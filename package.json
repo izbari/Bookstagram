@@ -11,17 +11,24 @@
   },
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.8",
+    "@react-native-firebase/app": "^12.7.5",
+    "@react-native-firebase/auth": "^12.7.5",
+    "@react-native-firebase/database": "^12.7.5",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
     "lottie-react-native": "^4.0.3",
     "react": "17.0.2",
     "react-native": "0.65.1",
+    "react-native-elements": "github:react-native-elements/react-native-elements#dist",
     "react-native-masked-text": "^1.12.5",
+    "react-native-modal": "^13.0.0",
     "react-native-paper": "^4.9.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.6.0",
-    "react-native-vector-icons": "^8.1.0"
+    "react-native-toast-message": "^1.4.9",
+    "react-native-vector-icons": "^8.1.0",
+    "react-native-webview": "^11.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.4",
@@ -29,8 +36,11 @@
     "@react-native-community/eslint-config": "^3.0.1",
     "babel-jest": "^27.1.0",
     "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.1.0",
     "metro-react-native-babel-preset": "^0.66.2",
+    "prettier": "2.3.2",
     "react-native-codegen": "^0.0.7",
     "react-test-renderer": "17.0.2"
   },

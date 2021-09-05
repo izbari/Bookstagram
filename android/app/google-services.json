@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "464963021979",
+    "project_id": "bookstagram-325020",
+    "storage_bucket": "bookstagram-325020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464963021979:android:5c0f3966445c46043eaa3e",
+        "android_client_info": {
+          "package_name": "com.bookstagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464963021979-mo6v5dvesodml81isgmroq07qftqlvib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "464963021979-mo6v5dvesodml81isgmroq07qftqlvib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
