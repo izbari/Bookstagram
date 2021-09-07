@@ -2,23 +2,34 @@ import * as React from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
+  FlatList,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
-import Login from '../components/Welcome';
+import {useDispatch,useSelector} from 'react-redux';
+import BookCard from '../components/BookCard'
+import {TextInput,Searchbar } from 'react-native-paper';
 
 function App(props) {
-  
-  const [mail, setMail] = React.useState('');
-  const [password, setPassword] = React.useState('');
 
+  const dispatch = useDispatch();  
+  const list=useSelector(s => s.favList);
+
+  const removeItem = (item) =>{
+  
+    dispatch({type:'REMOVE_FAVORITE',payload:{item:item}})  
+  
+  }; 
   return (
     <SafeAreaView style={styles.mainContainer}>
       
+       <FlatList
+        data={list}
+        renderItem={({item})=> <BookCard item={item} /> }
+        keyExtractor={item => item.id}
+      />
     </SafeAreaView>
   );
 }

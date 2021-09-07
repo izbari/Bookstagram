@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import  UserProvider from './context/Provider';
 
 import Login from './Pages/Login';
 import Profile from './Pages/Profile';
@@ -64,6 +65,7 @@ const Main = () => {
 };
 function App(props) {
   return (
+    <UserProvider>
     <NavigationContainer>
       <Stack.Navigator options={{headerShown: false}}>
          {/* <Stack.Screen
@@ -83,6 +85,7 @@ function App(props) {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </UserProvider>
   );
 }
 export default App;

@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+
 import {ToastAndroid} from 'react-native';
 import axios from 'axios';
 
@@ -41,14 +42,16 @@ function Discover(props) {
   // States hooks
   const [bookData, setBookData] = React.useState([]);
   const [current, setCurrent] = React.useState(9);
-
+  
   const images = [];
 
   React.useEffect(() => {
     getData();
   }, []);
+  
 
   const loadMore = () => {
+    
     console.log('Loading')
     if (current > bookData.length) {
       ToastAndroid.showWithGravityAndOffset(
