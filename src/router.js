@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -66,7 +66,7 @@ function App(props) {
   return (
     <NavigationContainer>
       <Stack.Navigator options={{headerShown: false}}>
-         <Stack.Screen
+         {/* <Stack.Screen
           options={{headerShown: false}}
           name="Login"
           component={Login}
@@ -75,7 +75,7 @@ function App(props) {
           options={{headerShown: false}}
           name="Signup"
           component={Signup}
-        /> 
+        />  */}
         <Stack.Screen
           options={{headerShown: false}}
           name="Main"
