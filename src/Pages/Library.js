@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import { SafeAreaView, StyleSheet, Button, View, FlatList } from 'react-native';
 
 import axios from 'axios';
-import {useDispatch} from 'react-redux';
-import {SearchBar} from 'react-native-elements';
-import {TextInput} from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { SearchBar } from 'react-native-elements';
+import { TextInput } from 'react-native-paper';
 
 import Login from '../components/Welcome';
 import Loading from '../components/Loading';
@@ -15,7 +15,7 @@ function Library(props) {
   const dispatch = useDispatch();
 
   const [cardData, setCardData] = React.useState([]);
-  const [search, setSearch] = React.useState();
+  const [search, setSearch] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -23,34 +23,39 @@ function Library(props) {
     getData();
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
 
   if (error) {
-    return <Error />;
+    return <Error style={styles.lottieContainerError} />
   }
-  const favHandler = item => {
-    dispatch({type: 'ADD_FAVORITE', payload: {bookCard: item}});
-  };
 
-  const renderItem = ({item}) => (
+
+
+  const favHandler = item => {
+    dispatch({ type: 'ADD_FAVORITE', payload: { favCard: item } });
+  };
+  const cartHandler = item => {
+    dispatch({ type: 'ADD_CART', payload: { cartCard: item } })
+  }
+  const renderItem = ({ item }) => (
     <BookCard
-      favHandler={() => {
-        favHandler(item);
-      }}
-      toNavigateBookHandler={() => props.navigation.navigate('Favorites')}
+      from="library"
+      favHandler={(item) => { favHandler(item) }}
+      cartHandler={(item) => { cartHandler(item) }}
       item={item}
     />
   );
 
-  const getData = async (text = "java" ) => {
-    
-    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&langRestrict=en&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
-    await axios
+  const getData =  (text = "java") => {
+    setLoading(true);
+
+    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
+     axios
       .get(API_URL)
       .then(res => {
-        setCardData(res.data.items);
+        setTimeout(() => { setCardData(res.data.items) }, 1000);
+
+        setLoading(false);
+
       })
       .catch(err => {
         console.log(err);
@@ -61,13 +66,14 @@ function Library(props) {
 
   };
 
-  const seachSubject = async text => {
+  const seachSubject = text => {
     setSearch(text);
-    await getData(text);
+    getData(text);
   };
 
   return (
-    <SafeAreaView>
+
+    <SafeAreaView style={styles.mainContainer}>
       <SearchBar
         placeholder="Type Here..."
         lightTheme
@@ -77,6 +83,9 @@ function Library(props) {
         value={search}
       />
 
+      {loading && <View style={styles.lottieContainer}>
+        <Loading />
+      </View>}
       <FlatList
         data={cardData}
         renderItem={renderItem}
@@ -86,11 +95,17 @@ function Library(props) {
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
+  mainContainer: { flex: 1, backgroundColor: '#E1E8EE' },
   lottieContainer: {
-    flex: 2,
-    width: '85%',
-    height: '30%',
+
+    width: '10%',
+    height: '5%',
+    alignSelf: 'center',
+  },
+  lottieContainerError: {
+
+    width: '50%',
+    height: '50%',
     alignSelf: 'center',
   },
   inputContainer: {
@@ -98,7 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  buttonContainer: {flex: 1, margin: 10},
+  buttonContainer: { flex: 1, margin: 10 },
   button: {
     borderRadius: 10,
     borderWidth: 2,
@@ -128,7 +143,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: 'black',
-    shadowOffset: {width: -2, height: 4},
+    shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },

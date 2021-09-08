@@ -4,25 +4,44 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  FlatList,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux'
+import { TextInput } from 'react-native-paper';
+import BookCard from '../components/BookCard';
 
 function App(props) {
-  
-  const [mail, setMail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const data = useSelector(s => s.cartList)
 
+  const dispatch = useDispatch();
+
+  const removeFromCart = (item) => {
+
+    dispatch({ type: 'REMOVE_CART', payload: { rmCartBook: item } })
+
+  };
   return (
     <SafeAreaView style={styles.mainContainer}>
-      
+
+      <FlatList
+        data={data}
+        renderItem={({ item }) =>
+          <BookCard
+            toNavigateBookDetails={(item) => props.navigation.navigate('SingleBookDesc',{singleBookData:item})}
+            removeFromCart={(item) => removeFromCart(item)}
+            from="store"
+            item={item}
+          />}
+        keyExtractor={item => item.id}
+      />
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
+  mainContainer: { flex: 1, backgroundColor: '#FF6EA1' },
   lottieContainer: {
     flex: 2,
     width: '85%',
@@ -34,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  buttonContainer: {flex: 1, margin: 10},
+  buttonContainer: { flex: 1, margin: 10 },
   button: {
     borderRadius: 10,
     borderWidth: 2,

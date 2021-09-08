@@ -18,7 +18,7 @@ function App(props) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Welcome />
+     
     </SafeAreaView>
   );
 }

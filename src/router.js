@@ -1,74 +1,67 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import  UserProvider from './context/Provider';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import UserProvider from './context/Provider';
 
 import Login from './Pages/Login';
 import Profile from './Pages/Profile';
 import Store from './Pages/Store';
 import Library from './Pages/Library';
-import Discover from './Pages/Discover';
+import AddTopics from './Pages/AddTopics';
 import Favorites from './Pages/Favorites';
 import Signup from './Pages/Signup';
+import SingleBookDesc from './Pages/SingleBookDesc';
+import MyTabBar from './components/TabBar'
+import Discover from './Pages/Discover'
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
   return (
-    <Tab.Navigator options={{headerShown: false}}>
+    <Tab.Navigator
+      tabBar={props => <MyTabBar {...props} />}
+      options={{ headerShown: false }}>
       <Tab.Screen
-        options={{headerShown: false}}
-        options ={{tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="earth" color='blue' size={size} />
-        ),}}
+        options={{ headerShown: false }}
         name="Discover"
         component={Discover}
       />
       <Tab.Screen
-        options={{headerShown: false}}
-        options ={{tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="cart" color='blue' size={size} />
-        ),}}
-        name="Store"
-        component={Store}
-      />
-      <Tab.Screen
-        options={{headerShown: false}}
-        options ={{tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="account" color='blue' size={size} />
-        ),}}
-        name="Profile"
-        component={Profile}
-      />
-      <Tab.Screen
-        options={{headerShown: false}}
-        options ={{tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="library" color='blue' size={size} />
-        ),}}
+        options={{ headerShown: false }}
         name="Library"
         component={Library}
       />
       <Tab.Screen
-        options={{headerShown: false}}
-        options ={{tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="heart" color='red' size={size} />
-        ),}}
+        options={{ headerShown: false }}
+        name="Store"
+        component={Store}
+      />
+
+
+      <Tab.Screen
+        options={{ headerShown: false }}
         name="Favorites"
         component={Favorites}
       />
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name="Profile"
+        component={Profile}
+      />
+
     </Tab.Navigator>
+
   );
 };
 function App(props) {
   return (
     <UserProvider>
-    <NavigationContainer>
-      <Stack.Navigator options={{headerShown: false}}>
-         {/* <Stack.Screen
+      <NavigationContainer>
+        <Stack.Navigator options={{ headerShown: false }}>
+          {/* <Stack.Screen
           options={{headerShown: false}}
           name="Login"
           component={Login}
@@ -78,13 +71,23 @@ function App(props) {
           name="Signup"
           component={Signup}
         />  */}
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Main"
-          component={Main}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Main"
+            component={Main}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="SingleBookDesc"
+            component={SingleBookDesc}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="AddTopics"
+            component={AddTopics}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </UserProvider>
   );
 }
