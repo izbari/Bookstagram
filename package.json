@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.8",
+    "@react-native-community/masked-view": "^0.1.11",
     "@react-native-firebase/app": "^12.7.5",
     "@react-native-firebase/auth": "^12.7.5",
     "@react-native-firebase/database": "^12.7.5",
@@ -23,7 +24,9 @@
     "react": "17.0.2",
     "react-native": "0.65.1",
     "react-native-elements": "github:react-native-elements/react-native-elements#dist",
+    "react-native-gesture-handler": "^1.10.3",
     "react-native-image-progress": "^1.1.1",
+    "react-native-linear-gradient": "^2.5.6",
     "react-native-masked-text": "^1.12.5",
     "react-native-modal": "^13.0.0",
     "react-native-paper": "^4.9.2",

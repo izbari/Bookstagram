@@ -1,4 +1,4 @@
-import { Avatar, Badge, Icon, withBadge, CheckBox } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import React from 'react';
 import {
     StyleSheet,
@@ -12,9 +12,9 @@ import {
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
 import { ToastAndroid } from 'react-native';
-import axios from 'axios';
 
 
+import { useDispatch, useSelector } from 'react-redux'
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 
@@ -24,11 +24,19 @@ function Discover(props) {
     // States hooks
     const [current, setCurrent] = React.useState(9);
     const [checked, setChecked] = React.useState([])
-    const { loading, error, data, categories } = useFetch();
-    const [selectedIds, setSelectedIds] = React.useState([])
-    console.log("data:", data)
+    const { loading, error, data, categories } = useFetch(false);
+
+    const [selectedIds, setSelectedIds] = React.useState(useSelector((store => store.topicIds)))
+    const dispatch = useDispatch();
 
 
+    console.log("add kısmına gelen selector bilgisi:", selectedIds)
+    const handleTopicList = () => {
+        
+        console.log(selectedIds)
+        dispatch({ type: 'ADD_TOPIC', payload: { topicList: selectedIds } })
+        props.navigation.navigate('Discover', { categories: categories, data: data });
+    }
 
 
     const handleSelectionMultiple = (id) => {
@@ -66,45 +74,47 @@ function Discover(props) {
 
 
     const bookAvatar = ({ item, index }) => (
-        <TouchableOpacity onPress={() => handleSelectionMultiple(item.id)}>
+
+        <View style={{ height: 110, width: 100, margin: 17.5, marginBottom: 20 }}>
+            <Image
+                style={{
+                    height: 95, width: 95, resizeMode: 'contain',
+                    borderRadius: 50,
+                    overflow: 'hidden', opacity: selectedIds.includes(item.id) ? 0.85 : 1
+                }}
+                source={{
+                    uri: data[index].url,
+                }}
+                size="large"
+
+                indicator={ProgressBar.indeterminate}
+                indicatorProps={{
+                    size: 20,
+                    borderWidth: 0,
+                    color: 'rgba(150, 150, 150, 1)',
+                    unfilledColor: 'rgba(200, 200, 200, 0.2)'
+                }}
+            >
+                <CheckBox
+                    Component={TouchableOpacity}
+                    center
+                    onPress={() => handleSelectionMultiple(item.id)}
+                    unchecked="null"
+                    iconType='material'
+                    checkedIcon='check'
+                    size={60}
+                    checkedColor='white'
+                    uncheckedColor='transparent'
+                    checked={selectedIds.includes(item.id) ? true : false}
+
+                />
+            </Image>
 
 
-            <View style={{ height: 110, width: 100, margin: 17.5, marginBottom: 20 }}>
-                <Image
-                    style={{ height: 95, width: 95, resizeMode: 'contain', borderRadius: 50, overflow: 'hidden', }}
-                    source={{
-                        uri: data[index].url,
-                    }}
-                    size="large"
-
-                    indicator={ProgressBar.indeterminate}
-                    indicatorProps={{
-                        size: 20,
-                        borderWidth: 0,
-                        color: 'rgba(150, 150, 150, 1)',
-                        unfilledColor: 'rgba(200, 200, 200, 0.2)'
-                    }}
-                >
-                    <CheckBox
-                        center
-                        containerStyle={{ backgroundColor: "transparent", borderWidth: 0 }}
-                        unchecked="radio"
-                        iconType='material'
-                        checkedIcon='check'
-                        size={70}
-                        disabled={true}
-                        checkedColor='lightgrey'
-                        checked={selectedIds.includes(item.id) ? true : false}
-                        activeOpacity={1}
-                    />
-                </Image>
-
-
-                <Text style={{ fontWeight: 'bold', alignSelf: 'center' }}>
-                    {categories[index]}
-                </Text>
-            </View>
-        </TouchableOpacity>
+            <Text style={{ fontWeight: 'bold', alignSelf: 'center' }}>
+                {categories[index]}
+            </Text>
+        </View>
     );
 
     return (
@@ -150,7 +160,7 @@ function Discover(props) {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => props.navigation.navigate("Library")}
+                onPress={() => handleTopicList()}
                 style={{
                     width: '80%',
                     height: '6%',

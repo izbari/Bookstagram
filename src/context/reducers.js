@@ -35,6 +35,12 @@ export default function (state, action) {
 
             }
 
+        case 'ADD_TOPIC':
+            
+           
+
+            return {...state,topicIds:action.payload.topicList};
+
 
         case 'REMOVE_FAVORITE':
 
