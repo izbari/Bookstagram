@@ -14,13 +14,13 @@ import {
 const {width} = Dimensions.get('window');
 function OnboardingItem(props) {
   return (
-    <SafeAreaView style={{flex: 1, width: width}}>
+    <View style={{flex: 1, width: width}}>
       <Image
         style={{resizeMode: 'contain', width, height: width}}
         source={{uri: props.item.image}}></Image>
       <Text style={styles.title}>{props.item.title}</Text>
       <Text>{props.item.description}</Text>
-    </SafeAreaView>
+    </View>
   );
 }
 const styles = StyleSheet.create({

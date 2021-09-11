@@ -17,7 +17,7 @@ import MaskedView from '@react-native-community/masked-view';
 import Svg, {Rect} from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
 import bookController from '../controllers/bookController';
-import {getMovies} from './api';
+import {getMovies} from '../controllers/api';
 const SPACING = 10;
 const ITEM_SIZE = width * 0.72;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;

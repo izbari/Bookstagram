@@ -10,20 +10,15 @@ import {
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import MaskedView from '@react-native-community/masked-view';
-import {LinearGradient} from 'react-native-linear-gradient';
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Svg, {Line, Rect} from 'react-native-svg';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
-import {ToastAndroid} from 'react-native';
 import useFetch from '../hooks/useFetch';
-import axios from 'axios';
 import {useSelector} from 'react-redux';
-import bookController from '../controllers/bookController';
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
-import {getMovies} from './api';
+import {getMovies} from '../controllers/api';
 
 const ITEM_SIZE = width * 0.2;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
@@ -218,12 +213,12 @@ function Discover(props) {
         }}></Image>
       <Text
         numberOfLines={2}
-        style={{color: 'black', fontSize: 14, alignSelft: 'center'}}>
+        style={{color: 'black', fontSize: 14, alignSelf: 'center'}}>
         {item.title}
       </Text>
       <Text
         numberOfLines={1}
-        style={{alignSelft: 'center', color: '#A1A1A1', fontSize: 8}}>
+        style={{alignSelf: 'center', color: '#A1A1A1', fontSize: 8}}>
         by {item.author}
       </Text>
     </TouchableOpacity>
