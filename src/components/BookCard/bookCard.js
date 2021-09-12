@@ -4,9 +4,10 @@ import {Rating} from 'react-native-rating-element';
 import bookController from '../../controllers/bookController';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
 const BookCard = props => {
-  console.log('bu ne meark ettim', props.item);
+  const list = useSelector(store => store.favList);
   return (
     <TouchableOpacity onPress={props.toNavigateBookHandler}>
       <View
@@ -49,9 +50,25 @@ const BookCard = props => {
             borderTopRightRadius: 10,
             borderBottomRightRadius: 10,
           }}>
-          <Text style={{marginBottom: 7, color: '#575758', fontWeight: 'bold'}}>
-            {bookController.checkTitle(props.item)}
-          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent:'space-between'
+            }}>
+            <Text
+              style={{marginBottom: 7, color: '#575758', fontWeight: 'bold'}}>
+              {bookController.checkTitle(props.item)}
+            </Text>
+            <TouchableOpacity
+              onPress={() => props.favHandler(props.item)}
+              style={{}}>
+              <Ionicons
+                name={list.includes(props.item) ? 'heart' : 'heart-outline'}
+                size={30}
+                color="#FF6EA1"
+              />
+            </TouchableOpacity>
+          </View>
           <Text style={{marginBottom: 10, color: '#A0A0A1', fontSize: 10}}>
             {bookController.checkAuthor(props.item)}
           </Text>
@@ -83,9 +100,10 @@ const BookCard = props => {
                   elevation: 20,
                   marginTop: 20,
                   shadowColor: '#52006A',
-                  height: 35,
                   borderRadius: 5,
                   shadowColor: 'black',
+                  height: 35,
+
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
@@ -115,7 +133,7 @@ const BookCard = props => {
                   justifyContent: 'center',
                   borderRadius: 5,
                 }}
-                onPress={() => props.favHandler(props.item)}>
+                onPress={null}>
                 <View>
                   <Text
                     style={{

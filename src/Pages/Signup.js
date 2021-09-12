@@ -14,8 +14,6 @@ import {TextInputMask} from 'react-native-masked-text';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
-
-
 import Welcome from '../components/Welcome';
 import Modal from 'react-native-modal';
 import authController from '../controllers/authController';
@@ -37,7 +35,7 @@ function Signup(props) {
   const [value, setValue] = React.useState('');
   const [checked, setChecked] = React.useState(false);
 
-  const [isFirst,setIsFirst] = React.useState(false)
+  const [isFirst, setIsFirst] = React.useState(false);
   //methods
   const toggleModal = () => {
     if (checked) {
@@ -45,35 +43,32 @@ function Signup(props) {
     }
     setModalVisible(!isModalVisible);
   };
-  const saveUserDatabase = async ()=>{
-
-    const uuid= generateQuickGuid()
-   console.log(uuid)
-   await database()
- .ref(`/users/${uuid}`)
- .set({
-   
-   name: name,
-   lastname: lastName,
-   email: email,
-   birth: birth,
-   gender: value,
-
- })
- const user = {
-  path:uuid,
-  name:name,
-   email:email,
-    lastname:lastName,
-    birth:birth, 
-    gender:value}
-  props.navigation.navigate("Login",{check:true,user:user});
-  
- }
+  const saveUserDatabase = async () => {
+    const uuid = generateQuickGuid();
+    console.log(uuid);
+    await database().ref(`/users/${uuid}`).set({
+      name: name,
+      lastname: lastName,
+      email: email,
+      birth: birth,
+      gender: value,
+    });
+    const user = {
+      path: uuid,
+      name: name,
+      email: email,
+      lastname: lastName,
+      birth: birth,
+      gender: value,
+    };
+    props.navigation.navigate('Login', {check: true, user: user});
+  };
   function generateQuickGuid() {
-    return Math.random().toString(36).substring(2, 15) +
-        Math.random().toString(36).substring(2, 15);
-}
+    return (
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    );
+  }
   const MyComponent = () => {
     return (
       <View style={{flex: 1}}>
@@ -209,24 +204,29 @@ function Signup(props) {
             style={styles.button}
             onPress={async () => {
               const user = {
-                name:name,
-                 email:email,
-                  lastname:lastName,
-                  birth:birth, 
-                  gender:value}
-                
+                name: name,
+                email: email,
+                lastname: lastName,
+                birth: birth,
+                gender: value,
+              };
+
               const condition = await authController.checkAuthConditions(
                 user,
                 password,
                 passwordAgain,
                 checked,
-            
               );
-               console.log("condition:",condition);
+              console.log('condition:', condition);
               if (condition) {
-                const createdInAuth = await authController.createUser(email,password);
-                console.log("database olusturma",createdInAuth)
-                createdInAuth ? saveUserDatabase() : console.log("Databasede oluşturulamadı.")
+                const createdInAuth = await authController.createUser(
+                  email,
+                  password,
+                );
+                console.log('database olusturma', createdInAuth);
+                createdInAuth
+                  ? saveUserDatabase()
+                  : console.log('Databasede oluşturulamadı.');
               }
             }}>
             <Text style={styles.buttonText}>Create</Text>

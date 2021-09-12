@@ -29,6 +29,11 @@ const Main = () => {
       options={{headerShown: false}}>
       <Tab.Screen
         options={{headerShown: false}}
+        name="Profile"
+        component={Profile}
+      />
+      <Tab.Screen
+        options={{headerShown: false}}
         name="Discover"
         component={Discover}
       />
@@ -53,11 +58,7 @@ const Main = () => {
         name="Favorites"
         component={Favorites}
       />
-      <Tab.Screen
-        options={{headerShown: false}}
-        name="Profile"
-        component={Profile}
-      />
+
       <Tab.Screen
         options={{headerShown: false}}
         name="Onboarding"

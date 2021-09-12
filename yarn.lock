@@ -3961,6 +3961,11 @@
   "resolved" "https://registry.npmjs.org/human-signals/-/human-signals-2.1.0.tgz"
   "version" "2.1.0"
 
+"i18n-js@3.0.11":
+  "integrity" "sha512-v7dG3kYJTQTyox3NqDabPDE/ZotWntyMI9kh4cYi+XlCSnsIR+KBTS2opPyObL8WndnklcLzbNU92FP/mLge3Q=="
+  "resolved" "https://registry.npmjs.org/i18n-js/-/i18n-js-3.0.11.tgz"
+  "version" "3.0.11"
+
 "iconv-lite@0.4.24":
   "integrity" "sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA=="
   "resolved" "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz"
@@ -6398,6 +6403,11 @@
     "react-native-ratings" "8.0.4"
     "react-native-size-matters" "^0.3.1"
 
+"react-native-flags@^1.0.0":
+  "integrity" "sha1-i/mbWOElymBX15I1SRMrNXl1TtM="
+  "resolved" "https://registry.npmjs.org/react-native-flags/-/react-native-flags-1.0.0.tgz"
+  "version" "1.0.0"
+
 "react-native-gesture-handler@^1.10.3":
   "integrity" "sha512-cBGMi1IEsIVMgoox4RvMx7V2r6bNKw0uR1Mu1o7NbuHS6BRSVLq0dP34l2ecnPlC+jpWd3le6Yg1nrdCjby2Mw=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz"
@@ -6408,6 +6418,13 @@
     "hoist-non-react-statics" "^3.3.0"
     "invariant" "^2.2.4"
     "prop-types" "^15.7.2"
+
+"react-native-i18n@^2.0.15":
+  "integrity" "sha512-V8VwUP0TLda3oJvgt5tdnFaOV7WXPhTjCTLO7sXI3C2SHggSbD4bCUryMzNJhesimJidH21V2Owvj4zAylHoQQ=="
+  "resolved" "https://registry.npmjs.org/react-native-i18n/-/react-native-i18n-2.0.15.tgz"
+  "version" "2.0.15"
+  dependencies:
+    "i18n-js" "3.0.11"
 
 "react-native-image-progress@^1.1.1":
   "integrity" "sha512-5rI2UjUo1bJoggU3lZAa+Wv29bm+N322XVR49mxfczfhaOyFdoXMIRgd5x2eXG+RQi9PcLleD6wxVDxGAPPO9Q=="
@@ -6425,6 +6442,11 @@
   "integrity" "sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg=="
   "resolved" "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz"
   "version" "2.5.6"
+
+"react-native-localize@^2.1.4":
+  "integrity" "sha512-Cvow7TSUsyIPj6ddxqT2GnKexQ//Q2Ur6KAQSXIcrjvE2K7KzbbveMpGsBK0oKvF9X+5DcVVED3EVdZXcrEoBw=="
+  "resolved" "https://registry.npmjs.org/react-native-localize/-/react-native-localize-2.1.4.tgz"
+  "version" "2.1.4"
 
 "react-native-masked-text@^1.12.5":
   "integrity" "sha512-lKGxeMbRW7c5pgGt6lSSsobIs5v3Gys8GHR4t5QDbHSJENDIOY97MWeucyhbuG+zJOhBo1XFIkCHkg5PsLU14g=="
@@ -6588,7 +6610,7 @@
     "whatwg-fetch" "^3.0.0"
     "ws" "^6.1.4"
 
-"react-native@*", "react-native@^0.65.0", "react-native@>= 0.62", "react-native@>=0.42.0", "react-native@>=0.46", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.60", "react-native@>=0.65.0", "react-native@>=0.65.0-rc.0 || 0.0.0-*", "react-native@0.65.1":
+"react-native@*", "react-native@^0.65.0", "react-native@>= 0.62", "react-native@>=0.42.0", "react-native@>=0.46", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.60", "react-native@>=0.60.0", "react-native@>=0.65.0", "react-native@>=0.65.0-rc.0 || 0.0.0-*", "react-native@0.65.1":
   "integrity" "sha512-0UOVSnlssweQZjuaUtzViCifE/4tXm8oRbxwakopc8GavPu9vLulde145GOw6QVYiOy4iL50f+2XXRdX9NmMeQ=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.65.1.tgz"
   "version" "0.65.1"
@@ -6659,7 +6681,14 @@
     "react-shallow-renderer" "^16.13.1"
     "scheduler" "^0.20.2"
 
-"react@*", "react@^16.0.0 || ^17.0.0", "react@^16.14.0 || ^17.0.0", "react@^16.3.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@>= 16.8.0", "react@>=16.0", "react@17.0.2":
+"react-wavify@^1.5.4":
+  "integrity" "sha512-FYpTBpgEaW5fm0Vt7cbICwjP2Uiy9Oj6NGheyJ1tIM8ShcVBZD56ZrAGV2Ad/FyINUNbJxyAr4/yT6MFxwmanQ=="
+  "resolved" "https://registry.npmjs.org/react-wavify/-/react-wavify-1.5.4.tgz"
+  "version" "1.5.4"
+  dependencies:
+    "prop-types" "^15.7.2"
+
+"react@*", "react@^0.13.0 || ^0.14.0 || >=15", "react@^16.0.0 || ^17.0.0", "react@^16.14.0 || ^17.0.0", "react@^16.3.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@>= 16.8.0", "react@>=16.0", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"

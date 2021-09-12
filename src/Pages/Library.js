@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, Button, View, FlatList } from 'react-native';
+import {SafeAreaView, StyleSheet, Button, View, FlatList} from 'react-native';
 
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { SearchBar } from 'react-native-elements';
-import { TextInput } from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
+import {SearchBar} from 'react-native-elements';
+import {TextInput} from 'react-native-paper';
 
 import Login from '../components/Welcome';
 import Loading from '../components/Loading';
@@ -13,7 +13,7 @@ import BookCard from '../components/BookCard';
 
 function Library(props) {
   const dispatch = useDispatch();
-
+  const list = useSelector(store => store.favList);
   const [cardData, setCardData] = React.useState([]);
   const [search, setSearch] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -23,47 +23,52 @@ function Library(props) {
     getData();
   }, []);
 
-
   if (error) {
-    return <Error style={styles.lottieContainerError} />
+    return <Error style={styles.lottieContainerError} />;
   }
-
-
 
   const favHandler = item => {
-    dispatch({ type: 'ADD_FAVORITE', payload: { favCard: item } });
+    if (list.includes(item)) {
+      dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
+    } else {
+      dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
+    }
   };
   const cartHandler = item => {
-    dispatch({ type: 'ADD_CART', payload: { cartCard: item } })
-  }
-  const renderItem = ({ item }) => (
+    dispatch({type: 'ADD_CART', payload: {cartCard: item}});
+  };
+
+  const renderItem = ({item}) => (
     <BookCard
       from="library"
-      favHandler={(item) => { favHandler(item) }}
-      cartHandler={(item) => { cartHandler(item) }}
+      favHandler={item => {
+        favHandler(item);
+      }}
+      cartHandler={item => {
+        cartHandler(item);
+      }}
       item={item}
     />
   );
 
-  const getData =  (text = "java") => {
+  const getData = (text = 'java') => {
     setLoading(true);
 
     const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
-     axios
+    axios
       .get(API_URL)
       .then(res => {
-        setTimeout(() => { setCardData(res.data.items) }, 1000);
+        setTimeout(() => {
+          setCardData(res.data.items);
+        }, 1000);
 
         setLoading(false);
-
       })
       .catch(err => {
         console.log(err);
         setError(true);
         setLoading(false);
-
       });
-
   };
 
   const seachSubject = text => {
@@ -72,7 +77,6 @@ function Library(props) {
   };
 
   return (
-
     <SafeAreaView style={styles.mainContainer}>
       <SearchBar
         placeholder="Type Here..."
@@ -83,9 +87,11 @@ function Library(props) {
         value={search}
       />
 
-      {loading && <View style={styles.lottieContainer}>
-        <Loading />
-      </View>}
+      {loading && (
+        <View style={styles.lottieContainer}>
+          <Loading />
+        </View>
+      )}
       <FlatList
         data={cardData}
         renderItem={renderItem}
@@ -95,15 +101,13 @@ function Library(props) {
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, backgroundColor: '#E1E8EE' },
+  mainContainer: {flex: 1, backgroundColor: '#E1E8EE'},
   lottieContainer: {
-
     width: '10%',
     height: '5%',
     alignSelf: 'center',
   },
   lottieContainerError: {
-
     width: '50%',
     height: '50%',
     alignSelf: 'center',
@@ -113,7 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  buttonContainer: { flex: 1, margin: 10 },
+  buttonContainer: {flex: 1, margin: 10},
   button: {
     borderRadius: 10,
     borderWidth: 2,
@@ -143,7 +147,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: 'black',
-    shadowOffset: { width: -2, height: 4 },
+    shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },

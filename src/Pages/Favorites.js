@@ -8,39 +8,51 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import BookCard from '../components/BookCard'
-import { TextInput, Searchbar } from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
+import BookCard from '../components/BookCard';
+import {TextInput, Searchbar} from 'react-native-paper';
 
 function App(props) {
-
   const dispatch = useDispatch();
-  const list = useSelector(s => s.favList).slice().reverse();
-
-  const removeFromFavorites = (item) => {
-
-    dispatch({ type: 'REMOVE_FAVORITE', payload: { rmFavBook: item } })
-
+  const list = useSelector(s => s.favList)
+    .slice()
+    .reverse();
+  const favHandler = item => {
+    if (list.includes(item)) {
+      dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
+    } else {
+      dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
+    }
+  };
+  const removeFromFavorites = item => {
+    dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
-
       <FlatList
         data={list}
-        renderItem={({ item }) =>
+        renderItem={({item}) => (
           <BookCard
-            removeFromFavorites={(item) => removeFromFavorites(item)}
+            favHandler={item => {
+              favHandler(item);
+            }}
+            removeFromFavorites={item => removeFromFavorites(item)}
             from="favorites"
             item={item}
-            toNavigateBookDetails={(item)=>props.navigation.navigate("SingleBookDesc",{singleBookData:item})}
-          />}
+            toNavigateBookDetails={item =>
+              props.navigation.navigate('SingleBookDesc', {
+                singleBookData: item,
+              })
+            }
+          />
+        )}
         keyExtractor={item => item.id}
       />
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, backgroundColor: '#FF6EA1' },
+  mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
   lottieContainer: {
     flex: 2,
     width: '85%',
@@ -52,7 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  buttonContainer: { flex: 1, margin: 10 },
+  buttonContainer: {flex: 1, margin: 10},
   button: {
     borderRadius: 10,
     borderWidth: 2,
