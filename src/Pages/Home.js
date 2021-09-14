@@ -6,24 +6,28 @@ import {
   StyleSheet,
   Text,
   View,
+  Keyboard,
+  TextInput,
+  Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
-import Login from '../components/Login';
+import PostCard from '../components/Post'
+import Image from 'react-native-image-progress';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+const {width} = Dimensions.get('window');
 
 function App(props) {
-  
   const [mail, setMail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
+ 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      
+     <PostCard />
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
+  mainContainer: {flex: 1},
+
   lottieContainer: {
     flex: 2,
     width: '85%',
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     width: 290,
     height: 38,
-    backgroundColor: '#FF6EA1',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignSelf: 'center',
     margin: 10,

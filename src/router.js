@@ -16,6 +16,7 @@ import SingleBookDesc from './Pages/SingleBookDesc';
 import MyTabBar from './components/TabBar';
 import Discover from './Pages/Discover';
 import deneme from './Pages/deneme';
+import Home from './Pages/Home';
 
 import Onboarding from './Pages/Onboarding';
 
@@ -27,6 +28,7 @@ const Main = () => {
     <Tab.Navigator
       tabBar={props => <MyTabBar {...props} />}
       options={{headerShown: false}}>
+      <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
       <Tab.Screen
         options={{headerShown: false}}
         name="Profile"
