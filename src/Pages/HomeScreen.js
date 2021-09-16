@@ -1,27 +1,24 @@
 import * as React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  View,
-  Keyboard,
-  TextInput,
+  Button,
   Dimensions,
-  TouchableOpacity,
+  Flatlist,
 } from 'react-native';
-import PostCard from '../components/Post'
+import PostCard from '../components/Post';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const {width} = Dimensions.get('window');
 
 function App(props) {
   const [mail, setMail] = React.useState('');
- 
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-     <PostCard />
+      <PostCard />
+      
     </SafeAreaView>
   );
 }

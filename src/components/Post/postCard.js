@@ -26,8 +26,8 @@ function postCard(props) {
       style={{
         margin: 15,
         alignSelf: 'center',
-        width: width * 0.85,
-        height: height + 60 + 300 + 60,
+        width: width * 0.90,
+        height: height + 60 + 280 + 60,
         backgroundColor: 'white',
         borderRadius: 5,
         shadowColor: '#CBCBCB',
@@ -55,7 +55,7 @@ function postCard(props) {
 
       <View
         style={{
-          width: width * 0.85,
+          width: width * 0.90,
           height: height,
         }}>
         <TextInput
@@ -74,8 +74,8 @@ function postCard(props) {
       <Image
         style={{
           alignSelf: 'center',
-          height: 300,
-          width: width * 0.85,
+          height: 280,
+          width: width * 0.90,
           resizeMode: 'cover',
         }}
         source={{uri: 'https://randomuser.me/api/portraits/men/41.jpg'}}
@@ -83,7 +83,7 @@ function postCard(props) {
       <View
         style={{
           flexDirection: 'row',
-          width: width * 0.85,
+          width: width * 0.90,
           height: 50,
           backgroundColor: 'white',
           justifyContent: 'space-around',
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
 
   lottieContainer: {
     flex: 2,
-    width: '85%',
+    width: '90%',
     height: '30%',
     alignSelf: 'center',
   },

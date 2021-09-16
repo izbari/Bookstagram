@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import UserProvider from './context/Provider';
-
+import {TouchableOpacity, NativeEventEmitter, Text} from 'react-native';
 import Login from './Pages/Login';
 import Profile from './Pages/Profile';
 import Store from './Pages/Store';
@@ -16,9 +16,12 @@ import SingleBookDesc from './Pages/SingleBookDesc';
 import MyTabBar from './components/TabBar';
 import Discover from './Pages/Discover';
 import deneme from './Pages/deneme';
-import Home from './Pages/Home';
+import HomeScreen from './Pages/HomeScreen';
+
+import CreatePost from './Pages/CreatePost';
 
 import Onboarding from './Pages/Onboarding';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -69,6 +72,52 @@ const Main = () => {
     </Tab.Navigator>
   );
 };
+const Home = props => (
+  <Stack.Navigator>
+    <Stack.Screen
+      options={{
+        headerTitleAlign: 'center',
+        title: 'Bookstagram',
+        headerStyle: {
+          backgroundColor: '#FF6EA1',
+        },
+        headerTintColor: 'white',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          textAlign: 'center',
+        },
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate('CreatePost');
+            }}>
+            <Ionicons name="add" size={35} color="white" />
+          </TouchableOpacity>
+        ),
+      }}
+      name="HomeScreen"
+      component={HomeScreen}
+    />
+    <Stack.Screen
+      options={{
+        headerTitleAlign: 'center',
+        title: 'Create your feed',
+        headerStyle: {
+          backgroundColor: '#FF6EA1',
+        },
+        headerTintColor: 'white',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          textAlign: 'center',
+        },
+    
+      }}
+      name="CreatePost"
+      component={CreatePost}
+    />
+  </Stack.Navigator>
+);
+
 function App(props) {
   return (
     <UserProvider>
@@ -84,11 +133,13 @@ function App(props) {
           name="Signup"
           component={Signup}
         />  */}
+
           <Stack.Screen
             options={{headerShown: false}}
             name="Main"
             component={Main}
           />
+
           <Stack.Screen
             options={{headerShown: false}}
             name="SingleBookDesc"

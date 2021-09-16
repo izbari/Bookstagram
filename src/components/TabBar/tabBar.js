@@ -16,7 +16,8 @@ function MyTabBar({state, descriptors, navigation}) {
         return 'heart';
       case 'Profile':
         return 'account';
-
+      case 'Home':
+        return 'home';
       default:
         break;
     }
