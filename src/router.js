@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import UserProvider from './context/Provider';
-import {TouchableOpacity, NativeEventEmitter, Text} from 'react-native';
+import {TouchableOpacity, Text} from 'react-native';
 import Login from './Pages/Login';
 import Profile from './Pages/Profile';
 import Store from './Pages/Store';
@@ -17,6 +17,7 @@ import MyTabBar from './components/TabBar';
 import Discover from './Pages/Discover';
 import deneme from './Pages/deneme';
 import HomeScreen from './Pages/HomeScreen';
+import Post from './Pages/Post';
 
 import CreatePost from './Pages/CreatePost';
 
@@ -32,6 +33,7 @@ const Main = () => {
       tabBar={props => <MyTabBar {...props} />}
       options={{headerShown: false}}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
+      <Tab.Screen options={{headerShown: false}} name="Post" component={Post} />
       <Tab.Screen
         options={{headerShown: false}}
         name="Profile"
@@ -110,7 +112,6 @@ const Home = props => (
           fontWeight: 'bold',
           textAlign: 'center',
         },
-    
       }}
       name="CreatePost"
       component={CreatePost}
@@ -123,17 +124,16 @@ function App(props) {
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator options={{headerShown: false}}>
-          {/* <Stack.Screen
-          options={{headerShown: false}}
-          name="Login"
-          component={Login}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Signup"
-          component={Signup}
-        />  */}
-
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Login"
+            component={Login}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Signup"
+            component={Signup}
+          />
           <Stack.Screen
             options={{headerShown: false}}
             name="Main"

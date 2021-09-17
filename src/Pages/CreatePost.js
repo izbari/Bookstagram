@@ -16,7 +16,9 @@ import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import auth from '@react-native-firebase/auth';
 
+import firestore from '@react-native-firebase/firestore';
 import Loading from '../components/Loading';
 
 const {width, height} = Dimensions.get('window');
@@ -59,14 +61,45 @@ const CreatePost = props => {
       </View>
     );
   }
-
   const submitPost = async () => {
+    if (image == null) {
+      return null;
+    }
+    const imageUrl = await uploadImage();
+    console.log('url:', imageUrl);
+    console.log('uuid:', auth().currentUser.uid);
+
+    await firestore()
+      .collection('posts')
+      .add({
+        userId: auth().currentUser.uid,
+        post: postText,
+        postImg: imageUrl,
+        postTime: firestore.Timestamp.fromDate(new Date()),
+        likes: null,
+        comments: null,
+      })
+      .then(() => {
+        console.log('Post added to firestore');
+        setPostText('');
+        setImage(null);
+      })
+      .catch(err => console.log('ERROR:', err.msg));
+  };
+
+  const uploadImage = async () => {
     const uploadUri = image;
     let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
     console.log('filename datası', filename);
+
+    const extension = filename.split('.').pop(); //jpg
+    const name = filename.split('.').slice(0, -1).join('.'); //name
+    filename = name + Date.now() + '.' + extension;
+
     setUploading(true);
     setTransferring(0);
-    const task = storage().ref(filename).putFile(uploadUri);
+    const storageRef = storage().ref(`photos/${filename}`);
+    const task = storageRef.putFile(uploadUri);
     task.on('state_changed', taskSnapshot => {
       console.log(
         `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
@@ -79,16 +112,21 @@ const CreatePost = props => {
     });
     try {
       await task;
-      await storage().ref(filename).putFile(uploadUri);
+      const url = await storageRef.getDownloadURL();
       setUploading(false);
-      Alert.alert(
-        'Image Uploaded Successfully',
-        'Your Image successfully uploaded to the Firebase Cloud Storage Successfully.',
-      );
+
+      Alert.alert('Post Published !', 'Post has been published successfully', [
+        {
+          text: 'OK',
+          onPress: () => props.navigation.navigate('HomeScreen'),
+        },
+      ]);
+
+      return url;
     } catch (error) {
       console.log(error);
+      return null;
     }
-    setImage(null);
   };
 
   const selectFromGallery = () => {
@@ -145,7 +183,6 @@ const CreatePost = props => {
           numberOfLines={7}
           placeholder={'What are u thinking ?'}
           onChangeText={setPostText}
-          defaultValue={postText}
         />
       </View>
 

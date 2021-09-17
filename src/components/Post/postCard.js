@@ -11,23 +11,28 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+
 import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import moment from 'moment';
 const {width} = Dimensions.get('window');
 
 function postCard(props) {
-  const [height, setHeight] = React.useState(0);
-
-  const [postText, setPostText] = React.useState('');
+  const TEXT_SIZE =
+    props.item.post != null
+      ? Math.round(props.item.post.length / 40.0) * 20 + 10
+      : 5;
+  const IMAGE_SIZE = props.item.postImg != null ? 250 : 5;
 
   return (
     <View
       style={{
         margin: 15,
         alignSelf: 'center',
-        width: width * 0.90,
-        height: height + 60 + 280 + 60,
+        width: width * 0.9,
+        height: 50 + TEXT_SIZE + IMAGE_SIZE + 50,
         backgroundColor: 'white',
         borderRadius: 5,
         shadowColor: '#CBCBCB',
@@ -45,45 +50,40 @@ function postCard(props) {
             marginTop: 10,
             marginLeft: 10,
           }}
-          source={{uri: 'https://randomuser.me/api/portraits/men/45.jpg'}}
+          source={{uri: 'https://randomuser.me/api/portraits/men/41.jpg'}}
         />
         <View style={{justifyContent: 'center', margin: 10, marginBottom: 0}}>
-          <Text>User name</Text>
-          <Text>5 gün önce</Text>
+          <Text>{props.item.userId}</Text>
+          <Text>{moment(props.item.postTime.toDate()).fromNow()}</Text>
         </View>
       </View>
 
       <View
         style={{
-          width: width * 0.90,
-          height: height,
+          width: width * 0.9,
+          height: TEXT_SIZE,
         }}>
-        <TextInput
-          onContentSizeChange={event => {
-            setHeight(event.nativeEvent.contentSize.height);
-          }}
-          style={{height: Math.max(35, height), padding: 15}}
-          value={postText}
-          multiline
-          autoCorrect
-          placeholder={'What are u thinking ?'}
-          onChangeText={setPostText}
-          defaultValue={postText}
-        />
+        {props.item.post != null ? (
+          <Text style={{padding: 5, color: '#333333'}}>{props.item.post}</Text>
+        ) : (
+          <View />
+        )}
       </View>
-      <Image
-        style={{
-          alignSelf: 'center',
-          height: 280,
-          width: width * 0.90,
-          resizeMode: 'cover',
-        }}
-        source={{uri: 'https://randomuser.me/api/portraits/men/41.jpg'}}
-      />
+      {props.item.postImg != null ? (
+        <Image
+          style={{
+            alignSelf: 'center',
+            height: IMAGE_SIZE,
+            width: width * 0.9,
+            resizeMode: 'cover',
+          }}
+          source={{uri: props.item.postImg}}
+        />
+      ) : null}
       <View
         style={{
           flexDirection: 'row',
-          width: width * 0.90,
+          width: width * 0.9,
           height: 50,
           backgroundColor: 'white',
           justifyContent: 'space-around',
@@ -109,52 +109,21 @@ function postCard(props) {
           />
           <Text style={{alignSelf: 'center', marginLeft: 2}}>5 Comments</Text>
         </View>
+        {props.item.userId == auth().currentUser.uid ? (
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={() => props.onDelete(props.item.id)}>
+            <Ionicons
+              name={'trash'}
+              size={25}
+              color="#FF6EA1"
+              style={{alignSelf: 'center'}}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  mainContainer: {flex: 1},
-
-  lottieContainer: {
-    flex: 2,
-    width: '90%',
-    height: '30%',
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center',
-  },
-  buttonContainer: {flex: 1, margin: 10},
-  button: {
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'white',
-    width: 290,
-    height: 38,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    margin: 10,
-  },
-  buttonText: {
-    alignSelf: 'center',
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  input: {
-    paddingLeft: 12,
-    borderRadius: 10,
-
-    width: 290,
-    height: 50,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    margin: 10,
-    backgroundColor: 'white',
-  },
-});
 
 export default postCard;
