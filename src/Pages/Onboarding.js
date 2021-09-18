@@ -28,7 +28,7 @@ function Onboarding(props) {
     if (currentIndex < slides.length - 1) {
       sliderRef.current.scrollToIndex({index: currentIndex + 1});
     } else {
-      props.navigation.navigate('Discover');
+      props.navigation.navigate('Main');
     }
   };
 
@@ -53,12 +53,10 @@ function Onboarding(props) {
         ref={sliderRef}
       />
       <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 70}}>
-          <View style={{marginBottom: 30}}>
-           <Paginator data={slides} scrollX={scrollX} />
-
-          </View>
+        <View style={{marginBottom: 30}}>
+          <Paginator data={slides} scrollX={scrollX} />
+        </View>
         <NextButton
-        
           scrollTo={scrollTo}
           percentage={(currentIndex + 1) * (100 / slides.length)}
         />

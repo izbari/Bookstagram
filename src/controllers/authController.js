@@ -1,119 +1,150 @@
 import {ToastAndroid} from 'react-native';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import React from 'react'
+import React from 'react';
+import {cleanSingle} from 'react-native-image-crop-picker';
 
-exports.createUser = async(email,password) => {
-  let check="k";
- await auth()
+exports.createUser = async ({
+  email,
+  password,
+  name,
+  lastName,
+  birth,
+  gender,
+  fallowers,
+  fallowing,
+  imageUrl,
+  books,
+}) => {
+  auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(() => {
-     console.log('created user')
-     check= true
+    .then(user => {
+      console.log("calisti1");
+      if (auth().currentUser) {
+        console.log("calisti2");
+
+        const userId = auth().currentUser.uid;
+        console.log("calisti3");
+
+        if (userId) {
+          console.log("calisti4");
+
+          database()
+            .ref('users/' + userId)
+            .set({
+              email,
+              id: userId,
+              name,
+              lastName,
+              birth,
+              gender,
+              imageUrl,
+              fallowers,
+              fallowing,
+              books,
+            });
+            console.log("calisti5");
+
+            return true;
+        }
+      }
     })
-    .catch(error => {
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
+    .catch(function (error) {
+      console.log("calisti6");
 
-      }
-
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-
-      console.error(error);
-      check=false;
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log('Register!');
+      console.log('ERROR:', errorCode, 'MSG:', errorMessage);
+      return false;
     });
-    return check;
 };
 
-exports.userLogin =  (props,email,password,data,check=false)=>{
-  console.log("check : " , check)
-  let check2="k";
+exports.userLogin = (props, email, password, data, check = false) => {
+  console.log('check : ', check);
+  let check2 = 'k';
 
-if(check){
-  auth()
-  .signInWithEmailAndPassword(email,password)
-  .then(() => {
-    console.log("new user login detected!")
-    console.log("authdaki update gelen data: ",data);
-  database()
-  .ref(`/users/${data.path}/`)
-  .set(data)
-  .then(() => console.log("New user successfully updated")
-  );
-  })
-  .catch(error => {
-    if (error.code === 'auth/email-already-in-use') {
-      console.log('That email address is already in use!');
-    }
+  if (check) {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+    console.log("******************NEW USER DETECTED******************")
+    props.navigation.navigate("Onboarding")
+        console.log('authdaki update gelen data: ', data);
+       
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
 
-    if (error.code === 'auth/invalid-email') {
-      console.log('That email address is invalid!');
-    }
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
 
-    console.error(error);
-  });
-  props.navigation.navigate("Main")
-}
-else{
-  auth()
-  .signInWithEmailAndPassword(email,password)
-  .then(() => {
-    ToastAndroid.showWithGravityAndOffset(
-      'Welcome!!',
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM,
-      25,
-      50,
-    );
-    check2=false
-    props.navigation.navigate("Main")
-    ;
-  })
-  .catch(error => {
-    if (error.code === 'auth/email-already-in-use') {
-      console.log('That email address is already in use!');
-    }
-
-    if (error.code === 'auth/invalid-email') {
-      console.log('That email address is invalid!');
-    }
-
-    console.error(error);
-  });
-}
-return check2;
-}
-exports.updateNewUser= (data) => {
-  
-}
-exports.checkAuthConditions = (
-  user,
-  password,
-  passwordAgain,
-  terms,
-) => {
-  console.log(user.name)
-  console.log(user.lastname)
-  console.log(user.gender)
-  console.log((user.name && user.lastName && user.gender))
-
-  if(Boolean(user.name) && Boolean(user.lastname) && Boolean(user.gender)){
-  if (password === passwordAgain) {
-    if (user.gender) {
-      if (terms) {
+        console.error(error);
+      });
+   
+  } else {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
         ToastAndroid.showWithGravityAndOffset(
+          'Welcome!!',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+        check2 = false;
+        props.navigation.navigate('Main');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+  }
+  return check2;
+};
+
+exports.checkAuthConditions = (user, password, passwordAgain, terms) => {
+  console.log(user.name);
+  console.log(user.lastname);
+  console.log(user.gender);
+ 
+
+  if (Boolean(user.name) && Boolean(user.lastname) && Boolean(user.gender)) {
+    if (password === passwordAgain) {
+      if (user.gender) {
+        if (terms) {
+          ToastAndroid.showWithGravityAndOffset(
             'User created successfully !',
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50,
           );
-        return true;
+          return true;
+        } else {
+          ToastAndroid.showWithGravityAndOffset(
+            'Please Accept terms and policies...',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
       } else {
         ToastAndroid.showWithGravityAndOffset(
-          'Please Accept terms and policies...',
+          'Please select your gender!',
           ToastAndroid.LONG,
           ToastAndroid.BOTTOM,
           25,
@@ -122,7 +153,7 @@ exports.checkAuthConditions = (
       }
     } else {
       ToastAndroid.showWithGravityAndOffset(
-        'Please select your gender!',
+        'Please enter your password correctly',
         ToastAndroid.LONG,
         ToastAndroid.BOTTOM,
         25,
@@ -131,21 +162,11 @@ exports.checkAuthConditions = (
     }
   } else {
     ToastAndroid.showWithGravityAndOffset(
-      'Please enter your password correctly',
-      ToastAndroid.LONG,
+      'Please fill your information',
+      ToastAndroid.SHORT,
       ToastAndroid.BOTTOM,
       25,
       50,
     );
   }
-
-}else{
-  ToastAndroid.showWithGravityAndOffset(
-    'Please fill your information',
-    ToastAndroid.SHORT,
-    ToastAndroid.BOTTOM,
-    25,
-    50,
-  );
 };
-}

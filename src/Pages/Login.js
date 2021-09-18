@@ -59,7 +59,7 @@ function App(props) {
                 console.log('sorun yok:', user);
                 let yeniusermi = props.route.params.check;
                 console.log('gelen check: ', yeniusermi);
-                let ideklenmisuser = {...user, id: auth().currentUser.uid};
+                let ideklenmisuser = {...user};
 
                 console.log(ideklenmisuser);
                 if (yeniusermi == true) {

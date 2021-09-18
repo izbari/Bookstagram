@@ -19,16 +19,28 @@ import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
 import Flag from 'react-native-flags';
+import auth from '@react-native-firebase/auth';
+import {useSelector} from 'react-redux';
+
 const {width, height} = Dimensions.get('window');
 
 function App(props) {
   const [isModalVisible, setModalVisible] = React.useState(false);
-
+  const user = useSelector(store => store.user);
   const data = [
     {id: 0, lang: 'TR', country: 'Turkish'},
     {id: 1, lang: 'US', country: 'English'},
     {id: 2, lang: 'DE', country: 'Deutschland'},
   ];
+
+  const signOut = () => {
+    auth()
+      .signOut()
+      .then(() =>
+        console.log(`${auth().currentUser.displayName}  signed out!`),
+      );
+  };
+
   const Localize = () => {
     return (
       <View style={{width: '80%', height: '70%'}}>
@@ -114,30 +126,41 @@ function App(props) {
           </Svg>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.profileStatusContainer}>
-              <Text style={styles.profileStatusNumber}>6554</Text>
+              <Text style={styles.profileStatusNumber}>
+                {user ? user.books.length : '1000'}
+              </Text>
               <Text style={styles.profileStatusText}>Books</Text>
             </View>
 
             <TouchableOpacity style={styles.profileStatusContainer}>
-              <Text style={styles.profileStatusNumber}>6554</Text>
+              <Text style={styles.profileStatusNumber}>
+                {user ? user.fallowers : '1000'}
+              </Text>
               <Text style={styles.profileStatusText}>Fallowers</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileStatusContainer}>
-              <Text style={styles.profileStatusNumber}>6554</Text>
+              <Text style={styles.profileStatusNumber}>
+                {' '}
+                {user.books ? user.fallowing : '1001'}
+              </Text>
               <Text style={styles.profileStatusText}>Fallowing</Text>
             </TouchableOpacity>
             <Image
               style={{
-                height: 100,
-                width: 100,
+                height: 90,
+                width: 90,
                 resizeMode: 'contain',
                 borderRadius: 50,
                 overflow: 'hidden',
                 elavation: 5,
-                marginTop: 25,
-                marginLeft: 40,
+                marginTop: 35,
+                marginLeft: 57,
               }}
-              source={{uri: 'https://randomuser.me/api/portraits/men/41.jpg'}}
+              source={{
+                uri: user
+                  ? user.imageUrl
+                  : 'https://scontent.ftzx1-1.fna.fbcdn.net/v/t1.30497-1/c59.0.200.200a/p200x200/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=12b3be&_nc_ohc=CxmGyQqlfmQAX-g1lo4&_nc_ht=scontent.ftzx1-1.fna&edm=AHgPADgEAAAA&oh=4403c3ccd0fc5eed2b87a0f3cfbe5198&oe=616AB239',
+              }}
             />
 
             <TouchableOpacity
@@ -227,12 +250,8 @@ function App(props) {
             <Text style={styles.text}>Language</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
-          <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="information-circle" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Help</Text>
-          </TouchableOpacity>
-          <Svg height="2" width={width}></Svg>
-          <TouchableOpacity style={styles.menuRow}>
+
+          <TouchableOpacity onPress={() => signOut()} style={styles.menuRow}>
             <Ionicons name="exit" size={25} color="#FF6EA1" />
             <Text style={styles.text}>Sign Out</Text>
           </TouchableOpacity>
@@ -259,6 +278,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     color: '#818182',
+    textAlign: 'center',
   },
   profileStatusContainer: {
     margin: 20,

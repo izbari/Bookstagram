@@ -1,21 +1,11 @@
 import * as React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  Keyboard,
-  TextInput,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View, Dimensions, TouchableOpacity} from 'react-native';
+import database from '@react-native-firebase/database';
 
 import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import {useSelector} from 'react-redux';
 import moment from 'moment';
 const {width} = Dimensions.get('window');
 
@@ -24,7 +14,17 @@ function postCard(props) {
     props.item.post != null
       ? Math.round(props.item.post.length / 40.0) * 20 + 10
       : 5;
+
+  let user;
   const IMAGE_SIZE = props.item.postImg != null ? 250 : 5;
+  database()
+    .ref(`/users/${props.item.userId}`)
+    .once('value')
+    .then(snapshot => {
+      user = snapshot.val();
+    });
+  const defaultImageUrl =
+    'https://scontent.ftzx1-1.fna.fbcdn.net/v/t1.30497-1/c59.0.200.200a/p200x200/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=12b3be&_nc_ohc=CxmGyQqlfmQAX-g1lo4&_nc_ht=scontent.ftzx1-1.fna&edm=AHgPADgEAAAA&oh=4403c3ccd0fc5eed2b87a0f3cfbe5198&oe=616AB239';
 
   return (
     <View
@@ -50,10 +50,12 @@ function postCard(props) {
             marginTop: 10,
             marginLeft: 10,
           }}
-          source={{uri: 'https://randomuser.me/api/portraits/men/41.jpg'}}
+          source={{
+            uri: user ? user.imageUrl : defaultImageUrl,
+          }}
         />
         <View style={{justifyContent: 'center', margin: 10, marginBottom: 0}}>
-          <Text>{props.item.userId}</Text>
+          <Text>{(user.name, user.lastName)}</Text>
           <Text>{moment(props.item.postTime.toDate()).fromNow()}</Text>
         </View>
       </View>

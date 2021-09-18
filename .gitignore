@@ -277,7 +277,8 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-
+google-services.json
+GoogleService-Info.plist
 ## Gcc Patch
 /*.gcno
 

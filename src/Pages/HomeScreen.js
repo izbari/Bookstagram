@@ -4,7 +4,9 @@ import {
   StyleSheet,
   FlatList,
   Button,
+  ScrollView,
   Alert,
+  View,
   Dimensions,
 } from 'react-native';
 import PostCard from '../components/Post';
@@ -12,18 +14,23 @@ import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import auth from '@react-native-firebase/auth';
+
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const {width} = Dimensions.get('window');
 
 function HomeScreen(props) {
   const [posts, setPosts] = React.useState([]);
   const [deleted, setDeleted] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    getPosts();
+   
+      getPosts();
+    
   }, []);
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     getPosts();
     setDeleted(false);
   }, [deleted]);
@@ -38,6 +45,7 @@ function HomeScreen(props) {
           'Post Deleted !',
           'Your Post Has Been Deleted Successfully',
         );
+        setDeleted(true);
       })
       .catch(err => {
         console.log('ERROR1:', err);
@@ -69,11 +77,12 @@ function HomeScreen(props) {
               .catch(err => {
                 console.log('Error while  deleting the image... ', err);
               });
+          } else {
+            console.log('else girmiş');
+            deleteFirestoreData(postId);
           }
-        } else {
-          console.log('else girmiş');
-          deleteFirestoreData(postId);
         }
+
         console.log('post deleted!');
       })
       .catch(err => {
@@ -106,8 +115,7 @@ function HomeScreen(props) {
             list.push({
               id: doc.id,
               userId,
-              userName: 'Test name',
-              userImg: 'https://randomuser.me/api/portraits/men/41.jpg',
+    
               postTime,
               post,
               postImg,
@@ -118,6 +126,9 @@ function HomeScreen(props) {
           });
 
           setPosts(list);
+          if (loading) {
+            setLoading(false);
+          }
         });
     } catch (error) {
       console.log(error.msg);
@@ -130,11 +141,172 @@ function HomeScreen(props) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <FlatList
-        data={posts}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+      {loading ? (
+        <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{alignItems: 'center'}}>
+          <SkeletonPlaceholder>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 20,
+                marginLeft: 5,
+              }}>
+              <View
+                style={{
+                  height: 60,
+                  width: 60,
+
+                  borderRadius: 50,
+                }}
+              />
+              <View style={{marginLeft: 20}}>
+                <View style={{width: 120, height: 20, borderRadius: 4}} />
+                <View
+                  style={{marginTop: 6, width: 80, height: 15, borderRadius: 4}}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+                borderRadius: 4,
+                width: 300,
+                height: 20,
+              }}
+            />
+            <View
+              style={{
+                marginTop: 6,
+                width: 250,
+                height: 20,
+                borderRadius: 4,
+              }}
+            />
+            <View
+              style={{
+                marginTop: 6,
+                width: 350,
+                height: 200,
+                marginTop: 10,
+                borderRadius: 4,
+              }}
+            />
+          </SkeletonPlaceholder>
+          <SkeletonPlaceholder>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 20,
+                marginLeft: 5,
+              }}>
+              <View
+                style={{
+                  height: 60,
+                  width: 60,
+
+                  borderRadius: 50,
+                }}
+              />
+              <View style={{marginLeft: 20}}>
+                <View style={{width: 120, height: 20, borderRadius: 4}} />
+                <View
+                  style={{marginTop: 6, width: 80, height: 15, borderRadius: 4}}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+                borderRadius: 4,
+                width: 300,
+                height: 20,
+              }}
+            />
+            <View
+              style={{
+                marginTop: 6,
+                width: 250,
+                height: 20,
+                borderRadius: 4,
+              }}
+            />
+            <View
+              style={{
+                marginTop: 6,
+                width: 350,
+                height: 200,
+                marginTop: 10,
+                borderRadius: 4,
+              }}
+            />
+          </SkeletonPlaceholder>
+          <SkeletonPlaceholder>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 20,
+                marginLeft: 5,
+              }}>
+              <View
+                style={{
+                  height: 60,
+                  width: 60,
+
+                  borderRadius: 50,
+                }}
+              />
+              <View style={{marginLeft: 20}}>
+                <View
+                  style={{
+                    width: 120,
+                    height: 20,
+                    borderRadius: 4,
+                    marginTop: 20,
+                  }}
+                />
+                <View
+                  style={{marginTop: 6, width: 80, height: 15, borderRadius: 4}}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+                borderRadius: 4,
+                width: 300,
+                height: 20,
+              }}
+            />
+            <View
+              style={{
+                marginTop: 6,
+                width: 250,
+                height: 20,
+                borderRadius: 4,
+              }}
+            />
+            <View
+              style={{
+                marginTop: 6,
+                width: 350,
+                height: 200,
+                marginTop: 10,
+                borderRadius: 4,
+              }}
+            />
+          </SkeletonPlaceholder>
+        </ScrollView>
+      ) : (
+        <FlatList
+          data={posts}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      )}
     </SafeAreaView>
   );
 }

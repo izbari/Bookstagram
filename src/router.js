@@ -18,6 +18,7 @@ import Discover from './Pages/Discover';
 import deneme from './Pages/deneme';
 import HomeScreen from './Pages/HomeScreen';
 import Post from './Pages/Post';
+import Auth from './Pages/Auth';
 
 import CreatePost from './Pages/CreatePost';
 
@@ -27,12 +28,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const Main = () => {
+const Main = props => {
   return (
     <Tab.Navigator
       tabBar={props => <MyTabBar {...props} />}
       options={{headerShown: false}}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
+
       <Tab.Screen options={{headerShown: false}} name="Post" component={Post} />
       <Tab.Screen
         options={{headerShown: false}}
@@ -65,17 +67,18 @@ const Main = () => {
         name="Favorites"
         component={Favorites}
       />
-
-      <Tab.Screen
-        options={{headerShown: false}}
-        name="Onboarding"
-        component={Onboarding}
-      />
     </Tab.Navigator>
   );
 };
 const Home = props => (
   <Stack.Navigator>
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="Auth"
+      component={Auth}
+    />
     <Stack.Screen
       options={{
         headerTitleAlign: 'center',
@@ -118,6 +121,31 @@ const Home = props => (
     />
   </Stack.Navigator>
 );
+const AuthProvider = props => (
+  <Stack.Navigator>
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="Login"
+      component={Login}
+    />
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="Signup"
+      component={Signup}
+    />
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="Onboarding"
+      component={Onboarding}
+    />
+  </Stack.Navigator>
+);
 
 function App(props) {
   return (
@@ -126,18 +154,13 @@ function App(props) {
         <Stack.Navigator options={{headerShown: false}}>
           <Stack.Screen
             options={{headerShown: false}}
-            name="Login"
-            component={Login}
-          />
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="Signup"
-            component={Signup}
-          />
-          <Stack.Screen
-            options={{headerShown: false}}
             name="Main"
             component={Main}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="AuthProvider"
+            component={AuthProvider}
           />
 
           <Stack.Screen
