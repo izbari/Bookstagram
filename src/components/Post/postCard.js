@@ -15,14 +15,17 @@ function postCard(props) {
       ? Math.round(props.item.post.length / 40.0) * 20 + 10
       : 5;
 
-  let user;
+  const [user, setUser] = React.useState({});
   const IMAGE_SIZE = props.item.postImg != null ? 250 : 5;
-  database()
-    .ref(`/users/${props.item.userId}`)
-    .once('value')
-    .then(snapshot => {
-      user = snapshot.val();
-    });
+ 
+  React.useEffect(async () => {
+    await database()
+      .ref(`/users/${props.item.userId}`)
+      .once('value')
+      .then(snapshot => {
+        setUser(snapshot.val());
+      });
+  }, []);
   const defaultImageUrl =
     'https://scontent.ftzx1-1.fna.fbcdn.net/v/t1.30497-1/c59.0.200.200a/p200x200/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=12b3be&_nc_ohc=CxmGyQqlfmQAX-g1lo4&_nc_ht=scontent.ftzx1-1.fna&edm=AHgPADgEAAAA&oh=4403c3ccd0fc5eed2b87a0f3cfbe5198&oe=616AB239';
 
@@ -38,7 +41,9 @@ function postCard(props) {
         shadowColor: '#CBCBCB',
         elevation: 25,
       }}>
-      <View style={{flexDirection: 'row', padding: 12, paddingBottom: 0}}>
+      <TouchableOpacity
+        onPress={() => props.toProfile(user.id)}
+        style={{flexDirection: 'row', padding: 12, paddingBottom: 0}}>
         <Image
           style={{
             height: 50,
@@ -47,18 +52,20 @@ function postCard(props) {
             borderRadius: 50,
             overflow: 'hidden',
             elavation: 5,
-            marginTop: 10,
-            marginLeft: 10,
+            marginTop: 5,
+            marginLeft: 5,
           }}
           source={{
             uri: user ? user.imageUrl : defaultImageUrl,
           }}
         />
         <View style={{justifyContent: 'center', margin: 10, marginBottom: 0}}>
-          <Text>{(user.name, user.lastName)}</Text>
-          <Text>{moment(props.item.postTime.toDate()).fromNow()}</Text>
+          <Text>{user.name + ' ' + user.lastName}</Text>
+          <Text style={{color: 'grey', fontSize: 12}}>
+            {moment(props.item.postTime.toDate()).fromNow()}
+          </Text>
         </View>
-      </View>
+      </TouchableOpacity>
 
       <View
         style={{
@@ -66,7 +73,9 @@ function postCard(props) {
           height: TEXT_SIZE,
         }}>
         {props.item.post != null ? (
-          <Text style={{padding: 5, color: '#333333'}}>{props.item.post}</Text>
+          <Text style={{marginLeft: 10, padding: 5, color: '#333333'}}>
+            {props.item.post}
+          </Text>
         ) : (
           <View />
         )}
@@ -93,24 +102,26 @@ function postCard(props) {
           shadowColor: '#CBCBCB',
           elevation: 25,
         }}>
-        <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity style={{flexDirection: 'row'}}>
           <Ionicons
             name={'heart-outline'}
             size={25}
             color="#FF6EA1"
             style={{alignSelf: 'center'}}
           />
-          <Text style={{alignSelf: 'center', marginLeft: 2}}>15 Likes</Text>
-        </View>
-        <View style={{flexDirection: 'row'}}>
+          <Text style={{alignSelf: 'center', marginLeft: 2}}>{props.item.likes} Likes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{flexDirection: 'row'}}>
           <Ionicons
             name={'chatbox-outline'}
             size={25}
             color="#FF6EA1"
             style={{alignSelf: 'center'}}
           />
-          <Text style={{alignSelf: 'center', marginLeft: 2}}>5 Comments</Text>
-        </View>
+          <Text style={{alignSelf: 'center', marginLeft: 2}}>
+            {props.item.comments} Comments
+          </Text>
+        </TouchableOpacity>
         {props.item.userId == auth().currentUser.uid ? (
           <TouchableOpacity
             style={{flexDirection: 'row'}}

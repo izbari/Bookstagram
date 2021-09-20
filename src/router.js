@@ -19,6 +19,7 @@ import deneme from './Pages/deneme';
 import HomeScreen from './Pages/HomeScreen';
 import Post from './Pages/Post';
 import Auth from './Pages/Auth';
+import OtherProfile from './Pages/OtherProfile';
 
 import CreatePost from './Pages/CreatePost';
 
@@ -118,6 +119,13 @@ const Home = props => (
       }}
       name="CreatePost"
       component={CreatePost}
+    />
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="OtherProfile"
+      component={OtherProfile}
     />
   </Stack.Navigator>
 );

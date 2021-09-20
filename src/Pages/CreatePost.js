@@ -62,9 +62,6 @@ const CreatePost = props => {
     );
   }
   const submitPost = async () => {
-    if (image == null) {
-      return null;
-    }
     const imageUrl = await uploadImage();
     console.log('url:', imageUrl);
     console.log('uuid:', auth().currentUser.uid);
@@ -76,10 +73,20 @@ const CreatePost = props => {
         post: postText,
         postImg: imageUrl,
         postTime: firestore.Timestamp.fromDate(new Date()),
-        likes: null,
-        comments: null,
+        likes: 0,
+        comments: 0,
       })
       .then(() => {
+        Alert.alert(
+          'Post Published !',
+          'Post has been published successfully',
+          [
+            {
+              text: 'OK',
+              onPress: () => props.navigation.navigate('HomeScreen'),
+            },
+          ],
+        );
         console.log('Post added to firestore');
         setPostText('');
         setImage(null);
@@ -88,6 +95,9 @@ const CreatePost = props => {
   };
 
   const uploadImage = async () => {
+    if (image == null) {
+      return null;
+    }
     const uploadUri = image;
     let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
     console.log('filename datası', filename);

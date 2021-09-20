@@ -4,13 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Menu,
-  Modal,
-  FlatList,
-  Button,
-  MenuTrigger,
-  MenuOptions,
-  Alert,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
@@ -18,57 +11,92 @@ import I18n from 'react-native-i18n';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
-import Flag from 'react-native-flags';
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 import {useSelector} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
-
 function App(props) {
-  const [isModalVisible, setModalVisible] = React.useState(false);
-  const user = useSelector(store => store.user);
-  const data = [
-    {id: 0, lang: 'TR', country: 'Turkish'},
-    {id: 1, lang: 'US', country: 'English'},
-    {id: 2, lang: 'DE', country: 'Deutschland'},
-  ];
+  const authUser = useSelector(store => store.user);
 
-  const signOut = () => {
-    auth()
-      .signOut()
-      .then(() =>
-        console.log(`${auth().currentUser.displayName}  signed out!`),
-      );
+  const [user, setUser] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [check, setCheck] = React.useState(false);
+
+  React.useEffect(() => {
+    const onValueChange = database()
+      .ref(`/users/${props.route.params.selectedUserId}`)
+      .on('value', snapshot => {
+        console.log('User dataa: ', snapshot.val());
+        setUser(snapshot.val());
+        setLoading(true);
+
+        setCheck(authUser.fallowing.includes(snapshot.val().id));
+      });
+
+    // Stop listening for updates when no longer required
+    return () =>
+      database()
+        .ref(`/users/${props.route.params.selectedUserId}`)
+        .off('value', onValueChange);
+  }, []);
+
+  const fallowRequest = userId => {
+    console.log(' user fallowers:', user.fallowers);
+    if (authUser.fallowing.includes(user.id)) {
+      const newList2 = user.fallowers.filter(item => {
+        return item !== auth().currentUser.uid;
+      });
+
+      console.log('istek geri alındı');
+      database()
+        .ref(`/users/${user.id}`)
+        .update({
+          fallowers: newList2,
+        })
+        .then(() => console.log('Data updated.'));
+
+      const newList3 = authUser.fallowing.filter(item => {
+        return item !== user.id;
+      });
+      database()
+        .ref(`/users/${authUser.id}`)
+        .update({
+          fallowing: newList3,
+        })
+        .then(() => console.log('Data updated.'));
+    } else {
+      if (user.fallowers.some(item => item === auth().currentUser.uid)) {
+        return null;
+      } else {
+        const liste = user.fallowers.concat(auth().currentUser.uid);
+        console.log('istek gönderildi');
+
+        database()
+          .ref(`/users/${user.id}`)
+          .update({
+            fallowers: liste,
+          })
+          .then(() => console.log('Fallowed users fallowers list  updated.'));
+
+        // Current user's fallowing list update
+        if (authUser.fallowing.some(item => item === user.id)) {
+          console.log('zaten takip ediliyo bu');
+          return null;
+        } else {
+          console.log('takip edilmiyomus takipe eklendi fallowinge');
+          const liste2 = authUser.fallowing.concat(user.id);
+          database()
+            .ref(`/users/${authUser.id}`)
+            .update({
+              fallowing: liste2,
+            })
+            .then(() => console.log('Current user fallowing list updated.'));
+        }
+      }
+    }
   };
 
-  const Localize = () => {
-    return (
-      <View style={{width: '80%', height: '70%'}}>
-        <Modal isVisible={isModalVisible} animationType="slide">
-          <FlatList
-            data={data}
-            renderItem={({item}) => {
-              return (
-                <TouchableOpacity style={styles.menuRow}>
-                  <Flag code={item.lang} size={32} />
-                  <Text style={styles.text}>{item.country}</Text>
-                </TouchableOpacity>
-              );
-            }}
-            style={{height: 200}}
-            keyExtractor={item => item.id}
-          />
-
-          <Button
-            title="Accept terms and Policies"
-            onPress={() => {
-              setModalVisible(!isModalVisible);
-            }}
-          />
-        </Modal>
-      </View>
-    );
-  };
   const CustomLinearGradient = props => {
     return (
       <LinearGradient gradientUnits="objectBoundingBox" {...props}>
@@ -79,7 +107,6 @@ function App(props) {
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
-      {isModalVisible && <Localize />}
       <View style={styles.svgCurve}>
         <View
           style={{
@@ -142,30 +169,29 @@ function App(props) {
                 marginRight: 5,
                 marginTop: 7,
               }}>
-              Hello {user ? user.name + ' ' + user.lastName : 'user cant found'}
+              {loading ? user.name + ' ' + user.lastName : 'user cant found'}
             </Text>
           </View>
-
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', margin: 10, marginBottom: 0}}>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.books.length : '1000'}
+                {loading ? user.books : '1000'}
               </Text>
               <Text style={styles.profileStatusText}>Books</Text>
             </View>
 
-            <TouchableOpacity style={styles.profileStatusContainer}>
+            <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.fallowers.length : '1000'}
+                {loading ? user.fallowers.length : '1000'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowers</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.profileStatusContainer}>
+            </View>
+            <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.fallowing.length : '1001'}
+                {loading ? user.fallowing.length : '1001'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowing</Text>
-            </TouchableOpacity>
+            </View>
             <Image
               style={{
                 height: 90,
@@ -174,11 +200,11 @@ function App(props) {
                 borderRadius: 50,
                 overflow: 'hidden',
                 elavation: 5,
-                marginTop: 0,
+                marginTop: -10,
                 marginLeft: 57,
               }}
               source={{
-                uri: user
+                uri: loading
                   ? user.imageUrl
                   : 'https://scontent.ftzx1-1.fna.fbcdn.net/v/t1.30497-1/c59.0.200.200a/p200x200/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=12b3be&_nc_ohc=CxmGyQqlfmQAX-g1lo4&_nc_ht=scontent.ftzx1-1.fna&edm=AHgPADgEAAAA&oh=4403c3ccd0fc5eed2b87a0f3cfbe5198&oe=616AB239',
               }}
@@ -192,92 +218,33 @@ function App(props) {
           width: '85%',
           height: '30%',
           alignSelf: 'center',
-          marginTop: 180,
+          marginTop: 160,
           shadowColor: '#CBCBCB',
           borderRadius: 2,
           elevation: 80,
         }}>
         <TouchableOpacity
-          onPress={null}
+          onPress={() => fallowRequest()}
           style={{
-            width: width * 0.85,
-            height: 30,
-            marginBottom: 25,
-            backgroundColor: '#FF6EA1',
-
             justifyContent: 'center',
+            backgroundColor: check ? '#7C74EA' : '#FF71A3',
+            height: 30,
           }}>
-          <Text
-            style={{
-              color: 'white',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              fontSize: 12,
-            }}>
-            Edit Profile
-          </Text>
+          <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+            <Text
+              style={{
+                color: 'white',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                fontSize: 13,
+              }}>
+              {check ? 'Fallowing' : 'Fallow'}
+            </Text>
+            {check ? (
+              <Ionicons name="checkmark-outline" size={15} color="white" />
+            ) : null}
+          </View>
         </TouchableOpacity>
-        <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
-          Account
-        </Text>
-        <View>
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('Store')}
-            style={styles.menuRow}>
-            <Ionicons name="cart" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>My cart</Text>
-          </TouchableOpacity>
-          <Svg height="2" width={width}></Svg>
-          <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="card" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Purchases</Text>
-          </TouchableOpacity>
-          <Svg height="2" width={width}></Svg>
-          <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="person" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Account</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View
-        style={{
-          width: '85%',
-          height: '30%',
-          alignSelf: 'center',
-          shadowColor: '#CBCBCB',
-          borderRadius: 2,
-          marginTop: 35,
-
-          elevation: 80,
-        }}>
-        <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
-          Settings
-        </Text>
-        <View>
-          <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="ellipse" size={25} color="black" />
-            <Text style={styles.text}>Night Mode</Text>
-          </TouchableOpacity>
-          <Svg height="2" width={width}></Svg>
-          <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="notifications" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Notifications</Text>
-          </TouchableOpacity>
-          <Svg height="2" width={width}></Svg>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={styles.menuRow}>
-            <Ionicons name="earth" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Language</Text>
-          </TouchableOpacity>
-          <Svg height="2" width={width}></Svg>
-
-          <TouchableOpacity onPress={() => signOut()} style={styles.menuRow}>
-            <Ionicons name="exit" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Sign Out</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -304,7 +271,7 @@ const styles = StyleSheet.create({
   },
   profileStatusContainer: {
     margin: 20,
-    marginTop: 60,
+    marginTop: 45,
     marginRight: 0,
     marginLeft: 40,
   },

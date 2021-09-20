@@ -224,7 +224,7 @@ function Signup(props) {
                 imageUrl: `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`,
                 fallowers: 0,
                 fallowing: 0,
-                books: [],
+                books: ['java'],
               };
               if (condition) {
                 createdInAuth = authController.createUser(newUser);

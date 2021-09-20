@@ -19,15 +19,11 @@ exports.createUser = async ({
   auth()
     .createUserWithEmailAndPassword(email, password)
     .then(user => {
-      console.log("calisti1");
       if (auth().currentUser) {
-        console.log("calisti2");
 
         const userId = auth().currentUser.uid;
-        console.log("calisti3");
 
         if (userId) {
-          console.log("calisti4");
 
           database()
             .ref('users/' + userId)
@@ -43,14 +39,12 @@ exports.createUser = async ({
               fallowing,
               books,
             });
-            console.log("calisti5");
 
             return true;
         }
       }
     })
     .catch(function (error) {
-      console.log("calisti6");
 
       // Handle Errors here.
       var errorCode = error.code;

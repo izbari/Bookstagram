@@ -30,11 +30,11 @@ function App(props) {
   } else {
     database()
       .ref(`/users/${user.uid}`)
-      .once('value')
-      .then(snapshot => {
+      .on('value', snapshot => {
         console.log('User data: ', snapshot.val());
         dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
         props.navigation.navigate('HomeScreen');
+        console.log(props.route.name);
       });
   }
 

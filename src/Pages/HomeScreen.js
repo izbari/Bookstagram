@@ -25,10 +25,8 @@ function HomeScreen(props) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-   
-      getPosts();
-    
-  }, []);
+    getPosts();
+  }, [props]);
 
   React.useEffect(async () => {
     getPosts();
@@ -100,6 +98,13 @@ function HomeScreen(props) {
       {text: 'Confirm', onPress: () => deletePost(postId)},
     ]);
   };
+  const toProfile = userId => {
+    if (auth().currentUser.uid === userId) {
+      props.navigation.navigate('Profile');
+    } else {
+      props.navigation.navigate('OtherProfile', {selectedUserId: userId});
+    }
+  };
 
   const getPosts = async () => {
     try {
@@ -115,7 +120,7 @@ function HomeScreen(props) {
             list.push({
               id: doc.id,
               userId,
-    
+
               postTime,
               post,
               postImg,
@@ -124,8 +129,8 @@ function HomeScreen(props) {
               comments,
             });
           });
-
           setPosts(list);
+
           if (loading) {
             setLoading(false);
           }
@@ -136,7 +141,13 @@ function HomeScreen(props) {
   };
 
   const renderItem = ({item}) => {
-    return <PostCard onDelete={handleDelete} item={item} />;
+    return (
+      <PostCard
+        toProfile={userId => toProfile(userId)}
+        onDelete={handleDelete}
+        item={item}
+      />
+    );
   };
 
   return (
