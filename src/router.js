@@ -35,22 +35,10 @@ const Main = props => {
       tabBar={props => <MyTabBar {...props} />}
       options={{headerShown: false}}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
-
-      <Tab.Screen options={{headerShown: false}} name="Post" component={Post} />
-      <Tab.Screen
-        options={{headerShown: false}}
-        name="Profile"
-        component={Profile}
-      />
       <Tab.Screen
         options={{headerShown: false}}
         name="Discover"
         component={Discover}
-      />
-      <Tab.Screen
-        options={{headerShown: false}}
-        name="deneme"
-        component={deneme}
       />
       <Tab.Screen
         options={{headerShown: false}}
@@ -62,11 +50,15 @@ const Main = props => {
         name="Store"
         component={Store}
       />
-
       <Tab.Screen
         options={{headerShown: false}}
         name="Favorites"
         component={Favorites}
+      />
+      <Tab.Screen
+        options={{headerShown: false}}
+        name="Profile"
+        component={Profile}
       />
     </Tab.Navigator>
   );

@@ -23,7 +23,9 @@ function HomeScreen(props) {
   const [posts, setPosts] = React.useState([]);
   const [deleted, setDeleted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+ 
 
+  
   React.useEffect(() => {
     getPosts();
   }, [props]);

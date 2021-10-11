@@ -26,7 +26,11 @@ function Library(props) {
   if (error) {
     return <Error style={styles.lottieContainerError} />;
   }
-
+  const cartDetailsHandler = item => {
+    props.navigation.navigate('SingleBookDesc', {
+      singleBookData: item,
+    });
+  };
   const favHandler = item => {
     if (list.includes(item)) {
       dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
@@ -46,6 +50,9 @@ function Library(props) {
       }}
       cartHandler={item => {
         cartHandler(item);
+      }}
+      cartDetailsHandler={item => {
+        cartDetailsHandler(item);
       }}
       item={item}
     />

@@ -53,7 +53,7 @@ const BookCard = props => {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent:'space-between'
+              justifyContent: 'space-between',
             }}>
             <Text
               style={{marginBottom: 7, color: '#575758', fontWeight: 'bold'}}>
@@ -133,7 +133,7 @@ const BookCard = props => {
                   justifyContent: 'center',
                   borderRadius: 5,
                 }}
-                onPress={null}>
+                onPress={() => props.cartDetailsHandler(props.item)}>
                 <View>
                   <Text
                     style={{
@@ -142,7 +142,7 @@ const BookCard = props => {
                       textAlign: 'center',
                       fontWeight: 'bold',
                     }}>
-                    Add to wishlist
+                    Details
                   </Text>
                 </View>
               </TouchableOpacity>
