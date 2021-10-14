@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
-
 import {Rating} from 'react-native-rating-element';
 
 import ProgressBar from 'react-native-progress/Bar';
@@ -61,6 +60,9 @@ function SingleBookDesc(props) {
       alert(error.message);
     }
   };
+
+
+  
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -195,6 +197,7 @@ function SingleBookDesc(props) {
                 </View>
               </TouchableOpacity>
             </View>
+          
           </View>
         </View>
       </ScrollView>

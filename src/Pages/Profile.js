@@ -4,13 +4,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Menu,
   Modal,
   FlatList,
   Button,
-  MenuTrigger,
-  MenuOptions,
-  Alert,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
@@ -198,7 +194,7 @@ function App(props) {
           elevation: 80,
         }}>
         <TouchableOpacity
-          onPress={null}
+          onPress={() => props.navigation.navigate('EditProfile',{user:user})}
           style={{
             width: width * 0.85,
             height: 30,

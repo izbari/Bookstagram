@@ -23,9 +23,7 @@ function HomeScreen(props) {
   const [posts, setPosts] = React.useState([]);
   const [deleted, setDeleted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
- 
 
-  
   React.useEffect(() => {
     getPosts();
   }, [props]);
@@ -34,7 +32,6 @@ function HomeScreen(props) {
     getPosts();
     setDeleted(false);
   }, [deleted]);
-
   const deleteFirestoreData = postId => {
     firestore()
       .collection('posts')
@@ -317,7 +314,7 @@ function HomeScreen(props) {
         <FlatList
           data={posts}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
         />
       )}
     </SafeAreaView>

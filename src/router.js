@@ -6,7 +6,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import UserProvider from './context/Provider';
 import {TouchableOpacity, Text} from 'react-native';
 import Login from './Pages/Login';
-import Profile from './Pages/Profile';
+import ProfileScreen from './Pages/Profile';
+import EditProfile from './Pages/EditProfile';
+
 import Store from './Pages/Store';
 import Library from './Pages/Library';
 import AddTopics from './Pages/AddTopics';
@@ -15,7 +17,6 @@ import Signup from './Pages/Signup';
 import SingleBookDesc from './Pages/SingleBookDesc';
 import MyTabBar from './components/TabBar';
 import Discover from './Pages/Discover';
-import deneme from './Pages/deneme';
 import HomeScreen from './Pages/HomeScreen';
 import Post from './Pages/Post';
 import Auth from './Pages/Auth';
@@ -28,7 +29,33 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
+const Profile = props => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="ProfileScreen"
+        component={ProfileScreen}></Stack.Screen>
+      <Stack.Screen
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Edit Profile',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+        }}
+        name="EditProfile"
+        component={EditProfile}></Stack.Screen>
+    </Stack.Navigator>
+  );
+};
 const Main = props => {
   return (
     <Tab.Navigator
