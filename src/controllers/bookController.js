@@ -24,7 +24,7 @@ exports.checkDescription = (item) => {
 exports.checkAuthor = (item) => {
     if (typeof (item.volumeInfo.authors) !== 'undefined' &&
         item.volumeInfo.authors != null) {
-        return item.volumeInfo.authors
+        return item.volumeInfo.authors["0"]
     }
     else {
         return "Author is not found!"
@@ -38,5 +38,16 @@ exports.checkTitle = (item) => {
 
     else {
         return "Title is not found!"
+    }
+}
+exports.checkPrice = (item) => {
+
+    if (typeof (item.saleInfo.listPrice) !== 'undefined' &&
+        item.saleInfo.listPrice != null) {
+        return item.saleInfo.listPrice.amount+" "+item.saleInfo.listPrice.currencyCode;
+    }
+
+    else {
+        return "Price undefined"
     }
 }

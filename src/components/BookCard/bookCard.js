@@ -69,7 +69,11 @@ const BookCard = props => {
               />
             </TouchableOpacity>
           </View>
-          <Text style={{marginBottom: 10, color: '#A0A0A1', fontSize: 10}}>
+        <View>
+
+        <View style={{flexDirection: 'row',justifyContent: 'space-between',}}>
+        <View>
+        <Text style={{marginBottom: 10, color: '#A0A0A1', fontSize: 10}}>
             {bookController.checkAuthor(props.item)}
           </Text>
 
@@ -83,6 +87,15 @@ const BookCard = props => {
             icon="ios-star"
             direction="row"
           />
+
+        </View>
+        
+         <View >
+            <Text style={{fontSize:12, color: 'grey'}}>{bookController.checkPrice(props.item)}</Text>
+
+         </View>
+ </View>
+        </View>
           <Text style={{marginBottom: 5, marginTop: 10, fontSize: 10}}>
             {bookController.checkDescription(props.item)}
           </Text>

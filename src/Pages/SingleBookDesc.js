@@ -13,7 +13,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {Rating} from 'react-native-rating-element';
-
+import { WebView } from 'react-native-webview';
 import ProgressBar from 'react-native-progress/Bar';
 
 import bookController from '../controllers/bookController';
@@ -22,6 +22,8 @@ const {width} = Dimensions.get('window').width;
 function SingleBookDesc(props) {
   const dispatch = useDispatch();
   const list = useSelector(store => store.favList);
+
+  const [read,setRead] = React.useState(false);
 
   let singleData = 'boş';
   if (
@@ -66,7 +68,7 @@ function SingleBookDesc(props) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView>
+      {!read  ? <ScrollView>
         <View
           style={{
             flex: 1,
@@ -183,7 +185,7 @@ function SingleBookDesc(props) {
                   justifyContent: 'center',
                   borderRadius: 5,
                 }}
-                onPress={() => favHandler(singleData)}>
+                onPress={() => setRead(true)}>
                 <View>
                   <Text
                     style={{
@@ -192,15 +194,14 @@ function SingleBookDesc(props) {
                       textAlign: 'center',
                       fontWeight: 'bold',
                     }}>
-                    Add to wishlist
-                  </Text>
+                  Read</Text>
                 </View>
               </TouchableOpacity>
             </View>
           
           </View>
         </View>
-      </ScrollView>
+      </ScrollView> : <WebView source={{ uri: singleData.accessInfo.webReaderLink}} />}
     </SafeAreaView>
   );
 }

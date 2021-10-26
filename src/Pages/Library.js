@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {SafeAreaView, StyleSheet, Button, View, FlatList} from 'react-native';
+import { SafeAreaView, ActivityIndicator, StyleSheet, Button, View, FlatList } from 'react-native';
 
 import axios from 'axios';
-import {useDispatch, useSelector} from 'react-redux';
-import {SearchBar} from 'react-native-elements';
-import {TextInput} from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import { SearchBar } from 'react-native-elements';
+import { TextInput } from 'react-native-paper';
 
 import Login from '../components/Welcome';
 import Loading from '../components/Loading';
@@ -17,11 +17,13 @@ function Library(props) {
   const [cardData, setCardData] = React.useState([]);
   const [search, setSearch] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
+  const [loading2, setLoading2] = React.useState(false);
 
+  const [error, setError] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(0);
   React.useEffect(() => {
     getData();
-  }, []);
+  }, [currentPage]);
 
   if (error) {
     return <Error style={styles.lottieContainerError} />;
@@ -33,16 +35,22 @@ function Library(props) {
   };
   const favHandler = item => {
     if (list.includes(item)) {
-      dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
+      dispatch({ type: 'REMOVE_FAVORITE', payload: { rmFavBook: item } });
     } else {
-      dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
+      dispatch({ type: 'ADD_FAVORITE', payload: { favCard: item } });
     }
   };
   const cartHandler = item => {
-    dispatch({type: 'ADD_CART', payload: {cartCard: item}});
+    dispatch({ type: 'ADD_CART', payload: { cartCard: item } });
   };
+  const handleLoadMore = (param) => {
+    setLoading2(true);
+    setCurrentPage(currentPage + 20)
 
-  const renderItem = ({item}) => (
+  }
+
+
+  const renderItem = ({ item }) => (
     <BookCard
       from="library"
       favHandler={item => {
@@ -61,15 +69,16 @@ function Library(props) {
   const getData = (text = 'java') => {
     setLoading(true);
 
-    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
+    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0&startIndex=${currentPage}`;
     axios
       .get(API_URL)
       .then(res => {
-        setTimeout(() => {
-          setCardData(res.data.items);
-        }, 1000);
 
+        setCardData(cardData.concat(res.data.items));
         setLoading(false);
+    setLoading2(false);
+
+
       })
       .catch(err => {
         console.log(err);
@@ -82,7 +91,18 @@ function Library(props) {
     setSearch(text);
     getData(text);
   };
+  const renderFooter = () => {
+    
+    return (
+      loading ? <View style={{ alignItems: 'center', marginTop: 10 }}>
 
+        <ActivityIndicator size="large"></ActivityIndicator>
+      </View> : null
+
+
+
+    )
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <SearchBar
@@ -103,12 +123,15 @@ function Library(props) {
         data={cardData}
         renderItem={renderItem}
         keyExtractor={item => item.id}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0}
+        ListFooterComponent={renderFooter}
       />
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {flex: 1, backgroundColor: '#E1E8EE'},
+  mainContainer: { flex: 1, backgroundColor: '#E1E8EE' },
   lottieContainer: {
     width: '10%',
     height: '5%',
@@ -124,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  buttonContainer: {flex: 1, margin: 10},
+  buttonContainer: { flex: 1, margin: 10 },
   button: {
     borderRadius: 10,
     borderWidth: 2,
@@ -154,7 +177,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: 'black',
-    shadowOffset: {width: -2, height: 4},
+    shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },
