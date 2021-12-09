@@ -30,7 +30,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-date-picker": "^4.1.0",
     "react-native-dropdown-picker": "^5.1.28",
-    "react-native-elements": "github:react-native-elements/react-native-elements#dist",
+    "react-native-elements": "^3.4.2",
     "react-native-flags": "^1.0.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-i18n": "^2.0.15",

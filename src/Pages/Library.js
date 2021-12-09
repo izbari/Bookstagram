@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, ActivityIndicator, StyleSheet, Button, View, FlatList } from 'react-native';
-
+import { SafeAreaView, ActivityIndicator, StyleSheet, Text, View, FlatList } from 'react-native';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchBar } from 'react-native-elements';
@@ -15,15 +14,16 @@ function Library(props) {
   const dispatch = useDispatch();
   const list = useSelector(store => store.favList);
   const [cardData, setCardData] = React.useState([]);
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
-
+  const [splash, setSplash] = React.useState(true);
   const [error, setError] = React.useState(false);
+  const [isFirst, setIsFirst] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(0);
   React.useEffect(() => {
     getData();
-  }, [currentPage]);
+  }, [currentPage, search]);
 
   if (error) {
     return <Error style={styles.lottieContainerError} />;
@@ -66,9 +66,8 @@ function Library(props) {
     />
   );
 
-  const getData = (text = 'java') => {
-    setLoading(true);
-
+  const getData = (text = search ) => {
+   
     const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0&startIndex=${currentPage}`;
     axios
       .get(API_URL)
@@ -76,8 +75,8 @@ function Library(props) {
 
         setCardData(cardData.concat(res.data.items));
         setLoading(false);
-    setLoading2(false);
-
+        setLoading2(false);
+        setSplash(false)
 
       })
       .catch(err => {
@@ -86,23 +85,34 @@ function Library(props) {
         setLoading(false);
       });
   };
-
+  if (splash) {
+    return <Loading style={styles.lottieContainerError} />;
+  }
   const seachSubject = text => {
     setSearch(text);
-    getData(text);
+    setIsFirst(true);
+    getData();
+
   };
   const renderFooter = () => {
-    
-    return (
-      loading ? <View style={{ alignItems: 'center', marginTop: 10 }}>
 
-        <ActivityIndicator size="large"></ActivityIndicator>
+    return (
+      loading2 ? <View style={{ alignItems: 'center', margin: 10 }}>
+
+        <ActivityIndicator size="small"></ActivityIndicator>
       </View> : null
 
 
 
     )
   }
+  const refreshHandler = async (params) => {
+    setLoading(true);
+   await setCardData([])
+    getData();
+  }
+
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <SearchBar
@@ -114,11 +124,7 @@ function Library(props) {
         value={search}
       />
 
-      {loading && (
-        <View style={styles.lottieContainer}>
-          <Loading />
-        </View>
-      )}
+
       <FlatList
         data={cardData}
         renderItem={renderItem}
@@ -126,6 +132,8 @@ function Library(props) {
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0}
         ListFooterComponent={renderFooter}
+        onRefresh={refreshHandler}
+        refreshing={loading}
       />
     </SafeAreaView>
   );

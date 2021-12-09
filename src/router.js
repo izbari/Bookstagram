@@ -73,13 +73,53 @@ const Main = props => {
         component={Library}
       />
       <Tab.Screen
-        options={{headerShown: false}}
-        name="Store"
+options={{
+  headerTitleAlign: 'center',
+  title: 'Store',
+  headerStyle: {
+    backgroundColor: '#FF6EA1',
+  },
+  headerTintColor: 'white',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },headerLeft: ()=> (
+    <TouchableOpacity onPress= {()=> props.navigation.goBack()}>
+       <Ionicons
+                name="arrow-back-outline"
+                size={30}
+                color="white"
+                style={{marginLeft: 15, marginRight: 5, marginTop: 5}}
+              />
+    </TouchableOpacity>) 
+  
+  
+}}        name="Store"
         component={Store}
       />
       <Tab.Screen
-        options={{headerShown: false}}
-        name="Favorites"
+options={{
+  headerTitleAlign: 'center',
+  title: 'Favorites',
+  headerStyle: {
+    backgroundColor: '#FF6EA1',
+  },
+  headerTintColor: 'white',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },headerLeft: ()=> (
+    <TouchableOpacity onPress= {()=> props.navigation.goBack()}>
+       <Ionicons
+                name="arrow-back-outline"
+                size={30}
+                color="white"
+                style={{marginLeft: 15, marginRight: 5, marginTop: 5}}
+              />
+    </TouchableOpacity>) 
+  
+  
+}}        name="Favorites"
         component={Favorites}
       />
       <Tab.Screen

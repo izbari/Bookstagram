@@ -15,6 +15,7 @@ import BookCard from '../components/BookCard';
 
 function App(props) {
   const data = useSelector(s => s.cartList)
+  const favList = useSelector(store=> store.favList)
 
   const dispatch = useDispatch();
 
@@ -22,6 +23,13 @@ function App(props) {
 
     dispatch({ type: 'REMOVE_CART', payload: { rmCartBook: item } })
 
+  };
+  const favHandler = item => {
+    if (favList.includes(item)) {
+      dispatch({ type: 'REMOVE_FAVORITE', payload: { rmFavBook: item } });
+    } else {
+      dispatch({ type: 'ADD_FAVORITE', payload: { favCard: item } });
+    }
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -32,6 +40,7 @@ function App(props) {
           <BookCard
             toNavigateBookDetails={(item) => props.navigation.navigate('SingleBookDesc',{singleBookData:item})}
             removeFromCart={(item) => removeFromCart(item)}
+            favHandler={(item)=> favHandler(item)}
             from="store"
             item={item}
           />}
@@ -41,7 +50,7 @@ function App(props) {
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, backgroundColor: '#FF6EA1' },
+  mainContainer: { flex: 1, backgroundColor: '#E1E8EE' },
   lottieContainer: {
     flex: 2,
     width: '85%',

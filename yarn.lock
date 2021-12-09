@@ -1495,17 +1495,17 @@
   "version" "15.7.4"
 
 "@types/react-native-vector-icons@^6.4.6":
-  "integrity" "sha512-ImqhwVPHtcWrfwaS4vVrnN/C1mY50+Gjer4wMltUJlkt9pTJ5WXCyn8VFPmxC5h8Zy0DBN2tYdusBZ2xJP14OA=="
-  "resolved" "https://registry.npmjs.org/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.8.tgz"
-  "version" "6.4.8"
+  "integrity" "sha512-z4sexbuZ7nmYsp7Z9YB5fSQoN3KFn6nZA3QsCkQLOYnVmVlxX4U22v/bM9Xx/6dOA1vClxoRZo2CFDX16uryXQ=="
+  "resolved" "https://registry.npmjs.org/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.10.tgz"
+  "version" "6.4.10"
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
 
 "@types/react-native@*":
-  "integrity" "sha512-QSOBN6m3TKBPFAcDhuFItDQtw1Fo1/FKDTHGeyeTwBXd3bu0V9s+oHEhntHN7PUK5dAOYFWsnO0wynWwS/KRxQ=="
-  "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.64.13.tgz"
-  "version" "0.64.13"
+  "integrity" "sha512-xiW7MfTPzd6xsJB8VEtheF9RH1Vyr1FlbM5jguMa+3ZtnFlE38H4TZSCFAaA3YGIZDnAOlG7qT13RUWyFpW2uw=="
+  "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.66.8.tgz"
+  "version" "0.66.8"
   dependencies:
     "@types/react" "*"
 
@@ -6240,8 +6240,9 @@
   "resolved" "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.1.28.tgz"
   "version" "5.1.28"
 
-"react-native-elements@github:react-native-elements/react-native-elements#dist":
-  "resolved" "git+ssh://git@github.com/react-native-elements/react-native-elements.git#09972ee95f07c69da26f2484b5f6888fb802f923"
+"react-native-elements@^3.4.2":
+  "integrity" "sha512-m0eAWOn7JuR1wNTNY0WHuaqst4LI/gFE4N5Bbyfsc4DiryWsMST7aAg5w/Gos4IexWIzhLKCIkPxthND1m/8Xg=="
+  "resolved" "https://registry.npmjs.org/react-native-elements/-/react-native-elements-3.4.2.tgz"
   "version" "3.4.2"
   dependencies:
     "@types/react-native-vector-icons" "^6.4.6"

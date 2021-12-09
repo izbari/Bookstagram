@@ -29,6 +29,8 @@ function App(props) {
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
+     
+
       <FlatList
         data={list}
         renderItem={({item}) => (
@@ -52,7 +54,7 @@ function App(props) {
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
+  mainContainer: {flex: 1, backgroundColor: '#E1E8EE'},
   lottieContainer: {
     flex: 2,
     width: '85%',
