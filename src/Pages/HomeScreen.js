@@ -2,11 +2,14 @@ import * as React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
+  TouchableOpacity,
   FlatList,
+  Text,
   Button,
   ScrollView,
   Alert,
   View,
+  Pressable,
   Dimensions,
 } from 'react-native';
 import PostCard from '../components/Post';
@@ -15,23 +18,64 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
+import moment from 'moment';
+import Modal from '../components/Modal/ModalTester'
+import {useSelector} from 'react-redux';
 
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const {width} = Dimensions.get('window');
 
 function HomeScreen(props) {
+  const [commentPosted,setCommentPosted] = React.useState(false);
   const [posts, setPosts] = React.useState([]);
   const [deleted, setDeleted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [selectedPost, setSelectedPost] = React.useState({});
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     getPosts();
-  }, [props]);
+  }, [posts,submitComment,likePost,commentPosted,setCommentPosted]);
 
   React.useEffect(async () => {
     getPosts();
     setDeleted(false);
   }, [deleted]);
+  const usera = useSelector(store => store.user);
+ 
+  const likeHandler = (postId, prevLikes) => {
+    const selectedPost = posts.find(post => post.id === postId);
+    console.log("selectedPost cevabi:",selectedPost);
+    //unlike
+    if(selectedPost.likes.includes(auth().currentUser.uid)) {unlikePost(postId, prevLikes)}
+    //like
+    else likePost(postId, prevLikes);
+    
+  }  
+  
+  const likePost = (postId, prevLikes) => {
+    firestore()
+      .collection('posts')
+      .doc(postId)
+      .update({
+        likes: [...prevLikes, auth().currentUser.uid],
+      })
+      .then(() => {
+        console.log('Likes count updated!');
+      });
+  };
+  const unlikePost = (postId, prevLikes) => {
+    console.log("filter cevabı:",prevLikes.filter(element => element != auth().currentUser.uid))
+    firestore()
+      .collection('posts')
+      .doc(postId)
+      .update({
+        likes: prevLikes.filter(element => element != auth().currentUser.uid),
+      })
+      .then(() => {
+        console.log('Likes count updated!');
+      });
+  };
   const deleteFirestoreData = postId => {
     firestore()
       .collection('posts')
@@ -48,6 +92,10 @@ function HomeScreen(props) {
         console.log('ERROR1:', err);
       });
   };
+ 
+  
+  
+  
 
   const deletePost = postId => {
     console.log('Current Post Id:', postId);
@@ -138,17 +186,47 @@ function HomeScreen(props) {
       console.log(error.msg);
     }
   };
-
+  
+    
+    
+  
+  
+ 
   const renderItem = ({item}) => {
     return (
       <PostCard
         toProfile={userId => toProfile(userId)}
         onDelete={handleDelete}
+        likeHandler={likeHandler}
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        setSelectedPost={setSelectedPost}
         item={item}
       />
     );
   };
-
+  const submitComment =  (postText) => {
+    console.log("calisiyo mu makes",postText);
+    console.log("selected post : ",selectedPost)
+    
+  firestore()
+    .collection('posts')
+    .doc(selectedPost.id)
+    .update({
+      comments: [...selectedPost.comments, {
+          userId: usera.id,
+          id:new Date().getTime().toString(),
+          img: usera.imageUrl,
+          name: usera.name + ' ' + usera.lastName,
+          comment: postText,
+          postTime: firestore.Timestamp.fromDate(new Date()),
+        }],
+    })
+    .then(() => {
+      console.log('Comment successfully posted!');
+      setCommentPosted(!commentPosted)
+    });
+};
   return (
     <SafeAreaView style={styles.mainContainer}>
       {loading ? (
@@ -311,11 +389,20 @@ function HomeScreen(props) {
           </SkeletonPlaceholder>
         </ScrollView>
       ) : (
-        <FlatList
+       <View>
+         <Modal 
+         modalVisible={modalVisible} 
+         setModalVisible={()=>setModalVisible(false)} 
+         selectedPostComments={selectedPost}
+         submitComment={(postText) =>submitComment(postText)}
+         
+         />
+      <FlatList
           data={posts}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-        />
+        />  
+       </View>
       )}
     </SafeAreaView>
   );
@@ -362,6 +449,50 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'white',
   },
+  centeredView: {
+    flex:0.1,
+    width:width,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    flex:0.1,
+    width:width,
+    
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
 
 export default HomeScreen;

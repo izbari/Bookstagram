@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text, Dimensions, ScrollView} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+import {View, ScrollView} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const Post = () => {
   return (

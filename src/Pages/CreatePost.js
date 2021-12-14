@@ -73,8 +73,8 @@ const CreatePost = props => {
         post: postText,
         postImg: imageUrl,
         postTime: firestore.Timestamp.fromDate(new Date()),
-        likes: 0,
-        comments: 0,
+        likes: [],
+        comments: [],
       })
       .then(() => {
         Alert.alert(
@@ -141,8 +141,8 @@ const CreatePost = props => {
 
   const selectFromGallery = () => {
     ImagePicker.openPicker({
-      width: 1200,
-      height: 780,
+      width: 1080,
+      height: 1920,
       cropping: true,
     }).then(image => {
       console.log(image);

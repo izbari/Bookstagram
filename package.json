@@ -47,6 +47,7 @@
     "react-native-screens": "^3.6.0",
     "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-svg": "^12.1.1",
+    "react-native-swipe-gestures": "^1.0.5",
     "react-native-toast-message": "^1.4.9",
     "react-native-vector-icons": "^8.1.0",
     "react-native-webview": "^11.13.0",

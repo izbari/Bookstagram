@@ -222,8 +222,8 @@ function Signup(props) {
                 birth,
                 gender: value,
                 imageUrl: `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`,
-                fallowers: 0,
-                fallowing: 0,
+                fallowers: [""],
+                fallowing: [""],
                 books: ['java'],
               };
               if (condition) {
