@@ -11,7 +11,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { Divider } from 'react-native-paper';
 import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-const {width} = Dimensions.get('window');
+import Modal from 'react-native-modal';
+
+const {width,height} = Dimensions.get('window');
+
 
 function postCard(props) {
   const TEXT_SIZE =
@@ -20,6 +23,7 @@ function postCard(props) {
       : 5;
 
   const [user, setUser] = React.useState({});
+  const [visible, setVisible] = React.useState(false);
 
   const IMAGE_SIZE = props.item.postImg != null ? 250 : 5;
   React.useEffect(async () => {
@@ -32,6 +36,7 @@ function postCard(props) {
       
   }, []);
           
+ 
  
           
   
@@ -81,8 +86,79 @@ function postCard(props) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() =>{null}}>
+      <TouchableOpacity onPress={() =>{setVisible(!visible);}}>
           <Ionicons name = "ellipsis-horizontal" size={25} style={{margin: 5,marginRight: 20,}}color="grey"/>
+
+          <Modal
+  deviceWidth={width}
+  swipeThreshold={10}
+  onBackButtonPress={()=>setVisible(false)}
+  useNativeDriver={true}
+              propagateSwipe={true}
+    animationIn={'slideInUp'}
+    onSwipeComplete={() => setVisible(false)}
+    swipeDirection={'down'}
+    style={{justifyContent: 'flex-end'}}
+    isVisible={visible}>
+    <View
+      style={{
+        height:height*.3,      
+        width: width,
+        marginLeft: -20,
+        marginBottom: -20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 30,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      }}>
+<TouchableOpacity
+onPress={() => setVisible(false)}
+style={{marginVertical:-15,marginBottom:0}}>
+<MaterialCommunityIcons name= "drag-horizontal-variant" size={35} color='grey' />
+</TouchableOpacity>
+
+      <View
+        style={{
+          flexDirection: 'row',
+          backgroundColor: '#F0F2F5',
+          justifyContent: 'flex-start',
+          borderRadius: 10,
+        }}>
+       {props.item.userId == auth().currentUser.uid ? (
+          <TouchableOpacity
+            style={{flexDirection: 'row',flex:1,alignItems: 'center',justifyContent: 'flex-start',padding:5}}
+            onPress={() => props.onDelete(props.item.id)}>
+            <Ionicons
+              name={'trash'}
+              size={30}
+              color="#FF6EA1"
+              style={{alignSelf: 'center',marginRight:5}}
+            />
+            <Text style={{fontSize:16,color:'#7E7E7E'}}>Delete the Post</Text>
+          </TouchableOpacity>
+        ) : <TouchableOpacity
+        style={{flexDirection: 'row',flex:1,alignItems: 'center',justifyContent: 'flex-start',padding:5}}
+        onPress={() => props.onSave(props.item.id)}>
+        <Ionicons
+          name={'bookmark-outline'}
+          size={30}
+          color="#FF6EA1"
+          style={{alignSelf: 'center',marginRight:5}}
+        />
+        <Text style={{fontSize:16,color:'#7E7E7E'}}>Save to my Bookmarks</Text>
+      </TouchableOpacity>}
+      </View>
+    </View> 
+      
+  </Modal>
 
       </TouchableOpacity>
       </View>
@@ -120,7 +196,7 @@ function postCard(props) {
       style={{width: width * 0.9, height: 25,flexDirection: 'row',margin:7,alignItems:'center',justifyContent: 'space-between'}}>
 
          {props.item?.likes?.length != 0 && <View style={{flexDirection: 'row',marginLeft:10}}>
-          <EvilIcons name="like" color="blue" size={25}/>
+          <EvilIcons name="like" color="#FF6EA1" size={25}/>
 <Text style={{alignSelf: 'center',color:'#727375'}}>
             {props.item?.likes?.length == 0
               ? ""
@@ -193,18 +269,7 @@ function postCard(props) {
             {'Share'}
           </Text>
         </TouchableOpacity>
-        {props.item.userId == auth().currentUser.uid ? (
-          <TouchableOpacity
-            style={{flexDirection: 'row'}}
-            onPress={() => props.onDelete(props.item.id)}>
-            <Ionicons
-              name={'trash'}
-              size={25}
-              color="#FF6EA1"
-              style={{alignSelf: 'center'}}
-            />
-          </TouchableOpacity>
-        ) : null}
+       
       </View>
     </View>
   );

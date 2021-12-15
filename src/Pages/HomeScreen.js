@@ -12,6 +12,7 @@ import {
   Pressable,
   Dimensions,
 } from 'react-native';
+import database from '@react-native-firebase/database';
 import PostCard from '../components/Post';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -32,6 +33,7 @@ function HomeScreen(props) {
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState({});
+  const [threeDotVisible, setThreeDotVisible] = React.useState(false);
 
   React.useEffect(async () => {
     getPosts();
@@ -94,6 +96,13 @@ function HomeScreen(props) {
   };
  
   
+  const onSave = (postId) => {
+    database()
+  .ref(`/users/${usera.id}/saved/`)
+  .set([usera?.saved,postId])
+  .then(() => console.log('Data set.'));
+    
+  }
   
   
 
@@ -153,6 +162,7 @@ function HomeScreen(props) {
     }
   };
 
+
   const getPosts = async () => {
     try {
       const list = [];
@@ -190,6 +200,10 @@ function HomeScreen(props) {
     
     
   
+  const onThreeDotClicked = (params) => {
+    setThreeDotVisible(!threeDotVisible)
+    console.warn("calistim")
+  }
   
  
   const renderItem = ({item}) => {
@@ -197,10 +211,12 @@ function HomeScreen(props) {
       <PostCard
         toProfile={userId => toProfile(userId)}
         onDelete={handleDelete}
+        onSave={onSave}
         likeHandler={likeHandler}
         setModalVisible={setModalVisible}
         modalVisible={modalVisible}
         setSelectedPost={setSelectedPost}
+        onThreeDotClicked={onThreeDotClicked}
         item={item}
       />
     );

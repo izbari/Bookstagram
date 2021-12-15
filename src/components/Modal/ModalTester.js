@@ -97,6 +97,8 @@ function ModalTester(props) {
       animationIn={'slideInUp'}
       onSwipeComplete={() => props.setModalVisible(false)}
       swipeDirection={'down'}
+      style={{justifyContent: 'flex-end'}}
+
       isVisible={props.modalVisible}>
       <View
         style={{
@@ -107,7 +109,7 @@ function ModalTester(props) {
           backgroundColor: 'white',
           borderRadius: 20,
           padding: 30,
-          marginTop:10,
+          
           alignItems: 'center',
           shadowColor: '#000',
           shadowOffset: {
@@ -124,6 +126,8 @@ function ModalTester(props) {
   <Icon name= "drag-horizontal-variant" size={35} color='grey' />
   </TouchableOpacity>
 <FlatList
+          ListEmptyComponent={      <Text style={{fontSize:18}}>No comments found</Text>
+        }
           data={props.selectedPostComments.comments}
           renderItem={comment}
           extraData={props.selectedPostComments.comments}
