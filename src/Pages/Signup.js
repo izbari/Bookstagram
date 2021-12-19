@@ -35,7 +35,6 @@ function Signup(props) {
   const [value, setValue] = React.useState('');
   const [checked, setChecked] = React.useState(false);
 
-  const [isFirst, setIsFirst] = React.useState(false);
   //methods
   const toggleModal = () => {
     if (checked) {
@@ -43,26 +42,7 @@ function Signup(props) {
     }
     setModalVisible(!isModalVisible);
   };
-  // const saveUserDatabase = async () => {
-  //   const uuid = generateQuickGuid();
-  //   console.log(uuid);
-  //   await database().ref(`/users/${uuid}`).set({
-  //     name: name,
-  //     lastname: lastName,
-  //     email: email,
-  //     birth: birth,
-  //     gender: value,
-  //   });
-  //   const user = {
-  //     path: uuid,
-  //     name: name,
-  //     email: email,
-  //     lastname: lastName,
-  //     birth: birth,
-  //     gender: value,
-  //   };
-  //   props.navigation.navigate('Login', {check: true, user: user});
-  // };
+
 
   const MyComponent = () => {
     return (
@@ -222,9 +202,9 @@ function Signup(props) {
                 birth,
                 gender: value,
                 imageUrl: `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`,
-                fallowers: [""],
-                fallowing: [""],
-                books: ['java'],
+                fallowers: [],
+                fallowing: [],
+                books: [],
               };
               if (condition) {
                 createdInAuth = authController.createUser(newUser);

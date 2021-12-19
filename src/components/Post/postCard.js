@@ -102,7 +102,6 @@ function postCard(props) {
     isVisible={visible}>
     <View
       style={{
-        height:height*.3,      
         width: width,
         marginLeft: -20,
         marginBottom: -20,

@@ -31,7 +31,6 @@ function App(props) {
     database()
       .ref(`/users/${user.uid}`)
       .on('value', snapshot => {
-        console.log('User data: ', snapshot.val());
         dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
         props.navigation.navigate('HomeScreen');
         console.log(props.route.name);

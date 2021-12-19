@@ -11,6 +11,8 @@ function MyTabBar({state, descriptors, navigation}) {
         return 'bookshelf';
       case 'Store':
         return 'cart';
+      case 'Chat':
+        return 'forum'  
 
       case 'Favorites':
         return 'heart';

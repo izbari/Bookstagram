@@ -8,7 +8,8 @@ import {TouchableOpacity, Text} from 'react-native';
 import Login from './Pages/Login';
 import ProfileScreen from './Pages/Profile';
 import EditProfile from './Pages/EditProfile';
-
+import ChatScreen from './Pages/ChatScreen';
+import ChatSingleScreen from './Pages/ChatSingleScreen';
 import Store from './Pages/Store';
 import Library from './Pages/Library';
 import AddTopics from './Pages/AddTopics';
@@ -18,7 +19,10 @@ import SingleBookDesc from './Pages/SingleBookDesc';
 import MyTabBar from './components/TabBar';
 import Discover from './Pages/Discover';
 import HomeScreen from './Pages/HomeScreen';
+import NewMessage from './Pages/NewMessage';
+
 import Post from './Pages/Post';
+
 import Auth from './Pages/Auth';
 import OtherProfile from './Pages/OtherProfile';
 
@@ -56,12 +60,73 @@ const Profile = props => {
     </Stack.Navigator>
   );
 };
+const Chat = ({navigation}) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Book Chat',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('NewMessage')
+              }}>
+              <Ionicons name="create-outline" size={25} color="white" />
+            </TouchableOpacity>
+          ),
+        }}
+        name="ChatScreen"
+        component={ChatScreen}
+      />
+      <Stack.Screen
+         options={{
+          headerTitleAlign: 'center',
+          title: 'New Message',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          }}}
+        name="NewMessage"
+        component={NewMessage}
+      />
+      <Stack.Screen
+        options={({route})=>({title: route.params.name,headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#FF6EA1',
+        },
+        headerTintColor: 'white',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          textAlign: 'center',
+        }})}
+        name="ChatSingleScreen"
+        component={ChatSingleScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const Main = props => {
   return (
     <Tab.Navigator
       tabBar={props => <MyTabBar {...props} />}
       options={{headerShown: false}}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
+      <Tab.Screen options={{headerShown: false}} name="Chat" component={Chat} />
+
       <Tab.Screen
         options={{headerShown: false}}
         name="Discover"
@@ -73,53 +138,55 @@ const Main = props => {
         component={Library}
       />
       <Tab.Screen
-options={{
-  headerTitleAlign: 'center',
-  title: 'Store',
-  headerStyle: {
-    backgroundColor: '#FF6EA1',
-  },
-  headerTintColor: 'white',
-  headerTitleStyle: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },headerLeft: ()=> (
-    <TouchableOpacity onPress= {()=> props.navigation.goBack()}>
-       <Ionicons
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Store',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => props.navigation.goBack()}>
+              <Ionicons
                 name="arrow-back-outline"
                 size={30}
                 color="white"
                 style={{marginLeft: 15, marginRight: 5, marginTop: 5}}
               />
-    </TouchableOpacity>) 
-  
-  
-}}        name="Store"
+            </TouchableOpacity>
+          ),
+        }}
+        name="Store"
         component={Store}
       />
       <Tab.Screen
-options={{
-  headerTitleAlign: 'center',
-  title: 'Favorites',
-  headerStyle: {
-    backgroundColor: '#FF6EA1',
-  },
-  headerTintColor: 'white',
-  headerTitleStyle: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },headerLeft: ()=> (
-    <TouchableOpacity onPress= {()=> props.navigation.goBack()}>
-       <Ionicons
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Favorites',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => props.navigation.goBack()}>
+              <Ionicons
                 name="arrow-back-outline"
                 size={30}
                 color="white"
                 style={{marginLeft: 15, marginRight: 5, marginTop: 5}}
               />
-    </TouchableOpacity>) 
-  
-  
-}}        name="Favorites"
+            </TouchableOpacity>
+          ),
+        }}
+        name="Favorites"
         component={Favorites}
       />
       <Tab.Screen

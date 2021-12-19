@@ -102,7 +102,6 @@ function ModalTester(props) {
       isVisible={props.modalVisible}>
       <View
         style={{
-          flex: 1,
           width: width,
           marginLeft: -20,
           marginBottom: -20,
@@ -126,7 +125,9 @@ function ModalTester(props) {
   <Icon name= "drag-horizontal-variant" size={35} color='grey' />
   </TouchableOpacity>
 <FlatList
-          ListEmptyComponent={      <Text style={{fontSize:18}}>No comments found</Text>
+          ListEmptyComponent={      <View style={{margin:30,marginTop:10}}>
+            <Text style={{fontSize:18,color:'grey'}}>No comments found</Text>
+          </View>
         }
           data={props.selectedPostComments.comments}
           renderItem={comment}

@@ -18,7 +18,7 @@ import Flag from 'react-native-flags';
 import auth from '@react-native-firebase/auth';
 import {useSelector} from 'react-redux';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 function App(props) {
   const [isModalVisible, setModalVisible] = React.useState(false);

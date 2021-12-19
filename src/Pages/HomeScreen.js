@@ -1,25 +1,21 @@
 import * as React from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
+ 
   FlatList,
-  Text,
-  Button,
+StyleSheet,
   ScrollView,
   Alert,
   View,
-  Pressable,
   Dimensions,
 } from 'react-native';
 import database from '@react-native-firebase/database';
 import PostCard from '../components/Post';
-import Image from 'react-native-image-progress';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
-import moment from 'moment';
+
 import Modal from '../components/Modal/ModalTester'
 import {useSelector} from 'react-redux';
 
@@ -97,9 +93,21 @@ function HomeScreen(props) {
  
   
   const onSave = (postId) => {
+    let added=[]
+    console.log("added ilk init",added)
+  
+    if(usera?.saved){
+      added=usera.saved;
+       added.includes(postId) ?
+         added=added.filter(element => postId!=element) : added.push(postId);
+       
+    }else{
+      added.push(postId);
+    }
+   
     database()
-  .ref(`/users/${usera.id}/saved/`)
-  .set([usera?.saved,postId])
+  .ref(`/users/${usera.id}/saved`)
+  .set(added)
   .then(() => console.log('Data set.'));
     
   }
