@@ -1,24 +1,22 @@
 import * as React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
-import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
-import Language from '../utils/Languages/lang';
+
 import authController from '../controllers/authController';
 import {TextInput} from 'react-native-paper';
 import Welcome from '../components/Yoga';
 function App(props) {
-  const [checkFirst, setCheckFirst] = React.useState(false);
 
   const [email, seteMail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [secret, setSecret] = React.useState(true);
+  
+  
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -28,23 +26,37 @@ function App(props) {
         <Welcome />
       </View>
 
-      <View style={styles.inputContainer}>
+    <View style={{flex:2.5}}>
+    <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
+          selectionColor='#FF6EA1'  
+                  theme={{ colors: { placeholder: 'black', text: 'black', primary: "black",underlineColor:'transparent',background : '#003489'}}}
+
           mode="outlined"
           label="Email"
           value={email}
-          right={<TextInput.Affix text="/100" />}
+          
+        
+          underlineColor='transparent'
+          editable= {true}
+         
           onChangeText={email => seteMail(email)}
         />
+        
         <TextInput
-          value={password}
-          mode="outlined"
-          onChangeText={password => setPassword(password)}
-          secureTextEntry={true}
-          label="Password"
-          right={<TextInput.Icon name="eye" />}
-          style={styles.input}
+           value={password}
+           mode="outlined"
+           
+           onChangeText={password => setPassword(password)}
+           secureTextEntry={secret}
+           
+           label="Password"
+           style={styles.input}
+           theme={{ colors: { placeholder: 'black', text: 'black', primary: "black",underlineColor:'transparent',background : '#003489'}}}
+           right={<TextInput.Icon 
+             onPress={() => setSecret(!secret)}
+           name="eye" color="grey" style={{marginTop:15}}/>}
         />
       </View>
       <View style={styles.buttonContainer}>
@@ -100,6 +112,7 @@ function App(props) {
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
       </View>
+    </View>
     </SafeAreaView>
   );
 }
@@ -112,9 +125,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   inputContainer: {
-    flex: 1.5,
+    marginBottom:50,
   },
-  buttonContainer: {flex: 1, margin: 10},
   button: {
     borderRadius: 10,
     borderWidth: 2,

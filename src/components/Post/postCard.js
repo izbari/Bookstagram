@@ -1,22 +1,21 @@
 import * as React from 'react';
 import {Text, View, Dimensions, TouchableOpacity} from 'react-native';
 import database from '@react-native-firebase/database';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Divider } from 'react-native-paper';
 import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
+import  {Menu,Provider,Divider, Button,} from 'react-native-paper'    
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 
 function postCard(props) {
+  
   const TEXT_SIZE =
     props.item.post != null
       ? Math.round(props.item.post.length / 40.0) * 20 + 10
@@ -24,6 +23,7 @@ function postCard(props) {
 
   const [user, setUser] = React.useState({});
   const [visible, setVisible] = React.useState(false);
+  const [menu, setMenu] = React.useState(false);
 
   const IMAGE_SIZE = props.item.postImg != null ? 250 : 5;
   React.useEffect(async () => {
@@ -36,7 +36,32 @@ function postCard(props) {
       
   }, []);
           
- 
+  
+  const openMenu = () => setMenu(true);
+
+  const closeMenu = () => setMenu(false);
+
+  const Menü = (params) => (
+    <Provider>
+  <View
+    style={{
+    flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+    }}>
+    <Menu
+      visible={menu}
+      onDismiss={() => {setMenu(false)}}
+      anchor={<Button title='zafer' onPress={() => {setMenu(!menu)}}>Show menu</Button>}>
+      <Menu.Item onPress={() => {setMenu(false)}} title="Item 1" />
+      <Menu.Item onPress={() => {}} title="Item 2" />
+      <Divider />
+      <Menu.Item onPress={() => {}} title="Item 3" />
+    </Menu>
+  </View>
+</Provider>
+  )
+  
  
           
   
@@ -53,12 +78,14 @@ function postCard(props) {
         margin: 15,
         alignSelf: 'center',
         width: width * 0.9,
-        height: 50 + TEXT_SIZE + IMAGE_SIZE + 110,
+        height: 50 + TEXT_SIZE + IMAGE_SIZE + 70 + (props.item.comments == 0 && props.item.likes == 0 ? 0 : 40),
         backgroundColor: 'white',
         borderRadius: 5,
         shadowColor: '#CBCBCB',
         elevation: 25,
       }}>
+                {menu && <Menü />}
+
       <View style={{flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center',}}>
       <TouchableOpacity
         onPress={() => props.toProfile(user.id)}
@@ -88,7 +115,7 @@ function postCard(props) {
 
       <TouchableOpacity onPress={() =>{setVisible(!visible);}}>
           <Ionicons name = "ellipsis-horizontal" size={25} style={{margin: 5,marginRight: 20,}}color="grey"/>
-
+        
           <Modal
   deviceWidth={width}
   swipeThreshold={10}
@@ -158,7 +185,6 @@ style={{marginVertical:-15,marginBottom:0}}>
     </View> 
       
   </Modal>
-
       </TouchableOpacity>
       </View>
 
@@ -186,32 +212,34 @@ style={{marginVertical:-15,marginBottom:0}}>
           source={{uri: props.item.postImg}}
         />
       ) : null}
+     {  props.item.comments == 0 && props.item.likes == 0 ?
+      null :
       <TouchableOpacity 
-       onPress={() => { console.log("postcarddaki props.item: ",props.item)
+       onPress={() => { 
        props.setModalVisible(!props.modalVisible);
                  
        props.setSelectedPost(props.item)
        }}
       style={{width: width * 0.9, height: 25,flexDirection: 'row',margin:7,alignItems:'center',justifyContent: 'space-between'}}>
 
-         {props.item?.likes?.length != 0 && <View style={{flexDirection: 'row',marginLeft:10}}>
+         {props.item?.likes?.length != 0 ? <View style={{flexDirection: 'row',marginLeft:10}}>
           <EvilIcons name="like" color="#FF6EA1" size={25}/>
 <Text style={{alignSelf: 'center',color:'#727375'}}>
             {props.item?.likes?.length == 0
               ? ""
               : props.item?.likes?.length}
           </Text>
-          </View>}
+          </View>: <View></View>}
           <View style={{flexDirection: 'row',marginRight: 20}}>
         {props.item.comments.length != 0
                 &&  <Text style={{alignSelf: 'center', marginLeft: 5,color:'#727375'}}>
             {props.item.comments.length + ' Comments'}
           </Text>}
           </View>
-      </TouchableOpacity>
+      </TouchableOpacity>}
       <Divider />
 
-      <View
+     <View
         style={{
           flexDirection: 'row',
           alignContent: 'center',
@@ -256,7 +284,7 @@ style={{marginVertical:-15,marginBottom:0}}>
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={()=>null}
+          onPress={()=>setMenu(true)}
           style={{flexDirection: 'row',flex:1,justifyContent: 'center'}}>
           <MaterialCommunityIcons
             name={"share-outline"}

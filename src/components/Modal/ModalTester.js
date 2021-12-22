@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {
-  Button,
+ 
   Keyboard,
   Text,
   View,
@@ -13,22 +13,51 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Image from 'react-native-image-progress';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const {width,height2} = Dimensions.get('window')
+import  {Menu,Provider,Divider, Button,} from 'react-native-paper'    
+
 import moment from 'moment';
 function ModalTester(props) {
   
   const [height, setHeight] = React.useState(0);
   const [postText, setPostText] = React.useState('');
-
-
+  const [menu, setMenu] = React.useState(true);
+  const Menü = (params) => (
+    <Provider>
+  <TouchableOpacity
+    style={{
+    flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+    }}>
+    <Menu
+      visible={true}
+      onDismiss={() => {setMenu(false)}}             
+     
+      anchor={  <TouchableOpacity onPress={() => {setMenu(!menu)
+      console.log("tıkkkk")}}>
+        <Ionicons 
+        
+        name="arrow-back-outline" size={35} />
+      </TouchableOpacity>
+  }>
+      <Menu.Item onPress={() => {setMenu(false)}} title="Item 1" />
+      <Menu.Item onPress={() => {}} title="Item 2" />
+      <Divider />
+      <Menu.Item onPress={() => {}} title="Item 3" />
+    </Menu>
+  </TouchableOpacity>
+</Provider>
+  )
+  
  
   const comment = ({item}) => {
     return (
       
-        <View style={{flexDirection: 'row',width:width,marginTop:15}}>
+        <View style={{flexDirection: 'row',width:width,marginVertical:10}}>
           <Image
             style={{
               height: 40,
@@ -50,9 +79,12 @@ function ModalTester(props) {
                 borderRadius: 20,
                 width: width * 0.72,
               }}>
+              <View style={{flexDirection: 'row',justifyContent: 'space-between'}}>
               <Text style={{fontWeight: 'bold', padding: 10, paddingBottom: 2}}>
                 {item.name}
-              </Text>
+              </Text>         
+              <Menü />
+              </View>
 
               <View style={{padding: 15, paddingTop: 0, paddingLeft: 10}}>
                 <Text>{item.comment}</Text>

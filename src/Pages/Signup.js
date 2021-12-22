@@ -11,9 +11,8 @@ import {
 import {WebView} from 'react-native-webview';
 import {TextInput, RadioButton, Checkbox} from 'react-native-paper';
 import {TextInputMask} from 'react-native-masked-text';
-import database from '@react-native-firebase/database';
-import auth from '@react-native-firebase/auth';
-
+import moment from 'moment';
+import Icon from 'react-native-vector-icons/Ionicons'
 import Welcome from '../components/Welcome';
 import Modal from 'react-native-modal';
 import authController from '../controllers/authController';
@@ -35,7 +34,27 @@ function Signup(props) {
   const [value, setValue] = React.useState('');
   const [checked, setChecked] = React.useState(false);
 
-  //methods
+  const [secret, setSecret] = React.useState(true);
+  const [passwordOutlineColor,setPasswordOutlineColor] = React.useState('black')
+
+  const emailHasErrors = () => {
+    
+    let pattern= /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return pattern.test(email) == 0;
+  };
+  const passwordHasError = (params) => {
+    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+   
+      if(strongRegex.test(password)) setPasswordOutlineColor("green");
+    else if(mediumRegex.test(password)) setPasswordOutlineColor("orange" );
+     else setPasswordOutlineColor( "red" );
+    
+  
+    
+  }
+  
+  
   const toggleModal = () => {
     if (checked) {
       setChecked(false);
@@ -68,7 +87,10 @@ function Signup(props) {
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
+      <View style={{flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
+      <Icon name='arrow-back-outline' size={25} color='white'  />
       <Text style={styles.header}>Welcome New User</Text>
+      </View>
       <View style={styles.lottieContainer}>
         <Welcome />
       </View>
@@ -89,6 +111,8 @@ function Signup(props) {
               mode="outlined"
               label="Name"
               value={name}
+              theme={{ colors: { placeholder: 'black', text: 'black', primary: "black",underlineColor:'transparent',background : 'white'}}}
+
               onChangeText={name => setName(name)}
             />
             <TextInput
@@ -96,27 +120,50 @@ function Signup(props) {
               mode="outlined"
               onChangeText={lastName => setLastName(lastName)}
               label="Last name"
+              
               style={(styles.input, {width: 120, height: 40, marginLeft: 30})}
+                          theme={{ colors: { placeholder: 'black', text: 'black', primary: "black",underlineColor:'transparent',background : 'white'}}}
+
             />
           </View>
           <TextInput
             style={styles.input}
             mode="outlined"
+            selectionColor='#FF6EA1'  
+
+                  underlineColor='transparent'
+                  editable= {true}
+                  right={<TextInput.Affix text={email.length+"/100"} />}
+          error={email.length == 0 ? false :emailHasErrors()}
+          theme={{ colors: { placeholder: 'black', text: 'black', primary: emailHasErrors()? 'black':'green',underlineColor:'transparent',background : '#003489'}}}
+
             label="Email"
             value={email}
+            
             onChangeText={email => seteMail(email)}
           />
           <TextInput
             value={password}
             mode="outlined"
-            onChangeText={password => setPassword(password)}
-            secureTextEntry={true}
+            
+            onChangeText={password => {setPassword(password)
+              passwordHasError()}}
+            secureTextEntry={secret}
             label="Password"
             style={styles.input}
+            theme={{ colors: { placeholder: 'black', text: 'black', primary: passwordOutlineColor,underlineColor:'transparent',background : '#003489'}}}
+            right={<TextInput.Icon 
+              forceTextInputFocus={false}
+              onPress={() => setSecret(!secret)}
+            name="eye" color="grey" style={{marginTop:15}}/>}
           />
+          
           <TextInput
             value={passwordAgain}
             style={styles.input}
+            error={password != passwordAgain}
+            theme={{ colors: { placeholder: 'black', text: 'black', primary: "green",underlineColor:'transparent',background : '#003489'}}}
+
             mode="outlined"
             secureTextEntry={true}
             label="Password again"
@@ -129,8 +176,21 @@ function Signup(props) {
             }}
             value={birth}
             onChangeText={birth => setBirth(birth)}
-            style={styles.input}
+            style= {{borderColor: 'white',
+            borderRadius: 5,
+            borderWidth:2,
+            paddingLeft:15,
+            borderColor: moment(birth,"DD-MM-YYYY").isValid() ? 'green' : 'red',
+            width: 290,
+            height: 40,
+            alignSelf: 'center',
+            justifyContent: 'center',
+            margin: 10,
+            marginBottom: 10,
+            backgroundColor: 'white',}}
             placeholder="DD/MM/YYYY"
+            placeholderTextColor={"black"}
+            
           />
 
           <RadioButton.Group

@@ -3,8 +3,8 @@ import { View,SafeAreaView,Text,TouchableOpacity,Dimensions,FlatList,RefreshCont
 import Image  from 'react-native-image-progress';
 import auth from '@react-native-firebase/auth';
 const {width} = Dimensions.get('window')
-
 import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
 
 export default function Chat(props) {
   const [messages, setMessages] = useState([]);
@@ -71,11 +71,52 @@ const getAllData = async() => {
     {name:item.recieverUserData.name +" "+item.recieverUserData.lastName,uid:item.recieverUserData.id})
 
   }
-  
+  const getPosts = async () => {
+
+      const postIds = await firestore().collection('Chats').get();
+    
+    
+    postIds.forEach(message => {
+            
+            if( message.data().chatId.split('-')[0] == auth().currentUser.uid) {
+              selectedPath.push(message.data().chatId)
+            } else if( message.data().chatId.split('-')[1] == auth().currentUser.uid) {
+             selectedPath.push(message.data().chatId)
+            }
+    })  
+
+
+
+    try {
+      const list = [];
+      await firestore()
+        .collection('Chats')
+        .doc(chatId)
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+             list.push({
+              ...doc.data(),
+              createdAt: doc.data().createdAt.toDate(),
+              senderUserData: doc.data().senderUserData,
+            })
+            console.log("get posttan gelen data:",{
+              ...doc.data(),
+              createdAt: doc.data().createdAt.toDate(),
+              senderUserData: doc.data().senderUserData,
+            })
+          });
+         
+        });
+    } catch (error) {
+      console.log(error.msg);
+    }
+  };
     
   
   const ChatObject = ({item,index}) => {
-    console.log("SIZEEEEEEEEEEEEEEEE:",messages.length)
     return(
       <TouchableOpacity
       onPress={()=>toChat(item)}  
@@ -104,11 +145,15 @@ const getAllData = async() => {
           }}
         source={{uri : item.recieverUserData.imageUrl}}/>
         <View style={{justifyContent: 'center',marginLeft: 10,padding: 5}}>
-          <Text style={{fontWeight: 'bold'}}>{messages.length !=0 ? item?.recieverUserData.name+" " + item?.recieverUserData.lastName : "daha gelmedi"}</Text>
+         
+         <Text style={{fontWeight: 'bold'}}>{messages.length !=0 ? item?.recieverUserData.name+" " + item?.recieverUserData.lastName : "daha gelmedi"}</Text>
           <View  style={{flexDirection: 'row',width:width-(width*0.05+90)}}>
           <Text 
-          numberOfLines={2} 
-          style={{fontStyle: 'italic',fontSize:12}}>{messages.length !=0 ? item.text : "daha gelmedi"}</Text>
+          numberOfLines={1} 
+          style={{fontStyle: 'italic',fontSize:12,color: 'grey',marginTop:5}}>{messages.length !=0 ? item.text : "daha gelmedi"}</Text>
+         </View>
+         <View style={{alignItems: 'flex-end'}}>
+          <Text style={{color: 'darkgrey', fontSize: 12}}>{messages.length !=0 ? moment(item?.createdAt).fromNow() : "daha gelmedi"}</Text>
           </View>
         </View>
       </TouchableOpacity>

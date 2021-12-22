@@ -154,8 +154,8 @@ const CreatePost = props => {
 
   const takePhotoByCamera = () => {
     ImagePicker.openCamera({
-      width: 1200,
-      height: 780,
+      width: 1080,
+      height: 1920,
       cropping: true,
     })
       .then(image => {

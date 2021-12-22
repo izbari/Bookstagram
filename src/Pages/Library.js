@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, ActivityIndicator, StyleSheet, Text, View, FlatList } from 'react-native';
+import { SafeAreaView, ActivityIndicator,Dimensions, StyleSheet, Text, View, FlatList } from 'react-native';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchBar } from 'react-native-elements';
@@ -9,7 +9,7 @@ import Login from '../components/Welcome';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import BookCard from '../components/BookCard';
-
+const {width} = Dimensions.get('window')
 function Library(props) {
   const dispatch = useDispatch();
   const list = useSelector(store => store.favList);
@@ -19,11 +19,11 @@ function Library(props) {
   const [loading2, setLoading2] = React.useState(false);
   const [splash, setSplash] = React.useState(true);
   const [error, setError] = React.useState(false);
-  const [isFirst, setIsFirst] = React.useState(false);
+
   const [currentPage, setCurrentPage] = React.useState(0);
   React.useEffect(() => {
     getData();
-  }, [currentPage, search]);
+  }, [currentPage]);
 
   if (error) {
     return <Error style={styles.lottieContainerError} />;
@@ -66,8 +66,9 @@ function Library(props) {
     />
   );
 
-  const getData = (text = search ) => {
-   
+  const getData = (text="bookstagram") => {
+   setLoading2(true);
+        setSplash(true)
     const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0&startIndex=${currentPage}`;
     axios
       .get(API_URL)
@@ -88,12 +89,7 @@ function Library(props) {
   if (splash) {
     return <Loading style={styles.lottieContainerError} />;
   }
-  const seachSubject = text => {
-    setSearch(text);
-    setIsFirst(true);
-    getData();
-
-  };
+  
   const renderFooter = () => {
 
     return (
@@ -101,6 +97,10 @@ function Library(props) {
 
         <ActivityIndicator size="small"></ActivityIndicator>
       </View> : null
+
+
+
+
 
 
 
@@ -116,10 +116,13 @@ function Library(props) {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <SearchBar
-        placeholder="Type Here..."
-        lightTheme
-        round
-        onChangeText={text => seachSubject(text)}
+       onIconPress = {()=>getData(search)}
+         containerStyle={{marginTop:15,alignSelf: 'center',height:45,margin:7,backgroundColor:'#CED5DA',width:width*0.9,borderRadius: 15}}
+         inputContainerStyle={{height:10,backgroundColor:'#CED5DA'}}
+         inputStyle={{fontSize:15}}
+         placeholder="Type Something ..."
+         lightTheme
+        onChangeText={setSearch}
         autoCorrect={false}
         value={search}
       />

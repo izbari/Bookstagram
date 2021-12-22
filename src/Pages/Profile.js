@@ -4,30 +4,40 @@ import {
   StyleSheet,
   Text,
   View,
-  Modal,
   FlatList,
-  Button,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Modal from 'react-native-modal';
+
 import I18n from 'react-native-i18n';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
 import Flag from 'react-native-flags';
 import auth from '@react-native-firebase/auth';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
+const {width,height} = Dimensions.get('window')
 
-const {width} = Dimensions.get('window');
 
-function App(props) {
-  const [isModalVisible, setModalVisible] = React.useState(false);
-  const user = useSelector(store => store.user);
+function App(props) { 
+  const dispatch = useDispatch();
+
   const data = [
-    {id: 0, lang: 'TR', country: 'Turkish'},
-    {id: 1, lang: 'US', country: 'English'},
-    {id: 2, lang: 'DE', country: 'Deutschland'},
+   
+    {id: 0, lang: 'tr', country: 'Turkish'},
+    {id: 1, lang: 'us', country: 'English'},
+    {id: 2, lang: 'de', country: 'Deutschland'}, 
+    {id: 3, lang: 'fr', country: 'French'},
+    
+  
   ];
+  const [isModalVisible, setModalVisible] = React.useState(false);
+  const [selectedLang, setSelectedLang] = React.useState(I18n.locale);
+    const user = useSelector(store => store.user);
+
+ 
 
   const signOut = () => {
     auth()
@@ -39,30 +49,76 @@ function App(props) {
 
   const Localize = () => {
     return (
-      <View style={{width: '80%', height: '70%'}}>
-        <Modal isVisible={isModalVisible} animationType="slide">
+      
+    
+        <Modal
+        deviceHeight={height}
+        deviceWidth={width}
+      swipeThreshold={10}
+      onBackButtonPress={()=>setModalVisible(false)}
+      useNativeDriver={true}
+                  propagateSwipe={true}
+        animationIn={'slideInUp'}
+        onSwipeComplete={() => setModalVisible(false)}
+        swipeDirection={'down'}
+        style={{justifyContent: 'flex-end'}}
+        isVisible={isModalVisible}>
+           <View
+        style={{
+          
+          width: width,
+          marginLeft: -20,
+          marginBottom: -20,
+          backgroundColor: 'white',
+          borderRadius: 20,
+          borderBottomRightRadius:0,
+          borderBottomLeftRadius:0,
+          padding: 30,
+          
+          alignItems: 'center',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+
+          shadowRadius: 4,
+        }}>
+            <TouchableOpacity
+  onPress={() => setModalVisible(false)}
+  style={{marginVertical:-20,marginBottom:0}}>
+  <Icon name= "drag-horizontal-variant" size={35} color='grey' />
+  </TouchableOpacity>
           <FlatList
             data={data}
+            showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              return (
-                <TouchableOpacity style={styles.menuRow}>
-                  <Flag code={item.lang} size={32} />
+           return (
+               <View>
+ <TouchableOpacity 
+                onPress={()=>{
+                  dispatch({ type: 'SET_LANGUAGE', payload: { lang: selectedLang} });
+
+                  setSelectedLang(item)
+                               setModalVisible(false)}}
+                style={styles.menuRow}>
+                  <Flag code={item.lang.toUpperCase()} size={32} />
                   <Text style={styles.text}>{item.country}</Text>
+                  
+
+              
                 </TouchableOpacity>
+                <Svg style={{backgroundColor:'#B3B3B3'}} height="1" width={width}></Svg>
+               </View>
               );
             }}
-            style={{height: 200}}
             keyExtractor={item => item.id}
           />
-
-          <Button
-            title="Accept terms and Policies"
-            onPress={() => {
-              setModalVisible(!isModalVisible);
-            }}
-          />
+ </View>
         </Modal>
-      </View>
+       
+     
     );
   };
   const CustomLinearGradient = props => {
@@ -75,7 +131,8 @@ function App(props) {
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
-      {isModalVisible && <Localize />}
+     {isModalVisible && <Localize />}
+        
       <View style={styles.svgCurve}>
         <View
           style={{
@@ -138,7 +195,7 @@ function App(props) {
                 marginRight: 5,
                 marginTop: 7,
               }}>
-              Hello {user ? user.name + ' ' + user.lastName : 'user cant found'}
+              {I18n.t("Hello",{locale:selectedLang.lang})} {user ? user.name + ' ' + user.lastName : 'user cant found'}
             </Text>
           </View>
 
@@ -147,20 +204,20 @@ function App(props) {
               <Text style={styles.profileStatusNumber}>
                 {user ? user.books.length : '1000'}
               </Text>
-              <Text style={styles.profileStatusText}>Books</Text>
+              <Text style={styles.profileStatusText}>{I18n.t("Books",{locale:selectedLang.lang})}</Text>
             </View>
 
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
                 {user ? user.fallowers.length : '1000'}
               </Text>
-              <Text style={styles.profileStatusText}>Fallowers</Text>
+              <Text style={styles.profileStatusText}>{I18n.t("Followers",{locale:selectedLang.lang})}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
                 {user ? user.fallowing.length : '1001'}
               </Text>
-              <Text style={styles.profileStatusText}>Fallowing</Text>
+              <Text style={styles.profileStatusText}>{I18n.t("Following",{locale:selectedLang.lang})}</Text>
             </TouchableOpacity>
             <Image
               style={{
@@ -210,28 +267,28 @@ function App(props) {
               textAlign: 'center',
               fontSize: 12,
             }}>
-            Edit Profile
+           {I18n.t("EditProfile",{locale:selectedLang.lang})}
           </Text>
         </TouchableOpacity>
         <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
-          Account
+        {I18n.t("Account",{locale:selectedLang.lang})}
         </Text>
         <View>
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Store')}
             style={styles.menuRow}>
             <Ionicons name="cart" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>My cart</Text>
+            <Text style={styles.text}>{I18n.t("MyCart",{locale:selectedLang.lang})}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
             <Ionicons name="card" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Purchases</Text>
+            <Text style={styles.text}>{I18n.t("Purchases",{locale: selectedLang.lang })}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
             <Ionicons name="person" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Account</Text>
+            <Text style={styles.text}>{I18n.t("Account",{locale:selectedLang.lang})}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -248,30 +305,31 @@ function App(props) {
           elevation: 80,
         }}>
         <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
-          Settings
+        {I18n.t("Settings",{locale:selectedLang.lang})}
         </Text>
         <View>
-          <TouchableOpacity style={styles.menuRow}>
+          <TouchableOpacity 
+          style={styles.menuRow}>
             <Ionicons name="ellipse" size={25} color="black" />
-            <Text style={styles.text}>Night Mode</Text>
+            <Text style={styles.text}>{I18n.t("Theme",{locale:selectedLang.lang})}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
             <Ionicons name="notifications" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Notifications</Text>
+            <Text style={styles.text}>{I18n.t("Notifications",{locale:selectedLang.lang})}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity
             onPress={() => setModalVisible(true)}
             style={styles.menuRow}>
             <Ionicons name="earth" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Language</Text>
+            <Text style={styles.text}>{I18n.t("Languages",{locale:selectedLang.lang})}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
 
           <TouchableOpacity onPress={() => signOut()} style={styles.menuRow}>
             <Ionicons name="exit" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>Sign Out</Text>
+            <Text style={styles.text}>{I18n.t("SignOut",{locale:selectedLang.lang})}</Text>
           </TouchableOpacity>
         </View>
       </View>
