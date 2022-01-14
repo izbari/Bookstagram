@@ -10,8 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
-import {SearchBar} from 'react-native-elements';
-import {useSearch} from '../utils/searchUtils';
+import {TextInput, Searchbar} from 'react-native-paper';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import BookCard from '../components/BookCard';
@@ -20,27 +19,25 @@ function Library(props) {
   const dispatch = useDispatch();
   const list = useSelector(store => store.favList);
   const [cardData, setCardData] = React.useState([]);
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
-  const [loading3, setLoading3] = React.useState(false);
-
-  //const [splash, setSplash] = React.useState(true);
+  const [splash, setSplash] = React.useState(true);
   const [error, setError] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(0);
-  
+  React.useEffect(() => {
+    getData();
+  }, [currentPage]);
 
   if (error) {
     return <Error style={styles.lottieContainerError} />;
   }
-
   const cartDetailsHandler = item => {
     props.navigation.navigate('SingleBookDesc', {
       singleBookData: item,
     });
   };
-
   const favHandler = item => {
     if (list.includes(item)) {
       dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
@@ -48,33 +45,13 @@ function Library(props) {
       dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
     }
   };
-
   const cartHandler = item => {
     dispatch({type: 'ADD_CART', payload: {cartCard: item}});
   };
-
-  const handleLoadMore = async param => {
-    if(!loading3){
-     setCurrentPage(currentPage+ 40);
-    console.log("currentPage1=" + currentPage)
-
-    const res = await getLoadMoreData(search,currentPage);
-}
+  const handleLoadMore = param => {
+    setLoading2(true);
+    setCurrentPage(currentPage + 20);
   };
-
-
- const getLoadMoreData = async(text,currentPage) => {   
-     setLoading3(true);
-
-   console.log("currentPage2=" + currentPage)
-    // same input with pagination
-    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=40&orderBy=relevance&startIndex=${currentPage+40}&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
-    const res = await axios(API_URL);
-    setCardData(cardData.concat(res.data.items));
-    setLoading3(false);
-   }
-
-
 
   const renderItem = ({item}) => (
     <BookCard
@@ -92,69 +69,68 @@ function Library(props) {
     />
   );
 
-  const getData = async text => {
-   
-      //new searching
-      const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=40&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
-
-      setLoading2(true);
-      const res = await useSearch(API_URL);
-      const bookData = res;
-      setLoading2(false);
-      setLoading(false);
-      setCardData(bookData);
-    
+  const getData = (text = 'bookstagram') => {
+    setLoading2(true);
+    setSplash(true);
+    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=20&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0&startIndex=${currentPage}`;
+    axios
+      .get(API_URL)
+      .then(res => {
+        setCardData(cardData.concat(res.data.items));
+        setLoading(false);
+        setLoading2(false);
+        setSplash(false);
+      })
+      .catch(err => {
+        console.log(err);
+        setError(true);
+        setLoading(false);
+      });
   };
-  const onChangeHandler = async e => {
-    setCurrentPage(0);
-    getData(e);
-    setSearch(e);
-  };
+  if (splash) {
+    return <Loading style={styles.lottieContainerError} />;
+  }
 
   const renderFooter = () => {
-    return loading3 ? (
+    return loading2 ? (
       <View style={{alignItems: 'center', margin: 10}}>
         <ActivityIndicator size="small"></ActivityIndicator>
       </View>
     ) : null;
   };
-  const refreshHandler = () => {
+  const refreshHandler = async params => {
     setLoading(true);
-    getData(search);
+    await setCardData([]);
+    getData();
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <SearchBar
-        //onIconPress = {()=>getData(search)}
-        containerStyle={{
+      <Searchbar
+        onIconPress={() => getData(search)}
+        icon={'arrow-left'}
+        style={{
           marginTop: 15,
           alignSelf: 'center',
           height: 45,
-          margin: 7,
-          backgroundColor: '#CED5DA',
+          margin: 5,
+          marginBottom: 0,
+          backgroundColor: 'white',
           width: width * 0.9,
-          borderRadius: 15,
+          borderRadius: 10,
         }}
-        inputContainerStyle={{height: 10, backgroundColor: '#CED5DA'}}
         inputStyle={{fontSize: 15}}
         placeholder="Type Something ..."
-        lightTheme
-        onChangeText={text => onChangeHandler(text)}
-        autoCorrect={false}
+        onChangeText={setSearch}
         value={search}
       />
-      {loading2 ? (
-        <View style={{alignItems: 'center', margin: 10}}>
-          <ActivityIndicator size="small"></ActivityIndicator>
-        </View>
-      ) : null}
 
       <FlatList
         data={cardData}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         onEndReached={handleLoadMore}
+        onEndReachedThreshold={0}
         ListFooterComponent={renderFooter}
         onRefresh={refreshHandler}
         refreshing={loading}
