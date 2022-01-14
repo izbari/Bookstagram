@@ -11,8 +11,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-
-import ActionButton from 'react-native-action-button';
+import { FAB, Portal, Provider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
@@ -22,7 +21,15 @@ import firestore from '@react-native-firebase/firestore';
 import Loading from '../components/Loading';
 
 const {width, height} = Dimensions.get('window');
+
 const CreatePost = props => {
+
+
+  const [state, setState] = React.useState({ open: false });
+
+  const onStateChange = ({ open }) => setState({ open });
+
+  const { open } = state;
   const [image, setImage] = React.useState(null);
   const [height, setHeight] = React.useState(0);
   const [postText, setPostText] = React.useState('');
@@ -149,6 +156,8 @@ const CreatePost = props => {
       const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
       console.log('image pathi', image.path);
       setImage(imageUri);
+    }).catch(err => {
+      console.log(err.msg);
     });
   };
 
@@ -199,20 +208,37 @@ const CreatePost = props => {
       {image !== null ? (
         <Image style={styles.image} source={{uri: image}} />
       ) : null}
-      <ActionButton buttonColor="#FF6EA1">
-        <ActionButton.Item
-          buttonColor="#9b59b6"
-          title="Take Photo"
-          onPress={() => takePhotoByCamera()}>
-          <Icon name="camera" style={styles.actionButtonIcon} />
-        </ActionButton.Item>
-        <ActionButton.Item
-          buttonColor="#3498db"
-          title="Choose Photo"
-          onPress={() => selectFromGallery()}>
-          <Icon name="image" style={styles.actionButtonIcon} />
-        </ActionButton.Item>
-      </ActionButton>
+        <Provider>
+      <Portal>
+        <FAB.Group
+          open={open}
+          color='white'
+          fabStyle={{backgroundColor:'#FF6EA1'}}
+
+          icon={open ? 'close' : 'plus'}
+          actions={[
+          
+            {
+              icon: 'camera',
+              label: 'Take Photo',
+              onPress: () => takePhotoByCamera(),
+              small: false,
+
+            },
+            {
+              icon: 'image',
+              label: 'Choose Photo',
+              onPress: () => selectFromGallery(),
+              small: false,
+
+            },
+            
+          ]}
+          onStateChange={onStateChange}
+         
+        />
+      </Portal>
+    </Provider>
     </View>
   );
 };

@@ -39,9 +39,8 @@ function ModalTester(props) {
      
       anchor={  <TouchableOpacity onPress={() => {setMenu(!menu)
       console.log("tıkkkk")}}>
-        <Ionicons 
-        
-        name="arrow-back-outline" size={35} />
+                  <Ionicons name = "ellipsis-horizontal" size={25} style={{margin: 5,marginRight: 20,}}color="grey"/>
+
       </TouchableOpacity>
   }>
       <Menu.Item onPress={() => {setMenu(false)}} title="Item 1" />
@@ -83,7 +82,9 @@ function ModalTester(props) {
               <Text style={{fontWeight: 'bold', padding: 10, paddingBottom: 2}}>
                 {item.name}
               </Text>         
+              <View>
               <Menü />
+              </View>
               </View>
 
               <View style={{padding: 15, paddingTop: 0, paddingLeft: 10}}>
