@@ -26,7 +26,6 @@ function ModalTester(props) {
   const [postText, setPostText] = React.useState('');
   const [menu, setMenu] = React.useState(true);
   const Menü = (params) => (
-    <Provider>
   <TouchableOpacity
     style={{
     flex: 1,
@@ -49,7 +48,6 @@ function ModalTester(props) {
       <Menu.Item onPress={() => {}} title="Item 3" />
     </Menu>
   </TouchableOpacity>
-</Provider>
   )
   
  

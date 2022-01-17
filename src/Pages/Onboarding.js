@@ -28,7 +28,7 @@ function Onboarding(props) {
     if (currentIndex < slides.length - 1) {
       sliderRef.current.scrollToIndex({index: currentIndex + 1});
     } else {
-      props.navigation.navigate('Main');
+      props.navigation.navigate('HomeScreen');
     }
   };
 

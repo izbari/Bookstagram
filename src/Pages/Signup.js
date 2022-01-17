@@ -5,23 +5,33 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  Text,
+  KeyboardAvoidingView ,
   Button,
 } from 'react-native';
 import {WebView} from 'react-native-webview';
-import {TextInput, RadioButton, Checkbox} from 'react-native-paper';
+import {
+  TextInput,
+  RadioButton,
+  Checkbox,
+  Portal,
+  Text,
+  Modal,
+} from 'react-native-paper';
 import {TextInputMask} from 'react-native-masked-text';
 import moment from 'moment';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
 import Welcome from '../components/Welcome';
-import Modal from 'react-native-modal';
 import authController from '../controllers/authController';
+import terms from '../utils/terms'
 
-//main method
+//main methods
 function Signup(props) {
   //States ,effects, vars
-  const [isModalVisible, setModalVisible] = React.useState(false);
-  // AUTH
+ 
+  const [visible, setVisible] = React.useState(false);
+  const [bottom, setBottom] = React.useState(true);
+  const hideModal = () => {setVisible(false)
+                             setBottom(true)     };
   const [name, setName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
 
@@ -35,84 +45,105 @@ function Signup(props) {
   const [checked, setChecked] = React.useState(false);
 
   const [secret, setSecret] = React.useState(true);
-  const [passwordOutlineColor,setPasswordOutlineColor] = React.useState('black')
+  const [passwordOutlineColor, setPasswordOutlineColor] =
+    React.useState('black');
 
   const emailHasErrors = () => {
-    
-    let pattern= /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return pattern.test(email) == 0;
   };
-  const passwordHasError = (params) => {
-    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-    const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-   
-      if(strongRegex.test(password)) setPasswordOutlineColor("green");
-    else if(mediumRegex.test(password)) setPasswordOutlineColor("orange" );
-     else setPasswordOutlineColor( "red" );
-    
-  
-    
-  }
-  
-  
-  const toggleModal = () => {
-    if (checked) {
-      setChecked(false);
-    }
-    setModalVisible(!isModalVisible);
+  const passwordHasError = params => {
+    const strongRegex = new RegExp(
+      '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})',
+    );
+    const mediumRegex = new RegExp(
+      '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})',
+    );
+
+    if (strongRegex.test(password)) setPasswordOutlineColor('green');
+    else if (mediumRegex.test(password)) setPasswordOutlineColor('orange');
+    else setPasswordOutlineColor('red');
   };
 
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    
+    return layoutMeasurement.height + contentOffset.y >=
+      contentSize.height ;
+  };
 
-  const MyComponent = () => {
+  const TermsPopup = () => {
     return (
-      <View style={{flex: 1}}>
-        <Modal isVisible={isModalVisible} animationType="slide">
+      <View>
+        <Portal>
+          <Modal
+            visible={visible}
+            onDismiss={hideModal}
+            contentContainerStyle={styles.containerStyle}>
+          <View style={{flex: 1,padding:20}}>
           <WebView
-            source={{
-              uri: 'https://www.termsandconditionsgenerator.com/live.php?token=LyjK5wb6m1SBE0ap0KBS6uZCPEz6mu7y',
-            }}
-            style={{marginTop: 10, flex: 1}}
-          />
-
-          <Button
-            title="Accept terms and Policies"
-            onPress={() => {
-              setChecked(true);
-              setModalVisible(!isModalVisible);
-            }}
-          />
-        </Modal>
+                originWhitelist={['*']}
+              onScroll={({nativeEvent}) => {
+                if (isCloseToBottom(nativeEvent)) {
+                  setBottom(false);
+                }
+              }}
+              scrollEventThrottle={400}
+              showsVerticalScrollIndicator={false}
+              startInLoadingState={false} 
+    scalesPageToFit={false} 
+              source={{ 
+                html: ` 
+                  <head>
+                    <meta content="width=width, initial-scale=1, maximum-scale=0.8" name="viewport"></meta>
+                  </head>
+                  <body style="background-image" size: ${terms}`, 
+              }} 
+              style={{flex: 1,padding:20}}
+            />
+          </View>
+            <Button
+              title="Accept Terms and Policies"
+              style={{marginTop: 30}}
+              onPress={()=>{hideModal() 
+              setChecked(true)}}
+              disabled={bottom}>
+              
+            </Button>
+          </Modal>
+        </Portal>
       </View>
     );
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <View style={{flexDirection: 'row',justifyContent: 'center',alignItems: 'center'}}>
-      <Icon name='arrow-back-outline' size={25} color='white'  />
-      <Text style={styles.header}>Welcome New User</Text>
-      </View>
+        <Text style={styles.header}>Welcome New User</Text>
+      
       <View style={styles.lottieContainer}>
         <Welcome />
       </View>
-      <ScrollView>
-        <View style={styles.inputContainer}>
-          <View style={{flexDirection: 'row'}}>
+      <KeyboardAvoidingView style={styles.inputContainer} behavior='position' keyboardVerticalOffset={ Platform.OS === 'ios' ? 40 : 0}>
+          <View style={{flexDirection: 'row',justifyContent: 'space-around',}}>
             <TextInput
               style={
                 (styles.input,
                 {
-                  width: 120,
+                  width: 135,
                   height: 40,
-                  marginRight: 20,
-                  marginLeft: 10,
                   borderColor: 'red',
                 })
               }
               mode="outlined"
               label="Name"
               value={name}
-              theme={{ colors: { placeholder: 'black', text: 'black', primary: "black",underlineColor:'transparent',background : 'white'}}}
-
+              theme={{
+                colors: {
+                  placeholder: 'black',
+                  text: 'black',
+                  primary: 'black',
+                  underlineColor: 'transparent',
+                  background: 'white',
+                },
+              }}
               onChangeText={name => setName(name)}
             />
             <TextInput
@@ -120,50 +151,82 @@ function Signup(props) {
               mode="outlined"
               onChangeText={lastName => setLastName(lastName)}
               label="Last name"
-              
-              style={(styles.input, {width: 120, height: 40, marginLeft: 30})}
-                          theme={{ colors: { placeholder: 'black', text: 'black', primary: "black",underlineColor:'transparent',background : 'white'}}}
-
+              style={(styles.input, {width: 135, height: 40,})}
+              theme={{
+                colors: {
+                  placeholder: 'black',
+                  text: 'black',
+                  primary: 'black',
+                  underlineColor: 'transparent',
+                  background: 'white',
+                },
+              }}
             />
           </View>
           <TextInput
             style={styles.input}
             mode="outlined"
-            selectionColor='#FF6EA1'  
-
-                  underlineColor='transparent'
-                  editable= {true}
-                  right={<TextInput.Affix text={email.length+"/100"} />}
-          error={email.length == 0 ? false :emailHasErrors()}
-          theme={{ colors: { placeholder: 'black', text: 'black', primary: emailHasErrors()? 'black':'green',underlineColor:'transparent',background : '#003489'}}}
-
+            selectionColor="#FF6EA1"
+            underlineColor="transparent"
+            editable={true}
+            right={<TextInput.Affix text={email.length + '/100'} />}
+            error={email.length == 0 ? false : emailHasErrors()}
+            theme={{
+              colors: {
+                placeholder: 'black',
+                text: 'black',
+                primary: emailHasErrors() ? 'black' : 'green',
+                underlineColor: 'transparent',
+                background: '#003489',
+              },
+            }}
             label="Email"
             value={email}
-            
             onChangeText={email => seteMail(email)}
           />
           <TextInput
             value={password}
             mode="outlined"
-            
-            onChangeText={password => {setPassword(password)
-              passwordHasError()}}
+            onChangeText={password => {
+              setPassword(password);
+              passwordHasError();
+            }}
             secureTextEntry={secret}
             label="Password"
             style={styles.input}
-            theme={{ colors: { placeholder: 'black', text: 'black', primary: passwordOutlineColor,underlineColor:'transparent',background : '#003489'}}}
-            right={<TextInput.Icon 
-              forceTextInputFocus={false}
-              onPress={() => setSecret(!secret)}
-            name="eye" color="grey" style={{marginTop:15}}/>}
+            theme={{
+              colors: {
+                placeholder: 'black',
+                text: 'black',
+                primary: passwordOutlineColor,
+                underlineColor: 'transparent',
+                background: '#003489',
+              },
+            }}
+            right={
+              <TextInput.Icon
+                forceTextInputFocus={false}
+                onPress={() => setSecret(!secret)}
+                name="eye"
+                color="grey"
+                style={{marginTop: 15}}
+              />
+            }
           />
-          
+
           <TextInput
             value={passwordAgain}
             style={styles.input}
             error={password != passwordAgain}
-            theme={{ colors: { placeholder: 'black', text: 'black', primary: "green",underlineColor:'transparent',background : '#003489'}}}
-
+            theme={{
+              colors: {
+                placeholder: 'black',
+                text: 'black',
+                primary: 'green',
+                underlineColor: 'transparent',
+                background: '#003489',
+              },
+            }}
             mode="outlined"
             secureTextEntry={true}
             label="Password again"
@@ -176,21 +239,22 @@ function Signup(props) {
             }}
             value={birth}
             onChangeText={birth => setBirth(birth)}
-            style= {{borderColor: 'white',
-            borderRadius: 5,
-            borderWidth:2,
-            paddingLeft:15,
-            borderColor: moment(birth,"DD-MM-YYYY").isValid() ? 'green' : 'red',
-            width: 290,
-            height: 40,
-            alignSelf: 'center',
-            justifyContent: 'center',
-            margin: 10,
-            marginBottom: 10,
-            backgroundColor: 'white',}}
+            style={{
+              borderColor: 'white',
+              borderRadius: 5,
+              borderWidth: 1,
+              paddingLeft: 15,
+              borderColor: birth.length==0 ? 'black' : moment(birth, 'DD-MM-YYYY').isValid() ? 'green' : 'red',
+              width: 290,
+              height: 40,
+              alignSelf: 'center',
+              justifyContent: 'center',
+              margin: 10,
+              marginBottom: 10,
+              backgroundColor: 'white',
+            }}
             placeholder="DD/MM/YYYY"
-            placeholderTextColor={"black"}
-            
+            placeholderTextColor={'black'}
           />
 
           <RadioButton.Group
@@ -204,35 +268,39 @@ function Signup(props) {
                 marginLeft: 32,
               }}>
               <View style={{flexDirection: 'row'}}>
-                <RadioButton value="Male" />
+                <RadioButton value="Male"           color={'white'}
+/>
                 <Text style={{marginTop: 8, fontSize: 15}}>Male</Text>
               </View>
               <View style={{flexDirection: 'row', marginLeft: 70}}>
-                <RadioButton value="Female" />
+                <RadioButton value="Female" color={'white'}/>
                 <Text style={{marginTop: 8, fontSize: 15}}>Female</Text>
               </View>
             </View>
           </RadioButton.Group>
           <View style={{flexDirection: 'row'}}>
             <Checkbox.Item
+              color={'white'}
+              labelStyle={{fontSize:12,fontStyle:'italic'}}
+              style={{fontSize:12}}
               status={checked ? 'checked' : 'unchecked'}
+              label={"I accept the Terms in the License Agreement."}
+              position="leading"
               onPress={() => {
-                if (checked) {
-                  setChecked(!checked);
-                } else {
-                  toggleModal();
-                }
+                if(checked){
+                  setChecked(false);}
+                else{setVisible(true);}
+               
+                
               }}
             />
-            <Text style={{marginTop: 15, marginRight: 0}}>I have read </Text>
-            <Text
-              style={{marginTop: 15, marginRight: 0, color: 'blue'}}
-              onPress={() => setModalVisible(!isModalVisible)}>
-              Terms and Policies
-            </Text>
+            
+           
+            
           </View>
-          {isModalVisible && <MyComponent />}
-        </View>
+          {visible && <TermsPopup />}
+          
+        </KeyboardAvoidingView>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -252,7 +320,6 @@ function Signup(props) {
                 passwordAgain,
                 checked,
               );
-              console.log('condition:', condition);
               let createdInAuth = 'k';
               const newUser = {
                 email,
@@ -262,9 +329,9 @@ function Signup(props) {
                 birth,
                 gender: value,
                 imageUrl: `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`,
-                fallowers: [],
-                fallowing: [],
-                books: [],
+                fallowers: ['initial'],
+                fallowing: ['initial'],
+                books: ['initial'],
               };
               if (condition) {
                 createdInAuth = authController.createUser(newUser);
@@ -272,7 +339,7 @@ function Signup(props) {
                 if (createdInAuth) {
                   console.log('Databasede oluştu.');
 
-                  props.navigation.navigate('Login', {
+                  props.navigation.navigate('Onboarding', {
                     user: newUser,
                     check: true,
                   });
@@ -283,25 +350,30 @@ function Signup(props) {
             }}>
             <Text style={styles.buttonText}>Create</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => props.navigation.navigate('Login')}>
+            <Text style={styles.buttonText}>Back</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
+  containerStyle: {backgroundColor: 'white', flex: 1, margin: 15,},
   mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
   lottieContainer: {
-    flex: 5,
+    flex: 2,
     width: '85%',
     height: '30%',
     alignSelf: 'center',
   },
   inputContainer: {
-    flex: 2,
-    justifyContent: 'center',
+    flex: 5,
+    justifyContent: 'flex-end',
     alignSelf: 'center',
   },
-  buttonContainer: {margin: 10, justifyContent: 'flex-end'},
+  buttonContainer: {margin: 10,marginBottom: 20,},
   button: {
     borderRadius: 10,
     borderWidth: 2,
@@ -337,6 +409,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     margin: 10,
+    marginTop: 20,
+    marginBottom: 0,
   },
   modal: {
     flex: 1,

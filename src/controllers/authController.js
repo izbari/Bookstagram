@@ -2,7 +2,6 @@ import {ToastAndroid} from 'react-native';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import React from 'react';
-import {cleanSingle} from 'react-native-image-crop-picker';
 
 exports.createUser = async ({
   email,
@@ -70,10 +69,24 @@ exports.userLogin = (props, email, password, data, check = false) => {
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
+          ToastAndroid.showWithGravityAndOffset(
+            'That email address is already in use!',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
           console.log('That email address is already in use!');
         }
 
         if (error.code === 'auth/invalid-email') {
+           ToastAndroid.showWithGravityAndOffset(
+            'That email address is invalid!',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
           console.log('That email address is invalid!');
         }
 
@@ -96,13 +109,24 @@ exports.userLogin = (props, email, password, data, check = false) => {
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
+          ToastAndroid.showWithGravityAndOffset(
+            'That email address is already in use!',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
         }
 
         if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
+          ToastAndroid.showWithGravityAndOffset(
+            'That email address is invalid!',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
         }
-
         console.error(error);
       });
   }

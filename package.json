@@ -22,6 +22,7 @@
     "@react-navigation/native-stack": "^6.1.0",
     "@reduxjs/toolkit": "^1.6.1",
     "axios": "^0.21.4",
+    "firebase": "^9.6.3",
     "formik": "^2.2.9",
     "lottie-react-native": "^4.0.3",
     "moment": "^2.29.1",

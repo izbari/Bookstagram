@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/core';
 import UserProvider from './context/Provider';
 import {TouchableOpacity, Text} from 'react-native';
 import Login from './Pages/Login';
@@ -20,8 +21,7 @@ import MyTabBar from './components/TabBar';
 import Discover from './Pages/Discover';
 import HomeScreen from './Pages/HomeScreen';
 import NewMessage from './Pages/NewMessage';
-
-import Post from './Pages/Post';
+import {Provider} from 'react-native-paper';
 
 import Auth from './Pages/Auth';
 import OtherProfile from './Pages/OtherProfile';
@@ -30,6 +30,36 @@ import CreatePost from './Pages/CreatePost';
 
 import Onboarding from './Pages/Onboarding';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import firebase from '@react-native-firebase/app';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyDoShg_mT8ediBrBP4bTHC4vGG2EM1bgpQ',
+
+  authDomain: 'bookstagram-325020.firebaseapp.com',
+
+  databaseURL: 'https://bookstagram-325020-default-rtdb.firebaseio.com',
+
+  projectId: 'bookstagram-325020',
+
+  storageBucket: 'bookstagram-325020.appspot.com',
+
+  messagingSenderId: '464963021979',
+
+  appId: '1:464963021979:web:73de2191c3f164423eaa3e',
+
+  measurementId: 'G-HVJVK84ZM8',
+};
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+  console.log("initializing app")
+}else {
+  firebase.app(); // if already initialized, use that one
+  console.log("initializing app2")
+
+}
+
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -78,7 +108,7 @@ const Chat = ({navigation}) => {
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('NewMessage')
+                navigation.navigate('NewMessage');
               }}>
               <Ionicons name="create-outline" size={25} color="white" />
             </TouchableOpacity>
@@ -88,7 +118,7 @@ const Chat = ({navigation}) => {
         component={ChatScreen}
       />
       <Stack.Screen
-         options={{
+        options={{
           headerTitleAlign: 'center',
           title: 'New Message',
           headerStyle: {
@@ -98,20 +128,24 @@ const Chat = ({navigation}) => {
           headerTitleStyle: {
             fontWeight: 'bold',
             textAlign: 'center',
-          }}}
+          },
+        }}
         name="NewMessage"
         component={NewMessage}
       />
       <Stack.Screen
-        options={({route})=>({title: route.params.name,headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#FF6EA1',
-        },
-        headerTintColor: 'white',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          textAlign: 'center',
-        }})}
+        options={({route}) => ({
+          title: route.params.name,
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+        })}
         name="ChatSingleScreen"
         component={ChatSingleScreen}
       />
@@ -120,6 +154,16 @@ const Chat = ({navigation}) => {
 };
 
 const Main = props => {
+  console.log("props",props)
+  React.useEffect(() => {
+    firebase.auth().onAuthStateChanged((user)=> {
+      if(!user){
+      props.navigation.navigate('AuthProvider')
+      }
+    })
+
+    
+  },[])
   return (
     <Tab.Navigator
       tabBar={props => <MyTabBar {...props} />}
@@ -253,6 +297,13 @@ const Home = props => (
       name="OtherProfile"
       component={OtherProfile}
     />
+    <Stack.Screen
+      options={{
+        headerShown: false,
+      }}
+      name="Onboarding"
+      component={Onboarding}
+    />
   </Stack.Navigator>
 );
 const AuthProvider = props => (
@@ -271,43 +322,42 @@ const AuthProvider = props => (
       name="Signup"
       component={Signup}
     />
-    <Stack.Screen
-      options={{
-        headerShown: false,
-      }}
-      name="Onboarding"
-      component={Onboarding}
-    />
   </Stack.Navigator>
 );
 
 function App(props) {
+
+
+
+
   return (
     <UserProvider>
       <NavigationContainer>
-        <Stack.Navigator options={{headerShown: false}}>
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="Main"
-            component={Main}
-          />
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="AuthProvider"
-            component={AuthProvider}
-          />
+        <Provider>
+          <Stack.Navigator options={{headerShown: false}}>
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="Main"
+              component={Main}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="AuthProvider"
+              component={AuthProvider}
+            />
 
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="SingleBookDesc"
-            component={SingleBookDesc}
-          />
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="AddTopics"
-            component={AddTopics}
-          />
-        </Stack.Navigator>
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="SingleBookDesc"
+              component={SingleBookDesc}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="AddTopics"
+              component={AddTopics}
+            />
+          </Stack.Navigator>
+        </Provider>
       </NavigationContainer>
     </UserProvider>
   );
