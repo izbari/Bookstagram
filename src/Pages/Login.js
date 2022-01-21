@@ -7,14 +7,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import authController from '../controllers/authController';
+import AuthController from '../controllers/authController';
 import {TextInput} from 'react-native-paper';
 import Welcome from '../components/Yoga';
+
 function App(props) {
   const [email, seteMail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [secret, setSecret] = React.useState(true);
 
+  
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.header}>WELCOME BACK !</Text>
@@ -71,51 +73,11 @@ function App(props) {
             }
           />
         </View>
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              let ideklenmisuser = 'k';
-              try {
-                if (!(props.route.params.user == undefined)) {
-                  console.log('user geldi', props.route.params.user);
-                  let user = props.route.params.user;
-                  console.log('sorun yok:', user);
-                  let yeniusermi = props.route.params.check;
-                  console.log('gelen check: ', yeniusermi);
-                  let ideklenmisuser = {...user};
-
-                  console.log(ideklenmisuser);
-                  if (yeniusermi == true) {
-                    let isNewUser = authController.userLogin(
-                      props,
-                      email,
-                      password,
-                      ideklenmisuser,
-                      yeniusermi,
-                    );
-                    console.log('başardık dostum !:', isNewUser);
-                  } else {
-                    let isNewUser = authController.userLogin(
-                      props,
-                      email,
-                      password,
-                      ideklenmisuser,
-                    );
-                    console.log('başardık dostum !:', isNewUser);
-                  }
-                }
-              } catch (err) {
-                console.log(err);
-                let isNewUser = authController.userLogin(
-                  props,
-                  email,
-                  password,
-                  ideklenmisuser,
-                );
-                console.log('başardık dostum !:', isNewUser);
-              }
-            }}>
+            onPress={()=>AuthController.userLogin(props,email,password)}>
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -128,6 +90,7 @@ function App(props) {
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
   lottieContainer: {

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {
   SafeAreaView,
- 
   FlatList,
-StyleSheet,
+  StyleSheet,
   ScrollView,
   Alert,
   View,
@@ -16,41 +15,56 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 
-import Modal from '../components/Modal/ModalTester'
-import {useSelector} from 'react-redux';
-
+import Modal from '../components/Modal/ModalTester';
+import {useDispatch, useSelector} from 'react-redux';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const {width} = Dimensions.get('window');
 
 function HomeScreen(props) {
-  const [commentPosted,setCommentPosted] = React.useState(false);
+  const [commentPosted, setCommentPosted] = React.useState(false);
   const [posts, setPosts] = React.useState([]);
   const [deleted, setDeleted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState({});
   const [threeDotVisible, setThreeDotVisible] = React.useState(false);
+  const [user, setUser] = React.useState({});
+
+  const dispatch = useDispatch();
+ 
+  React.useEffect(() => {
+    if (auth()?.currentUser.uid || props.route.params?.authId) {
+      database()
+        .ref(`/users/${auth().currentUser.uid || props.route.params.authId}`)
+        .on('value', snapshot => {
+          dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
+          console.log(
+            'route user states changed and fetched informations again...',
+          );
+        }).then(() => setUser(useSelector(store => store.user)));
+    }
+  }, []);
 
   React.useEffect(async () => {
     getPosts();
-  }, [posts,submitComment,likePost,commentPosted,setCommentPosted]);
+  }, [posts, submitComment, likePost, commentPosted, setCommentPosted]);
 
   React.useEffect(async () => {
     getPosts();
     setDeleted(false);
   }, [deleted]);
-  const usera = useSelector(store => store.user);
- 
+
   const likeHandler = (postId, prevLikes) => {
     const selectedPost = posts.find(post => post.id === postId);
-    console.log("selectedPost cevabi:",selectedPost);
+    console.log('selectedPost cevabi:', selectedPost);
     //unlike
-    if(selectedPost.likes.includes(auth().currentUser.uid)) {unlikePost(postId, prevLikes)}
+    if (selectedPost.likes.includes(auth().currentUser.uid)) {
+      unlikePost(postId, prevLikes);
+    }
     //like
     else likePost(postId, prevLikes);
-    
-  }  
-  
+  };
+
   const likePost = (postId, prevLikes) => {
     firestore()
       .collection('posts')
@@ -63,7 +77,10 @@ function HomeScreen(props) {
       });
   };
   const unlikePost = (postId, prevLikes) => {
-    console.log("filter cevabı:",prevLikes.filter(element => element != auth().currentUser.uid))
+    console.log(
+      'filter cevabı:',
+      prevLikes.filter(element => element != auth().currentUser.uid),
+    );
     firestore()
       .collection('posts')
       .doc(postId)
@@ -90,29 +107,25 @@ function HomeScreen(props) {
         console.log('ERROR1:', err);
       });
   };
- 
-  
-  const onSave = (postId) => {
-    let added=[]
-    console.log("added ilk init",added)
-  
-    if(usera?.saved){
-      added=usera.saved;
-       added.includes(postId) ?
-         added=added.filter(element => postId!=element) : added.push(postId);
-       
-    }else{
+
+  const onSave = postId => {
+    let added = [];
+    console.log('added ilk init', added);
+
+    if (user?.saved) {
+      added = user.saved;
+      added.includes(postId)
+        ? (added = added.filter(element => postId != element))
+        : added.push(postId);
+    } else {
       added.push(postId);
     }
-   
+
     database()
-  .ref(`/users/${usera.id}/saved`)
-  .set(added)
-  .then(() => console.log('Data set.'));
-    
-  }
-  
-  
+      .ref(`/users/${auth()?.currentUser?.uid}/saved`)
+      .set(added)
+      .then(() => console.log('Data set.'));
+  };
 
   const deletePost = postId => {
     console.log('Current Post Id:', postId);
@@ -170,7 +183,6 @@ function HomeScreen(props) {
     }
   };
 
-
   const getPosts = async () => {
     try {
       const list = [];
@@ -204,16 +216,12 @@ function HomeScreen(props) {
       console.log(error.msg);
     }
   };
-  
-    
-    
-  
-  const onThreeDotClicked = (params) => {
-    setThreeDotVisible(!threeDotVisible)
-    console.warn("calistim")
-  }
-  
- 
+
+  const onThreeDotClicked = params => {
+    setThreeDotVisible(!threeDotVisible);
+    console.warn('calistim');
+  };
+
   const renderItem = ({item}) => {
     return (
       <PostCard
@@ -229,28 +237,31 @@ function HomeScreen(props) {
       />
     );
   };
-  const submitComment =  (postText) => {
-    console.log("calisiyo mu makes",postText);
-    console.log("selected post : ",selectedPost)
-    
-  firestore()
-    .collection('posts')
-    .doc(selectedPost.id)
-    .update({
-      comments: [...selectedPost.comments, {
-          userId: usera.id,
-          id:new Date().getTime().toString(),
-          img: usera.imageUrl,
-          name: usera.name + ' ' + usera.lastName,
-          comment: postText,
-          postTime: firestore.Timestamp.fromDate(new Date()),
-        }],
-    })
-    .then(() => {
-      console.log('Comment successfully posted!');
-      setCommentPosted(!commentPosted)
-    });
-};
+  const submitComment = postText => {
+    console.log('calisiyo mu makes', postText);
+    console.log('selected post : ', selectedPost);
+
+    firestore()
+      .collection('posts')
+      .doc(selectedPost.id)
+      .update({
+        comments: [
+          ...selectedPost.comments,
+          {
+            userId: auth()?.currentUser?.uid,
+            id: new Date().getTime().toString(),
+            img: user.imageUrl,
+            name: user.name + ' ' + user.lastName,
+            comment: postText,
+            postTime: firestore.Timestamp.fromDate(new Date()),
+          },
+        ],
+      })
+      .then(() => {
+        console.log('Comment successfully posted!');
+        setCommentPosted(!commentPosted);
+      });
+  };
   return (
     <SafeAreaView style={styles.mainContainer}>
       {loading ? (
@@ -413,20 +424,19 @@ function HomeScreen(props) {
           </SkeletonPlaceholder>
         </ScrollView>
       ) : (
-       <View>
-         <Modal 
-         modalVisible={modalVisible} 
-         setModalVisible={()=>setModalVisible(false)} 
-         selectedPostComments={selectedPost}
-         submitComment={(postText) =>submitComment(postText)}
-         
-         />
-      <FlatList
-          data={posts}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />  
-       </View>
+        <View>
+          <Modal
+            modalVisible={modalVisible}
+            setModalVisible={() => setModalVisible(false)}
+            selectedPostComments={selectedPost}
+            submitComment={postText => submitComment(postText)}
+          />
+          <FlatList
+            data={posts}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+          />
+        </View>
       )}
     </SafeAreaView>
   );
@@ -474,49 +484,49 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   centeredView: {
-    flex:0.1,
-    width:width,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
+    flex: 0.1,
+    width: width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   modalView: {
-    flex:0.1,
-    width:width,
-    
-    backgroundColor: "white",
+    flex: 0.1,
+    width: width,
+
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
-  }
+    textAlign: 'center',
+  },
 });
 
 export default HomeScreen;
