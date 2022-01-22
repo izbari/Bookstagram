@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, } from 'react'
+
 import { GiftedChat } from 'react-native-gifted-chat'
 import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
@@ -83,12 +84,14 @@ export default function ChatSingleScreen({route}) {
   }
 
   return (
-    <GiftedChat
+
+      <GiftedChat
       messages={messages}
       onSend={text => onSend(text)}
       user={{
         _id: auth().currentUser.uid,
       }}
     />
+
   )
 }

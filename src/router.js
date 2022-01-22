@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import UserProvider from './context/Provider';
-import {TouchableOpacity, Text} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import Login from './Pages/Login';
 import ProfileScreen from './Pages/Profile';
 import EditProfile from './Pages/EditProfile';
@@ -20,7 +20,6 @@ import Discover from './Pages/Discover';
 import HomeScreen from './Pages/HomeScreen';
 import NewMessage from './Pages/NewMessage';
 import AuthLoading from './Pages/AuthLoading';
-
 import {Provider} from 'react-native-paper';
 import OtherProfile from './Pages/OtherProfile';
 
@@ -128,8 +127,11 @@ const Main = props => {
  
 
   return (
+   
     <Tab.Navigator
-      tabBar={props => <MyTabBar {...props} />}
+      tabBar={props => <MyTabBar {...props} 
+      ScreenOptions={{ tabBarHideOnKeyboard: true}}
+      />}
       options={{headerShown: false}}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
       <Tab.Screen options={{headerShown: false}} name="Chat" component={Chat} />
@@ -202,6 +204,7 @@ const Main = props => {
         component={Profile}
       />
     </Tab.Navigator>
+   
   );
 };
 const Home = props => (

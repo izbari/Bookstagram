@@ -11,6 +11,10 @@ export default function (state, action) {
     );
   }
   switch (action.type) {
+
+    case 'SET_ROUTE_NAME':
+      return  {...state,routeName:action.payload.routeName}
+
     case 'SET_LANG':
       return {...state,lang:action.payload.lang}
 

@@ -22,11 +22,12 @@ import moment from 'moment';
 import Welcome from '../components/Welcome';
 import AuthController from '../controllers/authController';
 import terms from '../utils/terms';
+import {useDispatch} from 'react-redux';
 
 //main methods
 function Signup(props) {
   //States ,effects, vars
-
+  const dispatch = useDispatch();
   const [visible, setVisible] = React.useState(false);
   const [bottom, setBottom] = React.useState(true);
   const hideModal = () => {
@@ -83,6 +84,8 @@ function Signup(props) {
     };
 
     AuthController.createUser(newUser,props);
+    dispatch({type: 'SET_ROUTE_NAME', payload: {routeName: "Signup"}});
+
   };
 
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {

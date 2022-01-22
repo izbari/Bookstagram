@@ -4,10 +4,8 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  Alert,
-  TextInput,
-  Image,
-  Button,
+  TextInput,ScrollView,
+  Image,KeyboardAvoidingView,
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,16 +16,18 @@ import {Formik} from 'formik';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DatePicker from 'react-native-date-picker';
 import {TextInputMask} from 'react-native-masked-text';
+import {Button} from 'react-native-paper';
 
 const EditProfile = props => {
   const user = props.route.params.user;
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [openDate, setOpenDate] = useState(false);
   const [image, setImage] = React.useState(user.imageUrl);
 
   const [date, setDate] = useState(user.birth);
-  React.useEffect(() => {});
+  
   const [items, setItems] = useState([
     {label: 'Male', value: 'Male'},
     {label: 'Female', value: 'Female'},
@@ -35,6 +35,7 @@ const EditProfile = props => {
   console.log('id', user.id);
 
   console.log('date', date);
+
   function convertTimeStamp(str) {
     var date = new Date(str),
       mnth = ('0' + (date.getMonth() + 1)).slice(-2),
@@ -55,9 +56,9 @@ const EditProfile = props => {
     });
   };
   const saveChanges = async values => {
+    setLoading(true);
     const check = await uploadImage();
     if (!check) {
-      Alert.alert('Your profile photo didnt updated');
       database()
         .ref('/users/' + user.id)
         .update({
@@ -66,7 +67,11 @@ const EditProfile = props => {
           gender: values.gender,
           birth: values.birth,
         })
-        .then(() => console.log('Data updated.'));
+        .then(() => {
+          props.navigation.goBack();
+
+          setLoading(false);
+        });
     } else {
       console.log('path: /users/' + user.id);
       database()
@@ -78,7 +83,10 @@ const EditProfile = props => {
           birth: values.birth,
           imageUrl: check,
         })
-        .then(() => console.log('Data updated.'));
+        .then(() => {
+          setLoading(false);
+          props.navigation.goBack();
+        });
     }
   };
 
@@ -100,13 +108,7 @@ const EditProfile = props => {
     try {
       await task;
       const url = await storageRef.getDownloadURL();
-
-      Alert.alert('Post Published !', 'Post has been published successfully', [
-        {
-          text: 'OK',
-          onPress: () => props.navigation.navigate('Profile'),
-        },
-      ]);
+      props.navigation.goBack();
 
       return url;
     } catch (error) {
@@ -116,8 +118,8 @@ const EditProfile = props => {
   };
 
   return (
-    <View>
-      <Image
+    <KeyboardAvoidingView behavior="padding" style={{flex:1}}>      
+    <Image
         style={{
           height: 150,
           width: 150,
@@ -161,7 +163,7 @@ const EditProfile = props => {
             fontWeight: 'bold',
             fontSize: 12,
             color: '#7D7D7D',
-            marginBottom:20,
+            marginBottom: 20,
           }}>
           At least 256 x 256px PNG or JPG file.
         </Text>
@@ -262,20 +264,27 @@ const EditProfile = props => {
                 }}
               />
             </>
-            {props.navigation.setOptions({
-              headerRight: () => (
-                <TouchableOpacity onPress={handleSubmit}>
-                  <Text
-                    style={{color: 'white', fontStyle: 'italic', fontSize: 16}}>
-                    Save
-                  </Text>
-                </TouchableOpacity>
-              ),
-            })}
+
+            <Button
+              onPress={handleSubmit}
+              style={{
+                borderRadius: 5,
+                borderColor: '#DDDDDD',
+                borderWidth: 1,
+                width: 300,
+                height: 35,
+                marginTop: 10,
+                alignSelf: 'center',
+              }}
+              loading={loading}
+              mode="contained"
+              compact={true}>
+              Press me
+            </Button>
           </>
         )}
       </Formik>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 const styles = StyleSheet.create({

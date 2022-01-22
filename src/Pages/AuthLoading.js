@@ -4,40 +4,49 @@ import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 const {width} = Dimensions.get('window');
 import Loading from '../components/Loading';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 
 function AuthLoading(props) {
+  console.log("AUTH LOADİNG................")
   // Set an initializing state while Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
+  const prevRoute = useSelector(store => store.routeName);
+useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
   
-
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
   }
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
+  
 
   if (initializing) return null;
- 
+
   if (!user) {
     props.navigation.navigate('AuthProvider');
+    console.log("asdasd11asd")
+
   } else {
-    console.log("userrrr:",user)
     database()
-      .ref(`/users/${user.uid}`)
-      .on('value', snapshot => {
-        dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
-        props.navigation.navigate('Main');
-        console.log("route name:",props.route.name);
-        
-      });
+    .ref(`/users/${user.uid}`)
+    .on('value', snapshot => {
+      dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
+    });
+    console.log("reduxtan gelen :", prevRoute)
+    if(prevRoute == 'Login'){
+      props.navigation.navigate('Main');
+    }else if(prevRoute == 'Signup'){
+      props.navigation.navigate('Onboarding');
+    }else if(prevRoute == 'null'){
+      props.navigation.navigate('Main');
+    }
+   
   }
 
   return (

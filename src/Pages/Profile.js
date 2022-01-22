@@ -22,16 +22,21 @@ const {width, height} = Dimensions.get('window');
 
 function Profile(props) {
   const dispatch = useDispatch();
-
   const data = [
     {id: 0, lang: 'tr', country: 'Turkish'},
     {id: 1, lang: 'us', country: 'English'},
     {id: 2, lang: 'de', country: 'Deutschland'},
     {id: 3, lang: 'fr', country: 'French'},
   ];
+  const authuser = useSelector(store => store.user);
+
+  const [user,setUser] = React.useState(authuser);
   const [isModalVisible, setModalVisible] = React.useState(false);
   const [selectedLang, setSelectedLang] = React.useState(I18n.locale);
-  const user = useSelector(store => store.user);
+
+  React.useEffect(() => {
+      setUser(authuser)
+  },[authuser])
 
   const signOut = () => {
     auth()

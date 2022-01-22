@@ -10,8 +10,10 @@ import {
 import AuthController from '../controllers/authController';
 import {TextInput} from 'react-native-paper';
 import Welcome from '../components/Yoga';
+import {useDispatch} from 'react-redux';
 
 function Login(props) {
+const dispatch = useDispatch();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [secret, setSecret] = React.useState(true);
@@ -79,7 +81,8 @@ function Login(props) {
             style={styles.button}
             onPress={async () => {
               await AuthController.userLogin(props, email, password);
-
+              dispatch({type: 'SET_ROUTE_NAME', payload: {routeName: "Login"}});
+              props.navigation.navigate("Main")
               setEmail('');
               setPassword('');
             }}>

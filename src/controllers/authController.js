@@ -13,7 +13,7 @@ function Toast(msg) {
   );
 }
 
-exports.createUser = async (user,props) => {
+exports.createUser = async (user, props) => {
   const condition = checkAuthConditions(user);
   if (condition) {
     auth()
@@ -24,7 +24,6 @@ exports.createUser = async (user,props) => {
           authUser.user.updateProfile({
             displayName: user.name + ' ' + user.lastName,
           });
-          console.log("auth user:",authUser,"usernew mi : ",authUser.additionalUserInfo.isNewUser );
           const willSave = {
             email: user.email,
             id: userId,
@@ -41,26 +40,22 @@ exports.createUser = async (user,props) => {
             database()
               .ref('users/' + userId)
               .set(willSave);
-            props.navigation.navigate('Onboarding',{isNewUser:authUser.additionalUserInfo.isNewUser});
           }
         }
       })
       .catch(function (error) {
-        console.log("error:",error);
         return false;
       });
   }
 };
 
-
 exports.userLogin = (props, email, password) => {
   if (password && email) {
     auth()
       .signInWithEmailAndPassword(email, password, props)
-      .then(({user}) => { signedIn = 1;
+      .then(({user}) => {
         Toast(`Welcome ${user.displayName} !! `);
-        props.navigation.navigate('Main');
-       
+        //props.navigation.navigate('Main');
       })
       .catch(error => {
         if (error.code === 'auth/wrong-password') {
@@ -71,14 +66,12 @@ exports.userLogin = (props, email, password) => {
         }
 
         if (error.code === 'auth/invalid-email') {
-          Toast("Email is invalid")
+          Toast('Email is invalid');
         }
       });
   } else if (!password && !email) Toast('Please enter email and password!');
   else if (!password) Toast('Please enter password!');
   else if (!email) Toast('Please enter email!');
-
-  return signedIn;
 };
 
 const checkAuthConditions = ({

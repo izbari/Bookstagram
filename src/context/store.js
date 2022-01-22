@@ -5,4 +5,5 @@ export default {
     topicIds:[-1],
     user:null,
     languages:I18n.locale,
+    routeName:"null",
 };

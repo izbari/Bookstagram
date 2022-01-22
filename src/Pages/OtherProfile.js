@@ -17,46 +17,42 @@ import {useSelector} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
 function OtherProfile(props) {
-  const authUser = useSelector(store => store.user);
-
+  
+  const baseUser = useSelector(store => store.user);
+  const [authUser,setAuthUser] = React.useState(baseUser);
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
-  const [check, setCheck] = React.useState(false);
 
-  React.useEffect(() => {
-    const onValueChange = database()
+React.useEffect(() => {
+    database()
       .ref(`/users/${props.route.params.selectedUserId}`)
       .on('value', snapshot => {
-        console.log('User dataa: ', snapshot.val());
         setUser(snapshot.val());
         setLoading(true);
-
-        setCheck(authUser.fallowing.includes(snapshot.val().id));
       });
-
-    // Stop listening for updates when no longer required
-    return () =>
-      database()
-        .ref(`/users/${props.route.params.selectedUserId}`)
-        .off('value', onValueChange);
   }, []);
 
-  const fallowRequest = userId => {
-    console.log(' user fallowers:', user.fallowers);
-    if (authUser.fallowing.includes(user.id)) {
-      const newList2 = user.fallowers.filter(item => {
-        return item !== auth().currentUser.uid;
+  React.useEffect(()=>{
+    setAuthUser(baseUser)
+  },[baseUser])
+
+  
+  const fallowRequest = (userId) => {
+    // already fallowed and cancel fallow
+    if (authUser?.fallowing?.includes(user.id)) {
+      const newList2 = user?.fallowers.filter(item => {
+        return item !== auth()?.currentUser.uid;
       });
 
-      console.log('istek geri alındı');
       database()
         .ref(`/users/${user.id}`)
         .update({
           fallowers: newList2,
         })
-        .then(() => console.log('Data updated.'));
+        .then(() => console.log('Takipten cikildi'));
 
-      const newList3 = authUser.fallowing.filter(item => {
+        // auth userin fallowing inden cikariliyor.
+      const newList3 = authUser?.fallowing.filter(item => {
         return item !== user.id;
       });
       database()
@@ -64,28 +60,28 @@ function OtherProfile(props) {
         .update({
           fallowing: newList3,
         })
-        .then(() => console.log('Data updated.'));
-    } else {
-      if (user.fallowers.some(item => item === auth().currentUser.uid)) {
-        return null;
+        .then(() => console.log('Fallowingimden cikarildi'));
+    } 
+    
+      //Eğer takip etmiyosam ve edeceksem
+    else {
+      if (user.fallowers.some(item => item === auth()?.currentUser.uid)) {
+        return null; //else in saglamasi
       } else {
-        const liste = user.fallowers.concat(auth().currentUser.uid);
-        console.log('istek gönderildi');
+        const liste = user.fallowers.concat(auth().currentUser.uid); //listeye kendimizi ekleyip databaseyi güncellicez.
 
         database()
           .ref(`/users/${user.id}`)
           .update({
             fallowers: liste,
           })
-          .then(() => console.log('Fallowed users fallowers list  updated.'));
+          .then(() => console.log("Fallowed user's fallowers list  updated."));
 
         // Current user's fallowing list update
-        if (authUser.fallowing.some(item => item === user.id)) {
-          console.log('zaten takip ediliyo bu');
+        if (authUser?.fallowing.some(item => item === user.id)) {
           return null;
         } else {
-          console.log('takip edilmiyomus takipe eklendi fallowinge');
-          const liste2 = authUser.fallowing.concat(user.id);
+          const liste2 = authUser?.fallowing.concat(user.id);
           database()
             .ref(`/users/${authUser.id}`)
             .update({
@@ -175,20 +171,20 @@ function OtherProfile(props) {
           <View style={{flexDirection: 'row', margin: 10, marginBottom: 0}}>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {loading ? user.books : '1000'}
+                {loading ? user.books : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Books</Text>
             </View>
 
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {loading ? user.fallowers.length : '1000'}
+                {loading ? user.fallowers.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowers</Text>
             </View>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {loading ? user.fallowing.length : '1001'}
+                {loading ? user.fallowing.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowing</Text>
             </View>
@@ -227,7 +223,7 @@ function OtherProfile(props) {
           onPress={() => fallowRequest()}
           style={{
             justifyContent: 'center',
-            backgroundColor: check ? '#7C74EA' : '#FF71A3',
+            backgroundColor: authUser?.fallowing?.includes(user?.id) ? '#7C74EA' : '#FF71A3',
             height: 30,
           }}>
           <View style={{flexDirection: 'row', alignSelf: 'center'}}>
@@ -238,9 +234,9 @@ function OtherProfile(props) {
                 textAlign: 'center',
                 fontSize: 13,
               }}>
-              {check ? 'Fallowing' : 'Fallow'}
+              {authUser?.fallowing?.includes(user?.id) ? 'Fallowing' : 'Fallow'}
             </Text>
-            {check ? (
+            {authUser?.fallowing?.includes(user?.id) ? (
               <Ionicons name="checkmark-outline" size={15} color="white" />
             ) : null}
           </View>
