@@ -15,19 +15,22 @@ const {width, height} = Dimensions.get('window');
 
 import Svg, {Rect} from 'react-native-svg';
 import {getMovies} from '../controllers/api';
-const SPACING = 10;
-const ITEM_SIZE = width * 0.72;
-const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
-const BACKDROP_HEIGHT = height * 0.65;
-const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
-const Loading = () => (
-  <View style={styles.loadingContainer}>
-    <Text style={styles.paragraph}>Loading...</Text>
-  </View>
-);
 
-export default function App() {
+export default function Deneme() {
+  const SPACING = 10;
+  const ITEM_SIZE = width * 0.72;
+  const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
+  const BACKDROP_HEIGHT = height * 0.65;
+  const AnimatedSvg = Animated.createAnimatedComponent(Svg);
+  
+  const Loading = () => (
+    <View style={styles.loadingContainer}>
+      <Text style={styles.paragraph}>Loading...</Text>
+    </View>
+  );
+
+
   const [movies, setMovies] = React.useState([]);
   const scrollX = React.useRef(new Animated.Value(0)).current;
   React.useEffect(() => {

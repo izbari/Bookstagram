@@ -11,12 +11,11 @@ import AuthController from '../controllers/authController';
 import {TextInput} from 'react-native-paper';
 import Welcome from '../components/Yoga';
 
-function App(props) {
-  const [email, seteMail] = React.useState('');
+function Login(props) {
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [secret, setSecret] = React.useState(true);
 
-  
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.header}>WELCOME BACK !</Text>
@@ -42,9 +41,10 @@ function App(props) {
             mode="outlined"
             label="Email"
             value={email}
+            autoCapitalize="none"
             underlineColor="transparent"
             editable={true}
-            onChangeText={email => seteMail(email)}
+            onChangeText={email => setEmail(email)}
           />
 
           <TextInput
@@ -77,7 +77,12 @@ function App(props) {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={()=>AuthController.userLogin(props,email,password)}>
+            onPress={async () => {
+              await AuthController.userLogin(props, email, password);
+
+              setEmail('');
+              setPassword('');
+            }}>
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -142,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Login;

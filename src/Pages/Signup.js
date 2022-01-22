@@ -82,7 +82,7 @@ function Signup(props) {
       terms: checked,
     };
 
-    AuthController.createUser(newUser);
+    AuthController.createUser(newUser,props);
   };
 
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {

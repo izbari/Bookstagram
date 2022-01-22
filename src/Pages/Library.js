@@ -73,9 +73,6 @@ function Library(props) {
     setCardData(cardData.concat(res.data.items));
     setLoading3(false);
    }
-
-
-
   const renderItem = ({item}) => (
     <BookCard
       from="library"

@@ -1,16 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Dimensions} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {useDispatch, useSelector} from 'react-redux';
 import database from '@react-native-firebase/database';
 const {width} = Dimensions.get('window');
 import Loading from '../components/Loading';
+import {useDispatch} from 'react-redux';
 
-function App(props) {
+function AuthLoading(props) {
   // Set an initializing state while Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
+  
 
   // Handle user state changes
   function onAuthStateChanged(user) {
@@ -24,16 +25,18 @@ function App(props) {
   }, []);
 
   if (initializing) return null;
-  console.log('user:', user);
+ 
   if (!user) {
     props.navigation.navigate('AuthProvider');
   } else {
+    console.log("userrrr:",user)
     database()
       .ref(`/users/${user.uid}`)
       .on('value', snapshot => {
         dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
-        props.navigation.navigate('HomeScreen');
-        console.log(props.route.name);
+        props.navigation.navigate('Main');
+        console.log("route name:",props.route.name);
+        
       });
   }
 
@@ -58,4 +61,4 @@ function App(props) {
     </View>
   );
 }
-export default App;
+export default AuthLoading;

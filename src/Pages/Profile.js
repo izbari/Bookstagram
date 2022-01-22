@@ -20,7 +20,7 @@ import auth from '@react-native-firebase/auth';
 import {useSelector, useDispatch} from 'react-redux';
 const {width, height} = Dimensions.get('window');
 
-function App(props) {
+function Profile(props) {
   const dispatch = useDispatch();
 
   const data = [
@@ -36,9 +36,6 @@ function App(props) {
   const signOut = () => {
     auth()
       .signOut()
-      .then(() =>
-        console.log(`${auth().currentUser.displayName}  signed out!`),
-      );
   };
 
   const Localize = () => {
@@ -383,4 +380,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Profile;

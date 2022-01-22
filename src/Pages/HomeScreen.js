@@ -28,23 +28,10 @@ function HomeScreen(props) {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState({});
   const [threeDotVisible, setThreeDotVisible] = React.useState(false);
-  const [user, setUser] = React.useState({});
 
-  const dispatch = useDispatch();
+   
+  const user = useSelector(store => store.user);
  
-  React.useEffect(() => {
-    if (auth()?.currentUser.uid || props.route.params?.authId) {
-      database()
-        .ref(`/users/${auth().currentUser.uid || props.route.params.authId}`)
-        .on('value', snapshot => {
-          dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
-          console.log(
-            'route user states changed and fetched informations again...',
-          );
-        }).then(() => setUser(useSelector(store => store.user)));
-    }
-  }, []);
-
   React.useEffect(async () => {
     getPosts();
   }, [posts, submitComment, likePost, commentPosted, setCommentPosted]);
@@ -58,7 +45,7 @@ function HomeScreen(props) {
     const selectedPost = posts.find(post => post.id === postId);
     console.log('selectedPost cevabi:', selectedPost);
     //unlike
-    if (selectedPost.likes.includes(auth().currentUser.uid)) {
+    if (selectedPost.likes.includes(auth?.currentUser.uid)) {
       unlikePost(postId, prevLikes);
     }
     //like
@@ -70,7 +57,7 @@ function HomeScreen(props) {
       .collection('posts')
       .doc(postId)
       .update({
-        likes: [...prevLikes, auth().currentUser.uid],
+        likes: [...prevLikes, auth()?.currentUser.uid],
       })
       .then(() => {
         console.log('Likes count updated!');
@@ -79,13 +66,13 @@ function HomeScreen(props) {
   const unlikePost = (postId, prevLikes) => {
     console.log(
       'filter cevabı:',
-      prevLikes.filter(element => element != auth().currentUser.uid),
+      prevLikes.filter(element => element != auth()?.currentUser.uid),
     );
     firestore()
       .collection('posts')
       .doc(postId)
       .update({
-        likes: prevLikes.filter(element => element != auth().currentUser.uid),
+        likes: prevLikes.filter(element => element != auth()?.currentUser.uid),
       })
       .then(() => {
         console.log('Likes count updated!');
@@ -176,7 +163,7 @@ function HomeScreen(props) {
     ]);
   };
   const toProfile = userId => {
-    if (auth().currentUser.uid === userId) {
+    if (auth()?.currentUser.uid === userId) {
       props.navigation.navigate('Profile');
     } else {
       props.navigation.navigate('OtherProfile', {selectedUserId: userId});

@@ -16,7 +16,7 @@ import database from '@react-native-firebase/database';
 import {useSelector} from 'react-redux';
 
 const {width, height} = Dimensions.get('window');
-function App(props) {
+function OtherProfile(props) {
   const authUser = useSelector(store => store.user);
 
   const [user, setUser] = React.useState(null);
@@ -283,4 +283,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default OtherProfile;

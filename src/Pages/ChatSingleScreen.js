@@ -10,7 +10,9 @@ export default function ChatSingleScreen({route}) {
 
   const {uid} = route.params;
   const authUser = useSelector(store=> store.user)
-
+  React.useEffect(() => {
+    getAllMessages()
+},[])
    
   const getAllMessages = async()=>{
     
@@ -41,9 +43,7 @@ export default function ChatSingleScreen({route}) {
     setMessages(allMessages)
 
   }
-  React.useEffect(() => {
-    getAllMessages()
-},[])
+ 
   const onSend =  (messageArray) => {
 
   

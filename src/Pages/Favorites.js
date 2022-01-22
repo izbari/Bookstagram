@@ -1,22 +1,21 @@
 import * as React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
+ 
   FlatList,
   StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
+
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import BookCard from '../components/BookCard';
-import {TextInput, Searchbar} from 'react-native-paper';
 
-function App(props) {
+function Favorites(props) {
   const dispatch = useDispatch();
   const list = useSelector(s => s.favList)
     .slice()
     .reverse();
+
+
   const favHandler = item => {
     if (list.includes(item)) {
       dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
@@ -96,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Favorites;
