@@ -29,6 +29,8 @@ useEffect(() => {
   if (initializing) return null;
 
   if (!user) {
+    console.log("reduxtan gelen :", prevRoute)
+
     props.navigation.navigate('AuthProvider');
     console.log("asdasd11asd")
 

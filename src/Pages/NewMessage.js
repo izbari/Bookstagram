@@ -49,7 +49,7 @@ React.useEffect(() =>{
 
   return(
         <TouchableOpacity
-        onPress={() =>props.navigation.navigate('ChatSingleScreen',{name:item.name +" "+item.lastName,uid:item.id})} 
+        onPress={() =>props.navigation.navigate('ChatSingleScreen',{chatId:"null",uid:item.id})} 
         style={{
           flexDirection: 'row',
           width: width*.95,

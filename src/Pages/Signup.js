@@ -136,17 +136,15 @@ function Signup(props) {
     );
   };
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <KeyboardAvoidingView behavior="padding" style={{flex:1, backgroundColor: '#FF6EA1'}}>   
       <Text style={styles.header}>Welcome New User</Text>
 
       <View style={styles.lottieContainer}>
         <Welcome />
       </View>
-      <KeyboardAvoidingView
-        style={styles.inputContainer}
-        behavior="position"
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+      <ScrollView>
+        
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <TextInput
             style={
               (styles.input,
@@ -154,6 +152,7 @@ function Signup(props) {
                 width: 135,
                 height: 40,
                 borderColor: 'red',
+                margin:0
               })
             }
             mode="outlined"
@@ -175,7 +174,7 @@ function Signup(props) {
             mode="outlined"
             onChangeText={lastName => setLastName(lastName)}
             label="Last name"
-            style={(styles.input, {width: 135, height: 40})}
+            style={(styles.input, {width: 135, height: 40,margin:0})}
             theme={{
               colors: {
                 placeholder: 'black',
@@ -286,13 +285,14 @@ function Signup(props) {
           placeholderTextColor={'black'}
         />
 
-        <RadioButton.Group onValueChange={setGender} value={gender}>
+        <RadioButton.Group style={{backgroundColor: 'black'}} onValueChange={setGender} value={gender}>
           <View
             style={{
+            
+              justifyContent: 'center',
               flexDirection: 'row',
               alignItems: 'center',
               margin: 10,
-              marginLeft: 32,
             }}>
             <View style={{flexDirection: 'row'}}>
               <RadioButton value="Male" color={'white'} />
@@ -304,7 +304,7 @@ function Signup(props) {
             </View>
           </View>
         </RadioButton.Group>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row',justifyContent: 'center'}}>
           <Checkbox.Item
             color={'white'}
             labelStyle={{fontSize: 12, fontStyle: 'italic'}}
@@ -322,7 +322,6 @@ function Signup(props) {
           />
         </View>
         {visible && <TermsPopup />}
-      </KeyboardAvoidingView>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -338,20 +337,22 @@ function Signup(props) {
           <Text style={styles.buttonText}>Back</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+      </ScrollView>
+
+    </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
   containerStyle: {backgroundColor: 'white', flex: 1, margin: 15},
   mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
   lottieContainer: {
-    flex: 2,
+    flex: 5,
     width: '85%',
-    height: '30%',
+    height: '50%',
     alignSelf: 'center',
   },
   inputContainer: {
-    flex: 5,
+    flex: 3,
     justifyContent: 'flex-end',
     alignSelf: 'center',
   },
@@ -375,7 +376,6 @@ const styles = StyleSheet.create({
   input: {
     borderColor: 'white',
     borderRadius: 10,
-
     borderColor: 'white',
     width: 290,
     height: 40,

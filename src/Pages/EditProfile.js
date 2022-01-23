@@ -25,16 +25,13 @@ const EditProfile = props => {
   const [value, setValue] = useState(null);
   const [openDate, setOpenDate] = useState(false);
   const [image, setImage] = React.useState(user.imageUrl);
-
   const [date, setDate] = useState(user.birth);
   
   const [items, setItems] = useState([
     {label: 'Male', value: 'Male'},
     {label: 'Female', value: 'Female'},
   ]);
-  console.log('id', user.id);
-
-  console.log('date', date);
+ 
 
   function convertTimeStamp(str) {
     var date = new Date(str),

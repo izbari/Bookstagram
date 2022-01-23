@@ -28,7 +28,6 @@ import CreatePost from './Pages/CreatePost';
 import Onboarding from './Pages/Onboarding';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -123,15 +122,11 @@ const Chat = ({navigation}) => {
 };
 
 const Main = props => {
- 
- 
-
   return (
-   
     <Tab.Navigator
-      tabBar={props => <MyTabBar {...props} 
-      ScreenOptions={{ tabBarHideOnKeyboard: true}}
-      />}
+      tabBar={props => (
+        <MyTabBar {...props} ScreenOptions={{tabBarHideOnKeyboard: true}} />
+      )}
       options={{headerShown: false}}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
       <Tab.Screen options={{headerShown: false}} name="Chat" component={Chat} />
@@ -204,12 +199,10 @@ const Main = props => {
         component={Profile}
       />
     </Tab.Navigator>
-   
   );
 };
 const Home = props => (
   <Stack.Navigator>
-    
     <Stack.Screen
       options={{
         headerTitleAlign: 'center',
@@ -257,7 +250,6 @@ const Home = props => (
       name="OtherProfile"
       component={OtherProfile}
     />
-   
   </Stack.Navigator>
 );
 const AuthProvider = props => (
@@ -281,13 +273,11 @@ const AuthProvider = props => (
 
 function App(props) {
   return (
-
     <UserProvider>
-          <Provider>
-
-      <NavigationContainer>
-          <Stack.Navigator options={{headerShown: false}}>
-          <Stack.Screen
+      <Provider>
+        <NavigationContainer>
+          <Stack.Navigator options={{headerShown: false}} mode="modal">
+            <Stack.Screen
               options={{headerShown: false}}
               name="AuthLoading"
               component={AuthLoading}
@@ -297,14 +287,14 @@ function App(props) {
               name="AuthProvider"
               component={AuthProvider}
             />
-             <Stack.Screen
-      options={{
-        headerShown: false,
-      }}
-      name="Onboarding"
-      component={Onboarding}
-    />
-             
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="Onboarding"
+              component={Onboarding}
+            />
+
             <Stack.Screen
               options={{headerShown: false}}
               name="Main"
@@ -322,11 +312,9 @@ function App(props) {
               component={AddTopics}
             />
           </Stack.Navigator>
-      </NavigationContainer>
+        </NavigationContainer>
       </Provider>
-
     </UserProvider>
-
   );
 }
 

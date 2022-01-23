@@ -44,7 +44,8 @@ exports.createUser = async (user, props) => {
         }
       })
       .catch(function (error) {
-        return false;
+        error.code == "auth/email-already-in-use" ? Toast("This email already used by another account!") : null ;
+       return false;
       });
   }
 };

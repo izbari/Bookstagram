@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import AuthController from '../controllers/authController';
@@ -19,7 +20,7 @@ const dispatch = useDispatch();
   const [secret, setSecret] = React.useState(true);
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <KeyboardAvoidingView  behavior="padding" style={{flex:1,backgroundColor: '#FF6EA1'}}>
       <Text style={styles.header}>WELCOME BACK !</Text>
 
       <View style={styles.lottieContainer}>
@@ -95,7 +96,7 @@ const dispatch = useDispatch();
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
