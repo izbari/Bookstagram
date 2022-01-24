@@ -96,27 +96,6 @@ const Chat = ({navigation,route}) => {
         component={NewMessage}
       />
       <Stack.Screen
-        options={({route}) => ({
-          title: route.params.name,
-          headerTitleAlign: 'center',
-          headerStyle: {
-            backgroundColor: '#FF6EA1',
-          },
-          headerTintColor: 'white',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            textAlign: 'center',
-          },
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('ChatScreen');
-              }}>
-              <Ionicons name="arrow-back-outline" size={25} color="white" />
-            </TouchableOpacity>
-          ),
-        })}
-        
         name="ChatSingleScreen"
         component={ChatSingleScreen}
       />
@@ -276,8 +255,8 @@ const AuthProvider = props => (
 
 function App(props) {
   return (
-    <UserProvider>
-      <Provider>
+    <Provider>
+      <UserProvider>
         <NavigationContainer>
           <Stack.Navigator options={{headerShown: false}} mode="modal">
             <Stack.Screen
@@ -316,8 +295,8 @@ function App(props) {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </Provider>
     </UserProvider>
+    </Provider>
   );
 }
 

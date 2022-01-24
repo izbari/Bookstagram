@@ -9,8 +9,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import moment from 'moment';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Modal from 'react-native-modal';
-import {Menu, Provider, Divider, Button} from 'react-native-paper';
-
+import ThreeDotMenu from '../ThreeDotMenu/ThreeDotMenu'
+import {Divider} from 'react-native-paper'
 const {width} = Dimensions.get('window');
 
 function postCard(props) {
@@ -33,45 +33,6 @@ function postCard(props) {
       });
   }, []);
 
-  const openMenu = () => setMenu(true);
-
-  const closeMenu = () => setMenu(false);
-
-  const Menü = params => (
-    <Provider>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
-        <Menu
-          visible={menu}
-          onDismiss={() => {
-            setMenu(false);
-          }}
-          anchor={
-            <Button
-              title="zafer"
-              onPress={() => {
-                setMenu(!menu);
-              }}>
-              Show menu
-            </Button>
-          }>
-          <Menu.Item
-            onPress={() => {
-              setMenu(false);
-            }}
-            title="Item 1"
-          />
-          <Menu.Item onPress={() => {}} title="Item 2" />
-          <Divider />
-          <Menu.Item onPress={() => {}} title="Item 3" />
-        </Menu>
-      </View>
-    </Provider>
-  );
 
   const defaultImageUrl =
     'https://scontent.ftzx1-1.fna.fbcdn.net/v/t1.30497-1/c59.0.200.200a/p200x200/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=12b3be&_nc_ohc=CxmGyQqlfmQAX-g1lo4&_nc_ht=scontent.ftzx1-1.fna&edm=AHgPADgEAAAA&oh=4403c3ccd0fc5eed2b87a0f3cfbe5198&oe=616AB239';
@@ -93,7 +54,7 @@ function postCard(props) {
         shadowColor: '#CBCBCB',
         elevation: 25,
       }}>
-      {menu && <Menü />}
+      <ThreeDotMenu visible={visible}/>
 
       <View
         style={{

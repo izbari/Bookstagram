@@ -35,10 +35,9 @@ const NewMessage = ({navigation, route}) => {
     myChats = myChats.filter(
       (value, index, self) => index === self.findIndex(t => t.id === value.id),
     );
-    console.log('mychatsss', myChats);
 
     getData();
-
+    setSearchedMyChats(myChats);
     setMyChats(myChats);
   }, [, myChats]);
 
@@ -62,28 +61,21 @@ const NewMessage = ({navigation, route}) => {
       });
   };
   const spesificChat = item => {
-    console.log('spesifik email', item.id);
-    console.log('ath', auth().currentUser.uid);
     let chatId = 'null';
+    let idPair =
+      auth().currentUser.uid < item.id
+        ? auth().currentUser.uid + '-' + item.id
+        : item.id + '-' + auth().currentUser.uid;
     firestore()
       .collection('Chats')
-      .where('users', 'array-contains', auth().currentUser.uid)
+      .where('users', 'array-contains', idPair)
       .onSnapshot(snapshot => {
         snapshot.docs.forEach(chat => {
-          if (chat.data().users.find(uid => uid == item.id)) {
-            console.log(
-              'boslar bunla gidiyor : ',
-              chat._ref._documentPath._parts['1']
-                ? chat._ref._documentPath._parts['1']
-                : 'null',
-            );
-            chatId = chat._ref._documentPath._parts['1']
-              ? chat._ref._documentPath._parts['1']
-              : 'null';
-          }
+          chatId = chat._ref._documentPath._parts['1']
+            ? chat._ref._documentPath._parts['1']
+            : 'null';
         });
 
-        console.log('snapshotumuz:', snapshot.docs);
         navigation.navigate('ChatSingleScreen', {
           name: item.name + ' ' + item.lastName,
           chatId: chatId,
@@ -113,7 +105,6 @@ const NewMessage = ({navigation, route}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log(item);
           spesificChat(item);
         }}
         style={{

@@ -18,7 +18,7 @@ import {useSelector} from 'react-redux';
 import Loading from '../components/Loading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Chat({navigation}) {
+export default function Chat({navigation, route}) {
   const authUser = useSelector(store => store.user);
   const [chats, setChats] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
@@ -34,7 +34,6 @@ export default function Chat({navigation}) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('NewMessage', {myChats: otherUserData});
@@ -58,16 +57,10 @@ export default function Chat({navigation}) {
           snapshot.docs.forEach(chat => {
             otherUids.push(chat.data().users.find(uid => uid !== user.uid));
           });
-
-        
-
           database()
             .ref('users/')
             .once('value', snapshot => {
               snapshot.forEach(item => {
-                // it will pass through all your snapshot items
-
-                //console.log('heyyy', item._snapshot.key);
                 if (otherUids.includes(item._snapshot.key)) {
                   const {id, name, lastName, imageUrl} = item._snapshot.value;
 
@@ -76,7 +69,6 @@ export default function Chat({navigation}) {
                     name: name,
                     lastName: lastName,
                     imageUrl: imageUrl,
-                   
                   });
                 }
               });
@@ -95,7 +87,7 @@ export default function Chat({navigation}) {
           setChats(snapshot.docs);
         });
     });
-  }, [user, user.uid]);
+  }, [, navigation, user, route?.params?.check]);
 
   useEffect(() => {}, [chats]);
 
@@ -112,6 +104,9 @@ export default function Chat({navigation}) {
               otherUserData.find(user => user.id === willSendUid)?.name +
               ' ' +
               otherUserData.find(user => user.id === willSendUid)?.lastName,
+            imageUrl: otherUserData.find(user => user.id === willSendUid)
+              ?.imageUrl,
+
             uid: willSendUid,
             chatId: willSendChatId,
           })
