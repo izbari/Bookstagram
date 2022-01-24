@@ -1,107 +1,223 @@
 import React from 'react';
-import {View, Text, Dimensions,FlatList,TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from 'react-native';
 import {SearchBar} from 'react-native-elements';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
+
 import auth from '@react-native-firebase/auth';
-import parseFirebaseData from '../utils/parseFirebaseData'
-import Image  from 'react-native-image-progress';
+import parseFirebaseData from '../utils/parseFirebaseData';
+import Image from 'react-native-image-progress';
 
 const {width} = Dimensions.get('window');
-const NewMessage = (props) => {
+const NewMessage = ({navigation, route}) => {
+  let {myChats} = route.params;
+  const [loading, setLoading] = React.useState(false);
+
   const [search, setSearch] = React.useState('');
+
   const [users, setUsers] = React.useState([]);
   const [searchedUsers, setSearchedUsers] = React.useState([]);
 
-  
+  const [MyChats, setMyChats] = React.useState([]);
+  const [searchedMyChats, setSearchedMyChats] = React.useState([]);
 
-React.useEffect(() =>{
-    getData()
+  React.useEffect(() => {}, []);
 
- },[])
- 
- const getData = async () => {
+  React.useEffect(() => {
+    myChats = myChats.filter(
+      (value, index, self) => index === self.findIndex(t => t.id === value.id),
+    );
+    console.log('mychatsss', myChats);
+
+    getData();
+
+    setMyChats(myChats);
+  }, [, myChats]);
+
+  const getData = async () => {
+    setLoading(true);
     await database()
-    .ref('/users/')
-    .once('value')
-    .then(snapshot => {
-      let data =parseFirebaseData(snapshot.val(),auth().currentUser.uid)
-       data= data.filter(user => {return user.id != auth().currentUser.uid})
-      setUsers(data)
-      setSearchedUsers(data)
-    });
- }
- 
+      .ref('/users/')
+      .once('value')
+      .then(snapshot => {
+        let data = parseFirebaseData(snapshot.val(), auth().currentUser.uid);
+        data = data.filter(user => {
+          return (
+            user.id != auth().currentUser.uid &&
+            !myChats.find(element => element.id == user.id)
+          );
+        });
 
- const searchFilterFunction = text => {    
-    const newData = searchedUsers.filter(item => {      
-      const itemData = `${item.name.toUpperCase()}   
-      ${item.lastName.toUpperCase()}`;
-      
-       const textData = text.toUpperCase();
-        
-       return itemData.indexOf(textData) > -1;    
-    });
-    
-    setUsers(newData)  
+        setUsers(data);
+        setSearchedUsers(data);
+        setLoading(false);
+      });
+  };
+  const spesificChat = item => {
+    console.log('spesifik email', item.id);
+    console.log('ath', auth().currentUser.uid);
+    let chatId = 'null';
+    firestore()
+      .collection('Chats')
+      .where('users', 'array-contains', auth().currentUser.uid)
+      .onSnapshot(snapshot => {
+        snapshot.docs.forEach(chat => {
+          if (chat.data().users.find(uid => uid == item.id)) {
+            console.log(
+              'boslar bunla gidiyor : ',
+              chat._ref._documentPath._parts['1']
+                ? chat._ref._documentPath._parts['1']
+                : 'null',
+            );
+            chatId = chat._ref._documentPath._parts['1']
+              ? chat._ref._documentPath._parts['1']
+              : 'null';
+          }
+        });
+
+        console.log('snapshotumuz:', snapshot.docs);
+        navigation.navigate('ChatSingleScreen', {
+          name: item.name + ' ' + item.lastName,
+          chatId: chatId,
+          uid: item.id,
+        });
+      });
   };
 
- const userItem = ({item}) => {
+  const searchFilterFunction = text => {
+    const newData = searchedUsers.filter(item => {
+      const itemData = `${item.name.toUpperCase()}   
+      ${item.lastName.toUpperCase()}`;
+      return itemData.indexOf(text.toUpperCase()) > -1;
+    });
 
-  return(
-        <TouchableOpacity
-        onPress={() =>props.navigation.navigate('ChatSingleScreen',{chatId:"null",uid:item.id})} 
+    const newData2 = searchedMyChats.filter(item => {
+      const itemData = `${item.name.toUpperCase()} 
+      ${item.lastName.toUpperCase()}`;
+      return itemData.indexOf(text.toUpperCase()) > -1;
+    });
+
+    setUsers(newData);
+    setMyChats(newData2);
+  };
+
+  const UserItem = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          console.log(item);
+          spesificChat(item);
+        }}
         style={{
           flexDirection: 'row',
-          width: width*.95,
-         margin:10,
-         marginBottom:3,
-       alignSelf: 'center',
-      
-       backgroundColor: 'white',
-       borderRadius: 10,
-       shadowColor: '#CBCBCB',
-       elevation: 25,
-     }}>
-       <Image
+          width: width * 0.95,
+          margin: 10,
+          marginBottom: 3,
+          alignSelf: 'center',
+
+          backgroundColor: 'white',
+          borderRadius: 10,
+          shadowColor: '#CBCBCB',
+          elevation: 25,
+        }}>
+        <Image
           style={{
-           height: 50,
-           width: 50,
-           resizeMode: 'contain',
-           borderRadius: 50,
-           overflow: 'hidden',
-           elavation: 15,
-           margin:7,
-         
-         }}
-       source={{uri : item.imageUrl}}/>
-       <View style={{justifyContent: 'center',marginLeft: 10,padding: 5}}>
-         <Text style={{fontWeight: 'bold'}}>{item.name+" "+item.lastName}</Text>
-       </View>
-     </TouchableOpacity>
-     )
- }
- 
- 
+            height: 50,
+            width: 50,
+            resizeMode: 'contain',
+            borderRadius: 50,
+            overflow: 'hidden',
+            elavation: 15,
+            margin: 7,
+          }}
+          source={{uri: item.imageUrl}}
+        />
+
+        <View style={{justifyContent: 'center', marginLeft: 10, padding: 5}}>
+          <Text style={{fontWeight: 'bold'}}>
+            {item.name + ' ' + item.lastName}
+          </Text>
+          <View
+            style={{flexDirection: 'row', width: width - (width * 0.05 + 90)}}>
+            <Text
+              numberOfLines={1}
+              style={{
+                fontStyle: 'italic',
+                fontSize: 12,
+                color: 'grey',
+                marginTop: 5,
+              }}>
+              {"User's cool bio..."}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <View>
+    <View style={{flex: 1}}>
       <SearchBar
-        containerStyle={{marginTop:15,alignSelf: 'center',height:45,margin:7,backgroundColor:'#DEDFE4',width:width*0.9,borderRadius: 15}}
-        inputContainerStyle={{height:10,backgroundColor:'#DEDFE4'}}
-        inputStyle={{fontSize:15}}
+        containerStyle={{
+          alignSelf: 'center',
+          height: 45,
+          margin: 7,
+          backgroundColor: '#DEDFE4',
+          width: width * 0.9,
+          borderRadius: 15,
+        }}
+        inputContainerStyle={{height: 10, backgroundColor: '#DEDFE4'}}
+        inputStyle={{fontSize: 15}}
         placeholder="Type Something ..."
         lightTheme
-        onChangeText=
-        {(text)=>{setSearch(text)
-            searchFilterFunction(text)}}
+        onChangeText={text => {
+          setSearch(text);
+          searchFilterFunction(text);
+        }}
         autoCorrect={false}
         value={search}
-      />    
-
-      <FlatList 
-      data={ users}
-      renderItem={userItem}
-      keyExtractor={item=>item.id}
       />
+      <ScrollView>
+        <View>
+          {MyChats.length != 0 ? (
+            <Text
+              style={{color: '#C4C4C4', fontWeight: 'bold', marginLeft: 10}}>
+              {'My Friends'}
+            </Text>
+          ) : null}
+
+          {MyChats.sort((a, b) => a.name.localeCompare(b.name)).map(item => {
+            return <UserItem key={item.id} item={item} />;
+          })}
+        </View>
+
+        <Text
+          style={{
+            color: '#C4C4C4',
+            fontWeight: 'bold',
+            marginLeft: 10,
+            marginTop: 10,
+          }}>
+          {'Other Users'}
+        </Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#FF6EA1" />
+        ) : (
+          users
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(item => {
+              return <UserItem key={item.id} item={item} />;
+            })
+        )}
+      </ScrollView>
     </View>
   );
 };

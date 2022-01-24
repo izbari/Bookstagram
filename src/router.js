@@ -58,7 +58,7 @@ const Profile = props => {
     </Stack.Navigator>
   );
 };
-const Chat = ({navigation}) => {
+const Chat = ({navigation,route}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -73,14 +73,7 @@ const Chat = ({navigation}) => {
             fontWeight: 'bold',
             textAlign: 'center',
           },
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('NewMessage');
-              }}>
-              <Ionicons name="create-outline" size={25} color="white" />
-            </TouchableOpacity>
-          ),
+         
         }}
         name="ChatScreen"
         component={ChatScreen}
@@ -97,6 +90,7 @@ const Chat = ({navigation}) => {
             fontWeight: 'bold',
             textAlign: 'center',
           },
+          
         }}
         name="NewMessage"
         component={NewMessage}
@@ -113,7 +107,16 @@ const Chat = ({navigation}) => {
             fontWeight: 'bold',
             textAlign: 'center',
           },
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('ChatScreen');
+              }}>
+              <Ionicons name="arrow-back-outline" size={25} color="white" />
+            </TouchableOpacity>
+          ),
         })}
+        
         name="ChatSingleScreen"
         component={ChatSingleScreen}
       />

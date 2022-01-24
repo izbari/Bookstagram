@@ -259,7 +259,6 @@ function Profile(props) {
             height: 30,
             marginBottom: 25,
             backgroundColor: '#FF6EA1',
-
             justifyContent: 'center',
           }}>
           <Text
