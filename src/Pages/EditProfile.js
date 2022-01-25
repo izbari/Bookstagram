@@ -65,8 +65,7 @@ const EditProfile = props => {
           birth: values.birth,
         })
         .then(() => {
-          props.navigation.goBack();
-
+          props.navigation.navigate('ProfileScreen');
           setLoading(false);
         });
     } else {
@@ -82,7 +81,7 @@ const EditProfile = props => {
         })
         .then(() => {
           setLoading(false);
-          props.navigation.goBack();
+          props.navigation.navigate('ProfileScreen');
         });
     }
   };
@@ -115,7 +114,8 @@ const EditProfile = props => {
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={{flex:1}}>      
+   <ScrollView>
+      <KeyboardAvoidingView behavior="padding" style={{flex:1}}>      
     <Image
         style={{
           height: 150,
@@ -174,6 +174,7 @@ const EditProfile = props => {
           birth: user.birth,
         }}
         onSubmit={values => {
+          console.log("değistim")
           values.birth = date;
           console.log(values);
           saveChanges(values);
@@ -266,22 +267,23 @@ const EditProfile = props => {
               onPress={handleSubmit}
               style={{
                 borderRadius: 5,
-                borderColor: '#DDDDDD',
+                backgroundColor: '#FF6EA1',
                 borderWidth: 1,
                 width: 300,
-                height: 35,
-                marginTop: 10,
+                height: 40,
+                margin: 10,
                 alignSelf: 'center',
               }}
               loading={loading}
               mode="contained"
               compact={true}>
-              Press me
+              Save 
             </Button>
           </>
         )}
       </Formik>
     </KeyboardAvoidingView>
+   </ScrollView>
   );
 };
 const styles = StyleSheet.create({

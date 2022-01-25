@@ -230,7 +230,7 @@ function Signup(props) {
             <TextInput.Icon
               forceTextInputFocus={false}
               onPress={() => setSecret(!secret)}
-              name="eye"
+              name={secret ? 'eye-off' : 'eye'}
               color="grey"
               style={{marginTop: 15}}
             />

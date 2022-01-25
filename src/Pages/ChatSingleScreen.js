@@ -1,12 +1,22 @@
+/**
+ * todos: 
+ * 1- In this screen need to be add functionality to menu items.
+ * 2- audio call and video call will add using webRTC.
+ * 3- maybe setting screen can add and in this screen may includes notification options , theme , media ...
+ */
+
 import React, {useState, useCallback} from 'react';
-import {TouchableOpacity, View,Button,Text} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ThreeDotMenu from '../components/ThreeDotMenu/ThreeDotMenu'
-import { Avatar, Card, Menu, Provider as PaperProvider } from 'react-native-paper';
+import {
+  Menu,
+  Divider,
+  Provider as PaperProvider,
+} from 'react-native-paper';
 
 export default function ChatSingleScreen({navigation, route}) {
   const [messages, setMessages] = useState([]);
@@ -15,20 +25,20 @@ export default function ChatSingleScreen({navigation, route}) {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: route.params.name.length > 15 ? route.params.name.slice(0,15) +"..." : route.params.name ,
-      
+      title:
+        route.params.name.length > 15
+          ? route.params.name.slice(0, 15) + '...'
+          : route.params.name,
+
       headerStyle: {
         backgroundColor: '#FF6EA1',
-        
       },
       headerTintColor: '#fff',
-      
-    
-        headerTitleStyle: {
-          fontWeight:'bold',
-          fontSize:25
+
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        fontSize: 25,
       },
-      
 
       headerLeft: () => (
         <View
@@ -66,7 +76,12 @@ export default function ChatSingleScreen({navigation, route}) {
         </View>
       ),
       headerRight: () => (
-        <View style={{flexDirection: 'row', justifyContent: 'space-between',width: 100}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: 100,
+          }}>
           <TouchableOpacity
             style={{justifyContent: 'center'}}
             onPress={() => {
@@ -81,9 +96,8 @@ export default function ChatSingleScreen({navigation, route}) {
             }}>
             <Ionicons name="videocam-outline" size={20} color="white" />
           </TouchableOpacity>
-          
-          
-          <RightMenu ></RightMenu>
+
+          <RightMenu></RightMenu>
         </View>
       ),
     });
@@ -101,9 +115,6 @@ export default function ChatSingleScreen({navigation, route}) {
         );
       });
   }, [chatId, currentChatId]);
-
-
-
 
   const onSend = useCallback(
     (m = []) => {
@@ -135,27 +146,57 @@ export default function ChatSingleScreen({navigation, route}) {
     const [visible, setVisible] = React.useState(false);
     const openMenu = () => setVisible(true);
     const closeMenu = () => setVisible(false);
-      return (
-        <Menu
-            visible={visible}
-            onDismiss={closeMenu}
-            anchor={<TouchableOpacity   hitSlop={{top: 20, bottom: 20, left: 50, right: 50}} style={{width:20,height:20}} title='dot' onPress={openMenu}>           
-             <Ionicons name="ellipsis-vertical-outline" size={20} color="white" />
-            </TouchableOpacity>}>
-            <Menu.Item onPress={() => {}} title="Item 1" />
-            <Menu.Item onPress={() => {}} title="Item 2" />
-          </Menu>
-      );
-    }
+    return (
+      <View style={{
+        position:'relative',
+        left:"%20",
+        bottom:"%20",
+        flexDirection: 'row',
+        justifyContent: 'center'}}>
+      <Menu
+            style={{width:'100%'}}
+
+        visible={visible}
+        onDismiss={closeMenu}
+        anchor={
+          <TouchableOpacity
+            hitSlop={{top: 40, bottom: 40, left: 40, right: 40}}
+            style={{width: 20, height: 20}}
+            title="dot"
+            onPress={openMenu}>
+            <Ionicons
+              name="ellipsis-vertical-outline"
+              size={20}
+              color="white"
+            />
+          </TouchableOpacity>
+        }>
+        <Menu.Item
+          icon="delete"
+          onPress={() => {}}
+          title="Clear Chat"
+          titleStyle={{fontSize:14}}
+        />
+        <Divider />
+        <Menu.Item
+          icon="cog"
+          onPress={() => {}}
+          title="Settings"
+          titleStyle={{fontSize:14}}
+        />
+      </Menu>
+      </View>
+    );
+  };
   return (
-    <View style={{flex:1}}>
-            <GiftedChat
-      messages={messages}
-      onSend={text => onSend(text)}
-      user={{
-        _id: auth().currentUser.uid,
-      }}
-    />
+    <View style={{flex: 1}}>
+      <GiftedChat
+        messages={messages}
+        onSend={text => onSend(text)}
+        user={{
+          _id: auth().currentUser.uid,
+        }}
+      />
     </View>
   );
 }

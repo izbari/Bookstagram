@@ -5,7 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import AuthController from '../controllers/authController';
@@ -14,13 +14,15 @@ import Welcome from '../components/Yoga';
 import {useDispatch} from 'react-redux';
 
 function Login(props) {
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [secret, setSecret] = React.useState(true);
 
   return (
-    <KeyboardAvoidingView  behavior="padding" style={{flex:1,backgroundColor: '#FF6EA1'}}>
+    <KeyboardAvoidingView
+      behavior="padding"
+      style={{flex: 1, backgroundColor: '#FF6EA1'}}>
       <Text style={styles.header}>WELCOME BACK !</Text>
 
       <View style={styles.lottieContainer}>
@@ -69,7 +71,7 @@ const dispatch = useDispatch();
             right={
               <TextInput.Icon
                 onPress={() => setSecret(!secret)}
-                name="eye"
+                name={secret ? 'eye-off' : 'eye'}
                 color="grey"
                 style={{marginTop: 15}}
               />
@@ -82,8 +84,8 @@ const dispatch = useDispatch();
             style={styles.button}
             onPress={async () => {
               await AuthController.userLogin(props, email, password);
-              dispatch({type: 'SET_ROUTE_NAME', payload: {routeName: "Login"}});
-              props.navigation.navigate("Main")
+              dispatch({type: 'SET_ROUTE_NAME', payload: {routeName: 'Login'}});
+              props.navigation.navigate('Main');
               setEmail('');
               setPassword('');
             }}>

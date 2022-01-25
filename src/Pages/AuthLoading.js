@@ -42,11 +42,11 @@ useEffect(() => {
     });
     console.log("reduxtan gelen :", prevRoute)
     if(prevRoute == 'Login'){
-      props.navigation.navigate('Main');
+      props.navigation.replace('Main');
     }else if(prevRoute == 'Signup'){
-      props.navigation.navigate('Onboarding');
+      props.navigation.replace('Onboarding');
     }else if(prevRoute == 'null'){
-      props.navigation.navigate('Main');
+      props.navigation.replace('Main');
     }
    
   }

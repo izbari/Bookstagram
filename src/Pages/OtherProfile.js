@@ -173,7 +173,7 @@ React.useEffect(() => {
           <View style={{flexDirection: 'row', margin: 10, marginBottom: 0}}>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {loading ? user.books : '-'}
+                {loading ? user.books.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Books</Text>
             </View>

@@ -1,40 +1,51 @@
-import * as React from 'react';
-import {View} from 'react-native';
-import {Button, Menu, Divider, Provider} from 'react-native-paper';
+import { View , TouchableOpacity, } from 'react-native';
+import {Menu, Divider} from 'react-native-paper';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import auth from '@react-native-firebase/auth';
 
-const ThreeDotMenu = (props) => {
+const RightMenu = (props) => {
   const [visible, setVisible] = React.useState(false);
-
   const openMenu = () => setVisible(true);
-
   const closeMenu = () => setVisible(false);
-
   return (
-    <Provider>
-      <View
-        style={{
-            
-          paddingTop: 50,
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
-        <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <Button
-              icon="dots-vertical"
-              onPress={openMenu}>
-            </Button>
-          }>
-          <Menu.Item onPress={() => {}} title="Item 1" />
-          <Menu.Item onPress={() => {}} title="Item 2" />
-          <Divider />
-          <Menu.Item onPress={() => {}} title="Item 3" />
-        </Menu>
-      </View>
-    </Provider>
+    <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <Menu
+        visible={visible}
+        onDismiss={closeMenu}
+        anchor={
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              alignContent: 'center',
+              width: 50,
+              height: 50,
+            }}
+            title="dot"
+            onPress={openMenu}>
+            <Ionicons
+              style={{alignSelf: 'center'}}
+              name="ellipsis-horizontal"
+              size={25}
+              color="grey"
+            />
+          </TouchableOpacity>
+        }>
+        <Menu.Item
+          icon={props?.whosePost == auth().currentUser.uid ? "delete" : "bookmark-multiple"}
+          onPress={() => {props?.whosePost == auth().currentUser.uid ? props.onDelete() : props.onSave() }}
+          title={props?.whosePost == auth().currentUser.uid ? "Delete My Post" : "Add to Saved Posts "}
+          titleStyle={{fontSize: 14}}
+        />
+        <Divider />
+        <Menu.Item
+          icon="close"
+          onPress={() => {}}
+          title="Hide the Post"
+          titleStyle={{fontSize: 14}}
+        />
+      </Menu>
+    </View>
   );
 };
-
-export default ThreeDotMenu;
+export default RightMenu;

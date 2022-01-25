@@ -22,7 +22,7 @@ import Loading from '../components/Loading';
 
 const {width, height} = Dimensions.get('window');
 
-const CreatePost = props => {
+const CreatePost = ({navigation}) => {
 
 
   const [state, setState] = React.useState({ open: false });
@@ -35,9 +35,8 @@ const CreatePost = props => {
   const [postText, setPostText] = React.useState('');
   const [uploading, setUploading] = React.useState(false);
   const [transferring, setTransferring] = React.useState(0);
-
-  React.useEffect(() => {
-    props.navigation.setOptions({
+  React.useLayoutEffect(() => {
+      navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={() => submitPost()}>
           <Text style={{color: 'white', fontStyle: 'italic', fontSize: 16}}>
@@ -46,7 +45,8 @@ const CreatePost = props => {
         </TouchableOpacity>
       ),
     });
-  });
+  },[navigation]);
+  
   if (uploading) {
     return (
       <View
@@ -90,7 +90,7 @@ const CreatePost = props => {
           [
             {
               text: 'OK',
-              onPress: () => props.navigation.navigate('HomeScreen'),
+              onPress: () => navigation.navigate('HomeScreen'),
             },
           ],
         );
@@ -135,7 +135,7 @@ const CreatePost = props => {
       Alert.alert('Post Published !', 'Post has been published successfully', [
         {
           text: 'OK',
-          onPress: () => props.navigation.navigate('HomeScreen'),
+          onPress: () => navigation.navigate('HomeScreen'),
         },
       ]);
 

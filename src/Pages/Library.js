@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
-import {SearchBar} from 'react-native-elements';
+import {Searchbar } from 'react-native-paper';
 import {useSearch} from '../utils/searchUtils';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
@@ -122,8 +122,10 @@ function Library(props) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <SearchBar
-        //onIconPress = {()=>getData(search)}
+      <Searchbar
+        icon = {'keyboard-backspace'}
+        onIconPress = {()=>{setSearch('') 
+        setCardData([])}}
         containerStyle={{
           marginTop: 15,
           alignSelf: 'center',
@@ -155,6 +157,20 @@ function Library(props) {
         ListFooterComponent={renderFooter}
         onRefresh={refreshHandler}
         refreshing={loading}
+        ListEmptyComponent={
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              margin: 15,
+              marginTop: 100,
+            }}>
+            <Text style={{fontStyle: 'italic', fontSize: 16}}>
+              Please Search Something...
+            </Text>
+
+          </View>
+        }
       />
     </SafeAreaView>
   );

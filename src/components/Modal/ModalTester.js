@@ -17,43 +17,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const {width,height2} = Dimensions.get('window')
-import  {Menu,Provider,Divider, Button,} from 'react-native-paper'    
 
 import moment from 'moment';
 function ModalTester(props) {
   
   const [height, setHeight] = React.useState(0);
   const [postText, setPostText] = React.useState('');
-  const [menu, setMenu] = React.useState(true);
-  const Menü = (params) => (
-  <TouchableOpacity
-    style={{
-    flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'center',
-    }}>
-    <Menu
-      visible={true}
-      onDismiss={() => {setMenu(false)}}             
-     
-      anchor={  <TouchableOpacity onPress={() => {setMenu(!menu)
-      console.log("tıkkkk")}}>
-                  <Ionicons name = "ellipsis-horizontal" size={25} style={{margin: 5,marginRight: 20,}}color="grey"/>
-
-      </TouchableOpacity>
-  }>
-      <Menu.Item onPress={() => {setMenu(false)}} title="Item 1" />
-      <Menu.Item onPress={() => {}} title="Item 2" />
-      <Divider />
-      <Menu.Item onPress={() => {}} title="Item 3" />
-    </Menu>
-  </TouchableOpacity>
-  )
-  
  
   const comment = ({item}) => {
     return (
-      
         <View style={{flexDirection: 'row',width:width,marginVertical:10}}>
           <Image
             style={{
@@ -66,7 +38,7 @@ function ModalTester(props) {
               marginRight: 7,
             }}
             source={{
-              uri: 'https://ui-avatars.com/api/?name=zafer-baris&background=random',
+              uri: item.img,
             }}
           />
           <View>
@@ -81,7 +53,7 @@ function ModalTester(props) {
                 {item.name}
               </Text>         
               <View>
-              <Menü />
+              <RightMenu />
               </View>
               </View>
 
