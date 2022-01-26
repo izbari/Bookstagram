@@ -12,8 +12,10 @@ export default function (state, action) {
   }
   switch (action.type) {
 
-    case 'SET_AUTH_FLOW':
-      return  {...state,authFlow:{routeName:action.payload.routeName,loading:action.payload.loading}}
+    case 'SET_ROUTE_NAME':
+      console.log("reducer calisti dispacta gelen" ,action.payload.routeName)
+      console.log("yeni statelerimiz:,",{...state,routeName:action.payload.routeName})
+      return  {...state,routeName:action.payload.routeName}
 
     case 'SET_LANG':
       return {...state,lang:action.payload.lang}

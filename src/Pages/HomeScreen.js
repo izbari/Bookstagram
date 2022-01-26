@@ -41,8 +41,6 @@ function HomeScreen(props) {
   const [user, setUser] = React.useState(authuser);
   const [showCommentInput, setShowCommentInput] = React.useState(false);
   const [homeIndex, setHomeIndex] = React.useState(0);
-  const deneme = props.route;
-  console.log("gelen param",deneme)
   
   React.useEffect(() => {
     //console.log('uid', auth()?.currentUser.uid);

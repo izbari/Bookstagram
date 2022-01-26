@@ -40,7 +40,8 @@ exports.createUser = async (user, props) => {
             database()
               .ref('users/' + userId)
               .set(willSave);
-              
+              props.navigation.navigate('AuthLoading',{deneme:props.route.name});
+
           }
         }
       })
@@ -53,14 +54,19 @@ exports.createUser = async (user, props) => {
 
 exports.userLogin = (props, email, password) => {
   if (password && email) {
+    let result = "boş";
+
     auth()
       .signInWithEmailAndPassword(email, password, props)
       .then(({user}) => {
+        console.log("USER CALISTI");
         Toast(`Welcome ${user.displayName} !! `);
-        return "user var"
-        //props.navigation.navigate('Main');
+        props.navigation.navigate('AuthLoading',{deneme:props.route.name});
+
+        result= true;
       })
       .catch(error => {
+        result = false;
         if (error.code === 'auth/wrong-password') {
           Toast('Wrong password.');
 
@@ -76,6 +82,7 @@ exports.userLogin = (props, email, password) => {
 
         }  
       });
+      return result;
       
   } 
   else if (!password && !email) Toast('Please enter email and password!');

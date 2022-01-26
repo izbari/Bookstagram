@@ -67,7 +67,7 @@ function Signup(props) {
     else setPasswordOutlineColor('red');
   };
 
-  const signUpHandler = () => {
+  const signUpHandler = async() => {
     const newUser = {
       email: email,
       password: password,
@@ -83,8 +83,7 @@ function Signup(props) {
       terms: checked,
     };
 
-    AuthController.createUser(newUser,props);
-    dispatch({type: 'SET_ROUTE_NAME', payload: {routeName: "Signup"}});
+    await AuthController.createUser(newUser,props);
 
   };
 
