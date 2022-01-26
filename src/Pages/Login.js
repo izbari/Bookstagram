@@ -84,8 +84,8 @@ function Login(props) {
             style={styles.button}
             onPress={async () => {
               await AuthController.userLogin(props, email, password);
+
               dispatch({type: 'SET_ROUTE_NAME', payload: {routeName: 'Login'}});
-              props.navigation.navigate('Main');
               setEmail('');
               setPassword('');
             }}>

@@ -40,6 +40,7 @@ exports.createUser = async (user, props) => {
             database()
               .ref('users/' + userId)
               .set(willSave);
+              
           }
         }
       })
@@ -56,23 +57,31 @@ exports.userLogin = (props, email, password) => {
       .signInWithEmailAndPassword(email, password, props)
       .then(({user}) => {
         Toast(`Welcome ${user.displayName} !! `);
+        return "user var"
         //props.navigation.navigate('Main');
       })
       .catch(error => {
         if (error.code === 'auth/wrong-password') {
           Toast('Wrong password.');
+
         }
         if (error.code === 'auth/email-already-in-use') {
           Toast('That email address is already in use!');
+
         }
 
         if (error.code === 'auth/invalid-email') {
           Toast('Email is invalid');
-        }
+        
+
+        }  
       });
-  } else if (!password && !email) Toast('Please enter email and password!');
+      
+  } 
+  else if (!password && !email) Toast('Please enter email and password!');
   else if (!password) Toast('Please enter password!');
   else if (!email) Toast('Please enter email!');
+
 };
 
 const checkAuthConditions = ({

@@ -259,7 +259,7 @@ function App(props) {
     <Provider>
       <UserProvider>
         <NavigationContainer>
-          <Stack.Navigator options={{headerShown: false}} mode="modal">
+          <Stack.Navigator options={{headerShown: false}}>
             <Stack.Screen
               options={{headerShown: false}}
               name="AuthLoading"

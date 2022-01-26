@@ -12,7 +12,7 @@ function MyTabBar({state, descriptors, navigation}) {
       case 'Store':
         return 'cart';
       case 'Chat':
-        return 'forum'  
+        return 'forum';
 
       case 'Favorites':
         return 'heart';
@@ -40,6 +40,7 @@ function MyTabBar({state, descriptors, navigation}) {
         const isFocused = state.index === index;
 
         const onPress = () => {
+          console.log("key",route.key);
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -61,6 +62,7 @@ function MyTabBar({state, descriptors, navigation}) {
 
         return (
           <TouchableOpacity
+            key={index}
             accessibilityRole="button"
             accessibilityState={isFocused ? {selected: true} : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}

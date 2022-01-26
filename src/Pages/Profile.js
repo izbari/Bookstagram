@@ -39,7 +39,9 @@ function Profile(props) {
 
   const signOut = () => {
     auth()
-      .signOut()
+      .signOut().then(()=>{
+        props.navigation.replace('AuthProvider')
+      })
   };
 
   // const Localize = () => {
