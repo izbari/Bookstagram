@@ -3,7 +3,6 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import {Rating} from 'react-native-rating-element';
 import bookController from '../../controllers/bookController';
 import Image from 'react-native-image-progress';
-import ProgressBar from 'react-native-progress/Bar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 const BookCard = props => {
@@ -24,13 +23,7 @@ const BookCard = props => {
         <View style={{backgroundColor: 'white', flex: 0.8}}>
           <Image
             source={{uri: '' + bookController.checkThumbnail(props.item)}}
-            indicator={ProgressBar.indeterminate}
-            indicatorProps={{
-              size: 20,
-              borderWidth: 0,
-              color: 'rgba(150, 150, 150, 1)',
-              unfilledColor: 'rgba(200, 200, 200, 0.2)',
-            }}
+          
             style={{
               height: 175,
               width: 120,

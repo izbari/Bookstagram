@@ -13,7 +13,6 @@ import {
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Image from 'react-native-image-progress';
-import ProgressBar from 'react-native-progress/Bar';
 import useFetch from '../hooks/useFetch';
 import {useSelector} from 'react-redux';
 const {width} = Dimensions.get('window');
@@ -173,13 +172,7 @@ function Discover(props) {
                   uri: data[item].url,
                 }}
                 size="large"
-                indicator={ProgressBar.indeterminate}
-                indicatorProps={{
-                  size: 20,
-                  borderWidth: 0,
-                  color: 'rgba(150, 150, 150, 1)',
-                  unfilledColor: 'rgba(200, 200, 200, 0.2)',
-                }}></Image>
+               ></Image>
 
               <Text
                 style={{

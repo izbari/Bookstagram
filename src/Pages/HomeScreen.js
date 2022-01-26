@@ -3,7 +3,9 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
+  Text,
   Alert,
+  TextInput,
   View,
   Dimensions,
 } from 'react-native';
@@ -12,33 +14,44 @@ import PostBody from '../components/Post/postBody';
 import PostFooter from '../components/Post/postFooter';
 import PostHeader from '../components/Post/postHeader';
 
-
 import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import SkeletonPlaceholder from '../components/SkeletonPlaceholder';
-import Modal from '../components/Modal/ModalTester';
-const {width} = Dimensions.get('window');
+import Comment from '../components/Post/postComment/';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import {ScrollView} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import SendCommentTextInput from '../components/Post/sendComment';
+const {width, height} = Dimensions.get('window');
 
 function HomeScreen(props) {
-  const authuser = useSelector(store => store.user);
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
 
-  const [commentPosted, setCommentPosted] = React.useState(false);
+  const authuser = useSelector(store => store.user);
   const [posts, setPosts] = React.useState([]);
   const [deleted, setDeleted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState({});
   const [user, setUser] = React.useState(authuser);
+  const [showCommentInput, setShowCommentInput] = React.useState(false);
+  const [homeIndex, setHomeIndex] = React.useState(0);
+
+  
   React.useEffect(() => {
     console.log('uid', auth()?.currentUser.uid);
     setUser(authuser);
-  }, [selectedPost]);
+  }, [authuser]);
 
   React.useEffect(async () => {
     getPosts();
-  }, [authuser]);
+    console.log(posts);
+  }, [user]);
 
   React.useEffect(async () => {
     getPosts();
@@ -57,7 +70,7 @@ function HomeScreen(props) {
   };
 
   const likePost = (postId, prevLikes) => {
-    console.log("like post")
+    console.log('like post');
     firestore()
       .collection('posts')
       .doc(postId)
@@ -69,7 +82,7 @@ function HomeScreen(props) {
       });
   };
   const unlikePost = (postId, prevLikes) => {
-    console.log("like post")
+    console.log('like post');
 
     console.log(
       'filter cevabı:',
@@ -86,7 +99,7 @@ function HomeScreen(props) {
       });
   };
   const deleteFirestoreData = postId => {
-    console.log("deleteFirestoreData")
+    console.log('deleteFirestoreData');
 
     firestore()
       .collection('posts')
@@ -105,7 +118,7 @@ function HomeScreen(props) {
   };
 
   const onSave = postId => {
-    console.log("on save")
+    console.log('on save');
 
     let added = [];
     console.log('added ilk init', added);
@@ -126,7 +139,7 @@ function HomeScreen(props) {
   };
 
   const deletePost = postId => {
-    console.log("deletePost")
+    console.log('deletePost');
 
     console.log('Current Post Id:', postId);
     firestore()
@@ -166,7 +179,7 @@ function HomeScreen(props) {
   };
 
   const handleDelete = postId => {
-    console.log("handle delete");
+    console.log('handle delete');
     Alert.alert('Delete Post', 'Are You Sure ?', [
       {
         text: 'Cancel',
@@ -177,7 +190,7 @@ function HomeScreen(props) {
     ]);
   };
   const toProfile = userId => {
-    console.log("to profile");
+    console.log('to profile');
     if (auth()?.currentUser.uid === userId) {
       props.navigation.navigate('Profile');
     } else {
@@ -186,7 +199,7 @@ function HomeScreen(props) {
   };
 
   const getPosts = async () => {
-    console.log("get posts");
+    console.log('get posts');
     try {
       const list = [];
       await firestore()
@@ -219,15 +232,14 @@ function HomeScreen(props) {
     }
   };
 
-  const renderItem = ({item}) => {
-    //console.log("rende ritem")
+  const renderItem = ({item,index}) => {
     return (
       <View
         style={{
           margin: 15,
           alignSelf: 'center',
           width: width * 0.9,
-        
+
           backgroundColor: 'white',
           borderRadius: 5,
           shadowColor: '#CBCBCB',
@@ -241,12 +253,16 @@ function HomeScreen(props) {
         />
         <PostBody item={item} />
         <PostFooter
+          setShowCommentInput={setShowCommentInput}
           item={item}
+          index={index}
+          setHomeIndex={setHomeIndex}
           setModalVisible={setModalVisible}
           likeHandler={likeHandler}
           modalVisible={modalVisible}
           setSelectedPost={setSelectedPost}
         />
+        {showCommentInput && (index == homeIndex) ? <SendCommentTextInput submitComment={submitComment}/>: null}
       </View>
     );
   };
@@ -272,21 +288,63 @@ function HomeScreen(props) {
       })
       .then(() => {
         console.log('Comment successfully posted!');
-        setCommentPosted(!commentPosted);
+        setShowCommentInput(false);
       });
   };
+
+  const renderHeader = () => {
+    return (
+      <View
+        style={{
+          height: 50,
+          backgroundColor: 'white',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Icon name="drag-horizontal-variant" size={35} color="#909090" />
+      </View>
+    );
+  };
+
+  const renderInner = () => (
+    <View
+      style={{
+        backgroundColor: 'white',
+        height: '100%',
+      }}>
+      <View>
+        <ScrollView>
+          {selectedPost.comments.map(item => {
+            return <Comment key={item.id} item={item} />;
+          })}
+        </ScrollView>
+      </View>
+    </View>
+  );
+
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       {loading ? (
         <SkeletonPlaceholder />
       ) : (
         <View>
-          <Modal
-            modalVisible={modalVisible}
-            setModalVisible={() => setModalVisible(false)}
-            selectedPostComments={selectedPost}
-            submitComment={postText => submitComment(postText)}
-          />
+          {modalVisible ? (
+            <BottomSheet
+              onCloseEnd={() => {
+                console.log('değistirdim');
+                console.log(selectedPost);
+                setModalVisible(false);
+              }}
+              enabledBottomInitialAnimation={true}
+              ref={bs}
+              snapPoints={[500, 0]}
+              initialSnap={0}
+              callbackNode={fall}
+              renderContent={renderInner}
+              renderHeader={renderHeader}
+              enabledGestureInteraction={true}
+            />
+          ) : null}
           <FlatList
             data={posts}
             renderItem={renderItem}
@@ -294,95 +352,11 @@ function HomeScreen(props) {
           />
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 const styles = StyleSheet.create({
   mainContainer: {flex: 1},
-
-  lottieContainer: {
-    flex: 2,
-    width: '85%',
-    height: '30%',
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center',
-  },
-  buttonContainer: {flex: 1, margin: 10},
-  button: {
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: 'white',
-    width: 290,
-    height: 38,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    margin: 10,
-  },
-  buttonText: {
-    alignSelf: 'center',
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  input: {
-    paddingLeft: 12,
-    borderRadius: 10,
-
-    width: 290,
-    height: 50,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    margin: 10,
-    backgroundColor: 'white',
-  },
-  centeredView: {
-    flex: 0.1,
-    width: width,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    flex: 0.1,
-    width: width,
-
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
 });
 
 export default HomeScreen;

@@ -56,7 +56,7 @@ const Header = props => {
         </View>
       </TouchableOpacity>
 
-      <ThreeDotMenu whosePost={props.item.userId} onSave={props.onSave} onDelete={props.onDelete} />
+      <ThreeDotMenu  itemId = {props.item.id} whosePost={props.item.userId} onSave={props.onSave} onDelete={props.onDelete} />
     </View>
   );
 };

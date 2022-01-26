@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Modal from 'react-native-modal';
 
 import I18n from '../utils/Languages//lang';
 import Image from 'react-native-image-progress';
@@ -43,79 +42,79 @@ function Profile(props) {
       .signOut()
   };
 
-  const Localize = () => {
-    return (
-      <Modal
-        deviceHeight={height}
-        deviceWidth={width}
-        swipeThreshold={10}
-        onBackButtonPress={() => setModalVisible(false)}
-        useNativeDriver={true}
-        propagateSwipe={true}
-        animationIn={'slideInUp'}
-        onSwipeComplete={() => setModalVisible(false)}
-        swipeDirection={'down'}
-        style={{justifyContent: 'flex-end'}}
-        isVisible={isModalVisible}>
-        <View
-          style={{
-            width: width,
-            marginLeft: -20,
-            marginBottom: -20,
-            backgroundColor: 'white',
-            borderRadius: 20,
-            borderBottomRightRadius: 0,
-            borderBottomLeftRadius: 0,
-            padding: 30,
+  // const Localize = () => {
+  //   return (
+  //     <Modal
+  //       deviceHeight={height}
+  //       deviceWidth={width}
+  //       swipeThreshold={10}
+  //       onBackButtonPress={() => setModalVisible(false)}
+  //       useNativeDriver={true}
+  //       propagateSwipe={true}
+  //       animationIn={'slideInUp'}
+  //       onSwipeComplete={() => setModalVisible(false)}
+  //       swipeDirection={'down'}
+  //       style={{justifyContent: 'flex-end'}}
+  //       isVisible={isModalVisible}>
+  //       <View
+  //         style={{
+  //           width: width,
+  //           marginLeft: -20,
+  //           marginBottom: -20,
+  //           backgroundColor: 'white',
+  //           borderRadius: 20,
+  //           borderBottomRightRadius: 0,
+  //           borderBottomLeftRadius: 0,
+  //           padding: 30,
 
-            alignItems: 'center',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
+  //           alignItems: 'center',
+  //           shadowColor: '#000',
+  //           shadowOffset: {
+  //             width: 0,
+  //             height: 2,
+  //           },
+  //           shadowOpacity: 0.25,
 
-            shadowRadius: 4,
-          }}>
-          <TouchableOpacity
-            onPress={() => setModalVisible(false)}
-            style={{marginVertical: -20, marginBottom: 0}}>
-            <Icon name="drag-horizontal-variant" size={35} color="grey" />
-          </TouchableOpacity>
-          <FlatList
-            data={data}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => {
-              return (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      dispatch({
-                        type: 'SET_LANGUAGE',
-                        payload: {lang: selectedLang},
-                      });
+  //           shadowRadius: 4,
+  //         }}>
+  //         <TouchableOpacity
+  //           onPress={() => setModalVisible(false)}
+  //           style={{marginVertical: -20, marginBottom: 0}}>
+  //           <Icon name="drag-horizontal-variant" size={35} color="grey" />
+  //         </TouchableOpacity>
+  //         <FlatList
+  //           data={data}
+  //           showsVerticalScrollIndicator={false}
+  //           renderItem={({item}) => {
+  //             return (
+  //               <View>
+  //                 <TouchableOpacity
+  //                   onPress={() => {
+  //                     dispatch({
+  //                       type: 'SET_LANGUAGE',
+  //                       payload: {lang: selectedLang},
+  //                     });
 
-                      setSelectedLang(item);
-                      setModalVisible(false);
-                    }}
-                    style={styles.menuRow}>
-                    <Flag code={item.lang.toUpperCase()} size={32} />
-                    <Text style={styles.text}>{item.country}</Text>
-                  </TouchableOpacity>
-                  <Svg
-                    style={{backgroundColor: '#B3B3B3'}}
-                    height="1"
-                    width={width}></Svg>
-                </View>
-              );
-            }}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      </Modal>
-    );
-  };
+  //                     setSelectedLang(item);
+  //                     setModalVisible(false);
+  //                   }}
+  //                   style={styles.menuRow}>
+  //                   <Flag code={item.lang.toUpperCase()} size={32} />
+  //                   <Text style={styles.text}>{item.country}</Text>
+  //                 </TouchableOpacity>
+  //                 <Svg
+  //                   style={{backgroundColor: '#B3B3B3'}}
+  //                   height="1"
+  //                   width={width}></Svg>
+  //               </View>
+  //             );
+  //           }}
+  //           keyExtractor={item => item.id}
+  //         />
+  //       </View>
+  //     </Modal>
+  //   );
+  // };
   const CustomLinearGradient = props => {
     return (
       <LinearGradient gradientUnits="objectBoundingBox" {...props}>

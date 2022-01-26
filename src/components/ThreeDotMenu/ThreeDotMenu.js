@@ -1,15 +1,15 @@
-import { View , TouchableOpacity, } from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import {Menu, Divider} from 'react-native-paper';
 import React from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
 
-const RightMenu = (props) => {
+const RightMenu = props => {
   const [visible, setVisible] = React.useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
   return (
-    <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+    <View style={{flexDirection: 'row', justifyContent: 'center',position:"absolute",right:props?.comment ? 0: 10,top:props?.comment? -10: 5}}>
       <Menu
         visible={visible}
         onDismiss={closeMenu}
@@ -26,15 +26,27 @@ const RightMenu = (props) => {
             <Ionicons
               style={{alignSelf: 'center'}}
               name="ellipsis-horizontal"
-              size={25}
+              size={props?.comment ? 20 : 25}
               color="grey"
             />
           </TouchableOpacity>
         }>
         <Menu.Item
-          icon={props?.whosePost == auth().currentUser.uid ? "delete" : "bookmark-multiple"}
-          onPress={() => {props?.whosePost == auth().currentUser.uid ? props.onDelete() : props.onSave() }}
-          title={props?.whosePost == auth().currentUser.uid ? "Delete My Post" : "Add to Saved Posts "}
+          icon={
+            props?.whosePost == auth().currentUser.uid
+              ? 'delete'
+              : 'bookmark-multiple'
+          }
+          onPress={() => {
+            props?.whosePost == auth().currentUser.uid
+              ? props.onDelete(props.itemId)
+              : props.onSave(props.itemId);
+          }}
+          title={
+            props?.whosePost == auth().currentUser.uid
+              ? 'Delete My Post'
+              : 'Add to Saved Posts '
+          }
           titleStyle={{fontSize: 14}}
         />
         <Divider />

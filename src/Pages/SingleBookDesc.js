@@ -12,9 +12,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
-import {Rating} from 'react-native-rating-element';
 import { WebView } from 'react-native-webview';
-import ProgressBar from 'react-native-progress/Bar';
 
 import bookController from '../controllers/bookController';
 
@@ -82,13 +80,7 @@ function SingleBookDesc(props) {
             }}>
             <Image
               source={{uri: '' + bookController.checkThumbnail(singleData)}}
-              indicator={ProgressBar.indeterminate}
-              indicatorProps={{
-                size: 20,
-                borderWidth: 0,
-                color: 'rgba(150, 150, 150, 1)',
-                unfilledColor: 'rgba(200, 200, 200, 0.2)',
-              }}
+            
               style={{
                 height: 300,
                 width: width,

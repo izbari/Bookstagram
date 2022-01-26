@@ -185,6 +185,7 @@ const Main = props => {
 };
 const Home = props => (
   <Stack.Navigator>
+   
     <Stack.Screen
       options={{
         headerTitleAlign: 'center',

@@ -10,7 +10,7 @@ import auth from '@react-native-firebase/auth';
 import {Divider} from 'react-native-paper';
 const {width} = Dimensions.get('window');
 
-const footer = props => {
+const footer = (props) => {
   return (
     <SafeAreaView>
       {props.item.comments == 0 && props.item.likes == 0 ? null : (
@@ -90,9 +90,10 @@ const footer = props => {
         <TouchableOpacity
           onPress={() => {
             console.log('postcarddaki props.item: ', props.item);
-            props.setModalVisible(!props.modalVisible);
-
-            props.setSelectedPost(props.item);
+            console.log("index:",props.index)
+            props.setSelectedPost(props.item);//buna gerek yok
+            props.setHomeIndex(props.index)
+            props.setShowCommentInput((prev)=> !prev)
           }}
           style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
           <Ionicons name={'chatbox-outline'} size={23} color="#FF6EA1" />
