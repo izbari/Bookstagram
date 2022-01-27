@@ -1,24 +1,26 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useTranslation} from 'react-i18next';
 
-function MyTabBar({state, descriptors, navigation}) {
+function MyTabBar({state, descriptors, navigation,}) {
+  const {i18n,t} = useTranslation();
   function iconGenerator(label) {
     switch (label) {
-      case 'Discover':
+      case ('Discover'):
         return 'magnify';
-      case 'Library':
+      case ('Library'):
         return 'bookshelf';
-      case 'Store':
+      case ('Store'):
         return 'cart';
-      case 'Chat':
+      case ('Chat'):
         return 'forum';
 
-      case 'Favorites':
+      case ('Favorites'):
         return 'heart';
-      case 'Profile':
+      case ('Profile'):
         return 'account';
-      case 'Home':
+      case ('Home'):
         return 'home';
       default:
         break;
@@ -82,14 +84,13 @@ function MyTabBar({state, descriptors, navigation}) {
               size={25}
               style={{alignSelf: 'center'}}
             />
-
             <Text
               style={{
                 color: isFocused ? '#FF6EA1' : '#B3B3B3',
                 alignSelf: 'center',
-                fontSize: 12,
+                fontSize: i18n.language == 'tr' ? 10 : 12,
               }}>
-              {label}
+              {t(`navigate:${label}`)}
             </Text>
           </TouchableOpacity>
         );

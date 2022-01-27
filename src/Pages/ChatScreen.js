@@ -5,8 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  FlatList,
-  RefreshControl,
+  FlatList,RefreshControl
 } from 'react-native';
 import Image from 'react-native-image-progress';
 import auth from '@react-native-firebase/auth';
@@ -21,7 +20,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 export default function Chat({navigation, route}) {
   const authUser = useSelector(store => store.user);
   const [chats, setChats] = useState([]);
-  const [refreshing, setRefreshing] = useState(true);
   const [user, setUser] = useState(authUser);
   const [loading, setLoading] = useState(false);
   const [otherUserData, setOtherUserData] = useState([]);
@@ -45,6 +43,10 @@ export default function Chat({navigation, route}) {
   }, [navigation, loading]);
 
   useEffect(() => {
+   fetchChats()
+  }, [, navigation, user, route?.params?.check]);
+
+  const fetchChats = () => {
     setLoading(true);
     let otherUids = [];
     let otherUserData = [];
@@ -87,9 +89,8 @@ export default function Chat({navigation, route}) {
           setChats(snapshot.docs);
         });
     });
-  }, [, navigation, user, route?.params?.check]);
-
-  useEffect(() => {}, [chats]);
+  };
+  
 
   const ChatObject = ({item}) => {
     const willSendUid = item?._data.users?.find(
@@ -177,9 +178,18 @@ export default function Chat({navigation, route}) {
       ) : (
         <FlatList
           data={chats}
-          //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={null} />}
           renderItem={ChatObject}
           keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl
+              title="Pull to refresh"
+              tintColor="#FF6EA1"
+              titleColor="grey"
+              colors={["#FF6EA1"]}
+              refreshing={loading}
+              onRefresh={() => fetchChats()}
+            />
+          }
           ListEmptyComponent={
             <View
               style={{

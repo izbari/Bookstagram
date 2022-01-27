@@ -5,6 +5,7 @@ import {
   Alert,
   View,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import database from '@react-native-firebase/database';
 import PostBody from '../components/Post/postBody';
@@ -25,7 +26,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SendCommentTextInput from '../components/Post/sendComment';
 const {width} = Dimensions.get('window');
 
-function HomeScreen({navigation,route}) {
+function HomeScreen({navigation, route}) {
   const newPost = route?.params?.newPost;
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -40,14 +41,14 @@ function HomeScreen({navigation,route}) {
   const [user, setUser] = React.useState(authuser);
   const [showCommentInput, setShowCommentInput] = React.useState(false);
   const [homeIndex, setHomeIndex] = React.useState(0);
-  
+
   React.useEffect(() => {
     setUser(authuser);
   }, [authuser]);
 
   React.useEffect(async () => {
     getPosts();
-  }, [newPost,rerender,user]);
+  }, [newPost, rerender, user]);
 
   React.useEffect(async () => {
     getPosts();
@@ -73,12 +74,11 @@ function HomeScreen({navigation,route}) {
         likes: [...prevLikes, auth()?.currentUser.uid],
       })
       .then(() => {
-        setRerender(!rerender)
+        setRerender(!rerender);
         console.log('Post liked');
       });
   };
   const unlikePost = (postId, prevLikes) => {
-
     console.log(
       'filter cevabı:',
       prevLikes.filter(element => element != auth()?.currentUser.uid),
@@ -90,7 +90,7 @@ function HomeScreen({navigation,route}) {
         likes: prevLikes.filter(element => element != auth()?.currentUser.uid),
       })
       .then(() => {
-        setRerender(!rerender)
+        setRerender(!rerender);
         console.log('Post unliked!');
       });
   };
@@ -196,6 +196,7 @@ function HomeScreen({navigation,route}) {
 
   const getPosts = async () => {
     try {
+      setLoading(true);
       const list = [];
       await firestore()
         .collection('posts')
@@ -217,18 +218,16 @@ function HomeScreen({navigation,route}) {
             });
           });
           setPosts(list);
-
-          if (loading) {
-            setLoading(false);
-          }
+          setLoading(false);
         });
     } catch (error) {
+      setLoading(false);
+
       console.log(error.msg);
     }
   };
 
-  const renderItem = ({item,index}) => {
-    console.log("Render:",index)
+  const renderItem = ({item, index}) => {
     return (
       <View
         style={{
@@ -258,7 +257,9 @@ function HomeScreen({navigation,route}) {
           modalVisible={modalVisible}
           setSelectedPost={setSelectedPost}
         />
-        {showCommentInput && (index == homeIndex) ? <SendCommentTextInput submitComment={submitComment}/>: null}
+        {showCommentInput && index == homeIndex ? (
+          <SendCommentTextInput submitComment={submitComment} />
+        ) : null}
       </View>
     );
   };
@@ -283,7 +284,7 @@ function HomeScreen({navigation,route}) {
         ],
       })
       .then(() => {
-        setRerender(!rerender)
+        setRerender(!rerender);
         console.log('Comment successfully posted!');
         setShowCommentInput(false);
       });
@@ -346,6 +347,16 @@ function HomeScreen({navigation,route}) {
             data={posts}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            refreshControl={
+              <RefreshControl
+                title="Pull to refresh"
+                tintColor="#FF6EA1"
+                titleColor="grey"
+                colors={["#FF6EA1"]}
+                refreshing={loading}
+                onRefresh={() => getPosts()}
+              />
+            }
           />
         </View>
       )}

@@ -7,7 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import I18n from 'react-native-i18n';
+//import I18n from 'react-native-i18n';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';

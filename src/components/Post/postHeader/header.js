@@ -4,17 +4,22 @@ import Image from 'react-native-image-progress';
 import ThreeDotMenu from '../../ThreeDotMenu';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
+import {useTranslation} from 'react-i18next';
 
 const Header = props => {
+  const {i18n,t} = useTranslation();
   const [user, setUser] = React.useState({});
 
+
   React.useEffect(async () => {
-    await database()
+
+    const singleUserData = await database()
       .ref(`/users/${props.item.userId}`)
       .once('value')
       .then(snapshot => {
         setUser(snapshot.val());
       });
+      return singleUserData
   }, [props.item.userId]);
 
   return (

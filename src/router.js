@@ -20,17 +20,24 @@ import Discover from './Pages/Discover';
 import HomeScreen from './Pages/HomeScreen';
 import NewMessage from './Pages/NewMessage';
 import AuthLoading from './Pages/AuthLoading';
-import {Provider} from 'react-native-paper';
+import {Provider,DefaultTheme} from 'react-native-paper';
 import OtherProfile from './Pages/OtherProfile';
 
 import CreatePost from './Pages/CreatePost';
-
 import Onboarding from './Pages/Onboarding';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#3498db',
+    accent: '#f1c40f',
+  },
+};
 const Profile = props => {
   return (
     <Stack.Navigator>
@@ -256,7 +263,7 @@ const AuthProvider = props => (
 
 function App(props) {
   return (
-    <Provider>
+    <Provider theme={theme}>
       <UserProvider>
         <NavigationContainer>
           <Stack.Navigator options={{headerShown: false}}>

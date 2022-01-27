@@ -1,5 +1,4 @@
 package com.bookstagram;
-
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.zoontek.rnlocalize.RNLocalizePackage;
 import android.app.Application;
@@ -16,7 +15,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 
@@ -36,7 +34,6 @@ public class MainApplication extends Application implements ReactApplication {
       new VectorIconsPackage();
       new RNCWebViewPackage();
 
-      new RNI18nPackage();
       // Packages that cannot be autolinked yet can be added manually here, for
       // example:
       // packages.add(new MyReactNativePackage());

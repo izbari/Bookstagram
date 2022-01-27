@@ -8,9 +8,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import auth from '@react-native-firebase/auth';
 import {Divider} from 'react-native-paper';
-const {width} = Dimensions.get('window');
+import {useTranslation} from 'react-i18next';
 
+const {width} = Dimensions.get('window');
 const footer = (props) => {
+  const {t} = useTranslation();
+
   return (
     <SafeAreaView>
       {props.item.comments == 0 && props.item.likes == 0 ? null : (
@@ -43,7 +46,7 @@ const footer = (props) => {
             {props.item.comments.length != 0 && (
               <Text
                 style={{alignSelf: 'center', marginLeft: 5, color: '#727375'}}>
-                {props.item.comments.length + ' Comments'}
+                {props.item.comments.length + " "+t('common:Comments')}
               </Text>
             )}
           </View>
@@ -83,7 +86,7 @@ const footer = (props) => {
               fontWeight: 'bold',
               color: 'grey',
             }}>
-            {'Like'}
+            {t('common:Like')}
           </Text>
         </TouchableOpacity>
 
@@ -103,7 +106,7 @@ const footer = (props) => {
               fontWeight: 'bold',
               color: 'grey',
             }}>
-            {'Comment'}
+            {t('common:Comment')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -121,7 +124,7 @@ const footer = (props) => {
               fontWeight: 'bold',
               color: 'grey',
             }}>
-            {'Share'}
+            {t('common:Share')}
           </Text>
         </TouchableOpacity>
       </View>

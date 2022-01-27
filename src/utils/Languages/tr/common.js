@@ -1,5 +1,5 @@
-const tr = {
-    Hello: 'Merhaba',
+export default {
+  Hello: 'Merhaba',
     MyCart:'Sepetim',
     Purchases : 'Siparişlerim',
     Theme :'Tema',
@@ -12,6 +12,11 @@ const tr = {
     Following:'Takip Edilenler',
     EditProfile: 'Profili düzenle',
     Settings: 'Ayarlar',
+    Like: 'Beğen',
+    Comment: 'Yorum',
+    Comments: 'Yorum',
+    Share: 'Paylaş',
+    WhatYouAreThinking: 'Ne düşünüyorsun ?'
+
     
   };
-  export default tr;

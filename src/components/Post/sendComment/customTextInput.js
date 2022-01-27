@@ -1,8 +1,10 @@
 import {StyleSheet, TextInput, View, Dimensions,TouchableOpacity,Keyboard} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-const {width} = Dimensions.get('window');
+import {useTranslation} from 'react-i18next';
+
 const customTextInput = (props) => {
+  const {t} = useTranslation();
     const [height, setHeight] = React.useState(0);
     const [postText, setPostText] = React.useState('');
    
@@ -28,9 +30,10 @@ const customTextInput = (props) => {
         multiline
         autoCorrect
         numberOfLines={7}
-        placeholder={'What are u thinking ?'}
+        placeholder={t('common:WhatYouAreThinking')}
         onChangeText={setPostText}></TextInput>
       <TouchableOpacity
+      disabled={postText.length== 0 ? true : false}
         onPress={async () => {
           const text = postText;
           await props.submitComment(text);
@@ -39,7 +42,7 @@ const customTextInput = (props) => {
           Keyboard.dismiss();
         
         }}>
-        <Icon name="send" size={25} color="#FF6EA1" style={{padding: 10}} />
+        <Icon name="send" size={25} color={postText.length== 0 ? "grey":"#FF6EA1"}  style={{padding: 10}} />
       </TouchableOpacity>
     </View>
   );

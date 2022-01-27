@@ -12,18 +12,20 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Avatar } from 'react-native-paper';
+import {useSelector} from 'react-redux';
 import {
   Menu,
+  Avatar,
   Divider,
-  Provider as PaperProvider,
 } from 'react-native-paper';
 
 export default function ChatSingleScreen({navigation, route}) {
+  const authUser = useSelector(store=> store.user)
   const [messages, setMessages] = useState([]);
-  const {uid, chatId} = route.params;
+  const {name,imageUrl,uid, chatId} = route.params;
   const [currentChatId, setCurrentChatId] = useState(chatId);
-
+  console.log(authUser)
+  console.log("name:",name,"imageUrl",imageUrl)
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title:
@@ -105,7 +107,7 @@ export default function ChatSingleScreen({navigation, route}) {
   }, [navigation]);
 
   React.useEffect(() => {
-    firestore()
+    const data = firestore()
       .doc('Chats/' + currentChatId)
       .onSnapshot(doc => {
         setMessages(
@@ -115,6 +117,7 @@ export default function ChatSingleScreen({navigation, route}) {
           })),
         );
       });
+      return data;
   }, [chatId, currentChatId]);
 
   const onSend = useCallback(
@@ -149,13 +152,11 @@ export default function ChatSingleScreen({navigation, route}) {
     const closeMenu = () => setVisible(false);
     return (
       <View style={{
-        position:'relative',
-        left:"%20",
-        bottom:"%20",
+        
         flexDirection: 'row',
         justifyContent: 'center'}}>
       <Menu
-            style={{width:'100%'}}
+            style={{width:'50%'}}
 
         visible={visible}
         onDismiss={closeMenu}
@@ -189,15 +190,20 @@ export default function ChatSingleScreen({navigation, route}) {
       </View>
     );
   };
+ 
+  
+  
   return (
     <View style={{flex: 1}}>
       <GiftedChat
         messages={messages}
         onSend={text => onSend(text)}
         user={{
-          _id: auth().currentUser.uid,
+          _id: authUser.id,
+          name: authUser.name+" "+authUser.lastName,
+          avatar: authUser.imageUrl
         }}
-        showAvatarForEveryMessage={true} />
+           />
     </View>
   );
 }

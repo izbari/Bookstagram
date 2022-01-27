@@ -5,12 +5,10 @@ import {
   Text,
   View,
   ScrollView,
-  Dimensions, 
- 
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Divider } from 'react-native-paper';
-import I18n from '../utils/Languages//lang';
+import {Divider} from 'react-native-paper';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
@@ -19,43 +17,50 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import auth from '@react-native-firebase/auth';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
-const {width, height} = Dimensions.get('window');
-
+import {TouchableOpacity} from 'react-native-gesture-handler';
+const {width} = Dimensions.get('window');
+import {useTranslation} from 'react-i18next';
+//import i18n from 'i18next';
 function Profile(props) {
+  const {t,i18n} = useTranslation();
+  const selectedLanguageCode = i18n.language;
+
+  const setLanguage = code => {
+    return i18n.changeLanguage(code);
+  };
+
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const dispatch = useDispatch();
-  const data = [
-    {id: 0, lang: 'tr', country: 'Turkish'},
-    {id: 1, lang: 'us', country: 'English'},
-    {id: 2, lang: 'de', country: 'Deutschland'},
-    {id: 3, lang: 'fr', country: 'French'},
+
+  const LANGUAGES = [
+    {code: 'tr', label: 'Turkish'},
+    {code: 'us', label: 'English'},
+    {code: 'de', label: 'Deutschland'},
+    {code: 'fr', label: 'French'},
   ];
+
   const authuser = useSelector(store => store.user);
 
-  const [user,setUser] = React.useState(authuser);
+  const [user, setUser] = React.useState(authuser);
   const [isModalVisible, setModalVisible] = React.useState(false);
-  const [selectedLang, setSelectedLang] = React.useState(I18n.locale);
 
   React.useEffect(() => {
-      setUser(authuser)
-  },[authuser])
+    setUser(authuser);
+  }, [authuser]);
 
   const signOut = () => {
     auth()
-      .signOut().then(()=>{
-        props.navigation.replace('AuthProvider')
-      })
+      .signOut()
+      .then(() => {
+        props.navigation.replace('AuthProvider');
+      });
   };
 
   const renderHeader = () => {
     return (
       <View
         style={{
-          height: 50,
+          height: 40,
           backgroundColor: 'white',
           alignItems: 'center',
           justifyContent: 'center',
@@ -73,49 +78,55 @@ function Profile(props) {
       }}>
       <View>
         <ScrollView>
-          {data.map(item => {
-             return (
-                             <View key={item.id}>
-                               <TouchableOpacity
-                                 onPress={() => {
-                                   dispatch({
-                                     type: 'SET_LANGUAGE',
-                                     payload: {lang: selectedLang},
-                                 });
-            
-                                   setSelectedLang(item);
-                               setModalVisible(false);
-                                 }}
-                                 style={styles.menuRow}>
-                                 <Flag code={item.lang.toUpperCase()} size={32} />
-                                <Text style={styles.text}>{item.country}</Text>
-                               </TouchableOpacity>
-                                 <Divider />
-                             </View>
-                           );
+          {LANGUAGES.map((language,index) => {
+            const selectedLanguage = language.code === selectedLanguageCode;
+            return (
+              <View style={{flex:1}} 
+              key={language.code}>
+                <TouchableOpacity
+                  key={language.code}
+                  disabled={selectedLanguage}
+                  onPress={() => {
+                    setLanguage(language.code);
+                    setModalVisible(false);
+                  }}
+                  style={{flex:1,padding:10}}
+
+                 >
+                  <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
+                  <View style={{flexDirection: 'row',flex:1}}>
+                  <Flag code={language.code.toUpperCase()} size={32} />
+                  <Text style={styles.text}>{language.label}</Text>
+                  </View>
+                  {selectedLanguage ? <Ionicons name='checkmark' size={25}  color='#FF6EA1'  /> : null}
+                  </View>
+                </TouchableOpacity>
+                {index +1 != LANGUAGES.length && <Divider />}
+              </View>
+            );
           })}
         </ScrollView>
       </View>
     </View>
   );
- 
-   const Localize = () => {
-     return (
+
+  const Localize = () => {
+    return (
       <BottomSheet
-      onCloseEnd={() => {
-        setModalVisible(false);
-      }}
-      enabledBottomInitialAnimation={true}
-      ref={bs}
-      snapPoints={[300, 0]}
-      initialSnap={0}
-      callbackNode={fall}
-      renderContent={renderInner}
-      renderHeader={renderHeader}
-      enabledGestureInteraction={true}
-    />
-     );
-   };
+        onCloseEnd={() => {
+          setModalVisible(false);
+        }}
+        enabledBottomInitialAnimation={true}
+        ref={bs}
+        snapPoints={[300, 0]}
+        initialSnap={0}
+        callbackNode={fall}
+        renderContent={renderInner}
+        renderHeader={renderHeader}
+        enabledGestureInteraction={true}
+      />
+    );
+  };
   const CustomLinearGradient = props => {
     return (
       <LinearGradient gradientUnits="objectBoundingBox" {...props}>
@@ -126,15 +137,12 @@ function Profile(props) {
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
-
       <View style={styles.svgCurve}>
-        
         <View
           style={{
             flex: 1,
             height: 180,
           }}>
-            
           <Svg
             id="wave"
             style={{transform: [{rotate: '90deg'}]}}
@@ -191,7 +199,7 @@ function Profile(props) {
                 marginRight: 5,
                 marginTop: 7,
               }}>
-              {I18n.t('Hello', {locale: selectedLang.lang})}{' '}
+              {t('common:Hello')}
               {user ? user.name + ' ' + user.lastName : 'user cant found'}
             </Text>
           </View>
@@ -201,17 +209,15 @@ function Profile(props) {
               <Text style={styles.profileStatusNumber}>
                 {user ? user.books.length : '1000'}
               </Text>
-              <Text style={styles.profileStatusText}>
-                {I18n.t('Books', {locale: selectedLang.lang})}
-              </Text>
+              <Text style={styles.profileStatusText}>{t('common:Books')}</Text>
             </View>
-           
+
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
                 {user ? user.fallowers.length : '1000'}
               </Text>
               <Text style={styles.profileStatusText}>
-                {I18n.t('Followers', {locale: selectedLang.lang})}
+                {t('common:Followers')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileStatusContainer}>
@@ -219,19 +225,20 @@ function Profile(props) {
                 {user ? user.fallowing.length : '1001'}
               </Text>
               <Text style={styles.profileStatusText}>
-                {I18n.t('Following', {locale: selectedLang.lang})}
+                {t('common:Following')}
               </Text>
             </TouchableOpacity>
             <Image
               style={{
+                position:'relative',
+                left:50,
+                top:10,
                 height: 90,
                 width: 90,
                 resizeMode: 'contain',
                 borderRadius: 50,
                 overflow: 'hidden',
                 elavation: 5,
-                marginTop: 0,
-                marginLeft: 57,
               }}
               source={{
                 uri: user
@@ -269,34 +276,28 @@ function Profile(props) {
               textAlign: 'center',
               fontSize: 12,
             }}>
-            {I18n.t('EditProfile', {locale: selectedLang.lang})}
+            {t('common:EditProfile')}
           </Text>
         </TouchableOpacity>
         <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
-          {I18n.t('Account', {locale: selectedLang.lang})}
+          {t('common:Account')}
         </Text>
         <View>
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Store')}
             style={styles.menuRow}>
             <Ionicons name="cart" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>
-              {I18n.t('MyCart', {locale: selectedLang.lang})}
-            </Text>
+            <Text style={styles.text}>{t('common:MyCart')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
             <Ionicons name="card" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>
-              {I18n.t('Purchases', {locale: selectedLang.lang})}
-            </Text>
+            <Text style={styles.text}>{t('common:Purchases')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
             <Ionicons name="person" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>
-              {I18n.t('Account', {locale: selectedLang.lang})}
-            </Text>
+            <Text style={styles.text}>{t('common:Account')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -311,47 +312,36 @@ function Profile(props) {
           marginTop: 35,
           elevation: 80,
         }}>
-   <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
-          {I18n.t('Settings', {locale: selectedLang.lang})}
+        <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
+          {t('common:Settings')}
         </Text>
         <View>
           <TouchableOpacity style={styles.menuRow}>
             <Ionicons name="ellipse" size={25} color="black" />
-            <Text style={styles.text}>
-              {I18n.t('Theme', {locale: selectedLang.lang})}
-            </Text>
+            <Text style={styles.text}>{t('common:Theme')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
             <Ionicons name="notifications" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>
-              {I18n.t('Notifications', {locale: selectedLang.lang})}
-            </Text>
+            <Text style={styles.text}>{t('common:Notifications')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity
             onPress={() => setModalVisible(true)}
             style={styles.menuRow}>
             <Ionicons name="earth" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>
-              {I18n.t('Languages', {locale: selectedLang.lang})}
-            </Text>
+            <Text style={styles.text}>{t('common:Languages')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
 
           <TouchableOpacity onPress={() => signOut()} style={styles.menuRow}>
             <Ionicons name="exit" size={25} color="#FF6EA1" />
-            <Text style={styles.text}>
-              {I18n.t('SignOut', {locale: selectedLang.lang})}
-            </Text>
-          </TouchableOpacity>   
-            
-
+            <Text style={styles.text}>{t('common:SignOut')}</Text>
+          </TouchableOpacity>
         </View>
- <View style={{width: '100%',
-          height: '50%',}}>  
-               {isModalVisible && <Localize />}
-               </View>
+        <View style={{width: '100%', height: '50%'}}>
+          {isModalVisible && <Localize />}
+        </View>
       </View>
     </SafeAreaView>
   );

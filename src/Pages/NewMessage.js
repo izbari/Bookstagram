@@ -78,6 +78,7 @@ const NewMessage = ({navigation, route}) => {
 
         navigation.navigate('ChatSingleScreen', {
           name: item.name + ' ' + item.lastName,
+          imageUrl : item.imageUrl,
           chatId: chatId,
           uid: item.id,
         });

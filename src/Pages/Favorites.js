@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  SafeAreaView,
- 
-  FlatList,
-  StyleSheet,
-
-} from 'react-native';
+import {SafeAreaView, View, FlatList, StyleSheet, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import BookCard from '../components/BookCard';
 
@@ -14,7 +8,6 @@ function Favorites(props) {
   const list = useSelector(s => s.favList)
     .slice()
     .reverse();
-
 
   const favHandler = item => {
     if (list.includes(item)) {
@@ -28,8 +21,6 @@ function Favorites(props) {
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
-     
-
       <FlatList
         data={list}
         renderItem={({item}) => (
@@ -48,6 +39,19 @@ function Favorites(props) {
           />
         )}
         keyExtractor={item => item.id}
+        ListEmptyComponent={
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              margin: 15,
+              marginTop: 100,
+            }}>
+            <Text style={{fontStyle: 'italic', fontSize: 16}}>
+              Your Favorites  Empty Ups !!
+            </Text>
+          </View>
+        }
       />
     </SafeAreaView>
   );

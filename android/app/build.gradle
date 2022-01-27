@@ -186,10 +186,9 @@ implementation project(':lottie-react-native')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    compile project(':react-native-vector-icons')
+    implementation project(':react-native-vector-icons')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(':react-native-webview')
-   compile project(':react-native-i18n')
 
   implementation project(':react-native-localize')
 

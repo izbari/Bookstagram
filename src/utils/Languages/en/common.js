@@ -1,5 +1,5 @@
-const en = {
-  Hello: 'Hello',
+export default {
+    Hello: 'Hello',
     MyCart: 'My cart',
     Purchases:'Purchases',
     Theme:'Theme',
@@ -12,5 +12,10 @@ const en = {
     Following:'Following',
     EditProfile: 'Edit Profile',
     Settings: 'Settings',
+    Like: 'Like',
+    Comment: 'Comment',
+    Comments: 'Comment',
+    Share: 'Share',
+    WhatYouAreThinking: 'What are you thinking ?'
+
   };
-  export default en;

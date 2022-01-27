@@ -1,7 +1,7 @@
 /**
  * @format
  */
-
+ import './src/utils/Languages/IMLocalize'
  import 'react-native-gesture-handler';
 import {AppRegistry} from 'react-native';
 import root from './src/router';
