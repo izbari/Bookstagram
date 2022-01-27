@@ -4,22 +4,29 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  Dimensions,
-  TouchableOpacity,
+  ScrollView,
+  Dimensions, 
+ 
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { Divider } from 'react-native-paper';
 import I18n from '../utils/Languages//lang';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
 import Flag from 'react-native-flags';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
 import auth from '@react-native-firebase/auth';
 import {useSelector, useDispatch} from 'react-redux';
+import {
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 const {width, height} = Dimensions.get('window');
 
 function Profile(props) {
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
   const dispatch = useDispatch();
   const data = [
     {id: 0, lang: 'tr', country: 'Turkish'},
@@ -44,79 +51,71 @@ function Profile(props) {
       })
   };
 
-  // const Localize = () => {
-  //   return (
-  //     <Modal
-  //       deviceHeight={height}
-  //       deviceWidth={width}
-  //       swipeThreshold={10}
-  //       onBackButtonPress={() => setModalVisible(false)}
-  //       useNativeDriver={true}
-  //       propagateSwipe={true}
-  //       animationIn={'slideInUp'}
-  //       onSwipeComplete={() => setModalVisible(false)}
-  //       swipeDirection={'down'}
-  //       style={{justifyContent: 'flex-end'}}
-  //       isVisible={isModalVisible}>
-  //       <View
-  //         style={{
-  //           width: width,
-  //           marginLeft: -20,
-  //           marginBottom: -20,
-  //           backgroundColor: 'white',
-  //           borderRadius: 20,
-  //           borderBottomRightRadius: 0,
-  //           borderBottomLeftRadius: 0,
-  //           padding: 30,
+  const renderHeader = () => {
+    return (
+      <View
+        style={{
+          height: 50,
+          backgroundColor: 'white',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Icon name="drag-horizontal-variant" size={35} color="#909090" />
+      </View>
+    );
+  };
 
-  //           alignItems: 'center',
-  //           shadowColor: '#000',
-  //           shadowOffset: {
-  //             width: 0,
-  //             height: 2,
-  //           },
-  //           shadowOpacity: 0.25,
-
-  //           shadowRadius: 4,
-  //         }}>
-  //         <TouchableOpacity
-  //           onPress={() => setModalVisible(false)}
-  //           style={{marginVertical: -20, marginBottom: 0}}>
-  //           <Icon name="drag-horizontal-variant" size={35} color="grey" />
-  //         </TouchableOpacity>
-  //         <FlatList
-  //           data={data}
-  //           showsVerticalScrollIndicator={false}
-  //           renderItem={({item}) => {
-  //             return (
-  //               <View>
-  //                 <TouchableOpacity
-  //                   onPress={() => {
-  //                     dispatch({
-  //                       type: 'SET_LANGUAGE',
-  //                       payload: {lang: selectedLang},
-  //                     });
-
-  //                     setSelectedLang(item);
-  //                     setModalVisible(false);
-  //                   }}
-  //                   style={styles.menuRow}>
-  //                   <Flag code={item.lang.toUpperCase()} size={32} />
-  //                   <Text style={styles.text}>{item.country}</Text>
-  //                 </TouchableOpacity>
-  //                 <Svg
-  //                   style={{backgroundColor: '#B3B3B3'}}
-  //                   height="1"
-  //                   width={width}></Svg>
-  //               </View>
-  //             );
-  //           }}
-  //           keyExtractor={item => item.id}
-  //         />
-  //       </View>
-  //     </Modal>
-  //   );
-  // };
+  const renderInner = () => (
+    <View
+      style={{
+        backgroundColor: 'white',
+        height: '100%',
+      }}>
+      <View>
+        <ScrollView>
+          {data.map(item => {
+             return (
+                             <View key={item.id}>
+                               <TouchableOpacity
+                                 onPress={() => {
+                                   dispatch({
+                                     type: 'SET_LANGUAGE',
+                                     payload: {lang: selectedLang},
+                                 });
+            
+                                   setSelectedLang(item);
+                               setModalVisible(false);
+                                 }}
+                                 style={styles.menuRow}>
+                                 <Flag code={item.lang.toUpperCase()} size={32} />
+                                <Text style={styles.text}>{item.country}</Text>
+                               </TouchableOpacity>
+                                 <Divider />
+                             </View>
+                           );
+          })}
+        </ScrollView>
+      </View>
+    </View>
+  );
+ 
+   const Localize = () => {
+     return (
+      <BottomSheet
+      onCloseEnd={() => {
+        setModalVisible(false);
+      }}
+      enabledBottomInitialAnimation={true}
+      ref={bs}
+      snapPoints={[300, 0]}
+      initialSnap={0}
+      callbackNode={fall}
+      renderContent={renderInner}
+      renderHeader={renderHeader}
+      enabledGestureInteraction={true}
+    />
+     );
+   };
   const CustomLinearGradient = props => {
     return (
       <LinearGradient gradientUnits="objectBoundingBox" {...props}>
@@ -127,14 +126,15 @@ function Profile(props) {
   };
   return (
     <SafeAreaView style={styles.mainContainer}>
-      {isModalVisible && <Localize />}
 
       <View style={styles.svgCurve}>
+        
         <View
           style={{
             flex: 1,
             height: 180,
           }}>
+            
           <Svg
             id="wave"
             style={{transform: [{rotate: '90deg'}]}}
@@ -205,7 +205,7 @@ function Profile(props) {
                 {I18n.t('Books', {locale: selectedLang.lang})}
               </Text>
             </View>
-
+           
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
                 {user ? user.fallowers.length : '1000'}
@@ -309,10 +309,9 @@ function Profile(props) {
           shadowColor: '#CBCBCB',
           borderRadius: 2,
           marginTop: 35,
-
           elevation: 80,
         }}>
-        <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
+   <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
           {I18n.t('Settings', {locale: selectedLang.lang})}
         </Text>
         <View>
@@ -345,8 +344,14 @@ function Profile(props) {
             <Text style={styles.text}>
               {I18n.t('SignOut', {locale: selectedLang.lang})}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>   
+            
+
         </View>
+ <View style={{width: '100%',
+          height: '50%',}}>  
+               {isModalVisible && <Localize />}
+               </View>
       </View>
     </SafeAreaView>
   );

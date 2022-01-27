@@ -1,11 +1,8 @@
 import * as React from 'react';
 import {
-  SafeAreaView,
   FlatList,
   StyleSheet,
-  Text,
   Alert,
-  TextInput,
   View,
   Dimensions,
 } from 'react-native';
@@ -26,14 +23,16 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import SendCommentTextInput from '../components/Post/sendComment';
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
-function HomeScreen(props) {
+function HomeScreen({navigation,route}) {
+  const newPost = route?.params?.newPost;
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-
   const authuser = useSelector(store => store.user);
   const [posts, setPosts] = React.useState([]);
+  const [rerender, setRerender] = React.useState(false);
+
   const [deleted, setDeleted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -43,14 +42,12 @@ function HomeScreen(props) {
   const [homeIndex, setHomeIndex] = React.useState(0);
   
   React.useEffect(() => {
-    //console.log('uid', auth()?.currentUser.uid);
     setUser(authuser);
   }, [authuser]);
 
   React.useEffect(async () => {
     getPosts();
-    console.log(posts);
-  }, [user]);
+  }, [newPost,rerender,user]);
 
   React.useEffect(async () => {
     getPosts();
@@ -59,7 +56,6 @@ function HomeScreen(props) {
 
   const likeHandler = (postId, prevLikes) => {
     const selectedPost = posts.find(post => post.id === postId);
-    console.log('selectedPost cevabi:', selectedPost);
     //unlike
     if (selectedPost.likes.includes(auth()?.currentUser.uid)) {
       unlikePost(postId, prevLikes);
@@ -77,11 +73,11 @@ function HomeScreen(props) {
         likes: [...prevLikes, auth()?.currentUser.uid],
       })
       .then(() => {
-        console.log('Likes count updated!');
+        setRerender(!rerender)
+        console.log('Post liked');
       });
   };
   const unlikePost = (postId, prevLikes) => {
-    console.log('like post');
 
     console.log(
       'filter cevabı:',
@@ -94,7 +90,8 @@ function HomeScreen(props) {
         likes: prevLikes.filter(element => element != auth()?.currentUser.uid),
       })
       .then(() => {
-        console.log('Likes count updated!');
+        setRerender(!rerender)
+        console.log('Post unliked!');
       });
   };
   const deleteFirestoreData = postId => {
@@ -191,9 +188,9 @@ function HomeScreen(props) {
   const toProfile = userId => {
     console.log('to profile');
     if (auth()?.currentUser.uid === userId) {
-      props.navigation.navigate('Profile');
+      navigation.navigate('Profile');
     } else {
-      props.navigation.navigate('OtherProfile', {selectedUserId: userId});
+      navigation.navigate('OtherProfile', {selectedUserId: userId});
     }
   };
 
@@ -231,6 +228,7 @@ function HomeScreen(props) {
   };
 
   const renderItem = ({item,index}) => {
+    console.log("Render:",index)
     return (
       <View
         style={{
@@ -285,6 +283,7 @@ function HomeScreen(props) {
         ],
       })
       .then(() => {
+        setRerender(!rerender)
         console.log('Comment successfully posted!');
         setShowCommentInput(false);
       });

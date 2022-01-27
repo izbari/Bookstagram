@@ -14,11 +14,9 @@ import Welcome from '../components/Yoga';
 import {useDispatch} from 'react-redux';
 
 function Login(props) {
-  const dispatch = useDispatch();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [secret, setSecret] = React.useState(true);
-
   return (
     <KeyboardAvoidingView
       behavior="padding"

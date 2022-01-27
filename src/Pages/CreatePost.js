@@ -1,17 +1,15 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Image,
   View,
-  TextInput,
   Text,
-  Animated,
   Platform,
   Alert,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import { FAB, Portal, Provider } from 'react-native-paper';
+import {FAB, Portal, Provider, TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
@@ -23,30 +21,30 @@ import Loading from '../components/Loading';
 const {width, height} = Dimensions.get('window');
 
 const CreatePost = ({navigation}) => {
-
-
-  const [state, setState] = React.useState({ open: false });
-
-  const onStateChange = ({ open }) => setState({ open });
-
-  const { open } = state;
+  const [text, setText] = useState('');
+  const [fabVisible, setFabVisible] = React.useState(null);
+  const [saving, setSaving] = React.useState(false);
   const [image, setImage] = React.useState(null);
-  const [height, setHeight] = React.useState(0);
-  const [postText, setPostText] = React.useState('');
   const [uploading, setUploading] = React.useState(false);
   const [transferring, setTransferring] = React.useState(0);
+  console.log(text);
   React.useLayoutEffect(() => {
-      navigation.setOptions({
+    navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => submitPost()}>
+        <TouchableOpacity
+          onPress={() => {
+            setSaving(true);
+          }}>
           <Text style={{color: 'white', fontStyle: 'italic', fontSize: 16}}>
             Post
           </Text>
         </TouchableOpacity>
       ),
     });
-  },[navigation]);
-  
+  }, [navigation]);
+  useEffect(() => {
+    if (saving) submitPost();
+  }, [saving]);
   if (uploading) {
     return (
       <View
@@ -71,34 +69,24 @@ const CreatePost = ({navigation}) => {
   const submitPost = async () => {
     const imageUrl = await uploadImage();
     console.log('url:', imageUrl);
-    console.log('uuid:', auth().currentUser.uid);
+    console.log('postText:', text);
 
     await firestore()
       .collection('posts')
       .add({
         userId: auth().currentUser.uid,
-        post: postText,
+        post: text,
         postImg: imageUrl,
         postTime: firestore.Timestamp.fromDate(new Date()),
         likes: [],
         comments: [],
       })
       .then(() => {
-        Alert.alert(
-          'Post Published !',
-          'Post has been published successfully',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('HomeScreen'),
-            },
-          ],
-        );
-        console.log('Post added to firestore');
-        setPostText('');
-        setImage(null);
+        navigation.navigate('HomeScreen', {newPost: true});
       })
       .catch(err => console.log('ERROR:', err.msg));
+    console.log('Post added to firestore');
+    setImage(null);
   };
 
   const uploadImage = async () => {
@@ -131,14 +119,7 @@ const CreatePost = ({navigation}) => {
       await task;
       const url = await storageRef.getDownloadURL();
       setUploading(false);
-
-      Alert.alert('Post Published !', 'Post has been published successfully', [
-        {
-          text: 'OK',
-          onPress: () => navigation.navigate('HomeScreen'),
-        },
-      ]);
-
+      navigation.navigate('HomeScreen',{newPost:true});
       return url;
     } catch (error) {
       console.log(error);
@@ -151,14 +132,16 @@ const CreatePost = ({navigation}) => {
       width: 1080,
       height: 1920,
       cropping: true,
-    }).then(image => {
-      console.log(image);
-      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
-      console.log('image pathi', image.path);
-      setImage(imageUri);
-    }).catch(err => {
-      console.log(err.msg);
-    });
+    })
+      .then(image => {
+        console.log(image);
+        const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+        console.log('image pathi', image.path);
+        setImage(imageUri);
+      })
+      .catch(err => {
+        console.log(err.msg);
+      });
   };
 
   const takePhotoByCamera = () => {
@@ -182,63 +165,49 @@ const CreatePost = ({navigation}) => {
       <View
         style={{
           width: width * 0.9,
-          height: height + 20,
-          padding: 10,
           margin: 10,
           justifyContent: 'center',
           alignSelf: 'center',
-          borderRadius: 10,
           borderColor: '#BFBFBF',
           borderWidth: 1,
         }}>
         <TextInput
-          onContentSizeChange={event => {
-            setHeight(event.nativeEvent.contentSize.height);
-          }}
-          style={{height: Math.max(35, height), padding: 5, margin: 10}}
-          value={postText}
+          onChangeText={newText => setText(newText)}
           multiline
-          autoCorrect
-          numberOfLines={7}
-          placeholder={'What are u thinking ?'}
-          onChangeText={setPostText}
+          underlineColor={'#BFBFBF'}
+          activeUnderlineColor={'#BFBFBF'}
+          placeholder="Please Write Something ..."
         />
       </View>
 
       {image !== null ? (
         <Image style={styles.image} source={{uri: image}} />
       ) : null}
-        <Provider>
-      <Portal>
-        <FAB.Group
-          open={open}
-          color='white'
-          fabStyle={{backgroundColor:'#FF6EA1'}}
-
-          icon={open ? 'close' : 'plus'}
-          actions={[
-          
-            {
-              icon: 'camera',
-              label: 'Take Photo',
-              onPress: () => takePhotoByCamera(),
-              small: false,
-
-            },
-            {
-              icon: 'image',
-              label: 'Choose Photo',
-              onPress: () => selectFromGallery(),
-              small: false,
-
-            },
-            
-          ]}
-          onStateChange={onStateChange}
-         
-        />
-      </Portal>
-    </Provider>
+      <Provider>
+        <Portal>
+          <FAB.Group
+            open={fabVisible}
+            color="white"
+            fabStyle={{backgroundColor: '#FF6EA1'}}
+            icon={fabVisible ? 'close' : 'plus'}
+            actions={[
+              {
+                icon: 'camera',
+                label: 'Take Photo',
+                onPress: () => takePhotoByCamera(),
+                small: false,
+              },
+              {
+                icon: 'image',
+                label: 'Choose Photo',
+                onPress: () => selectFromGallery(),
+                small: false,
+              },
+            ]}
+            onStateChange={({open}) => setFabVisible(open)}
+          />
+        </Portal>
+      </Provider>
     </View>
   );
 };

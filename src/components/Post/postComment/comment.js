@@ -51,7 +51,7 @@ const Comment = ({item}) => {
             padding: 5,
           }}>
           <Text style={{color: 'grey', fontSize: 12}}>
-            {moment(item.postTime).fromNow()}
+            {moment(item.postTime.toDate()).fromNow()}
           </Text>
           <TouchableOpacity>
             <Text style={{color: 'grey', fontSize: 12, fontWeight: 'bold'}}>

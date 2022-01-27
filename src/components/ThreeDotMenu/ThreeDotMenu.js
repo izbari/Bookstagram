@@ -38,11 +38,13 @@ const RightMenu = props => {
               : 'bookmark-multiple'
           }
           onPress={() => {
+            closeMenu()
             props?.whosePost == auth().currentUser.uid
               ? props.onDelete(props.itemId)
               : props.onSave(props.itemId);
           }}
           title={
+            
             props?.whosePost == auth().currentUser.uid
               ? 'Delete My Post'
               : 'Add to Saved Posts '

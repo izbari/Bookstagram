@@ -6,12 +6,13 @@
  */
 
 import React, {useState, useCallback} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View,} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Avatar } from 'react-native-paper';
 import {
   Menu,
   Divider,
@@ -196,7 +197,7 @@ export default function ChatSingleScreen({navigation, route}) {
         user={{
           _id: auth().currentUser.uid,
         }}
-      />
+        showAvatarForEveryMessage={true} />
     </View>
   );
 }

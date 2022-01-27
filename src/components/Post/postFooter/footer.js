@@ -89,7 +89,6 @@ const footer = (props) => {
 
         <TouchableOpacity
           onPress={() => {
-            console.log('postcarddaki props.item: ', props.item);
             console.log("index:",props.index)
             props.setSelectedPost(props.item);//buna gerek yok
             props.setHomeIndex(props.index)
