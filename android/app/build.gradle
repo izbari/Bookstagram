@@ -135,6 +135,10 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
     splits {
         abi {
             reset()
@@ -189,7 +193,7 @@ implementation project(':lottie-react-native')
     implementation project(':react-native-vector-icons')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(':react-native-webview')
-
+      implementation project(':WebRTCModule')
   implementation project(':react-native-localize')
 
 

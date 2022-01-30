@@ -41,6 +41,7 @@ function HomeScreen({navigation, route}) {
   const [user, setUser] = React.useState(authuser);
   const [showCommentInput, setShowCommentInput] = React.useState(false);
   const [homeIndex, setHomeIndex] = React.useState(0);
+  const [refreshLoading, setRefreshLoading] = React.useState(false);
 
   React.useEffect(() => {
     setUser(authuser);
@@ -196,7 +197,7 @@ function HomeScreen({navigation, route}) {
 
   const getPosts = async () => {
     try {
-      setLoading(true);
+
       const list = [];
       await firestore()
         .collection('posts')
@@ -219,6 +220,7 @@ function HomeScreen({navigation, route}) {
           });
           setPosts(list);
           setLoading(false);
+
         });
     } catch (error) {
       setLoading(false);
@@ -319,7 +321,15 @@ function HomeScreen({navigation, route}) {
       </View>
     </View>
   );
+const onRefresh = async() => {
+  setRefreshLoading(true);
+  await getPosts();
+  setRefreshLoading(false);
+};
 
+  if(refreshLoading){
+    return <SkeletonPlaceholder />
+  }
   return (
     <View style={styles.mainContainer}>
       {loading ? (
@@ -352,9 +362,9 @@ function HomeScreen({navigation, route}) {
                 title="Pull to refresh"
                 tintColor="#FF6EA1"
                 titleColor="grey"
-                colors={["#FF6EA1"]}
-                refreshing={loading}
-                onRefresh={() => getPosts()}
+                colors={['#FF6EA1']}
+                refreshing={refreshLoading}
+                onRefresh={onRefresh}
               />
             }
           />

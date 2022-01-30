@@ -24,6 +24,8 @@ export default function ChatSingleScreen({navigation, route}) {
   const [messages, setMessages] = useState([]);
   const {name,imageUrl,uid, chatId} = route.params;
   const [currentChatId, setCurrentChatId] = useState(chatId);
+
+   
   console.log(authUser)
   console.log("name:",name,"imageUrl",imageUrl)
   React.useLayoutEffect(() => {
@@ -95,7 +97,7 @@ export default function ChatSingleScreen({navigation, route}) {
           <TouchableOpacity
             style={{justifyContent: 'center'}}
             onPress={() => {
-              navigation.navigate('ChatScreen', {check: true});
+              navigation.navigate('VideoCallScreen', {chatId:currentChatId,name:name,imageUrl:imageUrl,uid:uid});
             }}>
             <Ionicons name="videocam-outline" size={20} color="white" />
           </TouchableOpacity>

@@ -33,7 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
       packages.add(new LottiePackage());
       new VectorIconsPackage();
       new RNCWebViewPackage();
-
+      new com.oney.WebRTCModule.WebRTCModulePackage(); // <-- Add this line
       // Packages that cannot be autolinked yet can be added manually here, for
       // example:
       // packages.add(new MyReactNativePackage());

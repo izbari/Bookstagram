@@ -20,8 +20,10 @@ import Discover from './Pages/Discover';
 import HomeScreen from './Pages/HomeScreen';
 import NewMessage from './Pages/NewMessage';
 import AuthLoading from './Pages/AuthLoading';
-import {Provider,DefaultTheme} from 'react-native-paper';
+import {Provider, DefaultTheme} from 'react-native-paper';
 import OtherProfile from './Pages/OtherProfile';
+import VideoCallScreen from './Pages/VideoCallScreen';
+
 
 import CreatePost from './Pages/CreatePost';
 import Onboarding from './Pages/Onboarding';
@@ -65,7 +67,7 @@ const Profile = props => {
     </Stack.Navigator>
   );
 };
-const Chat = ({navigation,route}) => {
+const Chat = ({navigation, route}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -80,7 +82,6 @@ const Chat = ({navigation,route}) => {
             fontWeight: 'bold',
             textAlign: 'center',
           },
-         
         }}
         name="ChatScreen"
         component={ChatScreen}
@@ -97,15 +98,14 @@ const Chat = ({navigation,route}) => {
             fontWeight: 'bold',
             textAlign: 'center',
           },
-          
         }}
         name="NewMessage"
         component={NewMessage}
       />
-      <Stack.Screen
-        name="ChatSingleScreen"
-        component={ChatSingleScreen}
-      />
+      <Stack.Screen name="ChatSingleScreen" component={ChatSingleScreen} />
+      
+
+      <Stack.Screen name="VideoCallScreen" component={VideoCallScreen} />
     </Stack.Navigator>
   );
 };
@@ -192,7 +192,6 @@ const Main = props => {
 };
 const Home = props => (
   <Stack.Navigator>
-   
     <Stack.Screen
       options={{
         headerTitleAlign: 'center',
@@ -303,7 +302,7 @@ function App(props) {
             />
           </Stack.Navigator>
         </NavigationContainer>
-    </UserProvider>
+      </UserProvider>
     </Provider>
   );
 }
