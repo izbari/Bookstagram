@@ -6,4 +6,5 @@ export default {
     user:null,
     //languages:I18n.locale,
     routeName:"null",
+    callStatus:false
 };

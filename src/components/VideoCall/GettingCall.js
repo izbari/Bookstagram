@@ -4,7 +4,7 @@ import ActionButton from './Button';
 const GettingCall = props => {
   return (
     <View style={styles.container}>
-      <Image source={{uri: "https://avatars.githubusercontent.com/u/73957984?v=4"}} style={styles.image} />
+      <Image source={{uri: props.imageUrl ? props.imageUrl : "https://avatars.githubusercontent.com/u/73957984?v=4"}} style={styles.image} />
       <View style={styles.bContainer}>
         <ActionButton
           iconName="phone"

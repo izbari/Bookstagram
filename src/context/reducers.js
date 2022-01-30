@@ -1,6 +1,6 @@
 import {ToastAndroid} from 'react-native';
 
-export default function (state, action) {
+export default function (state, action,props) {
   function Toast(message) {
     ToastAndroid.showWithGravityAndOffset(
       message,
@@ -11,10 +11,14 @@ export default function (state, action) {
     );
   }
   switch (action.type) {
+    case 'SET_CALL_STATUS':
+      if(action.payload.callStatus){
+        props.navigation.navigate('VideoCallScreen')
+      }
+      return  {...state,callStatus:action.payload.callStatus}
 
     case 'SET_ROUTE_NAME':
       console.log("reducer calisti dispacta gelen" ,action.payload.routeName)
-      console.log("yeni statelerimiz:,",{...state,routeName:action.payload.routeName})
       return  {...state,routeName:action.payload.routeName}
 
     case 'SET_LANG':

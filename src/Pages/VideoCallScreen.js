@@ -8,6 +8,7 @@ import {
   RTCSessionDescription,
 } from 'react-native-webrtc';
 import firestore from '@react-native-firebase/firestore';
+import { useDispatch } from 'react-redux';
 
 import GettingCall from '../components/VideoCall/GettingCall';
 import CustomButton from '../components/VideoCall/Button';
@@ -15,26 +16,33 @@ import Video from '../components/VideoCall/Video';
 import Utils from '../utils/VideoCall/Utils';
 
 const configuration = {iceServers: [{url: 'stun:stun.l.google.com:19302'}]};
-const VideoCallScreen = () => {
+const VideoCallScreen = ({navigation, route}) => {
+  
+
+  const {chatId, imageUrl,name,uid} = route.params;
+
+  const dispatch = useDispatch();
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
   const [gettingCall, setGettingCall] = useState(false);
-  const pc = useRef();
+  const pc = useRef(null);
   const connecting = useRef(false);
 
-  useEffect(() => {
-    const cRef = firestore().collection('meet').doc('chatId');
+  useEffect(async () => {
+    const cRef = firestore().collection('meet').doc(chatId);
 
-    const subscribe = cRef.onSnapshot(snapshot => { 
+    const subscribe = cRef.onSnapshot(snapshot => {
       const data = snapshot.data();
 
       //on answer start the call
       if (pc.current && !pc.current.remoteDescription && data && data.answer) {
         pc.current.setRemoteDescription(new RTCSessionDescription(data.answer));
       }
-  
+
       if (data && data.offer && !connecting.current) {
+        dispatch({type: 'SET_CALL_STATUS', payload: {callStatus:true,chatId:chatId, imageUrl:imageUrl,name:name,uid:uid}});
         setGettingCall(true);
+
       }
     });
 
@@ -49,6 +57,7 @@ const VideoCallScreen = () => {
       });
     });
     return () => {
+      
       subscribe();
       subscribeDelete();
     };
@@ -77,14 +86,13 @@ const VideoCallScreen = () => {
     await setupWebrtc();
 
     //doc for call
-    const cRef = firestore().collection('meet').doc('chatId');
+    const cRef = firestore().collection('meet').doc(chatId);
 
-    await collectIceCandidates(cRef, 'caller', 'callee');
+    collectIceCandidates(cRef, 'caller', 'callee');
 
     if (pc.current) {
       const offer = await pc.current.createOffer();
       pc.current.setLocalDescription(offer);
-      console.log('79 offer', offer);
 
       const cWithOffer = {
         offer: {
@@ -100,10 +108,11 @@ const VideoCallScreen = () => {
     connecting.current = true;
     setGettingCall(false);
 
-    const cRef = firestore().collection('meet').doc('chatId');
+    const cRef = firestore().collection('meet').doc(chatId);
     const offer = (await cRef.get()).data()?.offer;
 
     if (offer) {
+      console.log('offer edildi!! ');
       await setupWebrtc();
       collectIceCandidates(cRef, 'callee', 'caller');
 
@@ -131,13 +140,15 @@ const VideoCallScreen = () => {
     if (pc.current) {
       pc.current.close();
     }
+    navigation.navigate('ChatSingleScreen', {chatId:currentChatId,name:name,imageUrl:imageUrl,uid:uid});
+
   };
 
   //helper functions
   const collectIceCandidates = async (cRef, localName, remoteName) => {
     const candidateCollection = cRef.collection(localName);
     if (pc.current) {
-      pc.current.ondicecandidate = event => {
+      pc.current.onicecandidate = event => {
         if (event.candidate) {
           candidateCollection.add(event.candidate); //tojson() olabilir
         }
@@ -147,7 +158,6 @@ const VideoCallScreen = () => {
       snapshot.docChanges().forEach(change => {
         if (change.type == 'added') {
           const candidate = new RTCIceCandidate(change.doc.data());
-
           pc.current?.addIceCandidate(candidate);
         }
       });
@@ -156,33 +166,37 @@ const VideoCallScreen = () => {
 
   const streamCleanUp = async () => {
     if (localStream) {
-      localStream.getTracks().forEach((t) => t.stop());
+      localStream.getTracks().forEach(t => t.stop());
       localStream.release();
     }
     setLocalStream(null);
     setRemoteStream(null);
   };
   const firestoreCleanUp = async () => {
-    const cRef = firestore().collection('meet').doc('chatId');
+    const cRef = firestore().collection('meet').doc(chatId);
 
-    if(cRef){
-   
-    const calleeCandidate = await cRef.collection('callee').get();
-    calleeCandidate.forEach(async candidate => {
-      await candidate.ref.delete();
-    });
+    if (cRef) {
+      const calleeCandidate = await cRef.collection('callee').get();
+      calleeCandidate.forEach(async candidate => {
+        await candidate.ref.delete();
+      });
 
-    const callerCandidate = await cRef.collection('caller').get();
-    callerCandidate.forEach(async candidate => {
-      await candidate.ref.delete();
-    });
-    cRef.delete();
-  }
-    
+      const callerCandidate = await cRef.collection('caller').get();
+      callerCandidate.forEach(async candidate => {
+        await candidate.ref.delete();
+      });
+      cRef.delete();
+    }
   };
 
   if (gettingCall) {
-    return <GettingCall join={() => join()} hangup={() => hangup()} />;
+    return (
+      <GettingCall
+        imageUrl={imageUrl}
+        join={() => join()}
+        hangup={() => hangup()}
+      />
+    );
   }
   if (localStream) {
     return (

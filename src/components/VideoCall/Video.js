@@ -18,7 +18,6 @@ const Video = props => {
   };
 
   if (props.localStream && !props.remoteStream) {
-    console.log("remote yok");
 
     return (
       <View style={styles.container}>
@@ -32,7 +31,6 @@ const Video = props => {
     );
   }
   if (props.localStream && props.remoteStream) {
-    console.log("remote var 34");
 
     return (
       <View style={styles.container}>
