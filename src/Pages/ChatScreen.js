@@ -15,7 +15,7 @@ import database from '@react-native-firebase/database';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
 import Loading from '../components/Loading';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from '../components/Icons';
 
 export default function Chat({navigation, route}) {
   const authUser = useSelector(store => store.user);
@@ -36,7 +36,7 @@ export default function Chat({navigation, route}) {
           onPress={() => {
             navigation.navigate('NewMessage', {myChats: otherUserData});
           }}>
-          <Ionicons name="create-outline" size={25} color="white" />
+          <Icon name="NewMessage" size={25} fill="white" />
         </TouchableOpacity>
       ),
     });

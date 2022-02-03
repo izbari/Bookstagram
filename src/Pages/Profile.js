@@ -7,7 +7,6 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Divider} from 'react-native-paper';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,10 +15,13 @@ import Flag from 'react-native-flags';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import auth from '@react-native-firebase/auth';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 const {width} = Dimensions.get('window');
+
 import {useTranslation} from 'react-i18next';
+import Icon from '../components/Icons'
+
 //import i18n from 'i18next';
 function Profile(props) {
   const {t,i18n} = useTranslation();
@@ -65,7 +67,7 @@ function Profile(props) {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Icon name="drag-horizontal-variant" size={35} color="#909090" />
+        <Icon name="Drag" size={35} fill="#909090" />
       </View>
     );
   };
@@ -98,7 +100,7 @@ function Profile(props) {
                   <Flag code={language.code.toUpperCase()} size={32} />
                   <Text style={styles.text}>{language.label}</Text>
                   </View>
-                  {selectedLanguage ? <Ionicons name='checkmark' size={25}  color='#FF6EA1'  /> : null}
+                  {selectedLanguage ? <Icon name='CheckMark' size={25}  fill='#FF6EA1'  /> : null}
                   </View>
                 </TouchableOpacity>
                 {index +1 != LANGUAGES.length && <Divider />}
@@ -183,13 +185,14 @@ function Profile(props) {
           </Svg>
           <View style={{flexDirection: 'row', margin: 10, marginBottom: 0}}>
             <TouchableOpacity onPress={() => props.navigation.goBack()}>
-              <Ionicons
-                name="arrow-back-outline"
+              <Icon
+                name="BackArrow"
                 size={30}
-                color="white"
+                fill="white"
                 style={{marginLeft: 5, marginRight: 5, marginTop: 5}}
               />
             </TouchableOpacity>
+           
             <Text
               style={{
                 color: 'white',
@@ -200,7 +203,7 @@ function Profile(props) {
                 marginTop: 7,
               }}>
               {t('common:Hello')}
-              {user ? user.name + ' ' + user.lastName : 'user cant found'}
+              {user ? " "+user.name[0].toUpperCase()+user.name.substring(1,user.name.length) +' ' + user.lastName[0].toUpperCase()+user.lastName.substring(1,user.lastName.length) : 'user cant found'}
             </Text>
           </View>
 
@@ -241,10 +244,7 @@ function Profile(props) {
                 elavation: 5,
               }}
               source={{
-                uri: user
-                  ? user.imageUrl
-                  : 'https://scontent.ftzx1-1.fna.fbcdn.net/v/t1.30497-1/c59.0.200.200a/p200x200/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=12b3be&_nc_ohc=CxmGyQqlfmQAX-g1lo4&_nc_ht=scontent.ftzx1-1.fna&edm=AHgPADgEAAAA&oh=4403c3ccd0fc5eed2b87a0f3cfbe5198&oe=616AB239',
-              }}
+                uri: user.imageUrl}}
             />
           </View>
         </View>
@@ -286,17 +286,17 @@ function Profile(props) {
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Store')}
             style={styles.menuRow}>
-            <Ionicons name="cart" size={25} color="#FF6EA1" />
+            <Icon  name='Card' size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:MyCart')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="card" size={25} color="#FF6EA1" />
+            <Icon name='CreditCard' size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:Purchases')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="person" size={25} color="#FF6EA1" />
+            <Icon  name='User' size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:Account')}</Text>
           </TouchableOpacity>
         </View>
@@ -317,25 +317,25 @@ function Profile(props) {
         </Text>
         <View>
           <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="ellipse" size={25} color="black" />
+            <Icon  name='Theme' size={25} fill="black" />
             <Text style={styles.text}>{t('common:Theme')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
-            <Ionicons name="notifications" size={25} color="#FF6EA1" />
+            <Icon name = {"Notification"} size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:Notifications')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity
             onPress={() => setModalVisible(true)}
             style={styles.menuRow}>
-            <Ionicons name="earth" size={25} color="#FF6EA1" />
+            <Icon name="Language" size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:Languages')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
 
           <TouchableOpacity onPress={() => signOut()} style={styles.menuRow}>
-            <Ionicons name="exit" size={25} color="#FF6EA1" />
+            <Icon name='Logout' size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:SignOut')}</Text>
           </TouchableOpacity>
         </View>

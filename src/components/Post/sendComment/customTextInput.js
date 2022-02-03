@@ -1,6 +1,6 @@
-import {StyleSheet, TextInput, View, Dimensions,TouchableOpacity,Keyboard} from 'react-native';
+import {TextInput, View,TouchableOpacity,Keyboard} from 'react-native';
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../../../components/Icons';
 import {useTranslation} from 'react-i18next';
 
 const customTextInput = (props) => {
@@ -33,6 +33,7 @@ const customTextInput = (props) => {
         placeholder={t('common:WhatYouAreThinking')}
         onChangeText={setPostText}></TextInput>
       <TouchableOpacity
+      style={{alignSelf:'center',padding:10}}
       disabled={postText.length== 0 ? true : false}
         onPress={async () => {
           const text = postText;
@@ -42,7 +43,7 @@ const customTextInput = (props) => {
           Keyboard.dismiss();
         
         }}>
-        <Icon name="send" size={25} color={postText.length== 0 ? "grey":"#FF6EA1"}  style={{padding: 10}} />
+        <Icon name={'Send'} size={25} fill={postText.length== 0 ? "grey":"#FF6EA1"} style={{padding:10}}  />
       </TouchableOpacity>
     </View>
   );
@@ -50,4 +51,3 @@ const customTextInput = (props) => {
 
 export default customTextInput;
 
-const styles = StyleSheet.create({});

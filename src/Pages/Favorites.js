@@ -1,6 +1,9 @@
 import * as React from 'react';
 import {SafeAreaView, View, FlatList, StyleSheet, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+
+import FastImage from 'react-native-fast-image';
+
 import BookCard from '../components/BookCard';
 
 function Favorites(props) {
@@ -19,6 +22,22 @@ function Favorites(props) {
   const removeFromFavorites = item => {
     dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
   };
+
+  if(!list.length){
+    return(<View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#fff',
+      }}>
+      <FastImage
+        style={{height: 500, width: 400}}
+        source={require('../assets/png/Favorite.jpg')}
+        resizeMode={FastImage.resizeMode.cover}
+      />
+     
+    </View>)
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <FlatList
@@ -39,19 +58,7 @@ function Favorites(props) {
           />
         )}
         keyExtractor={item => item.id}
-        ListEmptyComponent={
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              margin: 15,
-              marginTop: 100,
-            }}>
-            <Text style={{fontStyle: 'italic', fontSize: 16}}>
-              Your Favorites  Empty Ups !!
-            </Text>
-          </View>
-        }
+       
       />
     </SafeAreaView>
   );

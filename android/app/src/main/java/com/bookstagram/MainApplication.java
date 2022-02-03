@@ -17,7 +17,7 @@ import com.airbnb.android.react.lottie.LottiePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
-
+import com.horcrux.svg.SvgPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -33,7 +33,8 @@ public class MainApplication extends Application implements ReactApplication {
       packages.add(new LottiePackage());
       new VectorIconsPackage();
       new RNCWebViewPackage();
-      new com.oney.WebRTCModule.WebRTCModulePackage(); // <-- Add this line
+      new SvgPackage();
+      new com.oney.WebRTCModule.WebRTCModulePackage(); 
       // Packages that cannot be autolinked yet can be added manually here, for
       // example:
       // packages.add(new MyReactNativePackage());

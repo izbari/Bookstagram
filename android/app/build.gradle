@@ -193,12 +193,11 @@ implementation project(':lottie-react-native')
     implementation project(':react-native-vector-icons')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(':react-native-webview')
-      implementation project(':WebRTCModule')
-  implementation project(':react-native-localize')
-
-
+    implementation project(':WebRTCModule')
+    implementation project(':react-native-localize')
+    implementation project(':react-native-svg')
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-      exclude group:'com.facebook.fbjni'
+    exclude group:'com.facebook.fbjni'
     }
 
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {SafeAreaView, StyleSheet, FlatList,View,Text} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import BookCard from '../components/BookCard';
-
+import FastImage from 'react-native-fast-image';
 function Store(props) {
   const dispatch = useDispatch();
   const data = useSelector(s => s.cartList);
@@ -18,6 +18,21 @@ function Store(props) {
       dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
     }
   };
+  if(!data.lenght){
+    return(<View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#fff',
+      }}>
+      <FastImage
+        style={{height: 550, width: 700}}
+        source={require('../assets/png/EmptyList.jpg')}
+        resizeMode={FastImage.resizeMode.contain}
+      />
+     
+    </View>)
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <FlatList

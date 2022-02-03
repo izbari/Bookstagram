@@ -12,14 +12,15 @@ import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {Searchbar } from 'react-native-paper';
 import {useSearch} from '../utils/searchUtils';
-import Loading from '../components/Loading';
 import Error from '../components/Error';
 import BookCard from '../components/BookCard';
+
+import FastImage from 'react-native-fast-image';
 const {width} = Dimensions.get('window');
 function Library(props) {
   const dispatch = useDispatch();
   const list = useSelector(store => store.favList);
-  const [cardData, setCardData] = React.useState([]);
+  const [cardData, setCardData] = React.useState(null);
   const [search, setSearch] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
@@ -119,25 +120,13 @@ function Library(props) {
     setLoading(true);
     getData(search);
   };
-
+  
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Searchbar
-        icon = {'keyboard-backspace'}
-        onIconPress = {()=>{setSearch('') 
-        setCardData([])}}
-        containerStyle={{
-          marginTop: 15,
-          alignSelf: 'center',
-          height: 45,
-          margin: 7,
-          backgroundColor: '#CED5DA',
-          width: width * 0.9,
-          borderRadius: 15,
-        }}
-        inputContainerStyle={{height: 10, backgroundColor: '#CED5DA'}}
+        style={{borderColor:'grey',margin:10}}
         inputStyle={{fontSize: 15}}
-        placeholder="Type Something ..."
+        placeholder="Search a Book ..."
         lightTheme
         onChangeText={text => onChangeHandler(text)}
         autoCorrect={false}
@@ -148,7 +137,23 @@ function Library(props) {
           <ActivityIndicator size="small"></ActivityIndicator>
         </View>
       ) : null}
-
+{
+  !cardData ?
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0',
+        padding:40
+      }}>
+      <FastImage
+        style={{height: 400, width: 400}}
+        source={require('../assets/png/SearchError.jpg')}
+        resizeMode={FastImage.resizeMode.cover}
+      />
+     
+    </View>
+    :
       <FlatList
         data={cardData}
         renderItem={renderItem}
@@ -157,26 +162,14 @@ function Library(props) {
         ListFooterComponent={renderFooter}
         onRefresh={refreshHandler}
         refreshing={loading}
-        ListEmptyComponent={
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              margin: 15,
-              marginTop: 100,
-            }}>
-            <Text style={{fontStyle: 'italic', fontSize: 16}}>
-              Please Search Something...
-            </Text>
-
-          </View>
-        }
+       
       />
+}
     </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {flex: 1, backgroundColor: '#E1E8EE'},
+  mainContainer: {flex: 1, backgroundColor: '#f0f0f0'},
   lottieContainer: {
     width: '10%',
     height: '5%',

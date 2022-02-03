@@ -18,6 +18,7 @@ import {useSelector} from 'react-redux';
 const {width} = Dimensions.get('window');
 
 import {getMovies} from '../controllers/api';
+import { ActivityIndicator } from 'react-native-paper';
 
 const ITEM_SIZE = width * 0.2;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
@@ -44,7 +45,7 @@ function Discover(props) {
       fetchData(movies);
     }
   }, [movies]);
-  React.useEffect(() => {}, [scrollX]);
+  
   const CustomFlatlist = () => {
     return (
       <View style={styles.container}>
@@ -76,7 +77,7 @@ function Discover(props) {
               inputRange,
               outputRange: [5, 20, 5],
             });
-
+            
             return (
               <View style={{width: ITEM_SIZE, height: ITEM_SIZE}}>
                 <Animated.View
@@ -111,15 +112,15 @@ function Discover(props) {
                 </Animated.View>
               </View>
             );
-          }}
-        />
+          }}/>
+        
       </View>
     );
   };
 
   const list = useSelector(store => store.topicIds);
 
-  const selectedTopics = ({item}) => {
+  const SelectedTopics = ({item}) => {
     {
       if (item == -1) {
         return (
@@ -190,12 +191,15 @@ function Discover(props) {
       }
     }
   };
-  const TrendItem = ({item, index}) => (
+  const TrendItem = ({item, index}) => {
+    
+    console.log("item",item);
+    return(
     <TouchableOpacity
       onPress={() =>
         props.navigation.navigate('SingleBookDesc', {singleBookData: item})
       }
-      style={{height: 180, width: 100, margin: 10, marginBottom: 15}}>
+      style={{height: 180, width:100, margin: 10, marginBottom: 15}}>
       <Image
         source={{uri: item.imageURL}}
         style={{
@@ -215,7 +219,14 @@ function Discover(props) {
         by {item.author}
       </Text>
     </TouchableOpacity>
-  );
+  );}
+  if(loading){
+    return(
+      <View style={{flex:1,justifyContent:'center'}}>
+          <ActivityIndicator size={'large'} color='#FF6EA1' />
+      </View>
+    )
+  }
   return (
     <SafeAreaView style={{flex: 1}} horizontal={true}>
       <View style={styles.pickedBooks}>
@@ -231,7 +242,7 @@ function Discover(props) {
         <CustomFlatlist />
       </View>
 
-      <ScrollView nestedScrollEnabled={true} style={{flex: 0.5}}>
+      <ScrollView  nestedScrollEnabled  style={{flex: 0.5}}>
         <View
           style={{
             flex: 0.1,
@@ -240,25 +251,20 @@ function Discover(props) {
             height: 100,
             justifyContent: 'center',
             margin: 15,
+            marginBottom:0,
+
           }}>
-          <FlatList
-            data={list}
-            renderItem={selectedTopics}
-            keyExtractor={(item, index) => item.id}
-            horizontal={true}
-            nestedScrollEnabled
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{alignContent: 'center'}}
-          />
+          <ScrollView   horizontal={true}>
+          {list.map((item, index) => {
+               return <SelectedTopics key={index} item={item}/>
+            })}
+          </ScrollView>
+          
         </View>
         <View
           style={{
             flex: 0.4,
-
-            width: width,
-
-            justifyContent: 'center',
-            margin: 15,
+            width: width,            
           }}>
           <Text
             style={{
@@ -266,19 +272,20 @@ function Discover(props) {
               fontSize: 24,
               fontWeight: 'bold',
               padding: 5,
-              marginBottom: 20,
+              marginHorizontal:15
             }}>
             Trending Books
           </Text>
-          <View style={{width: width, flex: 1}}>
-            <FlatList
-              data={trending}
-              renderItem={TrendItem}
-              keyExtractor={item => item.key}
-              nestedScrollEnabled
-              numColumns={3}
-            />
-          </View>
+
+           <View style={{flexDirection:'row',flexWrap:'wrap'}} >
+           {trending.map((item, index) => (
+              <View key={index} style={{width:'33%'}}>
+                <TrendItem  item={item} />
+              </View>
+
+            ))}
+           </View>
+         
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -303,7 +310,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     margin: 0,
   },
-  pickedBooks: {width: width, flex: 0.5, backgroundColor: '#EE8BAD'},
+  pickedBooks: {width: width, flex: 0.55, backgroundColor: '#EE8BAD'},
   mainContainer: {flex: 1, backgroundColor: 'white'},
   lottieContainer: {
     flex: 2,

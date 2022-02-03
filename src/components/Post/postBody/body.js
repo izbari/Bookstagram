@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Dimensions} from 'react-native';
-import Image from 'react-native-image-progress';
 import {Divider} from 'react-native-paper';
+import FastImage from 'react-native-fast-image'
 const {width} = Dimensions.get('window');
 
 const body = props => {
@@ -10,9 +10,7 @@ const body = props => {
       <Divider />
 
       <View
-        style={{
-          width: width * 0.9,
-        }}>
+      >
         {props.item.post != null ? (
           <Text
             style={{
@@ -28,15 +26,15 @@ const body = props => {
         )}
       </View>
       {props.item.postImg != null ? (
-        <Image
-          style={{
-            alignSelf: 'center',
-            height: 400,
-            width: width * 0.9,
-            resizeMode: 'cover',
-          }}
-          source={{uri: props.item.postImg}}
-        />
+        <FastImage
+        style={{height: 400,
+          width: width * 0.9, }}
+        source={{
+            uri: props.item.postImg,
+            priority: FastImage.priority.normal,
+        }}
+        resizeMode={FastImage.resizeMode.cover}
+    />
       ) : null}
     </View>
   );

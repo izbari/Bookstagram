@@ -1,7 +1,7 @@
 import {View, TouchableOpacity} from 'react-native';
 import {Menu, Divider} from 'react-native-paper';
 import React from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Threedot from '../../assets/svg/Threedot.svg';
 import auth from '@react-native-firebase/auth';
 
 const RightMenu = props => {
@@ -23,11 +23,12 @@ const RightMenu = props => {
             }}
             title="dot"
             onPress={openMenu}>
-            <Ionicons
+            <Threedot
               style={{alignSelf: 'center'}}
               name="ellipsis-horizontal"
-              size={props?.comment ? 20 : 25}
-              color="grey"
+              width={props?.comment ? 25 : 30}
+              height={props?.comment ? 25 : 30}
+              fill="grey"
             />
           </TouchableOpacity>
         }>

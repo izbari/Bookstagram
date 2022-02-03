@@ -1,27 +1,29 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import Icon from '../../components/Icons';
+
 import {useTranslation} from 'react-i18next';
 
-function MyTabBar({state, descriptors, navigation,}) {
-  const {i18n,t} = useTranslation();
+function MyTabBar({state, descriptors, navigation}) {
+  const {i18n, t} = useTranslation();
   function iconGenerator(label) {
     switch (label) {
-      case ('Discover'):
-        return 'magnify';
-      case ('Library'):
-        return 'bookshelf';
-      case ('Store'):
-        return 'cart';
-      case ('Chat'):
-        return 'forum';
+      case 'Discover':
+        return 'Search';
+      case 'Library':
+        return 'Library';
+      case 'Store':
+        return 'Card';
+      case 'Chat':
+        return 'Message';
 
-      case ('Favorites'):
-        return 'heart';
-      case ('Profile'):
-        return 'account';
-      case ('Home'):
-        return 'home';
+      case 'Favorites':
+        return 'FilledLike';
+      case 'Profile':
+        return 'User';
+      case 'Home':
+        return 'Home';
       default:
         break;
     }
@@ -42,7 +44,7 @@ function MyTabBar({state, descriptors, navigation,}) {
         const isFocused = state.index === index;
 
         const onPress = () => {
-          console.log("key",route.key);
+          console.log('key', route.key);
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -78,9 +80,9 @@ function MyTabBar({state, descriptors, navigation,}) {
               marginBottom: 3,
               backgroundColor: 'white',
             }}>
-            <MaterialCommunityIcons
+            <Icon
               name={icon}
-              color={isFocused ? '#FF6EA1' : '#B3B3B3'}
+              fill={isFocused ? '#FF6EA1' : '#B3B3B3'}
               size={25}
               style={{alignSelf: 'center'}}
             />

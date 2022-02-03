@@ -14,30 +14,31 @@ import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {useSelector} from 'react-redux';
+import {ActivityIndicator} from 'react-native-paper';
 
-const {width, height} = Dimensions.get('window');
+import Icon from '../components/Icons';
+
 function OtherProfile(props) {
-  
   const baseUser = useSelector(store => store.user);
-  const [authUser,setAuthUser] = React.useState(baseUser);
+  const [authUser, setAuthUser] = React.useState(baseUser);
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
 
-React.useEffect(() => {
+  React.useEffect(() => {
+    setLoading(true);
     database()
       .ref(`/users/${props.route.params.selectedUserId}`)
       .on('value', snapshot => {
         setUser(snapshot.val());
-        setLoading(true);
+        setLoading(false);
       });
   }, []);
 
-  React.useEffect(()=>{
-    setAuthUser(baseUser)
-  },[baseUser])
+  React.useEffect(() => {
+    setAuthUser(baseUser);
+  }, [baseUser]);
 
-  
-  const fallowRequest = (userId) => {
+  const fallowRequest = userId => {
     // already fallowed and cancel fallow
     if (authUser?.fallowing?.includes(user.id)) {
       const newList2 = user?.fallowers.filter(item => {
@@ -51,7 +52,7 @@ React.useEffect(() => {
         })
         .then(() => console.log('Takipten cikildi'));
 
-        // auth userin fallowing inden cikariliyor.
+      // auth userin fallowing inden cikariliyor.
       const newList3 = authUser?.fallowing.filter(item => {
         return item !== user.id;
       });
@@ -61,9 +62,9 @@ React.useEffect(() => {
           fallowing: newList3,
         })
         .then(() => console.log('Fallowingimden cikarildi'));
-    } 
-    
-      //Eğer takip etmiyosam ve edeceksem
+    }
+
+    //Eğer takip etmiyosam ve edeceksem
     else {
       if (user.fallowers.some(item => item === auth()?.currentUser.uid)) {
         return null; //else in saglamasi
@@ -101,6 +102,13 @@ React.useEffect(() => {
       </LinearGradient>
     );
   };
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <ActivityIndicator size="large" color="#FF6EA1" />
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.svgCurve}>
@@ -148,45 +156,50 @@ React.useEffect(() => {
               d="M0,384L80,376C160,368,320,352,480,304C640,256,800,176,960,192C1120,208,1280,320,1440,304C1600,288,1760,144,1920,128C2080,112,2240,224,2400,240C2560,256,2720,176,2880,176C3040,176,3200,256,3360,248C3520,240,3680,144,3840,128C4000,112,4160,176,4320,192C4480,208,4640,176,4800,192C4960,208,5120,272,5280,304C5440,336,5600,336,5760,288C5920,240,6080,144,6240,152C6400,160,6560,272,6720,304C6880,336,7040,288,7200,224C7360,160,7520,80,7680,104C7840,128,8000,256,8160,280C8320,304,8480,224,8640,224C8800,224,8960,304,9120,312C9280,320,9440,256,9600,256C9760,256,9920,320,10080,304C10240,288,10400,192,10560,176C10720,160,10880,224,11040,280C11200,336,11360,384,11440,408L11520,432L11520,480L11440,480C11360,480,11200,480,11040,480C10880,480,10720,480,10560,480C10400,480,10240,480,10080,480C9920,480,9760,480,9600,480C9440,480,9280,480,9120,480C8960,480,8800,480,8640,480C8480,480,8320,480,8160,480C8000,480,7840,480,7680,480C7520,480,7360,480,7200,480C7040,480,6880,480,6720,480C6560,480,6400,480,6240,480C6080,480,5920,480,5760,480C5600,480,5440,480,5280,480C5120,480,4960,480,4800,480C4640,480,4480,480,4320,480C4160,480,4000,480,3840,480C3680,480,3520,480,3360,480C3200,480,3040,480,2880,480C2720,480,2560,480,2400,480C2240,480,2080,480,1920,480C1760,480,1600,480,1440,480C1280,480,1120,480,960,480C800,480,640,480,480,480C320,480,160,480,80,480L0,480Z"></Path>
           </Svg>
           <View style={{flexDirection: 'row', margin: 10, marginBottom: 0}}>
-            <TouchableOpacity onPress={() => {props.navigation.goBack()
-              console.log(props.navigation.getState()?.routes)
-            }}>
-              <Ionicons
-                name="arrow-back-outline"
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.goBack();
+                console.log(props.navigation.getState()?.routes);
+              }}>
+              <Icon
+                name="BackArrow"
                 size={30}
-                color="white"
+                fill="white"
                 style={{marginLeft: 5, marginRight: 5, marginTop: 5}}
               />
             </TouchableOpacity>
-            <Text
+          <View style={{flex:0.85,}}>
+          <Text
               style={{
                 color: 'white',
                 fontWeight: 'bold',
                 fontSize: 20,
+                alignSelf:'center',
                 marginLeft: 5,
                 marginRight: 5,
                 marginTop: 7,
               }}>
-              {loading ? user.name + ' ' + user.lastName : 'user cant found'}
+              {user ? user.name[0].toUpperCase()+user.name.substring(1,user.name.length) +' ' + user.lastName[0].toUpperCase()+user.lastName.substring(1,user.lastName.length) : 'user cant found'}
             </Text>
+          </View>
           </View>
           <View style={{flexDirection: 'row', margin: 10, marginBottom: 0}}>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {loading ? user.books.length : '-'}
+                {user ? user.books.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Books</Text>
             </View>
 
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {loading ? user.fallowers.length : '-'}
+                {user ? user.fallowers.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowers</Text>
             </View>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {loading ? user.fallowing.length : '-'}
+                {user ? user.fallowing.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowing</Text>
             </View>
@@ -202,7 +215,7 @@ React.useEffect(() => {
                 marginLeft: 57,
               }}
               source={{
-                uri: loading
+                uri: user
                   ? user.imageUrl
                   : 'https://scontent.ftzx1-1.fna.fbcdn.net/v/t1.30497-1/c59.0.200.200a/p200x200/84628273_176159830277856_972693363922829312_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=12b3be&_nc_ohc=CxmGyQqlfmQAX-g1lo4&_nc_ht=scontent.ftzx1-1.fna&edm=AHgPADgEAAAA&oh=4403c3ccd0fc5eed2b87a0f3cfbe5198&oe=616AB239',
               }}
@@ -225,7 +238,9 @@ React.useEffect(() => {
           onPress={() => fallowRequest()}
           style={{
             justifyContent: 'center',
-            backgroundColor: authUser?.fallowing?.includes(user?.id) ? '#7C74EA' : '#FF71A3',
+            backgroundColor: authUser?.fallowing?.includes(user?.id)
+              ? '#7C74EA'
+              : '#FF71A3',
             height: 30,
           }}>
           <View style={{flexDirection: 'row', alignSelf: 'center'}}>

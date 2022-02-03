@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -27,8 +27,8 @@ import VideoCallScreen from './Pages/VideoCallScreen';
 
 import CreatePost from './Pages/CreatePost';
 import Onboarding from './Pages/Onboarding';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import Icon from './components/Icons';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const theme = {
@@ -142,16 +142,7 @@ const Main = props => {
             fontWeight: 'bold',
             textAlign: 'center',
           },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => props.navigation.goBack()}>
-              <Ionicons
-                name="arrow-back-outline"
-                size={30}
-                color="white"
-                style={{marginLeft: 15, marginRight: 5, marginTop: 5}}
-              />
-            </TouchableOpacity>
-          ),
+         
         }}
         name="Store"
         component={Store}
@@ -168,16 +159,7 @@ const Main = props => {
             fontWeight: 'bold',
             textAlign: 'center',
           },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => props.navigation.goBack()}>
-              <Ionicons
-                name="arrow-back-outline"
-                size={30}
-                color="white"
-                style={{marginLeft: 15, marginRight: 5, marginTop: 5}}
-              />
-            </TouchableOpacity>
-          ),
+         
         }}
         name="Favorites"
         component={Favorites}
@@ -209,7 +191,7 @@ const Home = props => (
             onPress={() => {
               props.navigation.navigate('CreatePost');
             }}>
-            <Ionicons name="add" size={35} color="white" />
+            <Icon  name='Add' size={35} fill="white" />
           </TouchableOpacity>
         ),
       }}

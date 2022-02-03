@@ -17,7 +17,7 @@ const Header = props => {
       .then(snapshot => {
         setUser(snapshot.val());
       });
-      return singleUserData
+      return ()=> singleUserData()
   }, [props.item.userId]);
 
   return (
