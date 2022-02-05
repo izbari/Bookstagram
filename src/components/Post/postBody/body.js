@@ -1,17 +1,16 @@
 import React from 'react';
 import {View, Text, Dimensions} from 'react-native';
 import {Divider} from 'react-native-paper';
-import FastImage from 'react-native-fast-image'
+import FastImage from 'react-native-fast-image';
 const {width} = Dimensions.get('window');
 
-const body = props => {
-  return (
+ const Body = React.memo(({item}) => (
+   
     <View>
       <Divider />
 
-      <View
-      >
-        {props.item.post != null ? (
+      <View>
+        {item.post != null ? (
           <Text
             style={{
               marginLeft: 10,
@@ -19,25 +18,23 @@ const body = props => {
               padding: 5,
               color: '#333333',
             }}>
-            {props.item.post}
+            {item.post}
           </Text>
         ) : (
           <View />
         )}
       </View>
-      {props.item.postImg != null ? (
+      {item.postImg != null ? (
         <FastImage
-        style={{height: 400,
-          width: width * 0.9, }}
-        source={{
-            uri: props.item.postImg,
+          style={{height: 400, width: width * 0.9}}
+          source={{
+            uri: item.postImg,
             priority: FastImage.priority.normal,
-        }}
-        resizeMode={FastImage.resizeMode.cover}
-    />
+          }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
       ) : null}
     </View>
-  );
-};
-
-export default body;
+  )
+);
+export default Body;

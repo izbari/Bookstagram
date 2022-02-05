@@ -4,22 +4,30 @@ import Image from 'react-native-image-progress';
 import ThreeDotMenu from '../../ThreeDotMenu';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
-
-const Header = props => {
+import auth from '@react-native-firebase/auth';
+const Header = React.memo(({item,navigation}) => {
   const [user, setUser] = React.useState({});
 
-
   React.useEffect(async () => {
-
+    
     const singleUserData = await database()
-      .ref(`/users/${props.item.userId}`)
+      .ref(`/users/${item.userId}`)
       .once('value')
       .then(snapshot => {
         setUser(snapshot.val());
       });
       return ()=> singleUserData()
-  }, [props.item.userId]);
+  }, [item.userId]);
+  const toProfile = React.useCallback((userId) => {
+    if (auth().currentUser.uid === userId) {
+      navigation.navigate('Profile');
+    } else {
+      navigation.navigate('OtherProfile', {selectedUserId: userId});
+    }
+  }, [user]);
 
+
+  console.log("header",);
   return (
     <View
       style={{
@@ -28,7 +36,7 @@ const Header = props => {
         alignItems: 'center',
       }}>
       <TouchableOpacity
-        onPress={() => props.toProfile(user.id)}
+        onPress={() =>toProfile(user.id)}
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -44,7 +52,7 @@ const Header = props => {
             elavation: 5,
           }}
           source={{
-            uri: user ? user.imageUrl : defaultImageUrl,
+            uri: user ? user.imageUrl : null,
           }}
         />
         <View
@@ -54,14 +62,14 @@ const Header = props => {
           }}>
           <Text>{user.name + ' ' + user.lastName}</Text>
           <Text style={{color: 'grey', fontSize: 12}}>
-            {moment(props.item.postTime.toDate()).fromNow()}
+            {moment(item.postTime.toDate()).fromNow()}
           </Text>
         </View>
       </TouchableOpacity>
 
-      <ThreeDotMenu  itemId = {props.item.id} whosePost={props.item.userId} onSave={props.onSave} onDelete={props.onDelete} />
+      <ThreeDotMenu  itemId = {item.id} whosePost={item.userId} />
     </View>
   );
-};
+});
 
 export default Header;

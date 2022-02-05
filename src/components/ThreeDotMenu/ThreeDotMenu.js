@@ -1,15 +1,24 @@
 import {View, TouchableOpacity} from 'react-native';
 import {Menu, Divider} from 'react-native-paper';
 import React from 'react';
-import Threedot from '../../assets/svg/Threedot.svg';
 import auth from '@react-native-firebase/auth';
+import {useDispatch} from 'react-redux';
 
+import Icon from '../../components/Icons';
 const RightMenu = props => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = React.useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
   return (
-    <View style={{flexDirection: 'row', justifyContent: 'center',position:"absolute",right:props?.comment ? 0: 10,top:props?.comment? -10: 5}}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        position: 'absolute',
+        right: props?.comment ? 0 : 10,
+        top: props?.comment ? -10 : 5,
+      }}>
       <Menu
         visible={visible}
         onDismiss={closeMenu}
@@ -23,11 +32,10 @@ const RightMenu = props => {
             }}
             title="dot"
             onPress={openMenu}>
-            <Threedot
+            <Icon
               style={{alignSelf: 'center'}}
-              name="ellipsis-horizontal"
-              width={props?.comment ? 25 : 30}
-              height={props?.comment ? 25 : 30}
+              name="Threedot"
+              size={props?.comment ? 25 : 30}
               fill="grey"
             />
           </TouchableOpacity>
@@ -39,13 +47,13 @@ const RightMenu = props => {
               : 'bookmark-multiple'
           }
           onPress={() => {
-            closeMenu()
-            props?.whosePost == auth().currentUser.uid
-              ? props.onDelete(props.itemId)
-              : props.onSave(props.itemId);
+            closeMenu();
+            props?.whosePost != auth().currentUser.uid
+              ? dispatch({type: 'SAVE_POST', payload: {itemId:props.itemId}})
+              : dispatch({type: 'DELETE_POST', payload: {postId:props.itemId}});
+
           }}
           title={
-            
             props?.whosePost == auth().currentUser.uid
               ? 'Delete My Post'
               : 'Add to Saved Posts '

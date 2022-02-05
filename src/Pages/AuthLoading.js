@@ -20,7 +20,7 @@ function AuthLoading(props) {
           .on('value', snapshot => {
             dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
           });
-
+            console.log("*********************************************************");
         if (deneme == 'Login') {
           props.navigation.replace('Main');
         } else if (deneme == 'Signup') {

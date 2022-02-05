@@ -1,34 +1,37 @@
 import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
-import React from 'react';
+import React, {useCallback, memo} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-
 import auth from '@react-native-firebase/auth';
+import {useDispatch} from 'react-redux';
+
 import {Divider} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 
 import Icon from '../../../components/Icons';
 const {width} = Dimensions.get('window');
 
-const footer = React.memo(
+const Footer = React.memo(
   ({
     item,
-    likeHandler,
     setSelectedPost,
     setHomeIndex,
     setShowCommentInput,
     setModalVisible,
-    modalVisible,
     index,
   }) => {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-    console.log(index, 'kere çalıştım');
+    console.log(
+     index, "rerender");
+    
+
     return (
       <SafeAreaView>
-        {item.comments == 0 && item.likes == 0 ? null : (
+        {item?.comments == 0 && item?.likes == 0 ? null : (
           <TouchableOpacity
             onPress={() => {
-              setModalVisible(!modalVisible);
+              setModalVisible();
               setSelectedPost(item);
             }}
             style={{
@@ -41,10 +44,9 @@ const footer = React.memo(
             }}>
             {item?.likes?.length != 0 ? (
               <View style={{flexDirection: 'row', marginLeft: 10}}>
-                <Icon name='Like'   size={20}    fill={'#FF6EA1'}
-/>
+                <Icon name="Like" size={20} fill={'#FF6EA1'} />
                 <Text style={{alignSelf: 'center', color: '#727375'}}>
-                  {item?.likes?.length == 0 ? '' : " "+item?.likes?.length}
+                  {item?.likes?.length == 0 ? '' : ' ' + item?.likes?.length}
                 </Text>
               </View>
             ) : (
@@ -80,15 +82,13 @@ const footer = React.memo(
             elevation: 25,
           }}>
           <TouchableOpacity
-            onPress={() => likeHandler(item.id, item.likes)}
+            onPress={() => dispatch({type: 'LIKE_HANDLER', payload: {post: item}})}
             style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
-            {item.likes.includes(auth().currentUser.uid) ?
-            <Icon
-              name='FilledLike'
-              size={25}
-              fill={'#FF6EA1'}
-            /> :      <Icon name='Like'   size={25}    fill={'#FF6EA1'} />
-          }
+            {item.likes.includes(auth().currentUser.uid) ? (
+              <Icon name="FilledLike" size={25} fill={'#FF6EA1'} />
+            ) : (
+              <Icon name="Like" size={25} fill={'#FF6EA1'} />
+            )}
             <Text
               style={{
                 alignSelf: 'center',
@@ -107,11 +107,7 @@ const footer = React.memo(
               setShowCommentInput(prev => !prev);
             }}
             style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
-             <Icon
-              name='Comment'
-              size={23}
-              fill={'#FF6EA1'}
-            /> 
+            <Icon name="Comment" size={23} fill={'#FF6EA1'} />
             <Text
               style={{
                 alignSelf: 'center',
@@ -125,11 +121,7 @@ const footer = React.memo(
           <TouchableOpacity
             onPress={() => setMenu(true)}
             style={{flexDirection: 'row', flex: 1, justifyContent: 'center'}}>
-            <Icon
-              name='Share'
-              size={25}
-              fill="#FF6EA1"
-            />
+            <Icon name="Share" size={25} fill="#FF6EA1" />
             <Text
               style={{
                 alignSelf: 'center',
@@ -143,7 +135,6 @@ const footer = React.memo(
         </View>
       </SafeAreaView>
     );
-  },
-);
+  });
 
-export default footer;
+export default Footer;

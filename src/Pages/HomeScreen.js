@@ -2,39 +2,35 @@ import * as React from 'react';
 import {
   FlatList,
   StyleSheet,
-  Alert,
   View,
   Dimensions,
   RefreshControl,
 } from 'react-native';
-import database from '@react-native-firebase/database';
 import PostBody from '../components/Post/postBody';
 import PostFooter from '../components/Post/postFooter';
 import PostHeader from '../components/Post/postHeader';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import SkeletonPlaceholder from '../components/SkeletonPlaceholder';
 import Comment from '../components/Post/postComment/';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import {ScrollView} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from '../components/Icons';
 
 import SendCommentTextInput from '../components/Post/sendComment';
 const {width} = Dimensions.get('window');
 
 function HomeScreen({navigation, route}) {
   const newPost = route?.params?.newPost;
+  const dispatch = useDispatch();
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
   const authuser = useSelector(store => store.user);
   const [posts, setPosts] = React.useState([]);
-  const [rerender, setRerender] = React.useState(false);
 
-  const [deleted, setDeleted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState({});
@@ -43,161 +39,31 @@ function HomeScreen({navigation, route}) {
   const [homeIndex, setHomeIndex] = React.useState(0);
   const [refreshLoading, setRefreshLoading] = React.useState(false);
 
+  const POST_LIST = useSelector(store => store.posts);
+
   React.useEffect(() => {
     setUser(authuser);
   }, [authuser]);
 
   React.useEffect(async () => {
-    getPosts();
-  }, [newPost, rerender, user]);
+    console.log('---------------------------');
+    await getPosts();
+    dispatch({type: 'POST_LIST', payload: {posts: posts}});
+  }, []);
 
-  React.useEffect(async () => {
-    getPosts();
-    setDeleted(false);
-  }, [deleted]);
+  const ModalHandle = React.useCallback(() => {
+    setModalVisible(value => !value);
+  }, [setModalVisible]);
 
-  const likeHandler = (postId, prevLikes) => {
-    const selectedPost = posts.find(post => post.id === postId);
-    //unlike
-    if (selectedPost.likes.includes(auth()?.currentUser.uid)) {
-      unlikePost(postId, prevLikes);
-    }
-    //like
-    else likePost(postId, prevLikes);
-  };
-
-  const likePost = (postId, prevLikes) => {
-    console.log('like post');
-    firestore()
-      .collection('posts')
-      .doc(postId)
-      .update({
-        likes: [...prevLikes, auth()?.currentUser.uid],
-      })
-      .then(() => {
-        setRerender(!rerender);
-        console.log('Post liked');
-      });
-  };
-  const unlikePost = (postId, prevLikes) => {
-    console.log(
-      'filter cevabı:',
-      prevLikes.filter(element => element != auth()?.currentUser.uid),
-    );
-    firestore()
-      .collection('posts')
-      .doc(postId)
-      .update({
-        likes: prevLikes.filter(element => element != auth()?.currentUser.uid),
-      })
-      .then(() => {
-        setRerender(!rerender);
-        console.log('Post unliked!');
-      });
-  };
-  const deleteFirestoreData = postId => {
-    console.log('deleteFirestoreData');
-
-    firestore()
-      .collection('posts')
-      .doc(postId)
-      .delete()
-      .then(() => {
-        Alert.alert(
-          'Post Deleted !',
-          'Your Post Has Been Deleted Successfully',
-        );
-        setDeleted(true);
-      })
-      .catch(err => {
-        console.log('ERROR1:', err);
-      });
-  };
-
-  const onSave = postId => {
-    console.log('on save');
-
-    let added = [];
-    console.log('added ilk init', added);
-
-    if (user?.saved) {
-      added = user.saved;
-      added.includes(postId)
-        ? (added = added.filter(element => postId != element))
-        : added.push(postId);
-    } else {
-      added.push(postId);
-    }
-
-    database()
-      .ref(`/users/${auth()?.currentUser?.uid}/saved`)
-      .set(added)
-      .then(() => console.log('Data set.'));
-  };
-
-  const deletePost = postId => {
-    console.log('deletePost');
-
-    console.log('Current Post Id:', postId);
-    firestore()
-      .collection('posts')
-      .doc(postId)
-      .get()
-      .then(documentSnapshot => {
-        if (documentSnapshot.exists) {
-          console.log('data:', documentSnapshot.data());
-          const {postImg} = documentSnapshot.data();
-          if (postImg != null) {
-            console.log('postimg null değil linki bu :', postImg);
-            const storageRef = storage().refFromURL(postImg);
-            const imageRef = storage().ref(storageRef.fullPath);
-            console.log('imageRef:', imageRef);
-            imageRef
-              .delete()
-              .then(() => {
-                console.log(`${postImg} has been deleted`);
-                deleteFirestoreData(postId);
-                setDeleted(true);
-              })
-              .catch(err => {
-                console.log('Error while  deleting the image... ', err);
-              });
-          } else {
-            console.log('else girmiş');
-            deleteFirestoreData(postId);
-          }
-        }
-
-        console.log('post deleted!');
-      })
-      .catch(err => {
-        console.log('ERROR2:', err);
-      });
-  };
-
-  const handleDelete = postId => {
-    console.log('handle delete');
-    Alert.alert('Delete Post', 'Are You Sure ?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'Confirm', onPress: () => deletePost(postId)},
-    ]);
-  };
-  const toProfile = userId => {
-    console.log('to profile');
-    if (auth()?.currentUser.uid === userId) {
-      navigation.navigate('Profile');
-    } else {
-      navigation.navigate('OtherProfile', {selectedUserId: userId});
-    }
-  };
+  const selectedPostHandle = React.useCallback((post) => {
+    setSelectedPost(post);
+  }, [setSelectedPost]);
+  console.log('RERENDER CHECKER');
+  //new post önemli
 
   const getPosts = async () => {
     try {
-
+      console.log('get posts -------------------------');
       const list = [];
       await firestore()
         .collection('posts')
@@ -220,11 +86,11 @@ function HomeScreen({navigation, route}) {
           });
           setPosts(list);
           setLoading(false);
-
+          return list
         });
     } catch (error) {
       setLoading(false);
-
+      setError(true);
       console.log(error.msg);
     }
   };
@@ -242,22 +108,15 @@ function HomeScreen({navigation, route}) {
           shadowColor: '#CBCBCB',
           elevation: 25,
         }}>
-        <PostHeader
-          item={item}
-          toProfile={userId => toProfile(userId)}
-          onDelete={handleDelete}
-          onSave={onSave}
-        />
+        <PostHeader item={item} navigation={navigation} />
         <PostBody item={item} />
         <PostFooter
           setShowCommentInput={setShowCommentInput}
           item={item}
           index={index}
           setHomeIndex={setHomeIndex}
-          setModalVisible={setModalVisible}
-          likeHandler={likeHandler}
-          modalVisible={modalVisible}
-          setSelectedPost={setSelectedPost}
+          setModalVisible={ModalHandle}
+          setSelectedPost={selectedPostHandle}
         />
         {showCommentInput && index == homeIndex ? (
           <SendCommentTextInput submitComment={submitComment} />
@@ -266,9 +125,6 @@ function HomeScreen({navigation, route}) {
     );
   };
   const submitComment = postText => {
-    console.log('calisiyo mu makes', postText);
-    console.log('selected post : ', selectedPost);
-
     firestore()
       .collection('posts')
       .doc(selectedPost.id)
@@ -286,7 +142,6 @@ function HomeScreen({navigation, route}) {
         ],
       })
       .then(() => {
-        setRerender(!rerender);
         console.log('Comment successfully posted!');
         setShowCommentInput(false);
       });
@@ -301,7 +156,7 @@ function HomeScreen({navigation, route}) {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Icon name="drag-horizontal-variant" size={35} color="#909090" />
+        <Icon name="Drag" size={35} fill="#909090" />
       </View>
     );
   };
@@ -321,14 +176,14 @@ function HomeScreen({navigation, route}) {
       </View>
     </View>
   );
-const onRefresh = async() => {
-  setRefreshLoading(true);
-  await getPosts();
-  setRefreshLoading(false);
-};
+  const onRefresh = async () => {
+    setRefreshLoading(true);
+    await getPosts();
+    setRefreshLoading(false);
+  };
 
-  if(refreshLoading){
-    return <SkeletonPlaceholder />
+  if (refreshLoading) {
+    return <SkeletonPlaceholder />;
   }
   return (
     <View style={styles.mainContainer}>
@@ -339,8 +194,6 @@ const onRefresh = async() => {
           {modalVisible ? (
             <BottomSheet
               onCloseEnd={() => {
-                console.log('değistirdim');
-                console.log(selectedPost);
                 setModalVisible(false);
               }}
               enabledBottomInitialAnimation={true}

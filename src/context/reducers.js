@@ -1,6 +1,10 @@
 import {ToastAndroid} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database';
 
-export default function (state, action,props) {
+export default function (state, action, props) {
   function Toast(message) {
     ToastAndroid.showWithGravityAndOffset(
       message,
@@ -10,19 +14,159 @@ export default function (state, action,props) {
       50,
     );
   }
+  const deletePostById = id => {
+    firestore()
+      .collection('posts')
+      .doc(id)
+      .delete()
+      .then(() => {
+        Alert.alert(
+          'Post Deleted !',
+          'Your Post Has Been Deleted Successfully',
+        );
+        setDeleted(true);
+      })
+      .catch(err => {
+        console.log('ERROR1:', err);
+      });
+  };
+
+  const likePostById = post => {
+    var {id, likes} = post;
+    firestore()
+      .collection('posts')
+      .doc(id)
+      .update({
+        likes: [...likes, auth()?.currentUser.uid],
+      })
+      .then(() => {
+        console.log('Post liked !!');
+      });
+    var newList = [
+      ...state.posts,
+      {
+        ...post,
+        likes: [...likes, auth()?.currentUser.uid],
+      },
+    ];
+    return {...state, posts: newList};
+  };
+  const unlikePostByID = post => {
+    var {id, likes} = post;
+    var updatedLikes = likes.filter(
+      element => element != auth()?.currentUser.uid,
+    );
+    console.log('hata test');
+    var newList = [
+      ...state.posts,
+      {
+        ...post,
+        likes: updatedLikes,
+      },
+    ];
+    firestore()
+      .collection('posts')
+      .doc(id)
+      .update({
+        likes: updatedLikes,
+      })
+      .then(() => {
+        console.log('Post unliked !!');
+      });
+    return {...state, posts: newList};
+  };
+
   switch (action.type) {
-    case 'SET_CALL_STATUS':
-      if(action.payload.callStatus){
-        props.navigation.navigate('VideoCallScreen')
+    case 'POST_LIST':
+      var posts = action.payload.posts;
+      return {...state, posts: posts};
+    case 'SAVE_POST':
+      var postId = action.payload.itemId;
+      var userRef = `/users/${auth()?.currentUser?.uid}/saved`;
+
+      database()
+        .ref(userRef)
+        .once('value')
+        .then(snapshot => {
+          console.log('User data: ', snapshot.val());
+          if (snapshot.val()) {
+            snapshot.val().includes(postId)
+              ? Toast('Post Already Saved')
+              : database()
+                  .ref(userRef)
+                  .set([...snapshot.val(), postId])
+                  .then(() => console.log('Post added your saved list.'));
+          } else {
+            database()
+              .ref(userRef)
+              .set([postId])
+              .then(() => console.log('Post added your saved list.'));
+          }
+        });
+
+      return {...state};
+    case 'DELETE_POST':
+      var id = action.payload.postId;
+      var newList = state.posts.filter(post => post.id !== id);
+      firestore()
+        .collection('posts')
+        .doc(id)
+        .get()
+        .then(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            const {postImg} = documentSnapshot.data();
+            if (postImg != null) {
+              const storageRef = storage().refFromURL(postImg);
+              const imageRef = storage().ref(storageRef.fullPath);
+              imageRef
+                .delete()
+                .then(() => {
+                  console.log(`${postImg} image has been deleted`);
+                  deletePostById(id);
+                })
+                .catch(err => {
+                  console.log('Error while  deleting the image... ', err);
+                });
+            } else {
+              console.log('Post without image deleted...');
+              deletePostById(id);
+            }
+          }
+
+          console.log('post deleted!');
+        })
+        .catch(err => {
+          console.log('ERROR2:', err);
+        });
+      return {...state, posts: newList};
+
+    case 'LIKE_HANDLER':
+      var post = action.payload.post;
+      //unlike
+      if (post.likes.includes(auth()?.currentUser.uid)) {
+        console.log('FOOTER-UNLIKE DİSPATCH EXECUTED1');
+        return unlikePostByID(post);
+        //dispatch({type: 'UNLIKE_POST', payload: {post: selectedPost}});
       }
-      return  {...state,callStatus:action.payload.callStatus}
+      //like
+      else {
+        console.log('FOOTER-LIKE DİSPATCH EXECUTED1');
+        return likePostById(post);
+        //dispatch({type: 'LIKE_POST', payload: {post: selectedPost}});
+      }
+
+    case 'SET_CALL_STATUS':
+      if (action.payload.callStatus) {
+        props.navigation.navigate('VideoCallScreen');
+      }
+      return {...state, callStatus: action.payload.callStatus};
 
     case 'SET_ROUTE_NAME':
-      console.log("reducer calisti dispacta gelen" ,action.payload.routeName)
-      return  {...state,routeName:action.payload.routeName}
+      console.log('reducer calisti dispacta gelen', action.payload.routeName);
+      return {...state, routeName: action.payload.routeName};
 
     case 'SET_LANG':
-      return {...state,lang:action.payload.lang}
+      return {...state, lang: action.payload.lang};
 
     case 'SET_USER':
       return {...state, user: action.payload.user};
