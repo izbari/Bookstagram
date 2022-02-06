@@ -1,14 +1,14 @@
 import React from 'react';
 import {View, Text, Dimensions} from 'react-native';
-import {Divider} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import isEqual from "react-fast-compare";
 const {width} = Dimensions.get('window');
 
- const Body = React.memo(({item}) => (
+ const Body = ({item}) => {
+  console.log("body");
+ return(
    
     <View>
-      <Divider />
-
       <View>
         {item.post != null ? (
           <Text
@@ -35,6 +35,7 @@ const {width} = Dimensions.get('window');
         />
       ) : null}
     </View>
-  )
-);
-export default Body;
+  )}
+
+
+export default React.memo(Body,isEqual);

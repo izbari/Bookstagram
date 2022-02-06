@@ -31,6 +31,7 @@
     "moment": "^2.29.1",
     "patch-package": "^6.4.7",
     "react": "17.0.2",
+    "react-fast-compare": "^3.2.0",
     "react-i18next": "^11.15.3",
     "react-native": "0.65.1",
     "react-native-date-picker": "^4.1.0",

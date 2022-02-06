@@ -1,22 +1,27 @@
 import {TextInput, View,TouchableOpacity,Keyboard} from 'react-native';
 import React from 'react';
 import Icon from '../../../components/Icons';
+import {useSelector,useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
-const customTextInput = (props) => {
+const customTextInput = ({setVisible,visible,item}) => {
   const {t} = useTranslation();
     const [height, setHeight] = React.useState(0);
     const [postText, setPostText] = React.useState('');
-   
+
+    const dispatch = useDispatch();
+    const user = useSelector(store => store.user);
+   if(!visible){
+    return null;
+   }
   return (
-    <View
+     <View
       style={{
         flexDirection: 'row',
         backgroundColor: '#F0F2F5',
         alignItems: 'flex-end',
-        borderRadius: 10,
       }}>
-      <TextInput
+       <TextInput
         onContentSizeChange={event => {
           setHeight(event.nativeEvent.contentSize.height);
         }}
@@ -36,10 +41,10 @@ const customTextInput = (props) => {
       style={{alignSelf:'center',padding:10}}
       disabled={postText.length== 0 ? true : false}
         onPress={async () => {
-          const text = postText;
-          await props.submitComment(text);
-         
-          
+
+          dispatch({type: 'ADD_COMMENT', payload: {postText:postText,item:item,user:user}});
+          setPostText('');
+          setVisible(false);
           Keyboard.dismiss();
         
         }}>

@@ -1,4 +1,4 @@
-export default function(data,uid)
+export default function(data)
 {
 
    return Object.keys(data).map(key=> {
@@ -6,7 +6,6 @@ export default function(data,uid)
     return{
         
                path: key,
-                id:uid,
             ...data[key],
 
     };

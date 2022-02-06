@@ -144,17 +144,38 @@ export default function (state, action, props) {
       var post = action.payload.post;
       //unlike
       if (post.likes.includes(auth()?.currentUser.uid)) {
-        console.log('FOOTER-UNLIKE DİSPATCH EXECUTED1');
         return unlikePostByID(post);
-        //dispatch({type: 'UNLIKE_POST', payload: {post: selectedPost}});
       }
       //like
       else {
-        console.log('FOOTER-LIKE DİSPATCH EXECUTED1');
         return likePostById(post);
-        //dispatch({type: 'LIKE_POST', payload: {post: selectedPost}});
       }
+    case 'ADD_COMMENT':
+      var {postText, user, item} = action.payload;
+      var comments = [
+        ...item.comments,
+        {
+          userId: auth()?.currentUser?.uid,
+          id: new Date().getTime().toString(),
+          img: user.imageUrl,
+          name: user.name + ' ' + user.lastName,
+          comment: postText,
+          postTime: firestore.Timestamp.fromDate(new Date()),
+        },
+      ];
 
+      var newList = [...state.posts, {...item, comments: comments}];
+      firestore()
+        .collection('posts')
+        .doc(item.id)
+        .update({
+          comments: comments,
+        })
+        .then(() => {
+          Toast('Comment successfully posted!');
+        });
+
+      return {...state, posts: newList};
     case 'SET_CALL_STATUS':
       if (action.payload.callStatus) {
         props.navigation.navigate('VideoCallScreen');

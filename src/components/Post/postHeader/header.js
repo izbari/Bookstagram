@@ -1,11 +1,13 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
-import Image from 'react-native-image-progress';
+import FastImage from 'react-native-fast-image';
 import ThreeDotMenu from '../../ThreeDotMenu';
 import moment from 'moment';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-const Header = React.memo(({item,navigation}) => {
+import isEqual from "react-fast-compare";
+
+const Header = ({item,navigation}) => {
   const [user, setUser] = React.useState({});
 
   React.useEffect(async () => {
@@ -42,18 +44,19 @@ const Header = React.memo(({item,navigation}) => {
           alignItems: 'center',
           padding: 10,
         }}>
-        <Image
+        <FastImage
           style={{
             height: 45,
             width: 45,
-            resizeMode: 'contain',
             borderRadius: 50,
             overflow: 'hidden',
             elavation: 5,
           }}
           source={{
             uri: user ? user.imageUrl : null,
-          }}
+            priority: FastImage.priority.high,
+        }}
+        resizeMode={FastImage.resizeMode.contain}
         />
         <View
           style={{
@@ -70,6 +73,6 @@ const Header = React.memo(({item,navigation}) => {
       <ThreeDotMenu  itemId = {item.id} whosePost={item.userId} />
     </View>
   );
-});
+};
 
-export default Header;
+export default React.memo(Header,isEqual);
