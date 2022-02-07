@@ -66,10 +66,16 @@ function OtherProfile(props) {
 
     //Eğer takip etmiyosam ve edeceksem
     else {
-      if (user.fallowers.some(item => item === auth()?.currentUser.uid)) {
+      if (
+        user?.fallowers &&
+        user.fallowers.some(item => item === auth()?.currentUser.uid)
+      ) {
         return null; //else in saglamasi
       } else {
-        const liste = user.fallowers.concat(auth().currentUser.uid); //listeye kendimizi ekleyip databaseyi güncellicez.
+        let liste = [];
+        user?.fallowers
+          ? (liste = user.fallowers.concat(auth().currentUser.uid))
+          : (liste = [auth().currentUser.uid]);
 
         database()
           .ref(`/users/${user.id}`)
@@ -168,38 +174,44 @@ function OtherProfile(props) {
                 style={{marginLeft: 5, marginRight: 5, marginTop: 5}}
               />
             </TouchableOpacity>
-          <View style={{flex:0.85,}}>
-          <Text
-              style={{
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: 20,
-                alignSelf:'center',
-                marginLeft: 5,
-                marginRight: 5,
-                marginTop: 7,
-              }}>
-              {user ? user.name[0].toUpperCase()+user.name.substring(1,user.name.length) +' ' + user.lastName[0].toUpperCase()+user.lastName.substring(1,user.lastName.length) : 'user cant found'}
-            </Text>
-          </View>
+            <View style={{flex: 0.85}}>
+              <Text
+                style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: 20,
+                  alignSelf: 'center',
+                  marginLeft: 5,
+                  marginRight: 5,
+                  marginTop: 7,
+                }}>
+                {user
+                  ? user.name[0].toUpperCase() +
+                    user.name.substring(1, user.name.length) +
+                    ' ' +
+                    user.lastName[0].toUpperCase() +
+                    user.lastName.substring(1, user.lastName.length)
+                  : 'user cant found'}
+              </Text>
+            </View>
           </View>
           <View style={{flexDirection: 'row', margin: 10, marginBottom: 0}}>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.books.length : '-'}
+                {user && user?.books ? user?.books.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Books</Text>
             </View>
 
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.fallowers.length : '-'}
+                {user && user?.fallowers ? user?.fallowers.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowers</Text>
             </View>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.fallowing.length : '-'}
+                {user && user?.fallowing ? user?.fallowing.length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowing</Text>
             </View>

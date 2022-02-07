@@ -1,13 +1,12 @@
 import React from 'react';
 import {View, Text, Dimensions} from 'react-native';
-import FastImage from 'react-native-fast-image';
-import isEqual from "react-fast-compare";
+import ImageModal from "react-native-image-modal"
+import isEqual from 'react-fast-compare';
 const {width} = Dimensions.get('window');
 
- const Body = ({item}) => {
-  console.log("body");
- return(
-   
+const Body = ({item}) => {
+  console.log('body');
+  return (
     <View>
       <View>
         {item.post != null ? (
@@ -25,17 +24,16 @@ const {width} = Dimensions.get('window');
         )}
       </View>
       {item.postImg != null ? (
-        <FastImage
-          style={{height: 400, width: width * 0.9}}
+        <ImageModal
+          resizeMode="contain"
+          style={{height: 400, width: width * 0.9, resizeMode: 'cover'}}
           source={{
             uri: item.postImg,
-            priority: FastImage.priority.normal,
           }}
-          resizeMode={FastImage.resizeMode.cover}
         />
       ) : null}
     </View>
-  )}
+  );
+};
 
-
-export default React.memo(Body,isEqual);
+export default React.memo(Body, isEqual);

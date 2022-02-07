@@ -5,29 +5,30 @@ import {
   View,
   Text,
   Platform,
-  Alert,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
 import {FAB, Portal, Provider, TextInput} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
-import auth from '@react-native-firebase/auth';
+import  {useSelector,} from 'react-redux';
 
 import firestore from '@react-native-firebase/firestore';
 import Loading from '../components/Loading';
 
-const {width, height} = Dimensions.get('window');
+
+const {width} = Dimensions.get('window');
 
 const CreatePost = ({navigation}) => {
+  const  {id, name,lastName,imageUrl:userImageUrl} = useSelector(store => store.user);
+  
   const [text, setText] = useState('');
   const [fabVisible, setFabVisible] = React.useState(null);
   const [saving, setSaving] = React.useState(false);
   const [image, setImage] = React.useState(null);
   const [uploading, setUploading] = React.useState(false);
   const [transferring, setTransferring] = React.useState(0);
-  console.log(text);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -42,9 +43,15 @@ const CreatePost = ({navigation}) => {
       ),
     });
   }, [navigation]);
+
+
   useEffect(() => {
     if (saving) submitPost();
   }, [saving]);
+
+
+  
+
   if (uploading) {
     return (
       <View
@@ -68,13 +75,13 @@ const CreatePost = ({navigation}) => {
   }
   const submitPost = async () => {
     const imageUrl = await uploadImage();
-    console.log('url:', imageUrl);
-    console.log('postText:', text);
-
+    
     await firestore()
       .collection('posts')
       .add({
-        userId: auth().currentUser.uid,
+        userId: id,
+        userName: name+' '+lastName,
+        userImageUrl: userImageUrl,
         post: text,
         postImg: imageUrl,
         postTime: firestore.Timestamp.fromDate(new Date()),
@@ -85,7 +92,6 @@ const CreatePost = ({navigation}) => {
         navigation.navigate('HomeScreen', {newPost: true});
       })
       .catch(err => console.log('ERROR:', err.msg));
-    console.log('Post added to firestore');
     setImage(null);
   };
 
@@ -95,7 +101,6 @@ const CreatePost = ({navigation}) => {
     }
     const uploadUri = image;
     let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
-    console.log('filename datası', filename);
 
     const extension = filename.split('.').pop(); //jpg
     const name = filename.split('.').slice(0, -1).join('.'); //name
@@ -134,9 +139,7 @@ const CreatePost = ({navigation}) => {
       cropping: true,
     })
       .then(image => {
-        console.log(image);
         const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
-        console.log('image pathi', image.path);
         setImage(imageUri);
       })
       .catch(err => {
@@ -172,7 +175,7 @@ const CreatePost = ({navigation}) => {
           borderWidth: 1,
         }}>
         <TextInput
-          onChangeText={newText => setText(newText)}
+          onChangeText={setText}
           multiline
           underlineColor={'#BFBFBF'}
           activeUnderlineColor={'#BFBFBF'}

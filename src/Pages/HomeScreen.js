@@ -7,21 +7,23 @@ import {
   Dimensions,
   RefreshControl,
 } from 'react-native';
+
+import Animated from 'react-native-reanimated';
+import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useSelector, useDispatch} from 'react-redux';
+import BottomSheet from 'reanimated-bottom-sheet';
+
+import Icon from '../components/Icons';
+import firebaseUtil from '../utils/parseFirebaseData';
+import SkeletonPlaceholder from '../components/SkeletonPlaceholder';
+
 import PostBody from '../components/Post/postBody';
 import PostFooter from '../components/Post/postFooter';
 import PostHeader from '../components/Post/postHeader';
-import FastImage from 'react-native-fast-image';
-import {useSelector, useDispatch} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
-import SkeletonPlaceholder from '../components/SkeletonPlaceholder';
+import SharePostRow from '../components/Post/SharePostRow';
 import Comment from '../components/Post/postComment/';
-import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import Icon from '../components/Icons';
-import database from '@react-native-firebase/database';
-import firebaseUtil from '../utils/parseFirebaseData';
-import {Button} from 'react-native-paper';
 
 const {width} = Dimensions.get('window');
 
@@ -64,6 +66,13 @@ function HomeScreen({navigation, route}) {
     }
   }, [POST_LIST]);
 
+  //New post listener
+  React.useEffect(() => {
+    if (newPost) {
+      onRefresh();
+    }
+  }, [newPost]);
+
   const HandleCommentModal = React.useCallback(() => {
     setHandleCommentModal(value => !value);
   }, [setHandleCommentModal]);
@@ -90,11 +99,21 @@ function HomeScreen({navigation, route}) {
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
-            const {likes, comments, post, postImg, postTime, userId} =
-              doc.data();
+            const {
+              likes,
+              comments,
+              post,
+              postImg,
+              postTime,
+              userId,
+              userName,
+              userImageUrl,
+            } = doc.data();
             list.push({
               id: doc.id,
               userId,
+              userName,
+              userImageUrl,
               postTime,
               post,
               postImg,
@@ -212,70 +231,7 @@ function HomeScreen({navigation, route}) {
         <View style={{padding: 5}}>
           <ScrollView>
             {friendsData.map(friend => {
-              return (
-                <View
-                  key={friend.id}
-                  style={{
-                    flexDirection: 'row',
-                    padding: 5,
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    borderRadius: 10,
-                    shadowColor: '#CBCBCB',
-                  }}>
-                  <View style={{flexDirection: 'row', flex: 1}}>
-                    <View style={{flexDirection: 'row', flex: 1}}>
-                      <FastImage
-                        style={{
-                          height: 40,
-                          width: 40,
-                          borderRadius: 50,
-                          overflow: 'hidden',
-                          elavation: 5,
-                        }}
-                        source={{
-                          uri: friend.imageUrl,
-                          priority: FastImage.priority.high,
-                        }}
-                        resizeMode={FastImage.resizeMode.contain}
-                      />
-                      <View
-                        style={{
-                          justifyContent: 'center',
-                          marginLeft: 10,
-                          padding: 5,
-                        }}>
-                        <Text style={{fontWeight: 'bold'}}>
-                          {friend.name + ' ' + friend.lastName}
-                        </Text>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                          }}>
-                          <Text
-                            numberOfLines={2}
-                            style={{
-                              fontStyle: 'italic',
-                              fontSize: 12,
-                              color: 'grey',
-                              marginTop: 5,
-                            }}>
-                            {'Cool bio ...'}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                    <Button
-                      mode="contained"
-                      
-                      style={{alignSelf: 'center',backgroundColor:'#2596ff'}}
-                      labelStyle={{fontSize: 12, color: 'white',fontWeight:'bold'}}
-                      onPress={() => console.log('Pressed')}>
-                      Send
-                    </Button>
-                  </View>
-                </View>
-              );
+              return <SharePostRow key={friend.id} friend={friend} post={selectedPost} />;
             })}
           </ScrollView>
         </View>

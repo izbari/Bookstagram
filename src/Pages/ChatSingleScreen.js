@@ -13,9 +13,9 @@ import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
+import ImageModal from 'react-native-image-modal'
 import {
   Menu,
-  Avatar,
   Divider,
 } from 'react-native-paper';
 
@@ -193,7 +193,28 @@ export default function ChatSingleScreen({navigation, route}) {
     );
   };
  
-  
+  const renderMessageImage = (props) => {
+    return (
+      <View
+        style={{
+          borderRadius: 15,
+          padding: 2,
+        }}
+      >
+        <ImageModal
+          resizeMode="contain"
+          style={{
+            width: 200,
+            height: 200,
+            padding: 6,
+            borderRadius: 15,
+            resizeMode: "cover",
+          }}
+          source={{ uri: props.currentMessage.image }}
+        />
+      </View>
+    );
+  };
   
   return (
     <View style={{flex: 1}}>
@@ -205,6 +226,10 @@ export default function ChatSingleScreen({navigation, route}) {
           name: authUser.name+" "+authUser.lastName,
           avatar: authUser.imageUrl
         }}
+        showUserAvatar
+        useNativeDriver={true}
+        renderMessageImage={renderMessageImage} 
+
            />
     </View>
   );

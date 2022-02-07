@@ -3,30 +3,18 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import ThreeDotMenu from '../../ThreeDotMenu';
 import moment from 'moment';
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import isEqual from "react-fast-compare";
 
 const Header = ({item,navigation}) => {
-  const [user, setUser] = React.useState({});
 
-  React.useEffect(async () => {
-    
-    const singleUserData = await database()
-      .ref(`/users/${item.userId}`)
-      .once('value')
-      .then(snapshot => {
-        setUser(snapshot.val());
-      });
-      return ()=> singleUserData()
-  }, [item.userId]);
   const toProfile = React.useCallback((userId) => {
     if (auth().currentUser.uid === userId) {
       navigation.navigate('Profile');
     } else {
       navigation.navigate('OtherProfile', {selectedUserId: userId});
     }
-  }, [user]);
+  }, [item.userId]);
 
 
   console.log("header",);
@@ -38,7 +26,7 @@ const Header = ({item,navigation}) => {
         alignItems: 'center',
       }}>
       <TouchableOpacity
-        onPress={() =>toProfile(user.id)}
+        onPress={() =>toProfile(item.userId)}
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -53,7 +41,7 @@ const Header = ({item,navigation}) => {
             elavation: 5,
           }}
           source={{
-            uri: user ? user.imageUrl : null,
+            uri: item.userImageUrl,
             priority: FastImage.priority.high,
         }}
         resizeMode={FastImage.resizeMode.contain}
@@ -63,7 +51,7 @@ const Header = ({item,navigation}) => {
             justifyContent: 'center',
             marginLeft: 10,
           }}>
-          <Text>{user.name + ' ' + user.lastName}</Text>
+          <Text>{item.userName}</Text>
           <Text style={{color: 'grey', fontSize: 12}}>
             {moment(item.postTime.toDate()).fromNow()}
           </Text>
