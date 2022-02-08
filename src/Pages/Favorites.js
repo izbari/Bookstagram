@@ -7,58 +7,32 @@ import FastImage from 'react-native-fast-image';
 import BookCard from '../components/BookCard';
 
 function Favorites(props) {
-  const dispatch = useDispatch();
   const list = useSelector(s => s.favList)
     .slice()
     .reverse();
 
-  const favHandler = item => {
-    if (list.includes(item)) {
-      dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
-    } else {
-      dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
-    }
-  };
-  const removeFromFavorites = item => {
-    dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
-  };
-
-  if(!list.length){
-    return(<View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#fff',
-      }}>
-      <FastImage
-        style={{height: 500, width: 400}}
-        source={require('../assets/png/Favorite.jpg')}
-        resizeMode={FastImage.resizeMode.cover}
-      />
-     
-    </View>)
+  if (!list.length) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          backgroundColor: '#fff',
+        }}>
+        <FastImage
+          style={{height: 500, width: 400}}
+          source={require('../assets/png/Favorite.jpg')}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+      </View>
+    );
   }
   return (
     <SafeAreaView style={styles.mainContainer}>
       <FlatList
         data={list}
-        renderItem={({item}) => (
-          <BookCard
-            favHandler={item => {
-              favHandler(item);
-            }}
-            removeFromFavorites={item => removeFromFavorites(item)}
-            from="favorites"
-            item={item}
-            toNavigateBookDetails={item =>
-              props.navigation.navigate('SingleBookDesc', {
-                singleBookData: item,
-              })
-            }
-          />
-        )}
+        renderItem={({item}) => <BookCard currentScreen = 'Favorite' list={list} navigate={props.navigation.navigate} item={item} />}
         keyExtractor={item => item.id}
-       
       />
     </SafeAreaView>
   );

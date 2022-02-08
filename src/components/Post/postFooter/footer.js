@@ -140,4 +140,5 @@ const Footer = React.memo(
   },
 );
 
-export default React.memo(Footer, isEqual);
+export default React.memo(Footer,isEqual);
+

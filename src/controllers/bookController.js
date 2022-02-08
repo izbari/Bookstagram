@@ -1,14 +1,15 @@
 
+
 exports.checkThumbnail = (item) => {
 
     if (typeof (item.volumeInfo.imageLinks) !== 'undefined' &&
         item.volumeInfo.imageLinks.thumbnail != null) {
-        return item.volumeInfo.imageLinks.thumbnail
+        return {uri:item.volumeInfo.imageLinks.thumbnail}
     }
 
     else {
-        return "https://cdn.pixabay.com/photo/2017/06/08/17/32/not-found-2384304_150.jpg"
-    }
+        return require('../assets/png/imagePlaceholder.jpg')
+        }
 }
 exports.checkDescription = (item) => {
 

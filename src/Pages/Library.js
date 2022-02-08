@@ -1,107 +1,79 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   ActivityIndicator,
-  Dimensions,
   StyleSheet,
-  Text,
   View,
   FlatList,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  
 } from 'react-native';
-import axios from 'axios';
-import {useDispatch, useSelector} from 'react-redux';
-import {Searchbar } from 'react-native-paper';
+import {useSelector} from 'react-redux';
+import {TouchableRipple, Searchbar, Divider} from 'react-native-paper';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 import {useSearch} from '../utils/searchUtils';
 import Error from '../components/Error';
 import BookCard from '../components/BookCard';
-
+import Icon from '../components/Icons';
 import FastImage from 'react-native-fast-image';
 const {width} = Dimensions.get('window');
 function Library(props) {
-  const dispatch = useDispatch();
   const list = useSelector(store => store.favList);
+
   const [cardData, setCardData] = React.useState(null);
   const [search, setSearch] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
   const [loading3, setLoading3] = React.useState(false);
-
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [sortId, setSortId] = useState(1);
+  const [value, setValue] = React.useState(null);
   //const [splash, setSplash] = React.useState(true);
   const [error, setError] = React.useState(false);
 
-  const [currentPage, setCurrentPage] = React.useState(0);
-  
-
+  const [currentPage, setCurrentPage] = React.useState(false);
+  //bottom sheet variables
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
   if (error) {
     return <Error style={styles.lottieContainerError} />;
   }
 
-  const cartDetailsHandler = item => {
-    props.navigation.navigate('SingleBookDesc', {
-      singleBookData: item,
-    });
-  };
+  const handleLoadMore = async param => {
+    if (!loading3) {
+      setCurrentPage(currentPage + 40);
+      console.log('currentPage1=' + currentPage);
 
-  const favHandler = item => {
-    if (list.includes(item)) {
-      dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
-    } else {
-      dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
+      const res = await getLoadMoreData(search, currentPage);
     }
   };
 
-  const cartHandler = item => {
-    dispatch({type: 'ADD_CART', payload: {cartCard: item}});
-  };
+  const getLoadMoreData = async (text, currentPage) => {
+    setLoading3(true);
 
-  const handleLoadMore = async param => {
-    if(!loading3){
-     setCurrentPage(currentPage+ 40);
-    console.log("currentPage1=" + currentPage)
-
-    const res = await getLoadMoreData(search,currentPage);
-}
-  };
-
-
- const getLoadMoreData = async(text,currentPage) => {   
-     setLoading3(true);
-
-   console.log("currentPage2=" + currentPage)
+    console.log('currentPage2=' + currentPage);
     // same input with pagination
-    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=40&orderBy=relevance&startIndex=${currentPage+40}&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
-    const res = await axios(API_URL);
-    setCardData(cardData.concat(res.data.items));
+    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=40&orderBy=relevance&startIndex=${
+      currentPage + 40
+    }&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
+    const res = await useSearch(API_URL);
+    setCardData(cardData.concat(res));
     setLoading3(false);
-   }
-  const renderItem = ({item}) => (
-    <BookCard
-      from="library"
-      favHandler={item => {
-        favHandler(item);
-      }}
-      cartHandler={item => {
-        cartHandler(item);
-      }}
-      cartDetailsHandler={item => {
-        cartDetailsHandler(item);
-      }}
-      item={item}
-    />
-  );
+  };
 
   const getData = async text => {
-   
-      //new searching
-      const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=40&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
+    //new searching
+    const API_URL = `https://www.googleapis.com/books/v1/volumes?q=${text}&maxResults=40&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
 
-      setLoading2(true);
-      const res = await useSearch(API_URL);
-      const bookData = res;
-      setLoading2(false);
-      setLoading(false);
-      setCardData(bookData);
-    
+    setLoading2(true);
+    const res = await useSearch(API_URL);
+    const bookData = res;
+    setLoading2(false);
+    setCardData(bookData);
+    setLoading(false);
   };
   const onChangeHandler = async e => {
     setCurrentPage(0);
@@ -120,11 +92,118 @@ function Library(props) {
     setLoading(true);
     getData(search);
   };
-  
+  const BottomSheetDragger = () => {
+    return (
+      <View
+        style={{
+          height: 75,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          backgroundColor: 'white',
+          justifyContent: 'center',
+        }}>
+        <Icon
+          name="Drag"
+          size={35}
+          fill="#909090"
+          style={{alignSelf: 'center'}}
+        />
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            marginHorizontal: 20,
+          }}>
+          <View style={{flex: 1}}>
+            <Text style={{fontSize: 24, color: '#4d4d4d', fontWeight: '450'}}>
+              Sırala
+            </Text>
+          </View>
+          <TouchableRipple
+            onPress={() => {
+              setModalVisible(false);
+            }}
+            mode="text"
+            compact
+            rippleColor="transparent"
+            uppercase={false}>
+            <Text style={{color: sortId == 1?'#4d4d4d' : "#ff6ea1", fontWeight: 'bold', fontSize: 15}}>
+              {sortId == 1 ? 'Kapat' : 'Uygula'}
+            </Text>
+          </TouchableRipple>
+        </View>
+      </View>
+    );
+  };
+  const SortItem = ({id,text}) => {
+    return (
+        <TouchableRipple
+        mode="text"
+        compact
+        rippleColor="transparent"
+        uppercase={false}
+          onPress={() => {
+            setSortId(id);
+          }}>
+         <View style={{flexDirection: 'row', margin: 20,}}>
+         <View
+            style={{
+              
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 10,
+              width: 25,
+              height: 25,
+              backgroundColor: sortId == id ? '#FF6EA1' : 'white',
+              borderColor: 'grey',
+              borderWidth: sortId == id ? 0 : 1,
+              borderRadius: 100,
+              marginRight: 10,
+            }}>
+            <Icon name="CheckMark" size={22} fill={"white"} />
+          </View> 
+          <View>
+            <Text style={{fontSize: 16, color: '#4d4d4d',alignSelf:'center'}}>
+          {text}
+        </Text>
+        </View>
+         </View>
+        </TouchableRipple>
+    );
+  };
+
+  const BottomsheetCommentContent = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: 'white',
+          height: '100%',
+          justifyContent: 'center',
+        }}>
+        <View style={{flex: 1}}>
+          <SortItem id={1} text={"Akıllı Sıralama"}/>
+          <Divider />
+          <SortItem id={2} text={"En Çok Satanlar"}/>
+          <Divider />
+          <SortItem id={3} text={"Değerlendirme Sayısı"}/>
+          <Divider />
+          <SortItem id={4} text={"Beğeni Sayısı"}/>
+          <Divider />
+          <SortItem id={5} text={"Artan Fiyat"}/>
+          <Divider />
+          <SortItem id={6} text={"Azalan Fiyat"}/>
+          <Divider />
+
+        </View>
+      </View>
+    );
+  };
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Searchbar
-        style={{borderColor:'grey',margin:10}}
+        style={{borderColor: 'grey', margin: 10}}
         inputStyle={{fontSize: 15}}
         placeholder="Search a Book ..."
         lightTheme
@@ -132,39 +211,94 @@ function Library(props) {
         autoCorrect={false}
         value={search}
       />
+      {cardData ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: '#e5e5e5',
+            width: '90%',
+            height: 50,
+            alignSelf: 'center',
+            justifyContent: 'space-between',
+            borderRadius: 10,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(true);
+            }}
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Icon name="Sort" size={22} fill={'black'} />
+            <Text style={{marginLeft: 10, fontSize: 15}}>Sırala</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Icon name="Filter" size={22} fill={'black'} />
+            <Text style={{marginLeft: 10, fontSize: 15}}>Filtrele</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
       {loading2 ? (
         <View style={{alignItems: 'center', margin: 10}}>
           <ActivityIndicator size="small"></ActivityIndicator>
         </View>
       ) : null}
-{
-  !cardData ?
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#f0f0f0',
-        padding:40
-      }}>
-      <FastImage
-        style={{height: 400, width: 400}}
-        source={require('../assets/png/SearchError.jpg')}
-        resizeMode={FastImage.resizeMode.cover}
-      />
-     
-    </View>
-    :
-      <FlatList
-        data={cardData}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        onEndReached={handleLoadMore}
-        ListFooterComponent={renderFooter}
-        onRefresh={refreshHandler}
-        refreshing={loading}
-       
-      />
-}
+      {!cardData ? (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            backgroundColor: '#f0f0f0',
+            padding: 40,
+          }}>
+          <FastImage
+            style={{height: 400, width: 400}}
+            source={require('../assets/png/SearchError.jpg')}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={cardData}
+          renderItem={({item}) => (
+            <BookCard
+              currentScreen="Library"
+              navigate={props.navigation.navigate}
+              item={item}
+              list={list}
+            />
+          )}
+          keyExtractor={item => item?.id}
+          onEndReached={handleLoadMore}
+          ListFooterComponent={renderFooter}
+          onRefresh={refreshHandler}
+          refreshing={loading}
+        />
+      )}
+      {modalVisible && (
+        <BottomSheet
+          onCloseEnd={() => {
+            setModalVisible(false);
+          }}
+          enabledBottomInitialAnimation={true}
+          ref={bs}
+          snapPoints={['65%', 0]}
+          initialSnap={0}
+          callbackNode={fall}
+          renderContent={BottomsheetCommentContent}
+          renderHeader={BottomSheetDragger}
+          enabledGestureInteraction={true}
+        />
+      )}
     </SafeAreaView>
   );
 }

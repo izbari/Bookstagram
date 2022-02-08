@@ -21,6 +21,8 @@ import DragIcon from '../../assets/svg/Drag.svg';
 import NewMessageIcon from '../../assets/svg/NewMessage.svg';
 import BackArrowIcon from '../../assets/svg/ArrowBack.svg';
 import CheckMarkIcon from '../../assets/svg/CheckMark.svg';
+import FilterIcon from '../../assets/svg/Filter.svg';
+import SortIcon from '../../assets/svg/Sort.svg';
 
 export default function Icons({name,size,fill,style}) {
     
@@ -47,6 +49,8 @@ const Icons = {
     NewMessage:NewMessageIcon,
     BackArrow:BackArrowIcon,
     CheckMark:CheckMarkIcon,
+    Sort:SortIcon,
+    Filter:FilterIcon
   }
   const Icon = Icons[name];
   return <Icon width={size} height={size} fill={fill} style={style} />;

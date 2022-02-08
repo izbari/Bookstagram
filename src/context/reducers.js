@@ -203,8 +203,8 @@ export default function (state, action, props) {
       }
 
     case 'ADD_CART':
-      if (state.cartList.some(item => item.id === action.payload.cartCard)) {
-        Toast('This book add your cart multiple');
+      if (state.cartList.some(item => item.id === action.payload.cartCard.id)) {
+        Toast('This book Already added your cart...');
         return state;
       } else {
         Toast('This book add your cart successfully');

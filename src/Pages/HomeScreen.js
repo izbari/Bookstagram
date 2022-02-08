@@ -50,7 +50,6 @@ function HomeScreen({navigation, route}) {
 
   // First render getPosts and store redux with dispatch
   React.useEffect(async () => {
-    console.log('---------------------------');
     await getPosts();
     dispatch({type: 'POST_LIST', payload: {posts: posts}});
   }, []);
@@ -59,11 +58,8 @@ function HomeScreen({navigation, route}) {
   React.useEffect(async () => {
     // when post actions happend this line will be execute and fetch modified posts
     if (posts.length != 0 && POST_LIST.length != 0 && POST_LIST !== posts) {
-      console.log('ÇALIŞTI**');
       await getPosts();
-    } else {
-      console.log('Posts and POST_LIST are same');
-    }
+    } 
   }, [POST_LIST]);
 
   //New post listener

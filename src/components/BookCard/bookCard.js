@@ -2,13 +2,17 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Rating} from 'react-native-rating-element';
 import bookController from '../../controllers/bookController';
-import Image from 'react-native-image-progress';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
-const BookCard = props => {
-  const list = useSelector(store => store.favList);
+import FastImage from 'react-native-fast-image';
+import Icon from '../../components/Icons';
+import { useDispatch} from 'react-redux';
+const BookCard = ({item, currentScreen, navigate, list}) => {
+  const dispatch = useDispatch();
+  const [source, setSource] = React.useState(
+    require('../../assets/png/imagePlaceholder.jpg'),
+  );
+  console.log('rerender');
   return (
-    <TouchableOpacity onPress={props.toNavigateBookHandler}>
+    <View>
       <View
         style={{
           flex: 0.5,
@@ -21,9 +25,11 @@ const BookCard = props => {
           marginTop: 10,
         }}>
         <View style={{backgroundColor: 'white', flex: 0.8}}>
-          <Image
-            source={{uri: '' + bookController.checkThumbnail(props.item)}}
-          
+          <FastImage
+            source={source}
+            onLoadEnd={() => {
+              setSource(bookController.checkThumbnail(item));
+            }}
             style={{
               height: 175,
               width: 120,
@@ -50,49 +56,57 @@ const BookCard = props => {
             }}>
             <Text
               style={{marginBottom: 7, color: '#575758', fontWeight: 'bold'}}>
-              {bookController.checkTitle(props.item)}
+              {bookController.checkTitle(item)}
             </Text>
             <TouchableOpacity
-              onPress={() => props.favHandler(props.item)}
+              onPress={() => {
+                list.includes(item)
+                  ? dispatch({
+                      type: 'REMOVE_FAVORITE',
+                      payload: {rmFavBook: item},
+                    })
+                  : dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
+              }}
               style={{}}>
-              <Ionicons
-                name={list.includes(props.item) ? 'heart' : 'heart-outline'}
+              <Icon
+                name={list.includes(item) ? 'FilledLike' : 'Like'}
                 size={30}
-                color="#FF6EA1"
+                fill="#FF6EA1"
               />
             </TouchableOpacity>
           </View>
-        <View>
+          <View>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <View>
+                <Text
+                  style={{marginBottom: 10, color: '#A0A0A1', fontSize: 10}}>
+                  {bookController.checkAuthor(item)}
+                </Text>
 
-        <View style={{flexDirection: 'row',justifyContent: 'space-between',}}>
-        <View>
-        <Text style={{marginBottom: 10, color: '#A0A0A1', fontSize: 10}}>
-            {bookController.checkAuthor(props.item)}
-          </Text>
+                <Rating
+                  rated={5}
+                  totalCount={2.5}
+                  ratingColor="#FF6DA0"
+                  ratingBackgroundColor="#d4d4d4"
+                  size={15}
+                  readonly
+                  icon="ios-star"
+                  direction="row"
+                />
+              </View>
 
-          <Rating
-            rated={5}
-            totalCount={2.5}
-            ratingColor="#FF6DA0"
-            ratingBackgroundColor="#d4d4d4"
-            size={15}
-            readonly
-            icon="ios-star"
-            direction="row"
-          />
-
-        </View>
-        
-         <View >
-            <Text style={{fontSize:12, color: 'grey'}}>{bookController.checkPrice(props.item)}</Text>
-
-         </View>
- </View>
-        </View>
+              <View>
+                <Text style={{fontSize: 12, color: 'grey'}}>
+                  {bookController.checkPrice(item)}
+                </Text>
+              </View>
+            </View>
+          </View>
           <Text style={{marginBottom: 5, marginTop: 10, fontSize: 10}}>
-            {bookController.checkDescription(props.item)}
+            {bookController.checkDescription(item)}
           </Text>
-          {props.from === 'library' && (
+          {currentScreen === 'Library' && (
             <View
               style={{
                 flexDirection: 'row',
@@ -113,7 +127,9 @@ const BookCard = props => {
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
-                onPress={() => props.cartHandler(props.item)}>
+                onPress={() =>
+                  dispatch({type: 'ADD_CART', payload: {cartCard: item}})
+                }>
                 <View>
                   <Text
                     style={{
@@ -139,7 +155,11 @@ const BookCard = props => {
                   justifyContent: 'center',
                   borderRadius: 5,
                 }}
-                onPress={() => props.cartDetailsHandler(props.item)}>
+                onPress={() =>
+                  navigate('SingleBookDesc', {
+                    singleBookData: item,
+                  })
+                }>
                 <View>
                   <Text
                     style={{
@@ -154,7 +174,7 @@ const BookCard = props => {
               </TouchableOpacity>
             </View>
           )}
-          {props.from === 'favorites' && (
+          {currentScreen === 'Favorite' && (
             <View
               style={{
                 flexDirection: 'row',
@@ -174,7 +194,11 @@ const BookCard = props => {
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
-                onPress={() => props.toNavigateBookDetails(props.item)}>
+                onPress={() =>
+                  navigate('SingleBookDesc', {
+                    singleBookData: item,
+                  })
+                }>
                 <View>
                   <Text
                     style={{
@@ -201,7 +225,12 @@ const BookCard = props => {
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
-                onPress={() => props.removeFromFavorites(props.item)}>
+                onPress={() =>
+                  dispatch({
+                    type: 'REMOVE_FAVORITE',
+                    payload: {rmFavBook: item},
+                  })
+                }>
                 <View>
                   <Text
                     style={{
@@ -216,7 +245,7 @@ const BookCard = props => {
               </TouchableOpacity>
             </View>
           )}
-          {props.from === 'store' && (
+          {currentScreen === 'Store' && (
             <View
               style={{
                 flexDirection: 'row',
@@ -237,7 +266,11 @@ const BookCard = props => {
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
-                onPress={() => props.toNavigateBookDetails(props.item)}>
+                onPress={() =>
+                  navigate('SingleBookDesc', {
+                    singleBookData: item,
+                  })
+                }>
                 <View>
                   <Text
                     style={{
@@ -264,7 +297,9 @@ const BookCard = props => {
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
-                onPress={() => props.removeFromCart(props.item)}>
+                onPress={() =>
+                  dispatch({type: 'REMOVE_CART', payload: {rmCartBook: item}})
+                }>
                 <View>
                   <Text
                     style={{
@@ -281,7 +316,11 @@ const BookCard = props => {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
-export default BookCard;
+export default React.memo(BookCard, (prevProps, nextProps) => {
+  
+  return prevProps?.list.includes(prevProps.item) ===
+  nextProps?.list.includes(nextProps.item);;
+});

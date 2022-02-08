@@ -39,12 +39,11 @@ function MyTabBar({state, descriptors, navigation}) {
             : options.title !== undefined
             ? options.title
             : route.name;
-
+        options.tabBarBadge = 3;
         const icon = iconGenerator(label);
         const isFocused = state.index === index;
 
         const onPress = () => {
-          console.log('key', route.key);
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,
@@ -77,9 +76,49 @@ function MyTabBar({state, descriptors, navigation}) {
               flex: 1,
               height: 50,
               justifyContent: 'flex-end',
-              marginBottom: 3,
               backgroundColor: 'white',
+              borderBottomColor: isFocused ? '#FF6EA1' : 'transparent',
+              borderBottomWidth: 3,
             }}>
+            {route.name == 'Chat' ? 
+                <View
+                style={{
+                  zIndex: 1,
+                  flex: 1,
+                  alignSelf: "stretch",
+                  justifyContent: "space-around",
+                  alignItems: "center"
+                }}
+              >
+               
+                  <View
+                    style={{
+                      position: "absolute",
+                      bottom: -10,
+                      right: 8,
+                      width: 18,
+                      height: 18,
+                      borderRadius: 10,
+                      backgroundColor: '#FF6EA1'
+                    }}
+                  >
+                    <Text
+                      style={{
+                        backgroundColor: "transparent",
+                        alignSelf: "center",
+                        color: "white",
+                        fontFamily: 'white',
+                        fontWeight: "300",
+                        marginTop: 1,
+                        fontSize: 12
+                      }}
+                    >
+                      {2}
+                    </Text>
+                  </View>
+                
+              </View>: null}
+            
             <Icon
               name={icon}
               fill={isFocused ? '#FF6EA1' : '#B3B3B3'}

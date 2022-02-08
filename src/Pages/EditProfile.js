@@ -16,7 +16,7 @@ import {Formik} from 'formik';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DatePicker from 'react-native-date-picker';
 import {TextInputMask} from 'react-native-masked-text';
-import {Button} from 'react-native-paper';
+import {Button,} from 'react-native-paper';
 
 const EditProfile = props => {
   const user = props.route.params.user;
@@ -50,7 +50,7 @@ const EditProfile = props => {
       const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
       console.log('image pathi', image.path);
       setImage(imageUri);
-    });
+    }).catch(err=>console.log(err));
   };
   const saveChanges = async values => {
     setLoading(true);
@@ -65,8 +65,8 @@ const EditProfile = props => {
           birth: values.birth,
         })
         .then(() => {
-          props.navigation.navigate('ProfileScreen');
           setLoading(false);
+          props.navigation.navigate('ProfileScreen');
         });
     } else {
       console.log('path: /users/' + user.id);
@@ -135,7 +135,6 @@ const EditProfile = props => {
           onPress={() => selectFromGallery()}
           style={{
             justifyContent: 'center',
-
             borderRadius: 5,
             borderColor: '#DDDDDD',
             borderWidth: 1,
@@ -265,6 +264,7 @@ const EditProfile = props => {
 
             <Button
               onPress={handleSubmit}
+              labelStyle={{color:'white',fontWeight:'bold'}}
               style={{
                 borderRadius: 5,
                 backgroundColor: '#FF6EA1',
@@ -272,11 +272,12 @@ const EditProfile = props => {
                 width: 300,
                 height: 40,
                 margin: 10,
+                marginBottom:25,
                 alignSelf: 'center',
               }}
               loading={loading}
               mode="contained"
-              compact={true}>
+              compact>
               Save 
             </Button>
           </>

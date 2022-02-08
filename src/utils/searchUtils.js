@@ -21,7 +21,7 @@ const makeRequestCreator = () => {
       const result = res.data.items;
       // Store response
       resources[query] = result;
-
+      
       return result;
     } catch (error) {
       if (axios.isCancel(error)) {

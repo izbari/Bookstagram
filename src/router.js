@@ -113,15 +113,19 @@ const Chat = ({navigation, route}) => {
 const Main = props => {
   return (
     <Tab.Navigator
+    
       tabBar={props => (
-        <MyTabBar {...props} ScreenOptions={{tabBarHideOnKeyboard: true}} />
-      )}
+        <MyTabBar {...props} 
+        ScreenOptions={{tabBarHideOnKeyboard: true}} />
+        )}
+        
       options={{headerShown: false}}>
       <Tab.Screen options={{headerShown: false}} name="Home" component={Home} />
       <Tab.Screen options={{headerShown: false}} name="Chat" component={Chat} />
 
       <Tab.Screen
-        options={{headerShown: false}}
+        options={{headerShown: false,}}
+                               
         name="Discover"
         component={Discover}
       />
