@@ -8,10 +8,9 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {TouchableRipple, Searchbar, Divider} from 'react-native-paper';
+import {TouchableRipple, Searchbar, List, Divider} from 'react-native-paper';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {useSearch} from '../utils/searchUtils';
@@ -19,6 +18,7 @@ import Error from '../components/Error';
 import BookCard from '../components/BookCard';
 import Icon from '../components/Icons';
 import FastImage from 'react-native-fast-image';
+import {ScrollView} from 'react-native-gesture-handler';
 const {width} = Dimensions.get('window');
 function Library(props) {
   const list = useSelector(store => store.favList);
@@ -28,16 +28,89 @@ function Library(props) {
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
   const [loading3, setLoading3] = React.useState(false);
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [sortVisible, setSortVisible] = React.useState(false);
+  const [filterVisible, setFilterVisible] = React.useState(false);
+  //const [filterValue, setFilterValue] = useState([]);
   const [sortId, setSortId] = useState(1);
   const [value, setValue] = React.useState(null);
   //const [splash, setSplash] = React.useState(true);
   const [error, setError] = React.useState(false);
-
+  let filterInfo = [];
   const [currentPage, setCurrentPage] = React.useState(false);
   //bottom sheet variables
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
+
+  //sort Data
+  const sortData = [
+    {id: 1, text: 'Akıllı Sıralama'},
+    {id: 2, text: 'En Çok Satanlar'},
+    {id: 3, text: 'Değerlendirme Sayısı'},
+    {id: 4, text: 'Beğeni Sayısı'},
+    {id: 5, text: 'Artan Fiyat'},
+    {id: 6, text: 'Azalan Fiyat'},
+  ];
+  let filterData = [
+    {
+      Kategoriler: {
+        id: 1,
+        data: [
+          {filter: 'E-Kitap', isChecked: false},
+          {filter: 'Kişisel', isChecked: false},
+          {filter: 'Roman', isChecked: false},
+          {filter: 'Dergi', isChecked: false},
+          {filter: 'Kültür', isChecked: false},
+          {filter: 'Eğitim', isChecked: false},
+          {filter: 'Bilim', isChecked: false},
+          {filter: 'Tarih', isChecked: false},
+        ],
+      },
+      Yazarlar: {
+        id: 2,
+        data: [
+          {filter: 'Zafer Barış', isChecked: false},
+          {filter: 'Oliver Twist', isChecked: false},
+          {filter: 'Haydar Dümenci', isChecked: false},
+          {filter: 'Nazım Hikmet', isChecked: false},
+          {filter: 'Teyfik Fikret', isChecked: false},
+        ],
+      },
+      Yayınevleri: {
+        id: 3,
+        data: [
+          {filter: 'Yayınevi 1', isChecked: false},
+          {filter: 'Yayınevi 2', isChecked: false},
+          {filter: 'Yayınevi 3', isChecked: false},
+          {filter: 'Yayınevi 4', isChecked: false},
+          {filter: 'Yayınevi 5', isChecked: false},
+          {filter: 'Yayınevi 6', isChecked: false},
+        ],
+      },
+      Diller: {
+        id: 4,
+
+        data: [
+          {filter: 'İngilizce', isChecked: false},
+          {filter: 'Fransızca', isChecked: false},
+          {filter: 'Türkçe', isChecked: false},
+          {filter: 'Almanca', isChecked: false},
+          {filter: 'İtalyanca', isChecked: false},
+        ],
+      },
+      'Fiyat Aralığı': {
+        id: 5,
+        data: [
+          {filter: '0 - 10', isChecked: false},
+          {filter: '10 - 50', isChecked: false},
+          {filter: '50 - 100', isChecked: false},
+          {filter: '100 - 200', isChecked: false},
+          {filter: '200 - 500', isChecked: false},
+          {filter: '500 - 1000', isChecked: false},
+          {filter: '1000 - 2000', isChecked: false},
+        ],
+      },
+    },
+  ];
   if (error) {
     return <Error style={styles.lottieContainerError} />;
   }
@@ -117,64 +190,112 @@ function Library(props) {
             marginHorizontal: 20,
           }}>
           <View style={{flex: 1}}>
-            <Text style={{fontSize: 24, color: '#4d4d4d', fontWeight: '450'}}>
-              Sırala
+            <Text style={{fontSize: 24, color: '#4d4d4d', fontWeight: '400'}}>
+              {sortVisible ? 'Sırala' : 'Filtrele'}
             </Text>
           </View>
           <TouchableRipple
             onPress={() => {
-              setModalVisible(false);
+              if (sortVisible) {
+                setValue(sortData.find(item => item.id === sortId).text);
+                setSortVisible(false);
+              } else if (filterVisible) {
+                let options=[]
+                console.log('Filtre ayarı : ', ...filterData);
+                setFilterVisible(false);
+                Object.keys(filterData[0]).map(item => {
+                  console.log("categoryi ismi olması lazım", item);
+                  filterData[0][item]['data'].map((item2)=>{
+                    item2.isChecked ? options.push(item+"_"+item2.filter) : null;
+                    console.log("qweqweqweqweqw",item2.isChecked);
+                  })
+                  
+                  
+                  })
+                  console.warn(...options);
+              }
+              
             }}
             mode="text"
             compact
             rippleColor="transparent"
             uppercase={false}>
-            <Text style={{color: sortId == 1?'#4d4d4d' : "#ff6ea1", fontWeight: 'bold', fontSize: 15}}>
-              {sortId == 1 ? 'Kapat' : 'Uygula'}
+            <Text
+              style={{
+                color: sortId == 1 ? '#4d4d4d' : '#ff6ea1',
+                fontWeight: 'bold',
+                fontSize: 15,
+              }}>
+              {sortVisible ? (sortId == 1 ? 'Kapat' : 'Uygula') : 'Uygula'}
             </Text>
           </TouchableRipple>
         </View>
       </View>
     );
   };
-  const SortItem = ({id,text}) => {
-    return (
+  const SortItem = ({item}) => {
+    if (sortId != item.id) {
+      return (
         <TouchableRipple
-        mode="text"
-        compact
-        rippleColor="transparent"
-        uppercase={false}
+          style={{borderBottomColor: '#e5e5e5', borderBottomWidth: 1}}
+          mode="text"
+          compact
+          rippleColor="transparent"
+          uppercase={false}
           onPress={() => {
-            setSortId(id);
+            setSortId(item.id);
           }}>
-         <View style={{flexDirection: 'row', margin: 20,}}>
-         <View
-            style={{
-              
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 10,
-              width: 25,
-              height: 25,
-              backgroundColor: sortId == id ? '#FF6EA1' : 'white',
-              borderColor: 'grey',
-              borderWidth: sortId == id ? 0 : 1,
-              borderRadius: 100,
-              marginRight: 10,
-            }}>
-            <Icon name="CheckMark" size={22} fill={"white"} />
-          </View> 
-          <View>
-            <Text style={{fontSize: 16, color: '#4d4d4d',alignSelf:'center'}}>
-          {text}
-        </Text>
-        </View>
-         </View>
+          <View style={{flexDirection: 'row', margin: 20}}>
+            <View style={styles.sortItem}></View>
+            <View>
+              <Text
+                style={{fontSize: 16, color: '#4d4d4d', alignSelf: 'center'}}>
+                {item.text}
+              </Text>
+            </View>
+          </View>
         </TouchableRipple>
-    );
+      );
+    } else if (item.id == sortId) {
+      return (
+        <TouchableRipple
+          style={{borderBottomColor: '#e5e5e5', borderBottomWidth: 1}}
+          mode="text"
+          compact
+          rippleColor="transparent"
+          uppercase={false}
+          onPress={() => {
+            setSortId(item.id);
+          }}>
+          <View style={{flexDirection: 'row', margin: 20}}>
+            <View
+              style={[
+                styles.sortItem,
+                {
+                  backgroundColor: '#FF6EA1',
+                  borderWidth: 0,
+                },
+              ]}>
+              <Icon name="CheckMark" size={22} fill={'white'} />
+            </View>
+            <View>
+              <Text
+                style={{fontSize: 16, color: '#4d4d4d', alignSelf: 'center'}}>
+                {item.text}
+              </Text>
+            </View>
+          </View>
+        </TouchableRipple>
+      );
+    } else
+      return (
+        <View>
+          <Text>NULL</Text>
+        </View>
+      );
   };
 
-  const BottomsheetCommentContent = () => {
+  const BottomsheetContent = ({children}) => {
     return (
       <View
         style={{
@@ -182,24 +303,98 @@ function Library(props) {
           height: '100%',
           justifyContent: 'center',
         }}>
-        <View style={{flex: 1}}>
-          <SortItem id={1} text={"Akıllı Sıralama"}/>
-          <Divider />
-          <SortItem id={2} text={"En Çok Satanlar"}/>
-          <Divider />
-          <SortItem id={3} text={"Değerlendirme Sayısı"}/>
-          <Divider />
-          <SortItem id={4} text={"Beğeni Sayısı"}/>
-          <Divider />
-          <SortItem id={5} text={"Artan Fiyat"}/>
-          <Divider />
-          <SortItem id={6} text={"Azalan Fiyat"}/>
-          <Divider />
+        <View style={{flex: 1}}>{children}</View>
+      </View>
+    );
+  };
+
+  const SingleInnerFilterItem = ({item, category,index}) => {
+    const [isSelected, setIsSelected] = useState(false);
+    console.log('rerender2',filterData[0][category]["data"][index]["isChecked"] );
+    console.log("sonuncu",category);
+    return (
+      <TouchableRipple
+        key={item.filter}
+        onPress={() => {
+          if (isSelected) {
+            console.log(item, 'kaldırıldı');
+            filterData[0][category]["data"][index]["isChecked"] = false;
+            
+          } else {
+            console.log(item, 'eklendi');
+            filterData[0][category]["data"][index]["isChecked"] = true;
+            console.log(item, 'eklendi');
+
+            console.log(filterData);  
+          }
+          setIsSelected(val => !val);
+        }}
+        rippleColor="transparent"
+        style={{
+          justifyContent: 'center',
+          height: 40,
+          margin: 10,
+          padding: 5,
+        }}>
+        <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+          <View style={{flex: 1}}>
+            <Text>{'• ' + item.filter}</Text>
+          </View>
+          <Icon
+            name="CheckMark"
+            size={22}
+            fill={isSelected ? 'black' : 'white'}
+            style={{marginRight: 10}}
+          />
+        </View>
+      </TouchableRipple>
+    );
+  };
+
+  const FilterSingleItem = ({item,category}) => {
+    console.log(category, 'category');
+    console.log("single data",item['data']);
+    return (
+      <View
+        style={{
+          flex: 1,
+
+          marginTop: 20,
+        }}>
+        <View
+          style={{
+            flex: 1,
+            marginLeft: 20,
+          }}>
+          <View style={{flexDirection: 'row'}}>
+            <Icon name="ExpandMore" size={25} fill={'grey'} />
+            <Text style={{fontSize: 18, color: '#4d4d4d'}}>{category}</Text>
+          </View>
+          {item['data'].map((item,index) => 
+           <SingleInnerFilterItem  key={index} item={item} category={category} index={index}/>
+            )}
+          
+          
+          <View style={{flex: 1, marginTop: 10}}></View>
 
         </View>
       </View>
     );
   };
+
+  const FilterComponent = () => {
+    console.log("keys : ", Object.keys(filterData))
+
+    {Object.keys(filterData[0]).map((key) => (
+      console.log("key : ", key)
+    ))}
+    return(
+    <ScrollView>
+      {Object.keys(filterData[0]).map((key) => (
+        <FilterSingleItem key={filterData[key]} item={filterData[0][key]} category={key} />
+      ))}
+    </ScrollView>
+  );}
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Searchbar
@@ -224,7 +419,7 @@ function Library(props) {
           }}>
           <TouchableOpacity
             onPress={() => {
-              setModalVisible(true);
+              setSortVisible(true);
             }}
             style={{
               flex: 1,
@@ -236,6 +431,9 @@ function Library(props) {
             <Text style={{marginLeft: 10, fontSize: 15}}>Sırala</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => {
+              setFilterVisible(true);
+            }}
             style={{
               flex: 1,
               flexDirection: 'row',
@@ -284,17 +482,30 @@ function Library(props) {
           refreshing={loading}
         />
       )}
-      {modalVisible && (
+      {(sortVisible || filterVisible) && (
         <BottomSheet
           onCloseEnd={() => {
-            setModalVisible(false);
+            setSortVisible(false);
+            setFilterVisible(false);
           }}
           enabledBottomInitialAnimation={true}
           ref={bs}
-          snapPoints={['65%', 0]}
+          snapPoints={sortVisible ? ['65%', 0] : ['85%', 0]}
           initialSnap={0}
           callbackNode={fall}
-          renderContent={BottomsheetCommentContent}
+          renderContent={() => (
+            <>
+              {sortVisible ? (
+                <BottomsheetContent
+                  children={sortData.map(item => (
+                    <SortItem key={item.id} item={item} />
+                  ))}
+                />
+              ) : (
+                <BottomsheetContent children={<FilterComponent />} />
+              )}
+            </>
+          )}
           renderHeader={BottomSheetDragger}
           enabledGestureInteraction={true}
         />
@@ -304,11 +515,19 @@ function Library(props) {
 }
 const styles = StyleSheet.create({
   mainContainer: {flex: 1, backgroundColor: '#f0f0f0'},
-  lottieContainer: {
-    width: '10%',
-    height: '5%',
-    alignSelf: 'center',
+  sortItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    width: 25,
+    height: 25,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 100,
+    marginRight: 10,
   },
+
   lottieContainerError: {
     width: '50%',
     height: '50%',

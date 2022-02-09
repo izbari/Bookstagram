@@ -23,7 +23,7 @@ import BackArrowIcon from '../../assets/svg/ArrowBack.svg';
 import CheckMarkIcon from '../../assets/svg/CheckMark.svg';
 import FilterIcon from '../../assets/svg/Filter.svg';
 import SortIcon from '../../assets/svg/Sort.svg';
-
+import ExpandMoreIcon from '../../assets/svg/ExpandMore.svg';
 export default function Icons({name,size,fill,style}) {
     
 const Icons = {
@@ -50,7 +50,8 @@ const Icons = {
     BackArrow:BackArrowIcon,
     CheckMark:CheckMarkIcon,
     Sort:SortIcon,
-    Filter:FilterIcon
+    Filter:FilterIcon,
+    ExpandMore:ExpandMoreIcon,
   }
   const Icon = Icons[name];
   return <Icon width={size} height={size} fill={fill} style={style} />;
