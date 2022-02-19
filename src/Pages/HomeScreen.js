@@ -7,7 +7,7 @@ import {
   Dimensions,
   RefreshControl,
 } from 'react-native';
-
+import PushNotification,{Importance,PushNotificationIOS} from 'react-native-push-notification';
 import Animated from 'react-native-reanimated';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
@@ -35,7 +35,7 @@ function HomeScreen({navigation, route}) {
   //bottom sheet variables
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-
+ 
   //some state variables
   const [posts, setPosts] = React.useState([]);
   const [friendsData, setFriendsData] = React.useState([]);
@@ -52,14 +52,68 @@ function HomeScreen({navigation, route}) {
   React.useEffect(async () => {
     await getPosts();
     dispatch({type: 'POST_LIST', payload: {posts: posts}});
-  }, []);
+    configure();
 
+    
+  }, []);
+  const configure = () => { 
+    PushNotification.configure({
+      onRegister: function (token) {
+        console.log("TOKEN:", token);
+      },
+      onNotification: function (notification) {
+        const {channelId,title,message,largeIconUrl} = notification;
+        console.log("NOTIFICATION:", notification);
+        console.log("id =>",channelId)
+        createNotification(channelId);
+        localNotification(notification.channelId,title,message,largeIconUrl);
+      },
+          onAction: function (notification) {
+        console.log("ACTION:", notification.action);
+        console.log("NOTIFICATION:", notification);
+          },
+          onRegistrationError: function(err) {
+        console.error(err.message, err);
+      },
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+      popInitialNotification: true,
+      requestPermissions: true
+  })
+};
+const createNotification = (channel) => { 
+  PushNotification.createChannel(
+    {
+      channelId: channel, // (required)
+      channelName: "My channel", // (required)
+      channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+      playSound: false, // (optional) default: true
+      soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+      importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+      vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+    },
+    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  );
+ }
+const localNotification = (channel,title,message,largeIconUrl) => { 
+  PushNotification.localNotification({
+    /* Android Only Properties */
+    channelId: channel,
+    title:title,
+    message: message,
+    largeIconUrl:largeIconUrl,
+  })
+ }
   //need to rerender when  post actions happend (like, comment, delete)
   React.useEffect(async () => {
     // when post actions happend this line will be execute and fetch modified posts
     if (posts.length != 0 && POST_LIST.length != 0 && POST_LIST !== posts) {
       await getPosts();
-    } 
+
+    }
   }, [POST_LIST]);
 
   //New post listener
@@ -87,7 +141,6 @@ function HomeScreen({navigation, route}) {
 
   const getPosts = async () => {
     try {
-      console.log('get posts -------------------------');
       const list = [];
       await firestore()
         .collection('posts')
@@ -227,7 +280,13 @@ function HomeScreen({navigation, route}) {
         <View style={{padding: 5}}>
           <ScrollView>
             {friendsData.map(friend => {
-              return <SharePostRow key={friend.id} friend={friend} post={selectedPost} />;
+              return (
+                <SharePostRow
+                  key={friend.id}
+                  friend={friend}
+                  post={selectedPost}
+                />
+              );
             })}
           </ScrollView>
         </View>
