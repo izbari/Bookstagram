@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {Divider} from 'react-native-paper';
 import Image from 'react-native-image-progress';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
 import Flag from 'react-native-flags';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -217,7 +216,7 @@ function Profile(props) {
 
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.fallowers.length : '1000'}
+                {user && user?.fallowers ? Object.keys(user.fallowers).length : '1000'}
               </Text>
               <Text style={styles.profileStatusText}>
                 {t('common:Followers')}
@@ -225,7 +224,7 @@ function Profile(props) {
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.fallowing.length : '1001'}
+                {user && user?.fallowing ? Object.keys(user.fallowing).length : '1001'}
               </Text>
               <Text style={styles.profileStatusText}>
                 {t('common:Following')}

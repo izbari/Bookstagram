@@ -17,7 +17,6 @@ const Header = ({item,navigation}) => {
   }, [item.userId]);
 
 
-  console.log("header",);
   return (
     <View
       style={{

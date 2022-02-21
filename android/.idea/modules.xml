@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bookstagram.iml" filepath="$PROJECT_DIR$/.idea/modules/Bookstagram.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-475409495/Bookstagram.WebRTCModule.iml" filepath="$PROJECT_DIR$/.idea/modules/-475409495/Bookstagram.WebRTCModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bookstagram.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bookstagram.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/714207964/Bookstagram.lottie-react-native.iml" filepath="$PROJECT_DIR$/.idea/modules/714207964/Bookstagram.lottie-react-native.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1012161263/Bookstagram.react-native-async-storage_async-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/-1012161263/Bookstagram.react-native-async-storage_async-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-330002339/Bookstagram.react-native-community_checkbox.iml" filepath="$PROJECT_DIR$/.idea/modules/-330002339/Bookstagram.react-native-community_checkbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1625460913/Bookstagram.react-native-date-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/1625460913/Bookstagram.react-native-date-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1779152186/Bookstagram.react-native-fast-image.iml" filepath="$PROJECT_DIR$/.idea/modules/-1779152186/Bookstagram.react-native-fast-image.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1599052365/Bookstagram.react-native-firebase_app.iml" filepath="$PROJECT_DIR$/.idea/modules/1599052365/Bookstagram.react-native-firebase_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1579058364/Bookstagram.react-native-firebase_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/1579058364/Bookstagram.react-native-firebase_auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1575041935/Bookstagram.react-native-firebase_database.iml" filepath="$PROJECT_DIR$/.idea/modules/1575041935/Bookstagram.react-native-firebase_database.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1174134377/Bookstagram.react-native-firebase_firestore.iml" filepath="$PROJECT_DIR$/.idea/modules/-1174134377/Bookstagram.react-native-firebase_firestore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/103449799/Bookstagram.react-native-firebase_functions.iml" filepath="$PROJECT_DIR$/.idea/modules/103449799/Bookstagram.react-native-firebase_functions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-852935888/Bookstagram.react-native-firebase_messaging.iml" filepath="$PROJECT_DIR$/.idea/modules/-852935888/Bookstagram.react-native-firebase_messaging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1720296103/Bookstagram.react-native-firebase_storage.iml" filepath="$PROJECT_DIR$/.idea/modules/1720296103/Bookstagram.react-native-firebase_storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1228211788/Bookstagram.react-native-flipper.iml" filepath="$PROJECT_DIR$/.idea/modules/-1228211788/Bookstagram.react-native-flipper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1190158570/Bookstagram.react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/1190158570/Bookstagram.react-native-gesture-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-652803287/Bookstagram.react-native-google-signin_google-signin.iml" filepath="$PROJECT_DIR$/.idea/modules/-652803287/Bookstagram.react-native-google-signin_google-signin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1098490083/Bookstagram.react-native-image-crop-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/-1098490083/Bookstagram.react-native-image-crop-picker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1810109692/Bookstagram.react-native-linear-gradient.iml" filepath="$PROJECT_DIR$/.idea/modules/1810109692/Bookstagram.react-native-linear-gradient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1759090725/Bookstagram.react-native-localize.iml" filepath="$PROJECT_DIR$/.idea/modules/1759090725/Bookstagram.react-native-localize.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1233341109/Bookstagram.react-native-masked-view_masked-view.iml" filepath="$PROJECT_DIR$/.idea/modules/-1233341109/Bookstagram.react-native-masked-view_masked-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-676813941/Bookstagram.react-native-pager-view.iml" filepath="$PROJECT_DIR$/.idea/modules/-676813941/Bookstagram.react-native-pager-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/937189858/Bookstagram.react-native-push-notification.iml" filepath="$PROJECT_DIR$/.idea/modules/937189858/Bookstagram.react-native-push-notification.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-169749774/Bookstagram.react-native-reanimated.iml" filepath="$PROJECT_DIR$/.idea/modules/-169749774/Bookstagram.react-native-reanimated.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1932453587/Bookstagram.react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/.idea/modules/1932453587/Bookstagram.react-native-safe-area-context.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/690102955/Bookstagram.react-native-screens.iml" filepath="$PROJECT_DIR$/.idea/modules/690102955/Bookstagram.react-native-screens.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-391616376/Bookstagram.react-native-svg.iml" filepath="$PROJECT_DIR$/.idea/modules/-391616376/Bookstagram.react-native-svg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1523486932/Bookstagram.react-native-vector-icons.iml" filepath="$PROJECT_DIR$/.idea/modules/-1523486932/Bookstagram.react-native-vector-icons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-475409495/Bookstagram.react-native-webrtc.iml" filepath="$PROJECT_DIR$/.idea/modules/-475409495/Bookstagram.react-native-webrtc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-50954467/Bookstagram.react-native-webview.iml" filepath="$PROJECT_DIR$/.idea/modules/-50954467/Bookstagram.react-native-webview.iml" />
+    </modules>
+  </component>
+</project>

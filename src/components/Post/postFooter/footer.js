@@ -19,7 +19,6 @@ const Footer = React.memo(
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    console.log('footer');
     return (
       <SafeAreaView>
         {item?.comments == 0 && item?.likes == 0 ? null : (

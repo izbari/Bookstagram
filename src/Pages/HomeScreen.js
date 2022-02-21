@@ -7,7 +7,10 @@ import {
   Dimensions,
   RefreshControl,
 } from 'react-native';
-import PushNotification,{Importance,PushNotificationIOS} from 'react-native-push-notification';
+import PushNotification, {
+  Importance,
+  PushNotificationIOS,
+} from 'react-native-push-notification';
 import Animated from 'react-native-reanimated';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
@@ -24,6 +27,8 @@ import PostFooter from '../components/Post/postFooter';
 import PostHeader from '../components/Post/postHeader';
 import SharePostRow from '../components/Post/SharePostRow';
 import Comment from '../components/Post/postComment/';
+import messaging from '@react-native-firebase/messaging';
+import auth from '@react-native-firebase/auth';
 
 const {width} = Dimensions.get('window');
 
@@ -35,7 +40,7 @@ function HomeScreen({navigation, route}) {
   //bottom sheet variables
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
- 
+
   //some state variables
   const [posts, setPosts] = React.useState([]);
   const [friendsData, setFriendsData] = React.useState([]);
@@ -49,30 +54,30 @@ function HomeScreen({navigation, route}) {
   const POST_LIST = useSelector(store => store.posts); //need change for posts list
 
   // First render getPosts and store redux with dispatch
-  React.useEffect(async () => {
-    await getPosts();
-    dispatch({type: 'POST_LIST', payload: {posts: posts}});
-    configure();
+  React.useEffect(  () => {
+     getPosts();
+     configure();
+     
 
     
   }, []);
-  const configure = () => { 
+  const configure = () => {
     PushNotification.configure({
       onRegister: function (token) {
-        console.log("TOKEN:", token);
+        console.log('TOKEN:', token);
       },
       onNotification: function (notification) {
-        const {channelId,title,message,largeIconUrl} = notification;
-        console.log("NOTIFICATION:", notification);
-        console.log("id =>",channelId)
+        const {channelId, title, message, largeIconUrl} = notification;
+        console.log('NOTIFICATION:', notification);
+        console.log('id =>', channelId);
         createNotification(channelId);
-        localNotification(notification.channelId,title,message,largeIconUrl);
+        localNotification(notification.channelId, title, message, largeIconUrl);
       },
-          onAction: function (notification) {
-        console.log("ACTION:", notification.action);
-        console.log("NOTIFICATION:", notification);
-          },
-          onRegistrationError: function(err) {
+      onAction: function (notification) {
+        console.log('ACTION:', notification.action);
+        console.log('NOTIFICATION:', notification);
+      },
+      onRegistrationError: function (err) {
         console.error(err.message, err);
       },
       permissions: {
@@ -81,38 +86,37 @@ function HomeScreen({navigation, route}) {
         sound: true,
       },
       popInitialNotification: true,
-      requestPermissions: true
-  })
-};
-const createNotification = (channel) => { 
-  PushNotification.createChannel(
-    {
-      channelId: channel, // (required)
-      channelName: "My channel", // (required)
-      channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-      playSound: false, // (optional) default: true
-      soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
-      importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-      vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-    },
-    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-  );
- }
-const localNotification = (channel,title,message,largeIconUrl) => { 
-  PushNotification.localNotification({
-    /* Android Only Properties */
-    channelId: channel,
-    title:title,
-    message: message,
-    largeIconUrl:largeIconUrl,
-  })
- }
+      requestPermissions: true,
+    });
+  };
+  const createNotification = channel => {
+    PushNotification.createChannel(
+      {
+        channelId: channel, // (required)
+        channelName: 'My channel', // (required)
+        channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
+        playSound: false, // (optional) default: true
+        soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+      },
+      created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+    );
+  };
+  const localNotification = (channel, title, message, largeIconUrl) => {
+    PushNotification.localNotification({
+      /* Android Only Properties */
+      channelId: channel,
+      title: title,
+      message: message,
+      largeIconUrl: largeIconUrl,
+    });
+  };
   //need to rerender when  post actions happend (like, comment, delete)
-  React.useEffect(async () => {
+  React.useEffect(() => {
     // when post actions happend this line will be execute and fetch modified posts
     if (posts.length != 0 && POST_LIST.length != 0 && POST_LIST !== posts) {
-      await getPosts();
-
+      getPosts();
     }
   }, [POST_LIST]);
 
@@ -173,6 +177,8 @@ const localNotification = (channel,title,message,largeIconUrl) => {
           });
           setPosts(list);
           setLoading(false);
+          dispatch({type: 'POST_LIST', payload: {posts: list}});
+
         });
     } catch (error) {
       setLoading(false);

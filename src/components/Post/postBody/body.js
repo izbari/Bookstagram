@@ -5,7 +5,6 @@ import isEqual from 'react-fast-compare';
 const {width} = Dimensions.get('window');
 
 const Body = ({item}) => {
-  console.log('body');
   return (
     <View>
       <View>

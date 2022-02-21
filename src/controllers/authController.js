@@ -14,6 +14,8 @@ function Toast(msg) {
 }
 
 exports.createUser = async (user, props) => {
+
+
   const condition = checkAuthConditions(user);
   if (condition) {
     auth()
@@ -35,60 +37,56 @@ exports.createUser = async (user, props) => {
             fallowers: user.fallowers,
             fallowing: user.fallowing,
             books: user.books,
-          };
+          };     
           if (userId) {
             database()
               .ref('users/' + userId)
               .set(willSave);
-              props.navigation.navigate('AuthLoading',{deneme:props.route.name});
-
+            props.navigation.navigate('AuthLoading', {
+              deneme: props.route.name,
+            });
           }
         }
       })
       .catch(function (error) {
-        error.code == "auth/email-already-in-use" ? Toast("This email already used by another account!") : null ;
-       return false;
+        error.code == 'auth/email-already-in-use'
+          ? Toast('This email already used by another account!')
+          : null;
+        return false;
       });
   }
 };
 
 exports.userLogin = (props, email, password) => {
   if (password && email) {
-    let result = "boş";
+    let result = 'boş';
 
     auth()
       .signInWithEmailAndPassword(email, password, props)
       .then(({user}) => {
-        console.log("USER CALISTI");
+        console.log('USER CALISTI');
         Toast(`Welcome ${user.displayName} !! `);
-        props.navigation.navigate('AuthLoading',{deneme:props.route.name});
+        props.navigation.navigate('AuthLoading', {deneme: props.route.name});
 
-        result= true;
+        result = true;
       })
       .catch(error => {
         result = false;
         if (error.code === 'auth/wrong-password') {
           Toast('Wrong password.');
-
         }
         if (error.code === 'auth/email-already-in-use') {
           Toast('That email address is already in use!');
-
         }
 
         if (error.code === 'auth/invalid-email') {
           Toast('Email is invalid');
-        
-
-        }  
+        }
       });
-      return result;
-      
-  } 
-  else if (!password && !email) Toast('Please enter email and password!');
+    return result;
+  } else if (!password && !email) Toast('Please enter email and password!');
   else if (!password) Toast('Please enter password!');
   else if (!email) Toast('Please enter email!');
-
 };
 
 const checkAuthConditions = ({

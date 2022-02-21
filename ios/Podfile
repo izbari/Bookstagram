@@ -18,6 +18,8 @@ target 'Bookstagram' do
 
   pod 'RNCallKeep', :path => '../node_modules/react-native-callkeep'
 
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
   target 'BookstagramTests' do
     inherit! :complete
     # Pods for testing

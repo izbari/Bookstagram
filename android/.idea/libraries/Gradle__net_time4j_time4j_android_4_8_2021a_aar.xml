@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Gradle: net.time4j:time4j-android:4.8-2021a@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1ce6fee9b65bafb224a07880fac69338/transformed/jetified-time4j-android-4.8-2021a/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b9c6a54bc4432acd0ca321a99b51049b/transformed/jetified-time4j-android-4.8-2021a/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b9c6a54bc4432acd0ca321a99b51049b/transformed/jetified-time4j-android-4.8-2021a/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b9c6a54bc4432acd0ca321a99b51049b/transformed/jetified-time4j-android-4.8-2021a/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.time4j/time4j-android/4.8-2021a/1569630ca2534f2fa9611239ca6e12389172fa99/time4j-android-4.8-2021a-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.time4j/time4j-android/4.8-2021a/11043df13b7491f412d09eee7fe5e62d067022d6/time4j-android-4.8-2021a-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

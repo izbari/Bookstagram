@@ -20,84 +20,80 @@ import Icon from '../components/Icons';
 
 function OtherProfile(props) {
   const baseUser = useSelector(store => store.user);
-  const [authUser, setAuthUser] = React.useState(baseUser);
+  const [me, setMe] = React.useState(baseUser);
   const [user, setUser] = React.useState(null);
+  const [isFallowing, setIsFallowing] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-
+  const userRef = props.route.params.selectedUserId;
   React.useEffect(() => {
     setLoading(true);
     database()
-      .ref(`/users/${props.route.params.selectedUserId}`)
+      .ref(`/users/${userRef}`)
       .on('value', snapshot => {
         setUser(snapshot.val());
+        const isfollowing = Object.keys(me?.fallowing).includes(
+          snapshot.val().id,
+        );
+        //setIsFallowing(isfollowing);
         setLoading(false);
       });
   }, []);
 
   React.useEffect(() => {
-    setAuthUser(baseUser);
+    setMe(baseUser);
+    const isfollowing = Object.keys(baseUser?.fallowing).includes(userRef)
+    setIsFallowing(isfollowing);
   }, [baseUser]);
 
-  const fallowRequest = userId => {
-    // already fallowed and cancel fallow
-    if (authUser?.fallowing?.includes(user.id)) {
-      const newList2 = user?.fallowers.filter(item => {
-        return item !== auth()?.currentUser.uid;
-      });
+  const fallowRequest = () => {
+    const authId = auth().currentUser.uid;
+    let map;
 
-      database()
-        .ref(`/users/${user.id}`)
-        .update({
-          fallowers: newList2,
-        })
-        .then(() => console.log('Takipten cikildi'));
+    if (Object.keys(me?.fallowing).includes(user?.id)) {
+      // already fallowed and cancel fallow
 
-      // auth userin fallowing inden cikariliyor.
-      const newList3 = authUser?.fallowing.filter(item => {
-        return item !== user.id;
-      });
-      database()
-        .ref(`/users/${authUser.id}`)
-        .update({
-          fallowing: newList3,
-        })
-        .then(() => console.log('Fallowingimden cikarildi'));
+      // remove from fallowers of user
+      map = new Map(Object.entries(user?.fallowers)); 
+      map.delete(authId);
+      fallowerHandler(user.id, Object.fromEntries(map));
+
+      // remove from fallowing of me
+      map = new Map(Object.entries(me?.fallowing));
+      map.delete(user.id);
+      fallowingHandler(authId, Object.fromEntries(map));
+      setIsFallowing(false);
+    } else {
+      // not fallowed and fallow
+
+      // add to fallowers of user
+      map = new Map(Object.entries(user?.fallowers));
+      map.set(authId, true); //ekleme
+      fallowerHandler(user.id, Object.fromEntries(map));
+
+      // add to fallowing of me
+      map = new Map(Object.entries(me?.fallowing));
+      map.set(user.id, true);
+      fallowingHandler(authId, Object.fromEntries(map));
+      
+      setIsFallowing(true);
     }
-
-    //Eğer takip etmiyosam ve edeceksem
-    else {
-      if (
-        user?.fallowers &&
-        user.fallowers.some(item => item === auth()?.currentUser.uid)
-      ) {
-        return null; //else in saglamasi
-      } else {
-        let liste = [];
-        user?.fallowers
-          ? (liste = user.fallowers.concat(auth().currentUser.uid))
-          : (liste = [auth().currentUser.uid]);
-
-        database()
-          .ref(`/users/${user.id}`)
-          .update({
-            fallowers: liste,
-          })
-          .then(() => console.log("Fallowed user's fallowers list  updated."));
-
-        // Current user's fallowing list update
-        if (authUser?.fallowing.some(item => item === user.id)) {
-          return null;
-        } else {
-          const liste2 = authUser?.fallowing.concat(user.id);
-          database()
-            .ref(`/users/${authUser.id}`)
-            .update({
-              fallowing: liste2,
-            })
-            .then(() => console.log('Current user fallowing list updated.'));
-        }
-      }
-    }
+    map=null;
+  };
+  const fallowingHandler = (ref, map) => {
+    database()
+      .ref(`/users/${ref}`)
+      .update({
+        fallowing: map,
+      })
+      .then(() => console.log(`id: ${ref}  fallowing list updated.`));
+  };
+  const fallowerHandler = (ref, map) => {
+    database()
+      .ref(`/users/${ref}`)
+      .update({
+        fallowers: map,
+      })
+      .then(() => console.log(`id: ${ref} fallowers list  updated.`));
   };
 
   const CustomLinearGradient = props => {
@@ -165,7 +161,6 @@ function OtherProfile(props) {
             <TouchableOpacity
               onPress={() => {
                 props.navigation.goBack();
-                console.log(props.navigation.getState()?.routes);
               }}>
               <Icon
                 name="BackArrow"
@@ -205,13 +200,13 @@ function OtherProfile(props) {
 
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user && user?.fallowers ? user?.fallowers.length : '-'}
+                {user && user?.fallowers ?Object.keys( user?.fallowers).length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowers</Text>
             </View>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user && user?.fallowing ? user?.fallowing.length : '-'}
+                {user && user?.fallowing ? Object.keys(user?.fallowing).length : '-'}
               </Text>
               <Text style={styles.profileStatusText}>Fallowing</Text>
             </View>
@@ -250,9 +245,7 @@ function OtherProfile(props) {
           onPress={() => fallowRequest()}
           style={{
             justifyContent: 'center',
-            backgroundColor: authUser?.fallowing?.includes(user?.id)
-              ? '#7C74EA'
-              : '#FF71A3',
+            backgroundColor: isFallowing ? '#7C74EA' : '#FF71A3',
             height: 30,
           }}>
           <View style={{flexDirection: 'row', alignSelf: 'center'}}>
@@ -263,9 +256,9 @@ function OtherProfile(props) {
                 textAlign: 'center',
                 fontSize: 13,
               }}>
-              {authUser?.fallowing?.includes(user?.id) ? 'Fallowing' : 'Fallow'}
+              {isFallowing ? 'Fallowing' : 'Fallow'}
             </Text>
-            {authUser?.fallowing?.includes(user?.id) ? (
+            {isFallowing ? (
               <Ionicons name="checkmark-outline" size={15} color="white" />
             ) : null}
           </View>
