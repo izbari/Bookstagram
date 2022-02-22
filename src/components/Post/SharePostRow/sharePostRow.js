@@ -10,7 +10,6 @@ import {useSelector} from 'react-redux';
 
 const sharePostRow = ({friend, post}) => {
   const authUser = useSelector(store => store.user);
-  console.log('Rerender checker');
   const [sent, setSent] = React.useState(false);
   let idPair =
     auth().currentUser.uid < friend.id
@@ -29,9 +28,9 @@ const sharePostRow = ({friend, post}) => {
       //This line share post
       const message = {
         _id: Date.now() + Math.random(),
-        text: post.post ? post.post : 'Hello developer',
+        text: post.post ? post.post : null,
         createdAt: new Date(),
-        image: post.postImg ? post.postImg : 'https://picsum.photos/200',
+        image: post.postImg ? post.postImg : null,
         user: {
           _id: authUser.id,
           name: authUser.name + ' ' + authUser.lastName,

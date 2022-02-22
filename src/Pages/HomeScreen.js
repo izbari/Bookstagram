@@ -58,8 +58,6 @@ function HomeScreen({navigation, route}) {
      getPosts();
      configure();
      
-
-    
   }, []);
   const configure = () => {
     PushNotification.configure({
@@ -97,6 +95,7 @@ function HomeScreen({navigation, route}) {
         channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
         playSound: false, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+        sound : "default",
         importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
       },
@@ -272,7 +271,7 @@ function HomeScreen({navigation, route}) {
         .then(snapshot => {
           data = firebaseUtil(snapshot.val());
           data = data.filter(item => {
-            return friendList.fallowing.includes(item.id);
+            return Object.keys(friendList.fallowing).includes(item.id);
           });
           setFriendsData(data);
         });

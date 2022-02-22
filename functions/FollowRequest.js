@@ -66,6 +66,8 @@ exports.sendFollowerNotification = functions.database.ref('/users/{followerUid}/
           title: 'You have a new follower!',
           body: `${name + " "+ lastName} is now following you.`,
           image: imageUrl,
+          sound: "default",
+
         }
       };
 

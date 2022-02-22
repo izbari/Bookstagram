@@ -33,7 +33,6 @@ function AuthLoading(props) {
     database()
     .ref(`/users/${user.uid}`)
     .on('value', snapshot => {
-      console.warn(snapshot.val().notificationTokens);
       if(!snapshot.val().notificationTokens){
         messaging().getToken().then(token => {
           if(token){
