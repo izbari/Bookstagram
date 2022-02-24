@@ -93,7 +93,7 @@ function HomeScreen({navigation, route}) {
         channelId: channel, // (required)
         channelName: 'My channel', // (required)
         channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
-        playSound: false, // (optional) default: true
+        playSound: true, // (optional) default: true
         soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
         sound : "default",
         importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
@@ -109,6 +109,7 @@ function HomeScreen({navigation, route}) {
       title: title,
       message: message,
       largeIconUrl: largeIconUrl,
+      sound: "default",
     });
   };
   //need to rerender when  post actions happend (like, comment, delete)

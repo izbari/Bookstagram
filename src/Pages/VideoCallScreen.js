@@ -40,7 +40,6 @@ const VideoCallScreen = ({navigation, route}) => {
       }
 
       if (data && data.offer && !connecting.current) {
-        dispatch({type: 'SET_CALL_STATUS', payload: {callStatus:true,chatId:chatId, imageUrl:imageUrl,name:name,uid:uid}});
         setGettingCall(true);
 
       }
@@ -126,6 +125,7 @@ const VideoCallScreen = ({navigation, route}) => {
             type: answer.type,
             sdp: answer.sdp,
           },
+          userid: uid,
         };
         cRef.update(cWithAnswer);
       }

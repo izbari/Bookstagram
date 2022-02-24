@@ -1,7 +1,11 @@
 const FollowRequest = require('./FollowRequest');
 const EmailFunctions = require('./EmailFunctions');
 const MessageNotification= require('./MessageNotification');
+const PostNotification = require('./PostNotification');
+const CallNotification = require('./CallNotification');
 exports.sendFollowerNotification = FollowRequest.sendFollowerNotification;
 exports.sendWelcomeEmail = EmailFunctions.sendWelcomeEmail;
 exports.sendByeEmail = EmailFunctions.sendByeEmail;
 exports.messageNotification  = MessageNotification.messageNotification;
+exports.postLike = PostNotification.postLike;
+exports.onCall = CallNotification.onCall;

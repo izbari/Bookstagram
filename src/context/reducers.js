@@ -176,11 +176,7 @@ export default function (state, action, props) {
         });
 
       return {...state, posts: newList};
-    case 'SET_CALL_STATUS':
-      if (action.payload.callStatus) {
-        props.navigation.navigate('VideoCallScreen');
-      }
-      return {...state, callStatus: action.payload.callStatus};
+ 
 
     case 'SET_ROUTE_NAME':
       console.log('reducer calisti dispacta gelen', action.payload.routeName);
