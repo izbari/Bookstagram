@@ -71,6 +71,7 @@ export default function Chat({navigation, route}) {
                     name: name,
                     lastName: lastName,
                     imageUrl: imageUrl,
+                    
                   });
                 }
               });

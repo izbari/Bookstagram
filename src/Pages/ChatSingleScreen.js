@@ -25,9 +25,7 @@ export default function ChatSingleScreen({navigation, route}) {
   const {name,imageUrl,uid, chatId} = route.params;
   const [currentChatId, setCurrentChatId] = useState(chatId);
 
-   
-  console.log(authUser)
-  console.log("name:",name,"imageUrl",imageUrl)
+  
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title:
@@ -42,7 +40,7 @@ export default function ChatSingleScreen({navigation, route}) {
 
       headerTitleStyle: {
         fontWeight: 'bold',
-        fontSize: 25,
+        fontSize: 18,
       },
 
       headerLeft: () => (
@@ -98,6 +96,7 @@ export default function ChatSingleScreen({navigation, route}) {
             style={{justifyContent: 'center'}}
             onPress={() => {
               navigation.navigate('VideoCallScreen', {chatId:currentChatId,name:name,imageUrl:imageUrl,uid:uid});
+              
             }}>
             <Ionicons name="videocam-outline" size={20} color="white" />
           </TouchableOpacity>
@@ -164,7 +163,6 @@ export default function ChatSingleScreen({navigation, route}) {
         onDismiss={closeMenu}
         anchor={
           <TouchableOpacity
-            hitSlop={{top: 40, bottom: 40, left: 40, right: 40}}
             style={{width: 20, height: 20}}
             title="dot"
             onPress={openMenu}>
@@ -222,9 +220,9 @@ export default function ChatSingleScreen({navigation, route}) {
         messages={messages}
         onSend={text => onSend(text)}
         user={{
-          _id: authUser.id,
-          name: authUser.name+" "+authUser.lastName,
-          avatar: authUser.imageUrl
+          _id: authUser != null ? authUser.id : route.params.authData.id,
+          name: authUser != null ? authUser.name+" "+authUser.lastName:route.params.authData.name+" "+route.params.authData.lastName,
+          avatar: authUser != null ? authUser.imageUrl : route.params.authData.imageUrl,
         }}
         showUserAvatar
         useNativeDriver={true}

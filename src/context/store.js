@@ -4,5 +4,6 @@ export default {
     topicIds:[-1],
     user:null,
     routeName:"null",
-    posts:[]
+    posts:[],
+    messageBadge:0,
 };

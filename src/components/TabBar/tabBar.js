@@ -1,11 +1,12 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
-
+import { useSelector } from 'react-redux';
 import Icon from '../../components/Icons';
 
 import {useTranslation} from 'react-i18next';
 
 function MyTabBar({state, descriptors, navigation}) {
+  const messageBadge = useSelector(store => store.messageBadge);
   const {i18n, t} = useTranslation();
   function iconGenerator(label) {
     switch (label) {
@@ -39,7 +40,6 @@ function MyTabBar({state, descriptors, navigation}) {
             : options.title !== undefined
             ? options.title
             : route.name;
-        options.tabBarBadge = 3;
         const icon = iconGenerator(label);
         const isFocused = state.index === index;
 
@@ -91,7 +91,7 @@ function MyTabBar({state, descriptors, navigation}) {
                 }}
               >
                
-                  <View
+                 {messageBadge != 0 && <View
                     style={{
                       position: "absolute",
                       bottom: -10,
@@ -113,9 +113,9 @@ function MyTabBar({state, descriptors, navigation}) {
                         fontSize: 12
                       }}
                     >
-                      {2}
+                      {messageBadge}
                     </Text>
-                  </View>
+                  </View>}
                 
               </View>: null}
             

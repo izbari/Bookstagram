@@ -77,6 +77,8 @@ export default function (state, action, props) {
   };
 
   switch (action.type) {
+  case 'MESSAGE_NOTIFICATION':
+    return {...state, messageBadge:state.messageBadge +1 };
     case 'POST_LIST':
       var posts = action.payload.posts;
       return {...state, posts: posts};

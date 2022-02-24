@@ -103,9 +103,7 @@ const Chat = ({navigation, route}) => {
         component={NewMessage}
       />
       <Stack.Screen name="ChatSingleScreen" component={ChatSingleScreen} />
-      
-
-      <Stack.Screen name="VideoCallScreen" component={VideoCallScreen} />
+      <Stack.Screen name="VideoCallScreen"  component={VideoCallScreen} />
     </Stack.Navigator>
   );
 };

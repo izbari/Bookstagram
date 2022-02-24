@@ -6,7 +6,7 @@ exports.messageNotification = functions.firestore
   .onUpdate(async (change, context) => {
     // Get an object representing the current document
     const newMessage = change.after.data();
-
+    const chatId = context.params.msgId;
     const sender = newMessage.messages[0].user;
     const receiver =
       sender._id == newMessage.users[0]
@@ -17,15 +17,21 @@ exports.messageNotification = functions.firestore
       .database()
       .ref(`/users/${receiver}/notificationTokens`)
       .once('value');
+    const getUserPromise = admin
+      .database()
+      .ref(`/users/${receiver}`)
+      .once('value');
 
     // The snapshot to the user's tokens.
     let tokensSnapshot;
-
+    let userSnapshot;
     // The array containing all the user's tokens.
     let tokens;
 
-    const results = await Promise.all([getDeviceTokensPromise]);
+    const results = await Promise.all([getDeviceTokensPromise,getUserPromise]);
     tokensSnapshot = results[0];
+    userSnapshot = results[1].val();
+
 
     // Check if there are any device tokens.
     if (!tokensSnapshot.hasChildren()) {
@@ -44,6 +50,14 @@ exports.messageNotification = functions.firestore
         body: `${newMessage.messages[0].text}`,
         image: sender.avatar,
         sound: 'default',
+      },
+      data: {
+        targetRoute: 'ChatSingleScreen',
+        chatId: chatId,
+        name: sender.name,
+        imageUrl: sender.avatar,
+        uid: newMessage.users[0],
+        authData:JSON.stringify(userSnapshot),
       },
     };
 

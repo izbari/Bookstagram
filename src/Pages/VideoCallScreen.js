@@ -8,7 +8,6 @@ import {
   RTCSessionDescription,
 } from 'react-native-webrtc';
 import firestore from '@react-native-firebase/firestore';
-import { useDispatch } from 'react-redux';
 
 import GettingCall from '../components/VideoCall/GettingCall';
 import CustomButton from '../components/VideoCall/Button';
@@ -21,14 +20,13 @@ const VideoCallScreen = ({navigation, route}) => {
 
   const {chatId, imageUrl,name,uid} = route.params;
 
-  const dispatch = useDispatch();
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
   const [gettingCall, setGettingCall] = useState(false);
   const pc = useRef(null);
   const connecting = useRef(false);
 
-  useEffect(async () => {
+  useEffect(() => {
     const cRef = firestore().collection('meet').doc(chatId);
 
     const subscribe = cRef.onSnapshot(snapshot => {
@@ -56,7 +54,6 @@ const VideoCallScreen = ({navigation, route}) => {
       });
     });
     return () => {
-      
       subscribe();
       subscribeDelete();
     };
@@ -97,6 +94,7 @@ const VideoCallScreen = ({navigation, route}) => {
         offer: {
           type: offer.type,
           sdp: offer.sdp,
+          user:{imageUrl:imageUrl,name:name,id:uid},
         },
       };
       cRef.set(cWithOffer);
@@ -125,7 +123,6 @@ const VideoCallScreen = ({navigation, route}) => {
             type: answer.type,
             sdp: answer.sdp,
           },
-          userid: uid,
         };
         cRef.update(cWithAnswer);
       }
@@ -140,7 +137,8 @@ const VideoCallScreen = ({navigation, route}) => {
     if (pc.current) {
       pc.current.close();
     }
-    navigation.navigate('ChatSingleScreen', {chatId:currentChatId,name:name,imageUrl:imageUrl,uid:uid});
+    navigation.navigate('ChatSingleScreen', {chatId:
+      chatId,name:name,imageUrl:imageUrl,uid:uid});
 
   };
 
@@ -150,7 +148,7 @@ const VideoCallScreen = ({navigation, route}) => {
     if (pc.current) {
       pc.current.onicecandidate = event => {
         if (event.candidate) {
-          candidateCollection.add(event.candidate); //tojson() olabilir
+          candidateCollection.add(event.candidate);
         }
       };
     }
