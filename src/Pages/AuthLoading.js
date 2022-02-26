@@ -5,14 +5,12 @@ import database from '@react-native-firebase/database';
 const {width} = Dimensions.get('window');
 import Loading from '../components/Loading';
 import messaging from '@react-native-firebase/messaging';
-
+import PushNotification from '../controllers/notificationController';
 import {useDispatch} from 'react-redux';
 
 function AuthLoading(props) {
   const dispatch = useDispatch();
   useEffect(() => {
-    auth().onAuthStateChanged(user => {
-      if(user){
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     messaging().onMessage(async remoteMessage => {
       console.log(
@@ -21,15 +19,20 @@ function AuthLoading(props) {
       );
       console.log("--------------->",remoteMessage.data.targetRoute)
      
-        if(remoteMessage.data.targetRoute==="ChatSingleScreen") {dispatch({type:'MESSAGE_NOTIFICATION', payload:{}});}
+        if(remoteMessage.data.targetRoute==="ChatSingleScreen") {
+          dispatch({type:'MESSAGE_NOTIFICATION', payload:{messageId:remoteMessage.data.chatId}});
+          PushNotification.configure();
+        }
         else if(remoteMessage.data.targetRoute==="VideoCallScreen"){
-          dispatch({type:'MESSAGE_NOTIFICATION', payload:{}});
-           const {name, imageUrl, chatId, uid, targetRoute} = remoteMessage.data; 
+           const {name, imageUrl, chatId, uid, targetRoute} = remoteMessage.data;   
+                   dispatch({type:'MESSAGE_NOTIFICATION', payload:{}});
+
            props.navigation.navigate('Chat', {
          screen: targetRoute,
          params: {name: name, imageUrl: imageUrl, chatId: chatId, uid: uid},
        });
         } 
+        return;
     }
      
     );
@@ -65,11 +68,9 @@ function AuthLoading(props) {
           });
         }
       });
-    }
-    else{
-      console.log("user yok----------------------------")
-    }
-    })
+    
+    
+  
   }, []);
   const deneme = props?.route?.params?.deneme;
   useEffect(() => {

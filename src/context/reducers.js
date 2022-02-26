@@ -56,7 +56,6 @@ export default function (state, action, props) {
     var updatedLikes = likes.filter(
       element => element != auth()?.currentUser.uid,
     );
-    console.log('hata test');
     var newList = [
       ...state.posts,
       {
@@ -78,7 +77,9 @@ export default function (state, action, props) {
 
   switch (action.type) {
   case 'MESSAGE_NOTIFICATION':
-    return {...state, messageBadge:state.messageBadge +1 };
+    var {messageId} = action.payload;
+    if(state.messageBadge.includes(messageId)) return {...state};
+    else return {...state, messageBadge: [...state.messageBadge, messageId]};
     case 'POST_LIST':
       var posts = action.payload.posts;
       return {...state, posts: posts};
@@ -90,7 +91,6 @@ export default function (state, action, props) {
         .ref(userRef)
         .once('value')
         .then(snapshot => {
-          console.log('User data: ', snapshot.val());
           if (snapshot.val()) {
             snapshot.val().includes(postId)
               ? Toast('Post Already Saved')
@@ -123,7 +123,6 @@ export default function (state, action, props) {
               imageRef
                 .delete()
                 .then(() => {
-                  console.log(`${postImg} image has been deleted`);
                   deletePostById(id);
                 })
                 .catch(err => {
@@ -134,8 +133,6 @@ export default function (state, action, props) {
               deletePostById(id);
             }
           }
-
-          console.log('post deleted!');
         })
         .catch(err => {
           console.log('ERROR2:', err);

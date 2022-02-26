@@ -5,5 +5,5 @@ export default {
     user:null,
     routeName:"null",
     posts:[],
-    messageBadge:0,
+    messageBadge: [],
 };

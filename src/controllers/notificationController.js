@@ -1,4 +1,4 @@
-import PushNotification from 'react-native-push-notification';
+import PushNotification,{Importance} from 'react-native-push-notification';
 exports.configure = () => {
     PushNotification.configure({
       onRegister: function (token) {
@@ -27,7 +27,7 @@ exports.configure = () => {
       requestPermissions: true,
     });
   };
-  exports.createNotification = channel => {
+  const createNotification = channel => {
     PushNotification.createChannel(
       {
         channelId: channel, // (required)
@@ -42,7 +42,7 @@ exports.configure = () => {
       created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
     );
   };
-  exports.localNotification = (channel, title, message, largeIconUrl) => {
+  const localNotification = (channel, title, message, largeIconUrl) => {
     PushNotification.localNotification({
       /* Android Only Properties */
       channelId: channel,

@@ -1,31 +1,27 @@
 /**
- * todos: 
+ * todos:
  * 1- In this screen need to be add functionality to menu items.
  * 2- audio call and video call will add using webRTC.
  * 3- maybe setting screen can add and in this screen may includes notification options , theme , media ...
  */
 
 import React, {useState, useCallback} from 'react';
-import {TouchableOpacity, View,} from 'react-native';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {TouchableOpacity, View, ActivityIndicator, Text} from 'react-native';
+import {GiftedChat, Bubble} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Image from 'react-native-image-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
-import ImageModal from 'react-native-image-modal'
-import {
-  Menu,
-  Divider,
-} from 'react-native-paper';
+import ImageModal from 'react-native-image-modal';
+import {Menu, Divider} from 'react-native-paper';
 
 export default function ChatSingleScreen({navigation, route}) {
-  const authUser = useSelector(store=> store.user)
+  const authUser = useSelector(store => store.user);
   const [messages, setMessages] = useState([]);
-  const {name,imageUrl,uid, chatId} = route.params;
+  const {name, imageUrl, uid, chatId} = route.params;
   const [currentChatId, setCurrentChatId] = useState(chatId);
 
-  
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title:
@@ -60,7 +56,7 @@ export default function ChatSingleScreen({navigation, route}) {
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('OtherProfile', {selectedUserId: uid});
+              navigateProfile(route.params.uid);
             }}>
             <Image
               style={{
@@ -95,13 +91,17 @@ export default function ChatSingleScreen({navigation, route}) {
           <TouchableOpacity
             style={{justifyContent: 'center'}}
             onPress={() => {
-              navigation.navigate('VideoCallScreen', {chatId:currentChatId,name:name,imageUrl:imageUrl,uid:uid});
-              
+              navigation.navigate('VideoCallScreen', {
+                chatId: currentChatId,
+                name: name,
+                imageUrl: imageUrl,
+                uid: uid,
+              });
             }}>
             <Ionicons name="videocam-outline" size={20} color="white" />
           </TouchableOpacity>
 
-          <RightMenu></RightMenu>
+          <RightMenu />
         </View>
       ),
     });
@@ -118,11 +118,12 @@ export default function ChatSingleScreen({navigation, route}) {
           })),
         );
       });
-      return data;
+    return data;
   }, [chatId, currentChatId]);
 
   const onSend = useCallback(
     (m = []) => {
+    // her message payloadına sent: true, received: true bu eklecek ona gore goruldu ayarlanacak thick style verilcek...
       if (currentChatId != 'null') {
         firestore()
           .doc('Chats/' + currentChatId)
@@ -152,53 +153,52 @@ export default function ChatSingleScreen({navigation, route}) {
     const openMenu = () => setVisible(true);
     const closeMenu = () => setVisible(false);
     return (
-      <View style={{
-        
-        flexDirection: 'row',
-        justifyContent: 'center'}}>
-      <Menu
-            style={{width:'50%'}}
-
-        visible={visible}
-        onDismiss={closeMenu}
-        anchor={
-          <TouchableOpacity
-            style={{width: 20, height: 20}}
-            title="dot"
-            onPress={openMenu}>
-            <Ionicons
-              name="ellipsis-vertical-outline"
-              size={20}
-              color="white"
-            />
-          </TouchableOpacity>
-        }>
-        <Menu.Item
-          icon="delete"
-          onPress={() => {}}
-          title="Clear Chat"
-          titleStyle={{fontSize:14}}
-        />
-        <Divider />
-        <Menu.Item
-          icon="cog"
-          onPress={() => {}}
-          title="Settings"
-          titleStyle={{fontSize:14}}
-        />
-      </Menu>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}>
+        <Menu
+          style={{width: '50%'}}
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+            <TouchableOpacity
+              style={{width: 20, height: 20}}
+              title="dot"
+              onPress={openMenu}>
+              <Ionicons
+                name="ellipsis-vertical-outline"
+                size={20}
+                color="white"
+              />
+            </TouchableOpacity>
+          }>
+          <Menu.Item
+            icon="delete"
+            onPress={() => {}}
+            title="Clear Chat"
+            titleStyle={{fontSize: 14}}
+          />
+          <Divider />
+          <Menu.Item
+            icon="cog"
+            onPress={() => {}}
+            title="Settings"
+            titleStyle={{fontSize: 14}}
+          />
+        </Menu>
       </View>
     );
   };
- 
-  const renderMessageImage = (props) => {
+
+  const renderMessageImage = props => {
     return (
       <View
         style={{
           borderRadius: 15,
           padding: 2,
-        }}
-      >
+        }}>
         <ImageModal
           resizeMode="contain"
           style={{
@@ -206,14 +206,33 @@ export default function ChatSingleScreen({navigation, route}) {
             height: 200,
             padding: 6,
             borderRadius: 15,
-            resizeMode: "cover",
+            resizeMode: 'cover',
           }}
-          source={{ uri: props.currentMessage.image }}
+          source={{uri: props.currentMessage.image}}
         />
       </View>
     );
   };
-  
+  const navigateProfile = userid => {
+    authUser.id === userid
+      ? navigation.navigate('Profile')
+      : navigation.navigate('OtherProfile', {selectedUserId: userid});
+  };
+
+  const renderBubble = props => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          left: {
+            backgroundColor: '#fff',
+          },
+          right: {backgroundColor: '#ff6ea1'},
+        }}
+      />
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
       <GiftedChat
@@ -221,14 +240,35 @@ export default function ChatSingleScreen({navigation, route}) {
         onSend={text => onSend(text)}
         user={{
           _id: authUser != null ? authUser.id : route.params.authData.id,
-          name: authUser != null ? authUser.name+" "+authUser.lastName:route.params.authData.name+" "+route.params.authData.lastName,
-          avatar: authUser != null ? authUser.imageUrl : route.params.authData.imageUrl,
+          name:
+            authUser != null
+              ? authUser.name + ' ' + authUser.lastName
+              : route.params.authData.name +
+                ' ' +
+                route.params.authData.lastName,
+          avatar:
+            authUser != null
+              ? authUser.imageUrl
+              : route.params.authData.imageUrl,
         }}
         showUserAvatar
         useNativeDriver={true}
-        renderMessageImage={renderMessageImage} 
-
-           />
+        renderMessageImage={renderMessageImage}
+        renderBubble={renderBubble}
+        renderLoading={() => (
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <ActivityIndicator size="large" color="#ff6ea1" />
+          </View>
+        )}
+        onPressAvatar={user => {
+          navigateProfile(user._id);
+        }}
+        renderTicks={() => (
+          <View style={{justifyContent:'center'}}>
+            <Text>✔✔</Text>
+          </View>
+        )}
+      />
     </View>
   );
 }

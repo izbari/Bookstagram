@@ -113,7 +113,7 @@ function MyTabBar({state, descriptors, navigation}) {
                         fontSize: 12
                       }}
                     >
-                      {messageBadge}
+                      {messageBadge.length}
                     </Text>
                   </View>}
                 
