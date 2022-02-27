@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Bookstagram/android/app/src/main/res/drawable/background_splash.xml" value="0.1" />
         <entry key="..\:/Bookstagram/android/app/src/main/res/drawable/ic_baseline_menu_book_24.xml" value="0.1" />
+        <entry key="..\:/Bookstagram/android/app/src/main/res/layout/launch_screen.xml" value="0.1" />
       </map>
     </option>
   </component>

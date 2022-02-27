@@ -27,7 +27,6 @@ import VideoCallScreen from './Pages/VideoCallScreen';
 
 import CreatePost from './Pages/CreatePost';
 import Onboarding from './Pages/Onboarding';
-
 import Icon from './components/Icons';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -109,6 +108,7 @@ const Chat = ({navigation, route}) => {
 };
 
 const Main = props => {
+  
   return (
     <Tab.Navigator
     
@@ -245,6 +245,7 @@ const AuthProvider = props => (
 );
 
 function App(props) {
+  
   return (
     <Provider theme={theme}>
       <UserProvider>

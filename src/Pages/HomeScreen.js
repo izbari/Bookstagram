@@ -6,11 +6,9 @@ import {
   Text,
   Dimensions,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
-import PushNotification, {
-  Importance,
-  PushNotificationIOS,
-} from 'react-native-push-notification';
+
 import Animated from 'react-native-reanimated';
 import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
@@ -27,8 +25,6 @@ import PostFooter from '../components/Post/postFooter';
 import PostHeader from '../components/Post/postHeader';
 import SharePostRow from '../components/Post/SharePostRow';
 import Comment from '../components/Post/postComment/';
-import messaging from '@react-native-firebase/messaging';
-import auth from '@react-native-firebase/auth';
 
 const {width} = Dimensions.get('window');
 
@@ -257,6 +253,7 @@ function HomeScreen({navigation, route}) {
   }
   return (
     <View style={styles.mainContainer}>
+      <StatusBar backgroundColor="#ff6ea1" barStyle="light-content" />
       {loading ? (
         <SkeletonPlaceholder />
       ) : (

@@ -20,6 +20,9 @@ target 'Bookstagram' do
 
   pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
 
+
+  pod 'RNBootSplash', :path => '../node_modules/react-native-bootsplash'
+
   target 'BookstagramTests' do
     inherit! :complete
     # Pods for testing
