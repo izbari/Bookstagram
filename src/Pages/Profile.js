@@ -7,7 +7,7 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import {Divider} from 'react-native-paper';
+import {ActivityIndicator, Divider} from 'react-native-paper';
 import Image from 'react-native-image-progress';
 import Svg, {Path, Defs, LinearGradient, Stop} from 'react-native-svg';
 import Flag from 'react-native-flags';
@@ -41,7 +41,6 @@ function Profile(props) {
   ];
 
   const authuser = useSelector(store => store.user);
-
   const [user, setUser] = React.useState(authuser);
   const [isModalVisible, setModalVisible] = React.useState(false);
 
@@ -136,6 +135,7 @@ function Profile(props) {
       </LinearGradient>
     );
   };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.svgCurve}>
@@ -146,7 +146,6 @@ function Profile(props) {
           }}>
           <Svg
             id="wave"
-            style={{transform: [{rotate: '90deg'}]}}
             viewBox="0 0 1440 480"
             version="1.1"
             style={{
@@ -202,21 +201,21 @@ function Profile(props) {
                 marginTop: 7,
               }}>
               {t('common:Hello')}
-              {user ? " "+user.name[0].toUpperCase()+user.name.substring(1,user.name.length) +' ' + user.lastName[0].toUpperCase()+user.lastName.substring(1,user.lastName.length) : 'user cant found'}
+              {!!user ? " "+user.name[0].toUpperCase()+user.name.substring(1,user.name.length) +' ' + user.lastName[0].toUpperCase()+user.lastName.substring(1,user.lastName.length) : 'user cant found'}
             </Text>
           </View>
 
           <View style={{flexDirection: 'row'}}>
             <View style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user ? user.books.length : '1000'}
+                {!!user ? user.books.length : '1000'}
               </Text>
               <Text style={styles.profileStatusText}>{t('common:Books')}</Text>
             </View>
 
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user && user?.fallowers ? Object.keys(user.fallowers).length : '1000'}
+                {!!user && user?.fallowers ? Object.keys(user.fallowers ?? {}).length : '1000'}
               </Text>
               <Text style={styles.profileStatusText}>
                 {t('common:Followers')}
@@ -224,7 +223,7 @@ function Profile(props) {
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {user && user?.fallowing ? Object.keys(user.fallowing).length : '1001'}
+                {!!user && user?.fallowing ? Object.keys(user.fallowing ?? {}).length : '1001'}
               </Text>
               <Text style={styles.profileStatusText}>
                 {t('common:Following')}

@@ -76,25 +76,26 @@ function AuthLoading(props) {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
       if (!user) {
-        props.navigation.navigate('AuthProvider');
+        props.navigation.navigate('AuthStack');
       } else {
         dbToken(user);
           if (deneme == 'Login') {
-          props.navigation.replace('Main');
+          props.navigation.replace('BookTab');
         } else if (deneme == 'Signup') {
           props.navigation.replace('Onboarding');
         } else if (deneme == undefined) {
-          props.navigation.replace('Main');
+          props.navigation.replace('BookTab');
         }
       }
     });
     return subscriber; // unsubscribe on unmount
   }, []);
   const dbToken = async (user) => {
+    console.log(user)
     database()
     .ref(`/users/${user.uid}`)
     .on('value', snapshot => {
-      if(!snapshot.val().notificationTokens){
+      if(!snapshot?.val()?.notificationTokens){
         messaging().getToken().then(token => {
           if(token){
             database()

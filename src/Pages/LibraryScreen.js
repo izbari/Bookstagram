@@ -15,7 +15,7 @@ import Loading from '../components/Loading';
 import Error from '../components/Error';
 import BookCard from '../components/BookCard';
 const {width} = Dimensions.get('window');
-function Library(props) {
+function LibraryScreen(props) {
   const dispatch = useDispatch();
   const list = useSelector(store => store.favList);
   const [cardData, setCardData] = React.useState([]);
@@ -191,4 +191,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Library;
+export default LibraryScreen;

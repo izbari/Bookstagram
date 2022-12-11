@@ -31,7 +31,7 @@ function OtherProfile(props) {
       .ref(`/users/${userRef}`)
       .on('value', snapshot => {
         setUser(snapshot.val());
-        const isfollowing = Object.keys(me?.fallowing).includes(
+        const isfollowing = Object.keys(me?.fallowing?? {} ).includes(
           snapshot.val().id,
         );
         //setIsFallowing(isfollowing);
@@ -41,7 +41,7 @@ function OtherProfile(props) {
 
   React.useEffect(() => {
     setMe(baseUser);
-    const isfollowing = Object.keys(baseUser?.fallowing).includes(userRef)
+    const isfollowing = Object.keys(baseUser?.fallowing ?? {}).includes(userRef)
     setIsFallowing(isfollowing);
   }, [baseUser]);
 

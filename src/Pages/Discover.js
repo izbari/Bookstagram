@@ -23,7 +23,7 @@ import { ActivityIndicator } from 'react-native-paper';
 const ITEM_SIZE = width * 0.2;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 
-function Discover(props) {
+function DiscoverScreen(props) {
   // States hooks
   const {loading, error, data, categories} = useFetch(false);
   const [name, setName] = React.useState('');
@@ -352,4 +352,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
-export default Discover;
+export default DiscoverScreen;

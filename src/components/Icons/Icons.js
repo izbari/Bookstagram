@@ -24,35 +24,36 @@ import CheckMarkIcon from '../../assets/svg/CheckMark.svg';
 import FilterIcon from '../../assets/svg/Filter.svg';
 import SortIcon from '../../assets/svg/Sort.svg';
 import ExpandMoreIcon from '../../assets/svg/ExpandMore.svg';
-export default function Icons({name,size,fill,style}) {
-    
-const Icons = {
-    Add:AddIcon,
-    Card:CardIcon,
-    Comment:CommentIcon,
-    CreditCard:CreditCardIcon,
-    FilledLike:FilledLikeIcon,
-    Home:HomeIcon,
-    Language:LanguageIcon,
-    Like:LikeIcon,
-    Logout:LogoutIcon,
-    Message:MessageIcon,
-    Notification:NotificationIcon,
-    Send:SendIcon,
-    Share:ShareIcon,
-    Theme:ThemeIcon,
-    Threedot:ThreedotIcon,
-    User:UserIcon,
-    Library:LibraryIcon,
-    Search:SearchIcon,
-    Drag:DragIcon,
-    NewMessage:NewMessageIcon,
-    BackArrow:BackArrowIcon,
-    CheckMark:CheckMarkIcon,
-    Sort:SortIcon,
-    Filter:FilterIcon,
-    ExpandMore:ExpandMoreIcon,
-  }
+import ChangeStackIcon from '../../assets/svg/ChangeStack.svg';
+export default function Icons({name, size, fill, style}) {
+  const Icons = {
+    Add: AddIcon,
+    Card: CardIcon,
+    Comment: CommentIcon,
+    CreditCard: CreditCardIcon,
+    FilledLike: FilledLikeIcon,
+    Home: HomeIcon,
+    Language: LanguageIcon,
+    Like: LikeIcon,
+    Logout: LogoutIcon,
+    Message: MessageIcon,
+    Notification: NotificationIcon,
+    Send: SendIcon,
+    Share: ShareIcon,
+    Theme: ThemeIcon,
+    Threedot: ThreedotIcon,
+    User: UserIcon,
+    Library: LibraryIcon,
+    Search: SearchIcon,
+    Drag: DragIcon,
+    NewMessage: NewMessageIcon,
+    BackArrow: BackArrowIcon,
+    CheckMark: CheckMarkIcon,
+    Sort: SortIcon,
+    Filter: FilterIcon,
+    ExpandMore: ExpandMoreIcon,
+    ChangeStack: ChangeStackIcon,
+  };
   const Icon = Icons[name];
   return <Icon width={size} height={size} fill={fill} style={style} />;
 }

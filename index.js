@@ -4,7 +4,7 @@
  import './src/utils/Languages/IMLocalize'
  import 'react-native-gesture-handler';
 import {AppRegistry,LogBox} from 'react-native';
-import root from './src/router';
+import root from './src/navigation';
 import {name as appName} from './app.json';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import messaging from '@react-native-firebase/messaging';
