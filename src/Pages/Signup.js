@@ -33,6 +33,7 @@ function Signup(props) {
   const hideModal = () => {
     setVisible(false);
     setBottom(true);
+    setChecked(true);
   };
   const [name, setName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
@@ -67,7 +68,7 @@ function Signup(props) {
     else setPasswordOutlineColor('red');
   };
 
-  const signUpHandler = async() => {
+  const signUpHandler = async () => {
     const newUser = {
       email: email,
       password: password,
@@ -83,8 +84,7 @@ function Signup(props) {
       terms: checked,
     };
 
-    await AuthController.createUser(newUser,props);
-
+    await AuthController.createUser(newUser, props);
   };
 
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
@@ -93,56 +93,52 @@ function Signup(props) {
 
   const TermsPopup = () => {
     return (
-      <View>
-        <Portal>
-          <Modal
-            visible={visible}
-            onDismiss={hideModal}
-            contentContainerStyle={styles.containerStyle}>
-            <View style={{flex: 1, padding: 20}}>
-              <WebView
-                originWhitelist={['*']}
-                onScroll={({nativeEvent}) => {
-                  if (isCloseToBottom(nativeEvent)) {
-                    setBottom(false);
-                  }
-                }}
-                scrollEventThrottle={400}
-                showsVerticalScrollIndicator={false}
-                startInLoadingState={false}
-                scalesPageToFit={false}
-                source={{
-                  html: ` 
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={hideModal}
+          contentContainerStyle={styles.containerStyle}>
+          <View style={{flex: 1, padding: 20}}>
+            <WebView
+              originWhitelist={['*']}
+              onScroll={({nativeEvent}) => {
+                if (isCloseToBottom(nativeEvent)) {
+                  setBottom(false);
+                }
+              }}
+              scrollEventThrottle={400}
+              showsVerticalScrollIndicator={false}
+              startInLoadingState={false}
+              scalesPageToFit={false}
+              source={{
+                html: ` 
                   <head>
                     <meta content="width=width, initial-scale=1, maximum-scale=0.8" name="viewport"></meta>
                   </head>
                   <body style="background-image" size: ${terms}`,
-                }}
-                style={{flex: 1, padding: 20}}
-              />
-            </View>
-            <Button
-              title="Accept Terms and Policies"
-              style={{marginTop: 30}}
-              onPress={() => {
-                hideModal();
-                setChecked(true);
               }}
-              disabled={bottom}></Button>
-          </Modal>
-        </Portal>
-      </View>
+              style={{flex: 1, padding: 20}}
+            />
+          </View>
+          <Button
+            title="Accept Terms and Policies"
+            style={{marginTop: 30}}
+            onPress={hideModal}
+            disabled={bottom}></Button>
+        </Modal>
+      </Portal>
     );
   };
   return (
-    <KeyboardAvoidingView behavior="padding" style={{flex:1, backgroundColor: '#FF6EA1'}}>   
+    <KeyboardAvoidingView
+      behavior="padding"
+      style={{flex: 1, backgroundColor: '#FF6EA1'}}>
       <Text style={styles.header}>Welcome New User</Text>
 
       <View style={styles.lottieContainer}>
         <Welcome />
       </View>
       <ScrollView>
-        
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <TextInput
             style={
@@ -151,7 +147,7 @@ function Signup(props) {
                 width: 135,
                 height: 40,
                 borderColor: 'red',
-                margin:0
+                margin: 0,
               })
             }
             mode="outlined"
@@ -173,7 +169,7 @@ function Signup(props) {
             mode="outlined"
             onChangeText={lastName => setLastName(lastName)}
             label="Last name"
-            style={(styles.input, {width: 135, height: 40,margin:0})}
+            style={(styles.input, {width: 135, height: 40, margin: 0})}
             theme={{
               colors: {
                 placeholder: 'black',
@@ -284,10 +280,12 @@ function Signup(props) {
           placeholderTextColor={'black'}
         />
 
-        <RadioButton.Group style={{backgroundColor: 'black'}} onValueChange={setGender} value={gender}>
+        <RadioButton.Group
+          style={{backgroundColor: 'black'}}
+          onValueChange={setGender}
+          value={gender}>
           <View
             style={{
-            
               justifyContent: 'center',
               flexDirection: 'row',
               alignItems: 'center',
@@ -303,7 +301,7 @@ function Signup(props) {
             </View>
           </View>
         </RadioButton.Group>
-        <View style={{flexDirection: 'row',justifyContent: 'center'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Checkbox.Item
             color={'white'}
             labelStyle={{fontSize: 12, fontStyle: 'italic'}}
@@ -322,22 +320,21 @@ function Signup(props) {
         </View>
         {visible && <TermsPopup />}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            signUpHandler();
-          }}>
-          <Text style={styles.buttonText}>Create</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => props.navigation.navigate('Login')}>
-          <Text style={styles.buttonText}>Back</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              signUpHandler();
+            }}>
+            <Text style={styles.buttonText}>Create</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => props.navigation.navigate('Login')}>
+            <Text style={styles.buttonText}>Back</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-
     </KeyboardAvoidingView>
   );
 }

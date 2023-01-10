@@ -75,17 +75,20 @@ function AuthLoading(props) {
   const deneme = props?.route?.params?.deneme;
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
+      console.warn('Auth state changed',deneme)
       if (!user) {
         props.navigation.navigate('AuthStack');
       } else {
-        dbToken(user);
+        dbToken(user).then(()=>{
           if (deneme == 'Login') {
-          props.navigation.replace('BookTab');
-        } else if (deneme == 'Signup') {
-          props.navigation.replace('Onboarding');
-        } else if (deneme == undefined) {
-          props.navigation.replace('BookTab');
-        }
+            props.navigation.replace('BookTab');
+          } else if (deneme == 'Signup') {
+            props.navigation.replace('Onboarding');
+          } else if (deneme == undefined) {
+            props.navigation.replace('BookTab');
+          }
+        });
+         
       }
     });
     return subscriber; // unsubscribe on unmount

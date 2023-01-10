@@ -14,8 +14,6 @@ function Toast(msg) {
 }
 
 exports.createUser = async (user, props) => {
-
-
   const condition = checkAuthConditions(user);
   if (condition) {
     auth()
@@ -37,7 +35,7 @@ exports.createUser = async (user, props) => {
             fallowers: user.fallowers,
             fallowing: user.fallowing,
             books: user.books,
-          };     
+          };
           if (userId) {
             database()
               .ref('users/' + userId)
@@ -115,4 +113,17 @@ const checkAuthConditions = ({
     Toast('Please fill your information');
   }
   return false;
+};
+
+exports.checkEmailExist = async email => {
+  if (email.length > 0) {
+    return await auth()
+      .fetchSignInMethodsForEmail(email)
+      .then(resp => {
+        console.log('Checking email: ' + resp, typeof resp, Object.keys(resp));
+        return resp ?? [];
+      });
+  } else {
+    return [];
+  }
 };

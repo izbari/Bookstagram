@@ -2,150 +2,235 @@ import * as React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
 
 import AuthController from '../controllers/authController';
-import {TextInput} from 'react-native-paper';
 import Welcome from '../components/Yoga';
-import {useDispatch} from 'react-redux';
-
+import {TextInput} from 'react-native-element-textinput';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {ActivityIndicator, Button, Text} from 'react-native-paper';
+const {width} = Dimensions.get('window');
 function Login(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [emailChecked, setEmailChecked] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [secret, setSecret] = React.useState(true);
+  const [focus, setFocus] = React.useState(false);
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={{flex: 1, backgroundColor: '#FF6EA1'}}>
-      <Text style={styles.header}>WELCOME BACK !</Text>
-
-      <View style={styles.lottieContainer}>
-        <Welcome />
-      </View>
-
-      <View style={{flex: 2.5}}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            selectionColor="#FF6EA1"
-            theme={{
-              colors: {
-                placeholder: 'black',
-                text: 'black',
-                primary: 'black',
-                underlineColor: 'transparent',
-                background: '#003489',
-              },
-            }}
-            mode="outlined"
-            label="Email"
-            value={email}
-            autoCapitalize="none"
-            underlineColor="transparent"
-            editable={true}
-            onChangeText={email => setEmail(email)}
-          />
-
-          <TextInput
-            value={password}
-            mode="outlined"
-            onChangeText={password => setPassword(password)}
-            secureTextEntry={secret}
-            label="Password"
-            style={styles.input}
-            theme={{
-              colors: {
-                placeholder: 'black',
-                text: 'black',
-                primary: 'black',
-                underlineColor: 'transparent',
-                background: '#003489',
-              },
-            }}
-            right={
-              <TextInput.Icon
-                onPress={() => setSecret(!secret)}
-                name={secret ? 'eye-off' : 'eye'}
-                color="grey"
-                style={{marginTop: 15}}
-              />
-            }
-          />
+    <ScrollView contentContainerStyle={{flexGrow: 1, backgroundColor: '#fff'}}>
+      <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+        <View style={styles.lottieContainer}>
+          <Welcome />
         </View>
 
-        <View style={styles.buttonContainer}>
+        <View
+          style={{
+            width: width * 0.8,
+            alignSelf: 'center',
+            justifyContent: 'space-between',
+            paddingVertical: 40,
+          }}>
+          {!emailChecked && (
+            <Text
+              variant="titleLarge"
+              style={{marginBottom: 20, color: '#8B7FC5'}}>
+              Welcome to Bookstagram
+            </Text>
+          )}
+
+          {emailChecked ? (
+            <>
+              <View
+                style={{
+                  alignItems: 'center',
+                  marginBottom: 35,
+                  height: 50,
+                  justifyContent: 'space-between',
+                }}>
+                <Text variant="bodyLarge"> {email}</Text>
+                <TouchableOpacity
+                  onPress={() => setEmailChecked(false)}
+                  labelStyle={{color: 'white'}}>
+                  <Text
+                    variant="labelLarge"
+                    style={{color: '#8B7FC5', fontWeight: 'bold'}}>
+                    Change Email
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <TextInput
+                renderRightIcon={() =>
+                  email.length > 0 ? (
+                    <Icon
+                      name={secret ? 'eye' : 'eye-off'}
+                      size={25}
+                      color={focus ? '#A39ACF' :'grey'}
+                      onPress={() => {
+                        setEmail('');
+                      }}
+                    />
+                  ) : null
+                }
+                secureTextEntry={secret}
+                autoCorrect={false}
+                placeholderTextColor="grey"
+                style={{
+                  marginBottom: 40,
+                  paddingHorizontal: 15,
+                  borderRadius: 10,
+                  height: 60,
+                  borderWidth: 2,
+                  borderColor: focus ? '#A39ACF' : '#ededed',
+                  backgroundColor: '#ededed',
+                }}
+                onFocus={() => setFocus(true)}
+                onBlur={() => setFocus(false)}
+                focusColor="#A39ACF"
+                selectionColor="#A39ACF"
+                inputStyle={{
+                  color: 'grey',
+                }}
+                scrollEnabled={false}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+              />
+            </>
+          ) : (
+            <TextInput
+              renderRightIcon={() =>
+                email.length > 0 ? (
+                  <Icon
+                    name="close-outline"
+                    size={25}
+                    color={'grey'}
+                    onPress={() => {
+                      setEmail('');
+                    }}
+                  />
+                ) : null
+              }
+              autoCorrect={false}
+              placeholderTextColor="grey"
+              style={{
+                marginBottom: 40,
+                paddingHorizontal: 15,
+                borderRadius: 10,
+                height: 60,
+                borderWidth: 2,
+                borderColor: focus ? '#A39ACF' : '#ededed',
+                backgroundColor: '#ededed',
+              }}
+              onFocus={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
+              focusColor="#A39ACF"
+              selectionColor="#A39ACF"
+              inputStyle={{
+                color: 'grey',
+              }}
+              scrollEnabled={false}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+            />
+          )}
           <TouchableOpacity
+            contentStyle={{height: 100}}
+            disabled={!emailChecked ? !email.length > 0 : !password.length > 0}
             style={styles.button}
             onPress={async () => {
-               await AuthController.userLogin(props, email, password);
-              setEmail('');
-              setPassword('');
+              try {
+                setLoading(true);
+
+                if (emailChecked) {
+                  return AuthController.userLogin(props, email, password);
+                }
+
+                const isExist = await AuthController.checkEmailExist(email);
+                if (!isExist.length > 0) {
+                  props.navigation.navigate('Signup');
+                } else {
+                  setEmailChecked(true);
+                }
+              } catch (error) {
+                console.log('error', error);
+              } finally {
+                setLoading(false);
+              }
             }}>
-            <Text style={styles.buttonText}>Sign in</Text>
+            {loading ? (
+              <ActivityIndicator size={'small'} color="white" animating />
+            ) : (
+              <Text
+                style={{
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  letterSpacing: 1,
+                  fontSize: 18,
+                  textAlign: 'center',
+                }}>
+                Log in
+              </Text>
+            )}
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => props.navigation.navigate('Signup')}>
-            <Text style={styles.buttonText}>Sign up</Text>
-          </TouchableOpacity>
+          <Text style={{textAlign: 'center', marginTop: 10}}>
+            <Text>{"Don't have an account?"} </Text>
+            <Text
+              onPress={() => props.navigation.navigate('Signup')}
+              variant="labelLarge"
+              style={{
+                color: '#A39ACF',
+                textDecorationLine: 'underline',
+                fontWeight: 'bold',
+              }}>
+              {'Sign up'}
+            </Text>
+          </Text>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {flex: 1, backgroundColor: '#FF6EA1'},
   lottieContainer: {
-    flex: 2.5,
+    marginTop: 40,
     width: '90%',
-    height: '35%',
+    height: '40%',
     alignSelf: 'center',
   },
-  inputContainer: {
-    marginBottom: 50,
-  },
+
   button: {
+    width: width * 0.8,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: 'white',
-    width: 250,
-    height: 38,
-    backgroundColor: '#FF6EA1',
+    height: 50,
+    backgroundColor: '#A39ACF',
     justifyContent: 'center',
     alignSelf: 'center',
-    margin: 10,
   },
   buttonText: {
     alignSelf: 'center',
-    color: 'white',
+    color: '#FF6EA1',
     fontWeight: 'bold',
+    fontSize: 18,
   },
   input: {
     alignSelf: 'center',
-    paddingLeft: 12,
-    borderRadius: 10,
+    borderRadius: 15,
     borderColor: 'white',
-
-    width: 290,
+    width: width * 0.8,
+    borderWidth: 1,
     height: 50,
-    alignSelf: 'center',
-    justifyContent: 'center',
     margin: 10,
-    backgroundColor: 'white',
-  },
-  header: {
-    color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    margin: 10,
-    marginTop: 20,
-    marginBottom: 0,
   },
 });
 

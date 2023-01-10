@@ -25,8 +25,10 @@ import FilterIcon from '../../assets/svg/Filter.svg';
 import SortIcon from '../../assets/svg/Sort.svg';
 import ExpandMoreIcon from '../../assets/svg/ExpandMore.svg';
 import ChangeStackIcon from '../../assets/svg/ChangeStack.svg';
+import CloseIcon from '../../assets/svg/Close.svg';
 export default function Icons({name, size, fill, style}) {
   const Icons = {
+    Close: CloseIcon,
     Add: AddIcon,
     Card: CardIcon,
     Comment: CommentIcon,
