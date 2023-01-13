@@ -76,6 +76,8 @@ export default function (state, action, props) {
   };
 
   switch (action.type) {
+  case 'ONBOARDING_PASSED' : 
+    return {...state,onboardingPassed: true}
   case 'MESSAGE_NOTIFICATION':
     var {messageId} = action.payload;
     if(state.messageBadge.includes(messageId)) return {...state};

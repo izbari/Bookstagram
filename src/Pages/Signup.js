@@ -6,49 +6,39 @@ import {
   View,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
-import {WebView} from 'react-native-webview';
-import {
-  RadioButton,
-  Checkbox,
-  Portal,
-  Text,
-  ProgressBar,
-  Modal,
-  Button,
-} from 'react-native-paper';
-import {TextInputMask} from 'react-native-masked-text';
-import moment from 'moment';
-import AuthController from '../controllers/authController';
-import terms from '../utils/terms';
+import {Text, ProgressBar} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {TextInput} from 'react-native-element-textinput';
 import FirstStep from '../components/Signup/FirstStep';
 import SecondStep from '../components/Signup/SecondStep';
 import ThirdStep from '../components/Signup/ThirdStep';
-
+import {createUser} from '../controllers/authController';
 //main methods
 const STEP_LENGTH = 3;
+const PROGRESS_LENGTH = STEP_LENGTH + 1;
 
 function Signup(props) {
   //States ,effects, vars
   const dispatch = useDispatch();
-  const [visible, setVisible] = React.useState(false);
-  const [bottom, setBottom] = React.useState(true);
-  // const hideModal = () => {
-  //   setVisible(false);
-  //   setBottom(true);
-  //   setChecked(true);
-  // };
+  const [step, setStep] = React.useState(1);
+  const [progressValue, setProgressValue] = React.useState(0);
+  const [loading, setLoading] = useState(false);
+  React.useEffect(() => {
+    const timeout = setTimeout(
+      () => setProgressValue(1 / PROGRESS_LENGTH),
+      500,
+    );
+    return () => clearTimeout(timeout);
+  }, []);
+
   const [formData, setFormData] = useState({
     email: props.route.params.email,
     password: '',
     passwordAgain: '',
     name: '',
     lastName: '',
-    birth: '',
+    birth: null,
     gender: '',
     imageUrl: '',
     fallowers: ['initial'],
@@ -56,109 +46,66 @@ function Signup(props) {
     books: ['initial'],
     terms: false,
   });
-  const signUpHandler = async () => {
-    const imgUrl = `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`;
-    // const newUser = {
-    //   email: email,
-    //   password: password,
-    //   passwordAgain: passwordAgain,
-    //   name: name,
-    //   lastName: lastName,
-    //   birth: birth,
-    //   gender: gender,
-    //   imageUrl: `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`,
-    //   fallowers: ['initial'],
-    //   fallowing: ['initial'],
-    //   books: ['initial'],
-    //   terms: checked,
-    // };
-
-    await AuthController.createUser(newUser, props);
-  };
-
-  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height;
-  };
-  // const TermsPopup = () => {
-  //   return (
-  //     <Portal>
-  //       <Modal
-  //         visible={visible}
-  //         onDismiss={hideModal}
-  //         contentContainerStyle={styles.containerStyle}>
-  //         <View style={{flex: 1, padding: 20}}>
-  //           <WebView
-  //             originWhitelist={['*']}
-  //             onScroll={({nativeEvent}) => {
-  //               if (isCloseToBottom(nativeEvent)) {
-  //                 setBottom(false);
-  //               }
-  //             }}
-  //             scrollEventThrottle={400}
-  //             showsVerticalScrollIndicator={false}
-  //             startInLoadingState={false}
-  //             scalesPageToFit={false}
-  //             source={{
-  //               html: `
-  //                 <head>
-  //                   <meta content="width=width, initial-scale=1, maximum-scale=0.8" name="viewport"></meta>
-  //                 </head>
-  //                 <body style="background-image" size: ${terms}`,
-  //             }}
-  //             style={{flex: 1, padding: 20}}
-  //           />
-  //         </View>
-  //         <Button
-  //           title="Accept Terms and Policies"
-  //           style={{marginTop: 30}}
-  //           onPress={hideModal}
-  //           disabled={bottom}></Button>
-  //       </Modal>
-  //     </Portal>
-  //   );
-  // };
-
-  const stepHandler = (step, val) => {
-    return Math.min(Math.max(step + val, 0), STEP_LENGTH);
-  };
-  const [step, setStep] = React.useState(0);
-  const [progressValue, setProgressValue] = React.useState(0);
+  console.log(step, progressValue);
   const onNextStepPress = useCallback(() => {
+    if (step === 3) {
+      setProgressValue(1);
+      return onRegister(formData);
+    }
     const currStep = stepHandler(step, 1);
-    setProgressValue(currStep / STEP_LENGTH);
+    setProgressValue(currStep / PROGRESS_LENGTH);
     setStep(currStep);
-  }, [step]);
+  }, [step, formData]);
+  const stepHandler = (step, val) => {
+    return Math.min(Math.max(step + val, 1), STEP_LENGTH);
+  };
 
-  console.warn('progressValue : ', progressValue);
   const onPreviousStepPress = useCallback(() => {
-    if (step === 0) return props.navigation.navigate('Login');
+    if (step === 1) return props.navigation.navigate('Login');
     const currStep = stepHandler(step, -1);
-    setProgressValue(currStep / STEP_LENGTH);
+    setProgressValue(currStep / PROGRESS_LENGTH);
     setStep(currStep);
   }, [step]);
-  console.log('formData : ', formData);
+  console.log('formData', formData);
+  const onRegister = async formData => {
+    const newUser = {
+      ...formData,
+      birth: new Date(formData.birth).toISOString(),
+      imageUrl: `https://ui-avatars.com/api/?name=${formData.name}-${formData.lastName}&background=random`,
+      fallowers: ['initial'],
+      fallowing: ['initial'],
+      books: ['initial'],
+    };
+    setLoading(true);
+    await createUser(newUser, props);
+    setLoading(false);
+  };
   const StepSelector = useCallback(
-    ({step}) => {
+    ({step, formData, onNextStepPress, setFormData}) => {
       switch (step) {
-        case 0:
+        case 1:
           return (
             <FirstStep
               onNextStepPress={onNextStepPress}
               setFormData={setFormData}
-            />
-          );
-        case 1:
-          return (
-            <SecondStep
-              onNextStepPress={onNextStepPress}
-              setFormData={setFormData}
+              formData={formData}
             />
           );
         case 2:
           return (
+            <SecondStep
+              onNextStepPress={onNextStepPress}
+              setFormData={setFormData}
+              formData={formData}
+            />
+          );
+        case 3:
+          return (
             <ThirdStep
               onNextStepPress={onNextStepPress}
               setFormData={setFormData}
+              formData={formData}
+              loading={loading}
             />
           );
         default:
@@ -186,38 +133,30 @@ function Signup(props) {
                 Back
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onNextStepPress}>
-              <Text
-                variant="bodyLarge"
-                style={{color: '#A39ACF', fontWeight: 'bold'}}>
-                Next
-              </Text>
-            </TouchableOpacity>
+            {
+              <TouchableOpacity onPress={onNextStepPress}>
+                <Text
+                  variant="bodyLarge"
+                  style={{color: '#A39ACF', fontWeight: 'bold'}}>
+                  {step !== 3 ? 'Next' : 'Sign up'}
+                </Text>
+              </TouchableOpacity>
+            }
           </View>
           <ProgressBar
             progress={progressValue}
             color={'#A39ACF'}
-            style={{marginHorizontal: 40}}
+            style={{transform: [{scaleX: 0.8}]}}
           />
 
-          {/* {visible && <TermsPopup />} */}
           <View style={{margin: 20, marginTop: 40}}>
             <StepSelector
               step={step}
               onNextStepPress={onNextStepPress}
               setFormData={setFormData}
+              formData={formData}
             />
           </View>
-          {/* <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={signUpHandler}>
-              <Text style={styles.buttonText}>Create</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => props.navigation.navigate('Login')}>
-              <Text style={styles.buttonText}>Back</Text>
-            </TouchableOpacity>
-          </View> */}
         </KeyboardAvoidingView>
       </ScrollView>
     </SafeAreaView>

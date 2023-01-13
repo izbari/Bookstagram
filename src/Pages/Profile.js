@@ -14,18 +14,18 @@ import Flag from 'react-native-flags';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import auth from '@react-native-firebase/auth';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 const {width} = Dimensions.get('window');
 
 import {useTranslation} from 'react-i18next';
-import Icon from '../components/Icons'
+import Icon from '../components/Icons';
 
 //import i18n from 'i18next';
 function Profile(props) {
-  const {t,i18n} = useTranslation();
+  const {t, i18n} = useTranslation();
   const selectedLanguageCode = i18n.language;
-
+  const dispatch = useDispatch();
   const setLanguage = code => {
     return i18n.changeLanguage(code);
   };
@@ -48,11 +48,12 @@ function Profile(props) {
     setUser(authuser);
   }, [authuser]);
 
-  const signOut = () => {
-    auth()
+  const signOut = async () => {
+    return await auth()
       .signOut()
       .then(() => {
-        props.navigation.replace('AuthProvider');
+        dispatch({type: 'SET_USER', payload: {user: null}});
+        return props.navigation.replace('AuthLoading');
       });
   };
 
@@ -78,11 +79,10 @@ function Profile(props) {
       }}>
       <View>
         <ScrollView>
-          {LANGUAGES.map((language,index) => {
+          {LANGUAGES.map((language, index) => {
             const selectedLanguage = language.code === selectedLanguageCode;
             return (
-              <View style={{flex:1}} 
-              key={language.code}>
+              <View style={{flex: 1}} key={language.code}>
                 <TouchableOpacity
                   key={language.code}
                   disabled={selectedLanguage}
@@ -90,18 +90,19 @@ function Profile(props) {
                     setLanguage(language.code);
                     setModalVisible(false);
                   }}
-                  style={{flex:1,padding:10}}
-
-                 >
-                  <View style={{flexDirection:'row',justifyContent:'flex-end'}}>
-                  <View style={{flexDirection: 'row',flex:1}}>
-                  <Flag code={language.code.toUpperCase()} size={32} />
-                  <Text style={styles.text}>{language.label}</Text>
-                  </View>
-                  {selectedLanguage ? <Icon name='CheckMark' size={25}  fill='#FF6EA1'  /> : null}
+                  style={{flex: 1, padding: 10}}>
+                  <View
+                    style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <View style={{flexDirection: 'row', flex: 1}}>
+                      <Flag code={language.code.toUpperCase()} size={32} />
+                      <Text style={styles.text}>{language.label}</Text>
+                    </View>
+                    {selectedLanguage ? (
+                      <Icon name="CheckMark" size={25} fill="#FF6EA1" />
+                    ) : null}
                   </View>
                 </TouchableOpacity>
-                {index +1 != LANGUAGES.length && <Divider />}
+                {index + 1 != LANGUAGES.length && <Divider />}
               </View>
             );
           })}
@@ -190,7 +191,7 @@ function Profile(props) {
                 style={{marginLeft: 5, marginRight: 5, marginTop: 5}}
               />
             </TouchableOpacity>
-           
+
             <Text
               style={{
                 color: 'white',
@@ -201,7 +202,14 @@ function Profile(props) {
                 marginTop: 7,
               }}>
               {t('common:Hello')}
-              {!!user ? " "+user.name[0].toUpperCase()+user.name.substring(1,user.name.length) +' ' + user.lastName[0].toUpperCase()+user.lastName.substring(1,user.lastName.length) : 'user cant found'}
+              {!!user
+                ? ' ' +
+                  user.name[0].toUpperCase() +
+                  user.name.substring(1, user.name.length) +
+                  ' ' +
+                  user.lastName[0].toUpperCase() +
+                  user.lastName.substring(1, user.lastName.length)
+                : 'user cant found'}
             </Text>
           </View>
 
@@ -215,7 +223,9 @@ function Profile(props) {
 
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {!!user && user?.fallowers ? Object.keys(user.fallowers ?? {}).length : '1000'}
+                {!!user && user?.fallowers
+                  ? Object.keys(user.fallowers ?? {}).length
+                  : '1000'}
               </Text>
               <Text style={styles.profileStatusText}>
                 {t('common:Followers')}
@@ -223,7 +233,9 @@ function Profile(props) {
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileStatusContainer}>
               <Text style={styles.profileStatusNumber}>
-                {!!user && user?.fallowing ? Object.keys(user.fallowing ?? {}).length : '1001'}
+                {!!user && user?.fallowing
+                  ? Object.keys(user.fallowing ?? {}).length
+                  : '1001'}
               </Text>
               <Text style={styles.profileStatusText}>
                 {t('common:Following')}
@@ -231,9 +243,9 @@ function Profile(props) {
             </TouchableOpacity>
             <Image
               style={{
-                position:'relative',
-                left:50,
-                top:10,
+                position: 'relative',
+                left: 50,
+                top: 10,
                 height: 90,
                 width: 90,
                 resizeMode: 'contain',
@@ -242,7 +254,8 @@ function Profile(props) {
                 elavation: 5,
               }}
               source={{
-                uri: user.imageUrl}}
+                uri: user.imageUrl,
+              }}
             />
           </View>
         </View>
@@ -284,17 +297,17 @@ function Profile(props) {
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Store')}
             style={styles.menuRow}>
-            <Icon  name='Card' size={25} fill="#FF6EA1" />
+            <Icon name="Card" size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:MyCart')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
-            <Icon name='CreditCard' size={25} fill="#FF6EA1" />
+            <Icon name="CreditCard" size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:Purchases')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
-            <Icon  name='User' size={25} fill="#FF6EA1" />
+            <Icon name="User" size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:Account')}</Text>
           </TouchableOpacity>
         </View>
@@ -315,12 +328,12 @@ function Profile(props) {
         </Text>
         <View>
           <TouchableOpacity style={styles.menuRow}>
-            <Icon  name='Theme' size={25} fill="black" />
+            <Icon name="Theme" size={25} fill="black" />
             <Text style={styles.text}>{t('common:Theme')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
           <TouchableOpacity style={styles.menuRow}>
-            <Icon name = {"Notification"} size={25} fill="#FF6EA1" />
+            <Icon name={'Notification'} size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:Notifications')}</Text>
           </TouchableOpacity>
           <Svg height="2" width={width}></Svg>
@@ -333,7 +346,7 @@ function Profile(props) {
           <Svg height="2" width={width}></Svg>
 
           <TouchableOpacity onPress={() => signOut()} style={styles.menuRow}>
-            <Icon name='Logout' size={25} fill="#FF6EA1" />
+            <Icon name="Logout" size={25} fill="#FF6EA1" />
             <Text style={styles.text}>{t('common:SignOut')}</Text>
           </TouchableOpacity>
         </View>

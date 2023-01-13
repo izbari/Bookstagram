@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import {TextInput} from 'react-native-element-textinput';
 import {ScrollView, Dimensions} from 'react-native';
 import {Text, Button} from 'react-native-paper';
+import {memo} from 'react';
 const {width} = Dimensions.get('window');
-export default function FirstStep({onNextStepPress, setFormData}) {
+function FirstStep({onNextStepPress, setFormData, formData}) {
   const [focus2, setFocus2] = useState(false);
   const [focus, setFocus] = useState(false);
   return (
@@ -34,6 +35,7 @@ export default function FirstStep({onNextStepPress, setFormData}) {
         }}
         scrollEnabled={false}
         placeholder="Name"
+        value={formData.name}
         onChangeText={text => setFormData(prev => ({...prev, name: text}))}
       />
       <TextInput
@@ -57,6 +59,7 @@ export default function FirstStep({onNextStepPress, setFormData}) {
         }}
         scrollEnabled={false}
         placeholder="Last name"
+        value={formData.lastName}
         onChangeText={text => setFormData(prev => ({...prev, lastName: text}))}
       />
       <Button
@@ -89,3 +92,4 @@ export default function FirstStep({onNextStepPress, setFormData}) {
     </ScrollView>
   );
 }
+export default FirstStep;

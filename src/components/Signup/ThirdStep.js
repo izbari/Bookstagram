@@ -1,31 +1,51 @@
 import React, {useState} from 'react';
 import {TextInput} from 'react-native-element-textinput';
-import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-import {Text, Button, Checkbox} from 'react-native-paper';
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import {Text, Button, Checkbox, Modal, Portal} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
-import TermsPopup from '../TermsPolicyModal';
+import {WebView} from 'react-native-webview';
+import terms from '../../utils/terms';
 const {width} = Dimensions.get('window');
-export default function SecondStep({onNextStepPress, setFormData}) {
+export default function ThirdStep({
+  setFormData,
+  formData,
+  loading,
+  onNextStepPress
+}) {
   const [visible, setVisible] = useState(false);
   const [focus, setFocus] = useState(false);
   const [focusForAgain, setFocusForAgain] = useState(false);
 
-  const [password, setPassword] = useState('');
-  const [passwordAgain, setPasswordAgain] = useState('');
-
   const [secret, setSecret] = useState(true);
   const [secretAgain, setSecretAgain] = useState(true);
 
-  const [loading, setLoading] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const password = formData.password;
+  const passwordAgain = formData.passwordAgain;
 
   const disabled =
     !password.length > 0 ||
     !passwordAgain.length > 0 ||
     password !== passwordAgain;
-  const onRegister = () => {
-    console.log('register');
+
+  const onAcceptTermPress = () => {
+    setVisible(false);
+    setFormData(prev => ({...prev, terms: true}));
   };
+
+  const onCheckboxPress = () => {
+    if (formData.terms) {
+      setFormData(prev => ({...prev, terms: false}));
+    } else {
+      setVisible(true);
+    }
+  };
+
   return (
     <ScrollView>
       <Text
@@ -55,8 +75,8 @@ export default function SecondStep({onNextStepPress, setFormData}) {
           borderRadius: 10,
           height: 60,
           borderWidth: 2,
-          borderColor: focus ? '#A39ACF' : '#ededed',
           backgroundColor: '#ededed',
+          borderColor: focus ? '#A39ACF' : '#ededed',
         }}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
@@ -67,7 +87,9 @@ export default function SecondStep({onNextStepPress, setFormData}) {
         scrollEnabled={false}
         placeholder="Password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={password =>
+          setFormData(prev => ({...prev, password: password}))
+        }
       />
       <TextInput
         renderRightIcon={() =>
@@ -86,7 +108,6 @@ export default function SecondStep({onNextStepPress, setFormData}) {
         autoCorrect={false}
         placeholderTextColor="grey"
         style={{
-          marginBottom: 40,
           paddingHorizontal: 15,
           borderRadius: 10,
           height: 60,
@@ -103,28 +124,26 @@ export default function SecondStep({onNextStepPress, setFormData}) {
         scrollEnabled={false}
         placeholder="Password Again"
         value={passwordAgain}
-        onChangeText={setPasswordAgain}
+        onChangeText={passwordAgain =>
+          setFormData(prev => ({...prev, passwordAgain: passwordAgain}))
+        }
       />
-      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginVertical: 20,
+          width,
+        }}>
         <Checkbox.Item
-          color={'white'}
+          color={'#8B7FC5'}
           labelStyle={{fontSize: 12, fontStyle: 'italic'}}
           style={{fontSize: 12}}
-          status={checked ? 'checked' : 'unchecked'}
+          status={formData.terms ? 'checked' : 'unchecked'}
           label={'I accept the Terms in the License Agreement.'}
           position="leading"
-          onPress={() => {
-            if (checked) {
-              setChecked(false);
-            } else {
-              setVisible(true);
-            }
-          }}
+          onPress={onCheckboxPress}
         />
       </View>
-      {visible && (
-        <TermsPopup visible={visible} hideModal={() => setVisible(false)} />
-      )}
 
       <Button
         mode="contained"
@@ -139,10 +158,10 @@ export default function SecondStep({onNextStepPress, setFormData}) {
             height: 50,
             backgroundColor: '#8B7FC5',
           },
-          {backgroundColor: disabled ? '#8B7FC5' : '#A39ACF'},
+          {backgroundColor: disabled ? '#A39ACF' : '#8B7FC5'},
         ]}
         loading={loading}
-        onPress={onRegister}>
+        onPress={onNextStepPress}>
         {loading ? undefined : (
           <Text
             style={{
@@ -156,6 +175,60 @@ export default function SecondStep({onNextStepPress, setFormData}) {
           </Text>
         )}
       </Button>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          contentContainerStyle={{
+            backgroundColor: 'white',
+            flex: 1,
+            margin: 15,
+            borderRadius: 10,
+          }}>
+          <View style={{flex: 1, padding: 20}}>
+            <TouchableOpacity
+              hitSlop={{top: 10, bottom: 10, right: 10, left: 10}}
+              style={{position: 'absolute', right: 15, top: 15, zIndex: 99}}
+              onPress={() => setVisible(false)}>
+              <Icon name="close-outline" size={24} />
+            </TouchableOpacity>
+            <WebView
+              originWhitelist={['*']}
+              scrollEventThrottle={400}
+              showsVerticalScrollIndicator={false}
+              startInLoadingState={false}
+              scalesPageToFit={false}
+              source={{
+                html: `
+                  <head>
+                    <meta content="width=width, initial-scale=1, maximum-scale=0.8" name="viewport"></meta>
+                  </head>
+                  <body style="background-image" size: ${terms}`,
+              }}
+              style={{flex: 1, padding: 20}}
+            />
+          </View>
+
+          <Button
+            mode="outlined"
+            compact
+            style={{
+              borderRadius: 0,
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+              backgroundColor: '#8B7FC5',
+            }}
+            labelStyle={{
+              color: '#fff',
+              fontWeight: 'bold',
+              letterSpacing: 1,
+              textAlign: 'center',
+            }}
+            onPress={onAcceptTermPress}>
+            Accept Terms and Policies
+          </Button>
+        </Modal>
+      </Portal>
     </ScrollView>
   );
 }

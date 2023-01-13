@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, Dimensions} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
@@ -17,38 +17,47 @@ function AuthLoading(props) {
         'A new FCM message at foregroud!',
         JSON.stringify(remoteMessage),
       );
-      console.log("--------------->",remoteMessage.data.targetRoute)
-     
-        if(remoteMessage.data.targetRoute==="ChatSingleScreen") {
-          dispatch({type:'MESSAGE_NOTIFICATION', payload:{messageId:remoteMessage.data.chatId}});
-          PushNotification.configure();
-        }
-        else if(remoteMessage.data.targetRoute==="VideoCallScreen"){
-           const {name, imageUrl, chatId, uid, targetRoute} = remoteMessage.data;   
-                   dispatch({type:'MESSAGE_NOTIFICATION', payload:{}});
+      console.log('--------------->', remoteMessage.data.targetRoute);
 
-           props.navigation.navigate('Chat', {
-         screen: targetRoute,
-         params: {name: name, imageUrl: imageUrl, chatId: chatId, uid: uid},
-       });
-        } 
-        return;
-    }
-     
-    );
+      if (remoteMessage.data.targetRoute === 'ChatSingleScreen') {
+        dispatch({
+          type: 'MESSAGE_NOTIFICATION',
+          payload: {messageId: remoteMessage.data.chatId},
+        });
+        PushNotification.configure();
+      } else if (remoteMessage.data.targetRoute === 'VideoCallScreen') {
+        const {name, imageUrl, chatId, uid, targetRoute} = remoteMessage.data;
+        dispatch({type: 'MESSAGE_NOTIFICATION', payload: {}});
+
+        props.navigation.navigate('Chat', {
+          screen: targetRoute,
+          params: {name: name, imageUrl: imageUrl, chatId: chatId, uid: uid},
+        });
+      }
+      return;
+    });
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log(
         'Notification caused app to open from background state:',
         remoteMessage,
       );
       const {name, imageUrl, chatId, uid, targetRoute} = remoteMessage.data;
-      const authData = (targetRoute === 'ChatSingleScreen') ? JSON.parse(remoteMessage.data.authData) : null; 
+      const authData =
+        targetRoute === 'ChatSingleScreen'
+          ? JSON.parse(remoteMessage.data.authData)
+          : null;
 
       props.navigation.navigate('Chat', {
         screen: targetRoute,
-        params: {name: name, imageUrl: imageUrl, chatId: chatId, uid: uid,authData:authData},
+        params: {
+          name: name,
+          imageUrl: imageUrl,
+          chatId: chatId,
+          uid: uid,
+          authData: authData,
+        },
       });
-      });
+    });
 
     // Check whether an initial notification is available
     messaging()
@@ -60,55 +69,64 @@ function AuthLoading(props) {
             remoteMessage,
           );
           const {name, imageUrl, chatId, uid, targetRoute} = remoteMessage.data;
-          const authData = (targetRoute === 'ChatSingleScreen') ? JSON.parse(remoteMessage.data.authData) : null; 
-           
+          const authData =
+            targetRoute === 'ChatSingleScreen'
+              ? JSON.parse(remoteMessage.data.authData)
+              : null;
+
           props.navigation.navigate('Chat', {
             screen: targetRoute,
-            params: {name: name, imageUrl: imageUrl, chatId: chatId, uid: uid,authData:authData},
+            params: {
+              name: name,
+              imageUrl: imageUrl,
+              chatId: chatId,
+              uid: uid,
+              authData: authData,
+            },
           });
         }
       });
-    
-    
-  
   }, []);
-  const deneme = props?.route?.params?.deneme;
+  const from = props?.route?.params?.from;
+  console.log('from ', from);
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(user => {
-      console.warn('Auth state changed',deneme)
+      console.warn('Auth state changed', from);
       if (!user) {
-        props.navigation.navigate('AuthStack');
+        console.log('User not logged in');
+        props.navigation.replace('Onboarding');
       } else {
-        dbToken(user).then(()=>{
-          if (deneme == 'Login') {
+        dbToken(user).then(() => {
+          if (from == 'Login' || from == 'Signup') {
+            console.log('User login');
             props.navigation.replace('BookTab');
-          } else if (deneme == 'Signup') {
-            props.navigation.replace('Onboarding');
-          } else if (deneme == undefined) {
+          } else if (from == undefined) {
             props.navigation.replace('BookTab');
           }
         });
-         
       }
     });
     return subscriber; // unsubscribe on unmount
   }, []);
-  const dbToken = async (user) => {
-    console.log(user)
+  const dbToken = async user => {
     database()
-    .ref(`/users/${user.uid}`)
-    .on('value', snapshot => {
-      if(!snapshot?.val()?.notificationTokens){
-        messaging().getToken().then(token => {
-          if(token){
-            database()
-              .ref(`/users/${user.uid}/notificationTokens/${token}`)
-              .set(true);
-          }
-        });
-      }
-      dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
-    });
+      .ref(`/users/${user.uid}`)
+      .on('value', snapshot => {
+        
+        console.log('USER KAYDEDILMIS:', snapshot);
+        if (!snapshot?.val()?.notificationTokens) {
+          messaging()
+            .getToken()
+            .then(token => {
+              if (token) {
+                database()
+                  .ref(`/users/${user.uid}/notificationTokens/${token}`)
+                  .set(true);
+              }
+            });
+        }
+        dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
+      });
   };
   return (
     <View

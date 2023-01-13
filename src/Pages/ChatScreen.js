@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  FlatList,RefreshControl
+  FlatList,
+  RefreshControl,
 } from 'react-native';
 import Image from 'react-native-image-progress';
 import auth from '@react-native-firebase/auth';
@@ -43,59 +44,58 @@ export default function Chat({navigation, route}) {
   }, [navigation, loading]);
 
   useEffect(() => {
-   fetchChats()
-  }, [, navigation, user, route?.params?.check]);
+    fetchChats();
+  }, [navigation, user, route?.params?.check]);
 
   const fetchChats = () => {
+    if (!authUser) return;
     setLoading(true);
     let otherUids = [];
     let otherUserData = [];
 
-    auth().onAuthStateChanged(user => {
-      firestore()
-        .collection('Chats')
-        .where('users', 'array-contains', user.uid)
-        .onSnapshot(snapshot => {
-          snapshot.docs.forEach(chat => {
-            otherUids.push(chat.data().users.find(uid => uid !== user.uid));
-          });
-          database()
-            .ref('users/')
-            .once('value', snapshot => {
-              snapshot.forEach(item => {
-                if (otherUids.includes(item._snapshot.key)) {
-                  const {id, name, lastName, imageUrl} = item._snapshot.value;
+    // auth().onAuthStateChanged(user => {
+    firestore()
+      .collection('Chats')
+      .where('users', 'array-contains', user?.uid)
+      .onSnapshot(snapshot => {
+        snapshot.docs.forEach(chat => {
+          otherUids.push(chat.data().users.find(uid => uid !== user?.uid));
+        });
+        database()
+          .ref('users/')
+          .once('value', snapshot => {
+            snapshot.forEach(item => {
+              if (otherUids.includes(item._snapshot.key)) {
+                const {id, name, lastName, imageUrl} = item._snapshot.value;
 
-                  otherUserData.push({
-                    id: id,
-                    name: name,
-                    lastName: lastName,
-                    imageUrl: imageUrl,
-                    
-                  });
-                }
-              });
-
-              let result = {};
-              for (let item of otherUserData) {
-                let newObject = Object.assign({}, item);
-                result[newObject.id] = newObject;
-                delete newObject.id;
+                otherUserData.push({
+                  id: id,
+                  name: name,
+                  lastName: lastName,
+                  imageUrl: imageUrl,
+                });
               }
-
-              setOtherUserData(otherUserData);
-              setLoading(false);
             });
 
-          setChats(snapshot.docs);
-        });
-    });
+            let result = {};
+            for (let item of otherUserData) {
+              let newObject = Object.assign({}, item);
+              result[newObject.id] = newObject;
+              delete newObject.id;
+            }
+
+            setOtherUserData(otherUserData);
+            setLoading(false);
+          });
+
+        setChats(snapshot.docs);
+      });
+    // });
   };
-  
 
   const ChatObject = ({item}) => {
     const willSendUid = item?._data.users?.find(
-      user => user !== auth()?.currentUser.uid,
+      user => user !== auth()?.currentUser?.uid,
     );
     const willSendChatId = item?._ref._documentPath._parts[1];
     return (
@@ -186,7 +186,7 @@ export default function Chat({navigation, route}) {
               title="Pull to refresh"
               tintColor="#FF6EA1"
               titleColor="grey"
-              colors={["#FF6EA1"]}
+              colors={['#FF6EA1']}
               refreshing={loading}
               onRefresh={() => fetchChats()}
             />

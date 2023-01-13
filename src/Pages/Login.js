@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import AuthController from '../controllers/authController';
+import {checkEmailExist, userLogin} from '../controllers/authController';
 import Welcome from '../components/Yoga';
 import {TextInput} from 'react-native-element-textinput';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -29,12 +29,19 @@ function Login(props) {
       setLoading(true);
 
       if (emailChecked) {
-        return AuthController.userLogin(props, email, password);
+        const resp = await userLogin(email, password);
+        console.warn('resp', resp);
+        if (resp) {
+          resetStates();
+          return props.navigation.navigate('AuthLoading', {
+            from: 'Login',
+          });
+        }
       }
-
-      const isExist = await AuthController.checkEmailExist(email);
+      const isExist = await checkEmailExist(email);
       if (!isExist.length > 0) {
         props.navigation.navigate('Signup', {email: email});
+        resetStates();
       } else {
         setEmailChecked(true);
       }
@@ -43,6 +50,11 @@ function Login(props) {
     } finally {
       setLoading(false);
     }
+  };
+  const resetStates = () => {
+    setEmailChecked(false);
+    setPassword('');
+    setEmail('');
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>

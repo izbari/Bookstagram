@@ -13,40 +13,45 @@ function Toast(msg) {
   );
 }
 
-exports.createUser = async (user, props) => {
+export const createUser = async (user, props) => {
+  console.warn('new user on createUser', user);
   const condition = checkAuthConditions(user);
   if (condition) {
     auth()
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(authUser => {
+        console.warn('auth.currentuser', auth().currentUser);
         if (auth().currentUser) {
           const userId = auth().currentUser.uid;
-          authUser.user.updateProfile({
-            displayName: user.name + ' ' + user.lastName,
-          });
-          const willSave = {
-            email: user.email,
+          console.log('userId', userId);
+          authUser.user
+            .updateProfile({
+              displayName: user.name + ' ' + user.lastName,
+            })
+            .then(updateRes => {
+              console.log('updateRes', updateRes);
+            });
+          const {terms, password, passwordAgain, ...rest} = user;
+          const newUser = {
             id: userId,
-            name: user.name,
-            lastName: user.lastName,
-            birth: user.birth,
-            gender: user.gender,
-            imageUrl: user.imageUrl,
-            fallowers: user.fallowers,
-            fallowing: user.fallowing,
-            books: user.books,
+            ...rest,
           };
+          console.log('willsave', newUser);
           if (userId) {
             database()
               .ref('users/' + userId)
-              .set(willSave);
-            props.navigation.navigate('AuthLoading', {
-              deneme: props.route.name,
-            });
+              .set(newUser)
+              .then(dbRes => {
+                console.warn('dbRes', dbRes);
+                props.navigation.navigate('AuthLoading', {
+                  from: 'Signup',
+                });
+              });
           }
         }
       })
       .catch(function (error) {
+        console.log(error.message);
         error.code == 'auth/email-already-in-use'
           ? Toast('This email already used by another account!')
           : null;
@@ -55,21 +60,15 @@ exports.createUser = async (user, props) => {
   }
 };
 
-exports.userLogin = (props, email, password) => {
+export const userLogin = async (email, password) => {
   if (password && email) {
-    let result = 'boş';
-
-    auth()
-      .signInWithEmailAndPassword(email, password, props)
+    return auth()
+      .signInWithEmailAndPassword(email, password)
       .then(({user}) => {
-        console.log('USER CALISTI');
         Toast(`Welcome ${user.displayName} !! `);
-        props.navigation.navigate('AuthLoading', {deneme: props.route.name});
-
-        result = true;
+        return true;
       })
       .catch(error => {
-        result = false;
         if (error.code === 'auth/wrong-password') {
           Toast('Wrong password.');
         }
@@ -80,8 +79,8 @@ exports.userLogin = (props, email, password) => {
         if (error.code === 'auth/invalid-email') {
           Toast('Email is invalid');
         }
+        return false;
       });
-    return result;
   } else if (!password && !email) Toast('Please enter email and password!');
   else if (!password) Toast('Please enter password!');
   else if (!email) Toast('Please enter email!');
@@ -95,6 +94,7 @@ const checkAuthConditions = ({
   passwordAgain,
   terms,
 }) => {
+  console.warn('?', name, lastName, gender, password, passwordAgain, terms);
   if (Boolean(name) && Boolean(lastName) && Boolean(gender)) {
     if (password === passwordAgain) {
       if (gender) {
@@ -115,7 +115,7 @@ const checkAuthConditions = ({
   return false;
 };
 
-exports.checkEmailExist = async email => {
+export const checkEmailExist = async email => {
   if (email.length > 0) {
     return await auth()
       .fetchSignInMethodsForEmail(email)

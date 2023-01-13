@@ -4,15 +4,15 @@ import {RadioButton, Text, Button} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 const {width} = Dimensions.get('window');
-export default function SecondStep({onNextStepPress, setFormData}) {
+function SecondStep({onNextStepPress, setFormData, formData}) {
   const [focus, setFocus] = useState(false);
-  const [gender, setGender] = useState('male');
-  const [date, setDate] = useState(null);
   const [open, setOpen] = useState(false);
   const onConfirm = date => {
     setOpen(false);
-    setDate(date);
-    setFormData(prev => ({...prev, birth: moment(date).format('DD-MM-YYYY')}));
+    setFormData(prev => ({
+      ...prev,
+      birth: moment(date),
+    }));
   };
   const onCancel = () => {
     setOpen(false);
@@ -21,14 +21,10 @@ export default function SecondStep({onNextStepPress, setFormData}) {
     setOpen(true);
     setFocus(true);
   };
-  const onGenderChanged = useCallback(
-    val => {
-      setFormData(prev => ({...prev, gender: val}));
-      setGender(val);
-    },
-    [gender],
-  );
-
+  const onGenderChanged = val => {
+    setFormData(prev => ({...prev, gender: val}));
+  };
+  console.log('bune', formData.gender);
   return (
     <ScrollView>
       <Text
@@ -50,12 +46,14 @@ export default function SecondStep({onNextStepPress, setFormData}) {
           backgroundColor: '#ededed',
         }}
         onPress={onOpen}>
-        {!date ? 'Birth of Date' : moment(date).format('DD-MM-YYYY')}
+        {!formData.birth
+          ? 'Birth of Date'
+          : moment(formData.birth).format('DD-MM-YYYY')}
       </Button>
       <DatePicker
         modal
         open={open}
-        date={date ?? new Date()}
+        date={new Date(formData.birth) ?? new Date()}
         mode="date"
         onConfirm={onConfirm}
         onCancel={onCancel}
@@ -63,7 +61,7 @@ export default function SecondStep({onNextStepPress, setFormData}) {
 
       <RadioButton.Group
         style={{backgroundColor: 'black'}}
-        value={gender}
+        value={formData.gender}
         onValueChange={onGenderChanged}>
         <View
           style={{
@@ -114,3 +112,4 @@ export default function SecondStep({onNextStepPress, setFormData}) {
     </ScrollView>
   );
 }
+export default SecondStep;
