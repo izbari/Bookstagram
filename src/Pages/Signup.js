@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,83 +6,72 @@ import {
   View,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Button,
+  Platform,
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import {
-  TextInput,
   RadioButton,
   Checkbox,
   Portal,
   Text,
+  ProgressBar,
   Modal,
+  Button,
 } from 'react-native-paper';
 import {TextInputMask} from 'react-native-masked-text';
 import moment from 'moment';
-import Welcome from '../components/Welcome';
 import AuthController from '../controllers/authController';
 import terms from '../utils/terms';
 import {useDispatch} from 'react-redux';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {TextInput} from 'react-native-element-textinput';
+import FirstStep from '../components/Signup/FirstStep';
+import SecondStep from '../components/Signup/SecondStep';
+import ThirdStep from '../components/Signup/ThirdStep';
 
 //main methods
+const STEP_LENGTH = 3;
+
 function Signup(props) {
   //States ,effects, vars
   const dispatch = useDispatch();
   const [visible, setVisible] = React.useState(false);
   const [bottom, setBottom] = React.useState(true);
-  const hideModal = () => {
-    setVisible(false);
-    setBottom(true);
-    setChecked(true);
-  };
-  const [name, setName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-
-  const [email, seteMail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [passwordAgain, setPasswordAgain] = React.useState('');
-
-  const [birth, setBirth] = React.useState('');
-
-  const [gender, setGender] = React.useState('');
-  const [checked, setChecked] = React.useState(false);
-
-  const [secret, setSecret] = React.useState(true);
-  const [passwordOutlineColor, setPasswordOutlineColor] =
-    React.useState('black');
-
-  const emailHasErrors = () => {
-    let pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return pattern.test(email) == 0;
-  };
-  const passwordHasError = params => {
-    const strongRegex = new RegExp(
-      '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})',
-    );
-    const mediumRegex = new RegExp(
-      '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})',
-    );
-
-    if (strongRegex.test(password)) setPasswordOutlineColor('green');
-    else if (mediumRegex.test(password)) setPasswordOutlineColor('orange');
-    else setPasswordOutlineColor('red');
-  };
-
+  // const hideModal = () => {
+  //   setVisible(false);
+  //   setBottom(true);
+  //   setChecked(true);
+  // };
+  const [formData, setFormData] = useState({
+    email: props.route.params.email,
+    password: '',
+    passwordAgain: '',
+    name: '',
+    lastName: '',
+    birth: '',
+    gender: '',
+    imageUrl: '',
+    fallowers: ['initial'],
+    fallowing: ['initial'],
+    books: ['initial'],
+    terms: false,
+  });
   const signUpHandler = async () => {
-    const newUser = {
-      email: email,
-      password: password,
-      passwordAgain: passwordAgain,
-      name: name,
-      lastName: lastName,
-      birth: birth,
-      gender: gender,
-      imageUrl: `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`,
-      fallowers: ['initial'],
-      fallowing: ['initial'],
-      books: ['initial'],
-      terms: checked,
-    };
+    const imgUrl = `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`;
+    // const newUser = {
+    //   email: email,
+    //   password: password,
+    //   passwordAgain: passwordAgain,
+    //   name: name,
+    //   lastName: lastName,
+    //   birth: birth,
+    //   gender: gender,
+    //   imageUrl: `https://ui-avatars.com/api/?name=${name}-${lastName}&background=random`,
+    //   fallowers: ['initial'],
+    //   fallowing: ['initial'],
+    //   books: ['initial'],
+    //   terms: checked,
+    // };
 
     await AuthController.createUser(newUser, props);
   };
@@ -90,252 +79,148 @@ function Signup(props) {
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height;
   };
+  // const TermsPopup = () => {
+  //   return (
+  //     <Portal>
+  //       <Modal
+  //         visible={visible}
+  //         onDismiss={hideModal}
+  //         contentContainerStyle={styles.containerStyle}>
+  //         <View style={{flex: 1, padding: 20}}>
+  //           <WebView
+  //             originWhitelist={['*']}
+  //             onScroll={({nativeEvent}) => {
+  //               if (isCloseToBottom(nativeEvent)) {
+  //                 setBottom(false);
+  //               }
+  //             }}
+  //             scrollEventThrottle={400}
+  //             showsVerticalScrollIndicator={false}
+  //             startInLoadingState={false}
+  //             scalesPageToFit={false}
+  //             source={{
+  //               html: `
+  //                 <head>
+  //                   <meta content="width=width, initial-scale=1, maximum-scale=0.8" name="viewport"></meta>
+  //                 </head>
+  //                 <body style="background-image" size: ${terms}`,
+  //             }}
+  //             style={{flex: 1, padding: 20}}
+  //           />
+  //         </View>
+  //         <Button
+  //           title="Accept Terms and Policies"
+  //           style={{marginTop: 30}}
+  //           onPress={hideModal}
+  //           disabled={bottom}></Button>
+  //       </Modal>
+  //     </Portal>
+  //   );
+  // };
 
-  const TermsPopup = () => {
-    return (
-      <Portal>
-        <Modal
-          visible={visible}
-          onDismiss={hideModal}
-          contentContainerStyle={styles.containerStyle}>
-          <View style={{flex: 1, padding: 20}}>
-            <WebView
-              originWhitelist={['*']}
-              onScroll={({nativeEvent}) => {
-                if (isCloseToBottom(nativeEvent)) {
-                  setBottom(false);
-                }
-              }}
-              scrollEventThrottle={400}
-              showsVerticalScrollIndicator={false}
-              startInLoadingState={false}
-              scalesPageToFit={false}
-              source={{
-                html: ` 
-                  <head>
-                    <meta content="width=width, initial-scale=1, maximum-scale=0.8" name="viewport"></meta>
-                  </head>
-                  <body style="background-image" size: ${terms}`,
-              }}
-              style={{flex: 1, padding: 20}}
-            />
-          </View>
-          <Button
-            title="Accept Terms and Policies"
-            style={{marginTop: 30}}
-            onPress={hideModal}
-            disabled={bottom}></Button>
-        </Modal>
-      </Portal>
-    );
+  const stepHandler = (step, val) => {
+    return Math.min(Math.max(step + val, 0), STEP_LENGTH);
   };
-  return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      style={{flex: 1, backgroundColor: '#FF6EA1'}}>
-      <Text style={styles.header}>Welcome New User</Text>
+  const [step, setStep] = React.useState(0);
+  const [progressValue, setProgressValue] = React.useState(0);
+  const onNextStepPress = useCallback(() => {
+    const currStep = stepHandler(step, 1);
+    setProgressValue(currStep / STEP_LENGTH);
+    setStep(currStep);
+  }, [step]);
 
-      <View style={styles.lottieContainer}>
-        <Welcome />
-      </View>
-      <ScrollView>
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-          <TextInput
-            style={
-              (styles.input,
-              {
-                width: 135,
-                height: 40,
-                borderColor: 'red',
-                margin: 0,
-              })
-            }
-            mode="outlined"
-            label="Name"
-            value={name}
-            theme={{
-              colors: {
-                placeholder: 'black',
-                text: 'black',
-                primary: 'black',
-                underlineColor: 'transparent',
-                background: 'white',
-              },
-            }}
-            onChangeText={name => setName(name)}
-          />
-          <TextInput
-            value={lastName}
-            mode="outlined"
-            onChangeText={lastName => setLastName(lastName)}
-            label="Last name"
-            style={(styles.input, {width: 135, height: 40, margin: 0})}
-            theme={{
-              colors: {
-                placeholder: 'black',
-                text: 'black',
-                primary: 'black',
-                underlineColor: 'transparent',
-                background: 'white',
-              },
-            }}
-          />
-        </View>
-        <TextInput
-          style={styles.input}
-          mode="outlined"
-          selectionColor="#FF6EA1"
-          underlineColor="transparent"
-          editable={true}
-          right={<TextInput.Affix text={email.length + '/100'} />}
-          error={email.length == 0 ? false : emailHasErrors()}
-          theme={{
-            colors: {
-              placeholder: 'black',
-              text: 'black',
-              primary: emailHasErrors() ? 'black' : 'green',
-              underlineColor: 'transparent',
-              background: '#003489',
-            },
-          }}
-          label="Email"
-          value={email}
-          onChangeText={email => seteMail(email)}
-        />
-        <TextInput
-          value={password}
-          mode="outlined"
-          onChangeText={password => {
-            setPassword(password);
-            passwordHasError();
-          }}
-          secureTextEntry={secret}
-          label="Password"
-          style={styles.input}
-          theme={{
-            colors: {
-              placeholder: 'black',
-              text: 'black',
-              primary: passwordOutlineColor,
-              underlineColor: 'transparent',
-              background: '#003489',
-            },
-          }}
-          right={
-            <TextInput.Icon
-              forceTextInputFocus={false}
-              onPress={() => setSecret(!secret)}
-              name={secret ? 'eye-off' : 'eye'}
-              color="grey"
-              style={{marginTop: 15}}
+  console.warn('progressValue : ', progressValue);
+  const onPreviousStepPress = useCallback(() => {
+    if (step === 0) return props.navigation.navigate('Login');
+    const currStep = stepHandler(step, -1);
+    setProgressValue(currStep / STEP_LENGTH);
+    setStep(currStep);
+  }, [step]);
+  console.log('formData : ', formData);
+  const StepSelector = useCallback(
+    ({step}) => {
+      switch (step) {
+        case 0:
+          return (
+            <FirstStep
+              onNextStepPress={onNextStepPress}
+              setFormData={setFormData}
             />
-          }
-        />
+          );
+        case 1:
+          return (
+            <SecondStep
+              onNextStepPress={onNextStepPress}
+              setFormData={setFormData}
+            />
+          );
+        case 2:
+          return (
+            <ThirdStep
+              onNextStepPress={onNextStepPress}
+              setFormData={setFormData}
+            />
+          );
+        default:
+          return null;
+      }
+    },
+    [step],
+  );
 
-        <TextInput
-          value={passwordAgain}
-          style={styles.input}
-          error={password != passwordAgain}
-          theme={{
-            colors: {
-              placeholder: 'black',
-              text: 'black',
-              primary: 'green',
-              underlineColor: 'transparent',
-              background: '#003489',
-            },
-          }}
-          mode="outlined"
-          secureTextEntry={true}
-          label="Password again"
-          onChangeText={passAgain => setPasswordAgain(passAgain)}
-        />
-        <TextInputMask
-          type={'datetime'}
-          options={{
-            format: 'DD/MM/YYYY',
-          }}
-          value={birth}
-          onChangeText={birth => setBirth(birth)}
-          style={{
-            borderColor: 'white',
-            borderRadius: 5,
-            borderWidth: 1,
-            paddingLeft: 15,
-            borderColor:
-              birth.length == 0
-                ? 'black'
-                : moment(birth, 'DD-MM-YYYY').isValid()
-                ? 'green'
-                : 'red',
-            width: 290,
-            height: 40,
-            alignSelf: 'center',
-            justifyContent: 'center',
-            margin: 10,
-            marginBottom: 10,
-            backgroundColor: 'white',
-          }}
-          placeholder="DD/MM/YYYY"
-          placeholderTextColor={'black'}
-        />
-
-        <RadioButton.Group
-          style={{backgroundColor: 'black'}}
-          onValueChange={setGender}
-          value={gender}>
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView contentContainerStyle={{flexGrow: 1, padding: 20}}>
+        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
           <View
             style={{
-              justifyContent: 'center',
               flexDirection: 'row',
-              alignItems: 'center',
-              margin: 10,
+              justifyContent: 'space-between',
+              padding: 20,
             }}>
-            <View style={{flexDirection: 'row'}}>
-              <RadioButton value="Male" color={'white'} />
-              <Text style={{marginTop: 8, fontSize: 15}}>Male</Text>
-            </View>
-            <View style={{flexDirection: 'row', marginLeft: 70}}>
-              <RadioButton value="Female" color={'white'} />
-              <Text style={{marginTop: 8, fontSize: 15}}>Female</Text>
-            </View>
+            <TouchableOpacity
+              onPress={onPreviousStepPress}
+              style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Icon name={'chevron-back-outline'} size={20} color="gray" />
+              <Text variant="labelLarge" style={{color: 'gray'}}>
+                Back
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onNextStepPress}>
+              <Text
+                variant="bodyLarge"
+                style={{color: '#A39ACF', fontWeight: 'bold'}}>
+                Next
+              </Text>
+            </TouchableOpacity>
           </View>
-        </RadioButton.Group>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Checkbox.Item
-            color={'white'}
-            labelStyle={{fontSize: 12, fontStyle: 'italic'}}
-            style={{fontSize: 12}}
-            status={checked ? 'checked' : 'unchecked'}
-            label={'I accept the Terms in the License Agreement.'}
-            position="leading"
-            onPress={() => {
-              if (checked) {
-                setChecked(false);
-              } else {
-                setVisible(true);
-              }
-            }}
+          <ProgressBar
+            progress={progressValue}
+            color={'#A39ACF'}
+            style={{marginHorizontal: 40}}
           />
-        </View>
-        {visible && <TermsPopup />}
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              signUpHandler();
-            }}>
-            <Text style={styles.buttonText}>Create</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => props.navigation.navigate('Login')}>
-            <Text style={styles.buttonText}>Back</Text>
-          </TouchableOpacity>
-        </View>
+          {/* {visible && <TermsPopup />} */}
+          <View style={{margin: 20, marginTop: 40}}>
+            <StepSelector
+              step={step}
+              onNextStepPress={onNextStepPress}
+              setFormData={setFormData}
+            />
+          </View>
+          {/* <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={signUpHandler}>
+              <Text style={styles.buttonText}>Create</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => props.navigation.navigate('Login')}>
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
+          </View> */}
+        </KeyboardAvoidingView>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

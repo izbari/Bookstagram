@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   SafeAreaView,
+  Platform,
   StyleSheet,
   View,
   TouchableOpacity,
@@ -22,62 +23,125 @@ function Login(props) {
   const [loading, setLoading] = React.useState(false);
   const [secret, setSecret] = React.useState(true);
   const [focus, setFocus] = React.useState(false);
+  const disabled = !emailChecked ? !email.length > 0 : !password.length > 0;
+  const onLogin = async () => {
+    try {
+      setLoading(true);
+
+      if (emailChecked) {
+        return AuthController.userLogin(props, email, password);
+      }
+
+      const isExist = await AuthController.checkEmailExist(email);
+      if (!isExist.length > 0) {
+        props.navigation.navigate('Signup', {email: email});
+      } else {
+        setEmailChecked(true);
+      }
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1, backgroundColor: '#fff'}}>
-      <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
-        <View style={styles.lottieContainer}>
-          <Welcome />
-        </View>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1, backgroundColor: '#fff'}}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1, paddingBottom: 40}}>
+          <View style={styles.lottieContainer}>
+            <Welcome />
+          </View>
 
-        <View
-          style={{
-            width: width * 0.8,
-            alignSelf: 'center',
-            justifyContent: 'space-between',
-            paddingVertical: 40,
-          }}>
-          {!emailChecked && (
-            <Text
-              variant="titleLarge"
-              style={{marginBottom: 20, color: '#8B7FC5'}}>
-              Welcome to Bookstagram
-            </Text>
-          )}
+          <View
+            style={{
+              width: width * 0.8,
+              alignSelf: 'center',
+              justifyContent: 'space-between',
+              paddingVertical: 40,
+            }}>
+            {!emailChecked && (
+              <Text
+                variant="titleLarge"
+                style={{marginBottom: 20, color: '#8B7FC5'}}>
+                Welcome to Bookstagram
+              </Text>
+            )}
 
-          {emailChecked ? (
-            <>
-              <View
-                style={{
-                  alignItems: 'center',
-                  marginBottom: 35,
-                  height: 50,
-                  justifyContent: 'space-between',
-                }}>
-                <Text variant="bodyLarge"> {email}</Text>
-                <TouchableOpacity
-                  onPress={() => setEmailChecked(false)}
-                  labelStyle={{color: 'white'}}>
-                  <Text
-                    variant="labelLarge"
-                    style={{color: '#8B7FC5', fontWeight: 'bold'}}>
-                    Change Email
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            {emailChecked ? (
+              <>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    marginBottom: 35,
+                    height: 50,
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text variant="bodyLarge"> {email}</Text>
+                  <TouchableOpacity
+                    onPress={() => setEmailChecked(false)}
+                    labelStyle={{color: 'white'}}>
+                    <Text
+                      variant="labelLarge"
+                      style={{color: '#8B7FC5', fontWeight: 'bold'}}>
+                      Change Email
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  renderRightIcon={() =>
+                    password.length > 0 ? (
+                      <Icon
+                        name={secret ? 'eye' : 'eye-off'}
+                        size={25}
+                        color={focus ? '#A39ACF' : 'grey'}
+                        onPress={() => {
+                          setSecret(prev => !prev);
+                        }}
+                      />
+                    ) : null
+                  }
+                  secureTextEntry={secret}
+                  autoCorrect={false}
+                  placeholderTextColor="grey"
+                  style={{
+                    marginBottom: 40,
+                    paddingHorizontal: 15,
+                    borderRadius: 10,
+                    height: 60,
+                    borderWidth: 2,
+                    borderColor: focus ? '#A39ACF' : '#ededed',
+                    backgroundColor: '#ededed',
+                  }}
+                  onFocus={() => setFocus(true)}
+                  onBlur={() => setFocus(false)}
+                  focusColor="#A39ACF"
+                  selectionColor="#A39ACF"
+                  inputStyle={{
+                    color: 'grey',
+                  }}
+                  scrollEnabled={false}
+                  placeholder="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                />
+              </>
+            ) : (
               <TextInput
                 renderRightIcon={() =>
                   email.length > 0 ? (
                     <Icon
-                      name={secret ? 'eye' : 'eye-off'}
+                      name="close-outline"
                       size={25}
-                      color={focus ? '#A39ACF' :'grey'}
+                      color={'grey'}
                       onPress={() => {
                         setEmail('');
                       }}
                     />
                   ) : null
                 }
-                secureTextEntry={secret}
                 autoCorrect={false}
                 placeholderTextColor="grey"
                 style={{
@@ -97,89 +161,36 @@ function Login(props) {
                   color: 'grey',
                 }}
                 scrollEnabled={false}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
               />
-            </>
-          ) : (
-            <TextInput
-              renderRightIcon={() =>
-                email.length > 0 ? (
-                  <Icon
-                    name="close-outline"
-                    size={25}
-                    color={'grey'}
-                    onPress={() => {
-                      setEmail('');
-                    }}
-                  />
-                ) : null
-              }
-              autoCorrect={false}
-              placeholderTextColor="grey"
-              style={{
-                marginBottom: 40,
-                paddingHorizontal: 15,
-                borderRadius: 10,
-                height: 60,
-                borderWidth: 2,
-                borderColor: focus ? '#A39ACF' : '#ededed',
-                backgroundColor: '#ededed',
-              }}
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
-              focusColor="#A39ACF"
-              selectionColor="#A39ACF"
-              inputStyle={{
-                color: 'grey',
-              }}
-              scrollEnabled={false}
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-            />
-          )}
-          <TouchableOpacity
-            contentStyle={{height: 100}}
-            disabled={!emailChecked ? !email.length > 0 : !password.length > 0}
-            style={styles.button}
-            onPress={async () => {
-              try {
-                setLoading(true);
-
-                if (emailChecked) {
-                  return AuthController.userLogin(props, email, password);
-                }
-
-                const isExist = await AuthController.checkEmailExist(email);
-                if (!isExist.length > 0) {
-                  props.navigation.navigate('Signup');
-                } else {
-                  setEmailChecked(true);
-                }
-              } catch (error) {
-                console.log('error', error);
-              } finally {
-                setLoading(false);
-              }
-            }}>
-            {loading ? (
-              <ActivityIndicator size={'small'} color="white" animating />
-            ) : (
-              <Text
-                style={{
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  letterSpacing: 1,
-                  fontSize: 18,
-                  textAlign: 'center',
-                }}>
-                Log in
-              </Text>
             )}
-          </TouchableOpacity>
-          <Text style={{textAlign: 'center', marginTop: 10}}>
+            <Button
+              mode="contained"
+              compact
+              contentStyle={{height: 50}}
+              disabled={disabled}
+              style={[
+                styles.button,
+                {backgroundColor: disabled ? '#A39ACF' : '#8B7FC5'},
+              ]}
+              loading={loading}
+              onPress={onLogin}>
+              {loading ? undefined : (
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    letterSpacing: 1,
+                    fontSize: 18,
+                    textAlign: 'center',
+                  }}>
+                  Log in
+                </Text>
+              )}
+            </Button>
+            {/* <Text style={{textAlign: 'center', marginTop: 10}}>
             <Text>{"Don't have an account?"} </Text>
             <Text
               onPress={() => props.navigation.navigate('Signup')}
@@ -191,10 +202,11 @@ function Login(props) {
               }}>
               {'Sign up'}
             </Text>
-          </Text>
-        </View>
-      </KeyboardAvoidingView>
-    </ScrollView>
+          </Text> */}
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -210,12 +222,9 @@ const styles = StyleSheet.create({
   button: {
     width: width * 0.8,
     borderRadius: 10,
-    borderWidth: 2,
     borderColor: 'white',
     height: 50,
     backgroundColor: '#A39ACF',
-    justifyContent: 'center',
-    alignSelf: 'center',
   },
   buttonText: {
     alignSelf: 'center',
