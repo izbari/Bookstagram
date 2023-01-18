@@ -1,0 +1,44 @@
+{
+  "name": "react-native-webrtc",
+  "version": "1.94.1",
+  "summary": "WebRTC for React Native",
+  "homepage": "https://github.com/react-native-webrtc/react-native-webrtc",
+  "license": "MIT",
+  "authors": "https://github.com/react-native-webrtc/react-native-webrtc/graphs/contributors",
+  "source": {
+    "git": "git@github.com:react-native-webrtc/react-native-webrtc.git",
+    "tag": "release #{s.version}"
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "11.0",
+    "osx": "10.13"
+  },
+  "preserve_paths": "ios/**/*",
+  "source_files": "ios/**/*.{h,m}",
+  "libraries": [
+    "c",
+    "sqlite3",
+    "stdc++"
+  ],
+  "frameworks": [
+    "AudioToolbox",
+    "AVFoundation",
+    "CoreAudio",
+    "CoreGraphics",
+    "CoreVideo",
+    "GLKit",
+    "VideoToolbox"
+  ],
+  "ios": {
+    "vendored_frameworks": "apple/WebRTC.xcframework"
+  },
+  "osx": {
+    "vendored_frameworks": "apple/WebRTC.xcframework"
+  },
+  "dependencies": {
+    "React-Core": [
+
+    ]
+  }
+}

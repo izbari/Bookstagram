@@ -1,0 +1,1 @@
+../../../FirebaseFirestore/FirebaseAppCheck/Sources/Interop/FIRAppCheckInterop.h

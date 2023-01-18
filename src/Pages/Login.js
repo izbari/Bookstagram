@@ -142,6 +142,7 @@ function Login(props) {
               </>
             ) : (
               <TextInput
+                autoCapitalize='none'
                 renderRightIcon={() =>
                   email.length > 0 ? (
                     <Icon

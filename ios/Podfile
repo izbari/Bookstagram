@@ -12,16 +12,12 @@ target 'Bookstagram' do
     :hermes_enabled => false
   )
 
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-
-  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-
-  pod 'RNCallKeep', :path => '../node_modules/react-native-callkeep'
-
-  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
 
 
-  pod 'RNBootSplash', :path => '../node_modules/react-native-bootsplash'
+  # pod 'RNCallKeep', :path => '../node_modules/react-native-callkeep'
+
+
+
 
   target 'BookstagramTests' do
     inherit! :complete

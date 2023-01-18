@@ -1,0 +1,6 @@
+module Pods_Bookstagram_BookstagramTests {
+  umbrella header "Pods-Bookstagram-BookstagramTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

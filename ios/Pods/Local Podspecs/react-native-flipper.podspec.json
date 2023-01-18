@@ -1,0 +1,32 @@
+{
+  "name": "react-native-flipper",
+  "version": "0.131.1",
+  "summary": "Flipper bindings for React Native",
+  "description": "react-native-flipper",
+  "homepage": "https://fbflipper.com/",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Michel Weststrate": "mweststrate@fb.com"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/facebook/flipper.git",
+    "tag": "0.131.1"
+  },
+  "source_files": "ios/**/*.{h,m,swift}",
+  "pod_target_xcconfig": {
+    "HEADER_SEARCH_PATHS": "\"${PODS_ROOT}/Headers/Public/FlipperKit\""
+  },
+  "requires_arc": true,
+  "compiler_flags": "-DFB_SONARKIT_ENABLED=1",
+  "dependencies": {
+    "React-Core": [
+
+    ]
+  }
+}
