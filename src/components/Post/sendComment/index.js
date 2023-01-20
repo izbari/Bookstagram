@@ -1,1 +1,1 @@
-export {default} from './customTextInput';
+export {default} from './addCommentBar';

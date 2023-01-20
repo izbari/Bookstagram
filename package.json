@@ -11,6 +11,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^4",
     "@react-native-async-storage/async-storage": "^1.16.1",
     "@react-native-community/checkbox": "^0.5.9",
     "@react-native-community/push-notification-ios": "^1.10.1",
@@ -45,6 +46,8 @@
     "react-native-dropdown-picker": "^5.3.0",
     "react-native-element-textinput": "^2.0.1",
     "react-native-elements": "^3.4.2",
+    "react-native-emoji-selector": "^0.2.0",
+    "react-native-emoticons": "^1.0.13",
     "react-native-fast-image": "^8.5.11",
     "react-native-flags": "^1.0.0",
     "react-native-flipper": "^0.131.1",
@@ -76,7 +79,8 @@
     "react-redux": "^7.2.6",
     "react-wavify": "^1.5.4",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
-    "redux": "^4.1.2"
+    "redux": "^4.1.2",
+    "twrnc": "^3.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
