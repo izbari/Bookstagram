@@ -1,4 +1,4 @@
-import {ToastAndroid} from 'react-native';
+import {Alert, ToastAndroid} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -173,7 +173,7 @@ export default function (state, action, props) {
           comments: comments,
         })
         .then(() => {
-          Toast('Comment successfully posted!');
+          Alert.alert('Comment successfully posted!');
         });
 
       return {...state, posts: newList};

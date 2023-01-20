@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {
   FlatList,
-  StyleSheet,
   View,
   Text,
   Dimensions,
   RefreshControl,
   StatusBar,
+  SafeAreaView,
 } from 'react-native';
 
 import Animated from 'react-native-reanimated';
@@ -14,7 +14,8 @@ import firestore from '@react-native-firebase/firestore';
 import database from '@react-native-firebase/database';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector, useDispatch} from 'react-redux';
-import BottomSheet from 'reanimated-bottom-sheet';
+// import BottomSheet from 'reanimated-bottom-sheet';
+import tw from 'twrnc';
 
 import Icon from '../components/Icons';
 import firebaseUtil from '../utils/parseFirebaseData';
@@ -25,36 +26,40 @@ import PostFooter from '../components/Post/postFooter';
 import PostHeader from '../components/Post/postHeader';
 import SharePostRow from '../components/Post/SharePostRow';
 import Comment from '../components/Post/postComment/';
+import BottomsheetCommentAction from '../components/Post/sendComment';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
+// import BottomSheetBackdrop from '../components/BottomSheet';
 
 const {width} = Dimensions.get('window');
 
 function HomeScreen({navigation, route}) {
   const newPost = route?.params?.newPost;
-  const friendList = useSelector(state => state.user);
   const dispatch = useDispatch();
-
+  const authUser = useSelector(store => store.user);
+  const friendList = useSelector(state => state.user);
   //bottom sheet variables
-  const bs = React.useRef(null);
-  const fall = new Animated.Value(1);
+  const bottomSheetRef = React.useRef(null);
+  const snapPoints = React.useMemo(() => ['50%', '100%'], []);
 
   //some state variables
   const [posts, setPosts] = React.useState([]);
   const [friendsData, setFriendsData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [handleCommentModal, setHandleCommentModal] = React.useState(false);
-  const [handleShareModal, setHandleShareModal] = React.useState(false);
 
   const [selectedPost, setSelectedPost] = React.useState({});
   const [refreshLoading, setRefreshLoading] = React.useState(false);
-
+  const [bottomSheetMode, setBottomSheetMode] = React.useState(
+    'comment' || 'share',
+  );
   const POST_LIST = useSelector(store => store.posts); //need change for posts list
-
   // First render getPosts and store redux with dispatch
   React.useEffect(() => {
     getPosts();
     // configure();
   }, []);
-
   //need to rerender when  post actions happend (like, comment, delete)
   React.useEffect(() => {
     // when post actions happend this line will be execute and fetch modified posts
@@ -70,13 +75,11 @@ function HomeScreen({navigation, route}) {
     }
   }, [newPost]);
 
-  const HandleCommentModal = React.useCallback(() => {
-    setHandleCommentModal(value => !value);
-  }, [setHandleCommentModal]);
-
-  const HandleShareModal = React.useCallback(() => {
-    setHandleShareModal(value => !value);
-  }, [setHandleShareModal]);
+  const handleModal = async mode => {
+    const openHalf = mode === 'comment' ? 1 : 0;
+    bottomSheetRef?.current?.snapToIndex(openHalf);
+    setBottomSheetMode(mode);
+  };
 
   const selectedPostHandle = React.useCallback(
     post => {
@@ -85,6 +88,16 @@ function HomeScreen({navigation, route}) {
     [setSelectedPost],
   );
   //new post önemli
+  const onAddCommentPress = comment => {
+    dispatch({
+      type: 'ADD_COMMENT',
+      payload: {postText: comment, item: selectedPost, user: authUser},
+    });
+    bottomSheetRef.current.close();
+  };
+  const handleSheetChanges = React.useCallback(props => {
+    console.log('handleSheetChanges', props);
+  }, []);
 
   const getPosts = async () => {
     try {
@@ -129,80 +142,43 @@ function HomeScreen({navigation, route}) {
     }
   };
 
-  const PostItem = ({item}) => {
-    return (
-      <View
-        style={{
-          margin: 15,
-          alignSelf: 'center',
-          width: width * 0.9,
-
-          backgroundColor: 'white',
-          borderRadius: 5,
-          shadowColor: '#CBCBCB',
-          elevation: 25,
-        }}>
-        <PostHeader item={item} navigation={navigation} />
-        <PostBody item={item} />
-        <PostFooter
-          item={item}
-          HandleCommentModal={HandleCommentModal}
-          HandleShareModal={HandleShareModal}
-          setSelectedPost={selectedPostHandle}
-        />
-      </View>
-    );
-  };
-
-  const BottomSheetDragger = () => {
-    return (
-      <View
-        style={{
-          height: 50,
-          backgroundColor: 'white',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Icon name="Drag" size={35} fill="#909090" />
-      </View>
-    );
-  };
+  const PostItem = React.useCallback(
+    ({item}) => {
+      return (
+        <View style={tw`m-2 bg-[#fff] rounded-lg shadow-md`}>
+          <PostHeader item={item} navigation={navigation} />
+          <PostBody item={item} />
+          <PostFooter
+            item={item}
+            handleModal={handleModal}
+            setSelectedPost={selectedPostHandle}
+          />
+        </View>
+      );
+    },
+    [posts],
+  );
 
   const BottomsheetCommentContent = () => {
-    return selectedPost.comments.length == 0 ? (
-      <View
-        style={{
-          backgroundColor: 'white',
-          height: '100%',
-          justifyContent: 'center',
-        }}>
-        <View style={{width, flex: 0.5}}>
+    return Object.keys(selectedPost ?? {}).length === 0 ? (
+      <View style={tw`bg-[#fff] h-full pt-10`}>
+        <View>
           <Icon
             name="Comment"
             size={100}
             fill="grey"
             strokeWidth="1"
-            style={{alignSelf: 'center'}}
+            style={tw`self-center`}
           />
-          <Text style={{fontSize: 25, alignSelf: 'center', color: 'grey'}}>
+          <Text style={tw`text-lg text-center text-gray-500`}>
             Not Comment Yet
           </Text>
         </View>
       </View>
     ) : (
-      <View
-        style={{
-          backgroundColor: 'white',
-          height: '100%',
-        }}>
-        <View>
-          <ScrollView>
-            {selectedPost.comments.map(item => {
-              return <Comment key={item.id} item={item} />;
-            })}
-          </ScrollView>
-        </View>
-      </View>
+      selectedPost.comments.map(item => {
+        return <Comment key={item.id} item={item} />;
+      })
     );
   };
   const BottomsheetShareContent = () => {
@@ -219,79 +195,31 @@ function HomeScreen({navigation, route}) {
           setFriendsData(data);
         });
     }
-    return (
-      <View
-        style={{
-          backgroundColor: 'white',
-          height: '100%',
-        }}>
-        <View style={{padding: 5}}>
-          <ScrollView>
-            {friendsData.map(friend => {
-              return (
-                <SharePostRow
-                  key={friend.id}
-                  friend={friend}
-                  post={selectedPost}
-                />
-              );
-            })}
-          </ScrollView>
-        </View>
-      </View>
-    );
+    return friendsData.map(friend => {
+      return (
+        <SharePostRow key={friend.id} friend={friend} post={selectedPost} />
+      );
+    });
   };
 
   const onRefresh = async () => {
     setRefreshLoading(true);
     await getPosts();
-    setRefreshLoading(false);
+    setTimeout(() => {
+      setRefreshLoading(false);
+    }, 5000);
   };
 
   if (refreshLoading) {
     return <SkeletonPlaceholder />;
   }
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={tw`flex-1`}>
       <StatusBar backgroundColor="#ff6ea1" barStyle="light-content" />
       {loading ? (
         <SkeletonPlaceholder />
       ) : (
         <View>
-          {handleCommentModal && (
-            <BottomSheet
-              onCloseEnd={() => {
-                setHandleCommentModal(false);
-              }}
-              enabledBottomInitialAnimation={true}
-              ref={bs}
-              snapPoints={
-                selectedPost.comments.length > 5 ? ['80%', 0] : ['55%', 0]
-              }
-              initialSnap={0}
-              callbackNode={fall}
-              renderContent={BottomsheetCommentContent}
-              renderHeader={BottomSheetDragger}
-              enabledGestureInteraction={true}
-            />
-          )}
-
-          {handleShareModal && (
-            <BottomSheet
-              onCloseEnd={() => {
-                setHandleShareModal(false);
-              }}
-              enabledBottomInitialAnimation={true}
-              ref={bs}
-              snapPoints={friendList.length > 5 ? ['80%', 0] : ['55%', 0]}
-              initialSnap={0}
-              callbackNode={fall}
-              renderContent={BottomsheetShareContent}
-              renderHeader={BottomSheetDragger}
-              enabledGestureInteraction={true}
-            />
-          )}
-
           <FlatList
             data={posts}
             renderItem={PostItem}
@@ -307,13 +235,38 @@ function HomeScreen({navigation, route}) {
               />
             }
           />
+          <BottomSheet
+            ref={bottomSheetRef}
+            index={-1}
+            snapPoints={snapPoints}
+            enablePanDownToClose={true}
+            backdropComponent={backdropProps => (
+              <BottomSheetBackdrop
+                {...backdropProps}
+                enableTouchThrough={true}
+              />
+            )}
+            footerComponent={() =>
+              bottomSheetMode === 'comment' ? (
+                <BottomsheetCommentAction
+                  onAddCommentPress={onAddCommentPress}
+                  imageUrl={authUser?.imageUrl}
+                />
+              ) : null
+            }
+            onChange={handleSheetChanges}>
+            <BottomSheetScrollView contentContainerStyle={tw`pb-20 bg-[#fff] `}>
+              {bottomSheetMode === 'comment' ? (
+                <BottomsheetCommentContent />
+              ) : (
+                <BottomsheetShareContent />
+              )}
+            </BottomSheetScrollView>
+          </BottomSheet>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
-const styles = StyleSheet.create({
-  mainContainer: {flex: 1},
-});
 
 export default HomeScreen;

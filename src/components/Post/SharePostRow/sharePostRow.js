@@ -7,7 +7,7 @@ import isEqual from 'react-fast-compare';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
-
+import tw from 'twrnc';
 const sharePostRow = ({friend, post}) => {
   const authUser = useSelector(store => store.user);
   const [sent, setSent] = React.useState(false);
@@ -91,26 +91,11 @@ const sharePostRow = ({friend, post}) => {
   };
 
   return (
-    <View
-      key={friend.id}
-      style={{
-        flexDirection: 'row',
-        padding: 5,
-        alignItems: 'center',
-        backgroundColor: 'white',
-        borderRadius: 10,
-        shadowColor: '#CBCBCB',
-      }}>
-      <View style={{flexDirection: 'row', flex: 1}}>
-        <View style={{flexDirection: 'row', flex: 1}}>
+    <View key={friend.id} style={tw`flex-row items-center bg-white p-4`}>
+      <View style={tw`flex-row flex-1`}>
+        <View style={tw`flex-row flex-1`}>
           <FastImage
-            style={{
-              height: 40,
-              width: 40,
-              borderRadius: 50,
-              overflow: 'hidden',
-              elavation: 5,
-            }}
+            style={tw`h-10 w-10 rounded-full`}
             source={{
               uri: friend.imageUrl,
               priority: FastImage.priority.high,
@@ -130,14 +115,7 @@ const sharePostRow = ({friend, post}) => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Text
-                numberOfLines={2}
-                style={{
-                  fontStyle: 'italic',
-                  fontSize: 12,
-                  color: 'grey',
-                  marginTop: 5,
-                }}>
+              <Text numberOfLines={2} style={tw`text-gray-500 text-sm italic`}>
                 {'Cool bio ...'}
               </Text>
             </View>
@@ -145,14 +123,12 @@ const sharePostRow = ({friend, post}) => {
         </View>
         <Button
           mode="contained"
-          style={{
-            alignSelf: 'center',
-            backgroundColor: sent ? 'grey' : '#2596ff',
-          }}
-          labelStyle={{fontSize: 12, color: 'white', fontWeight: 'bold'}}
+          style={tw(['self-center ', sent ? 'bg-gray-500' : 'bg-blue-500'])}
+          labelStyle={tw`text-white text-sm font-bold`}
           onPress={() => {
-            setSent(!sent);
-            ShareHandler(!sent);
+            const newVal = !sent;
+            ShareHandler(newVal);
+            setSent(newVal);
           }}>
           {sent ? 'Undo' : 'Send'}
         </Button>

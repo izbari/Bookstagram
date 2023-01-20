@@ -1,37 +1,28 @@
 import React from 'react';
 import {View, Text, Dimensions} from 'react-native';
-import ImageModal from "react-native-image-modal"
+import ImageModal from 'react-native-image-modal';
 import isEqual from 'react-fast-compare';
+import tw from 'twrnc';
 const {width} = Dimensions.get('window');
 
 const Body = ({item}) => {
   return (
-    <View>
+    <>
       <View>
-        {item.post != null ? (
-          <Text
-            style={{
-              marginLeft: 10,
-              marginBottom: 5,
-              padding: 5,
-              color: '#333333',
-            }}>
-            {item.post}
-          </Text>
-        ) : (
-          <View />
+        {item.post != null && (
+          <Text style={tw`ml-2 mb-2 p-2 text-gray-800`}>{item.post}</Text>
         )}
       </View>
-      {item.postImg != null ? (
+      {item.postImg != null && (
         <ImageModal
-          resizeMode="contain"
-          style={{height: 400, width: width * 0.9, resizeMode: 'cover'}}
+          resizeMode="cover"
+          style={tw`h-96 w-${width * 0.9}px mx-3`}
           source={{
             uri: item.postImg,
           }}
         />
-      ) : null}
-    </View>
+      )}
+    </>
   );
 };
 

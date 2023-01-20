@@ -4,62 +4,49 @@ import FastImage from 'react-native-fast-image';
 import ThreeDotMenu from '../../ThreeDotMenu';
 import moment from 'moment';
 import auth from '@react-native-firebase/auth';
-import isEqual from "react-fast-compare";
+import isEqual from 'react-fast-compare';
+import tw from 'twrnc';
+const Header = ({item, navigation}) => {
+  const toProfile = React.useCallback(
+    userId => {
+      console.log(item.userId, auth().currentUser.uid);
 
-const Header = ({item,navigation}) => {
-
-  const toProfile = React.useCallback((userId) => {
-    if (auth().currentUser.uid === userId) {
-      navigation.navigate('Profile');
-    } else {
-      navigation.navigate('OtherProfile', {selectedUserId: userId});
-    }
-  }, [item.userId]);
-
-
+      if (auth().currentUser.uid === userId) {
+        navigation.navigate('SocialMediaTab', {
+          screen: 'Profile',
+        });
+      } else {
+        navigation.navigate('OtherProfile', {
+          param: {selectedUserId: userId},
+          screen: 'OtherProfile',
+        });
+      }
+    },
+    [item.userId],
+  );
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
+    <View style={tw`flex-row justify-between items-center`}>
       <TouchableOpacity
-        onPress={() =>toProfile(item.userId)}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: 10,
-        }}>
+        onPress={() => toProfile(item.userId)}
+        style={tw`flex-row items-center p-4`}>
         <FastImage
-          style={{
-            height: 45,
-            width: 45,
-            borderRadius: 50,
-            overflow: 'hidden',
-            elavation: 5,
-          }}
+          style={tw`h-11 w-11 rounded-full overflow-hidden`}
           source={{
             uri: item.userImageUrl,
             priority: FastImage.priority.high,
-        }}
-        resizeMode={FastImage.resizeMode.contain}
+          }}
+          resizeMode={FastImage.resizeMode.contain}
         />
-        <View
-          style={{
-            justifyContent: 'center',
-            marginLeft: 10,
-          }}>
+        <View style={tw`justify-center ml-3`}>
           <Text>{item.userName}</Text>
-          <Text style={{color: 'grey', fontSize: 12}}>
+          <Text style={tw`text-gray-500 text-[12px]`}>
             {moment(item.postTime.toDate()).fromNow()}
           </Text>
         </View>
       </TouchableOpacity>
-
-      <ThreeDotMenu  itemId = {item.id} whosePost={item.userId} />
+      <ThreeDotMenu itemId={item.id} whosePost={item.userId} />
     </View>
   );
 };
 
-export default React.memo(Header,isEqual);
+export default React.memo(Header, isEqual);
