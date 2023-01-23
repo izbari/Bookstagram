@@ -10,9 +10,10 @@ import {Provider as ThemeProvider, DefaultTheme} from 'react-native-paper';
 
 import Onboarding from '../Pages/Onboarding';
 import AuthStack from './Stacks/authStack';
-import SocialMediaTab from './Tabs/SocialMediaTab';
-import BookTab from './Tabs/BookTab';
-
+import SocialMediaTab from './Tabs/BookTab';
+import BookTab from './Tabs/SocialMediaTab';
+import CreatePost from '../Pages/CreatePost';
+import Animated from 'react-native-reanimated';
 const Stack = createNativeStackNavigator();
 
 const theme = {
@@ -30,7 +31,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <ReduxProvier>
         <NavigationContainer>
-          <Stack.Navigator options={{headerShown: false}}>
+          <Stack.Navigator
+            screenOptions={{
+              animation: 'slide_from_right',
+            }}
+            options={{headerShown: false}}>
             <Stack.Screen
               options={{headerShown: false}}
               name="AuthLoading"
@@ -69,6 +74,23 @@ function App() {
               options={{headerShown: false}}
               name="AddTopics"
               component={AddTopics}
+            />
+            <Stack.Screen
+              options={{
+                presentation: 'card',
+                headerTitleAlign: 'center',
+                title: 'Create your feed',
+                headerStyle: {
+                  backgroundColor: '#FF6EA1',
+                },
+                headerTintColor: 'white',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                },
+              }}
+              name="CreatePost"
+              component={CreatePost}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -37,22 +37,6 @@ const HomeStack = ({navigation}) => {
       />
       <Stack.Screen
         options={{
-          headerTitleAlign: 'center',
-          title: 'Create your feed',
-          headerStyle: {
-            backgroundColor: '#FF6EA1',
-          },
-          headerTintColor: 'white',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            textAlign: 'center',
-          },
-        }}
-        name="CreatePost"
-        component={CreatePost}
-      />
-      <Stack.Screen
-        options={{
           headerShown: false,
         }}
         name="OtherProfile"

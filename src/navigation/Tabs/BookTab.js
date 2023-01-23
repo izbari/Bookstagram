@@ -2,30 +2,33 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyTabBar from '../../components/TabBar/tabBar';
-import HomeStack from '../Stacks/homeStack';
-import ChatStack from '../Stacks/chatStack';
-import FavoriteStack from '../Stacks/favoriteStack';
-const BookTab = () => {
+import ProfileStack from '../Stacks/profileStack';
+import StoreStack from '../Stacks/storeStack';
+import LibraryStack from '../Stacks/libraryStack';
+import DiscoverStack from '../Stacks/discoverStack';
+
+const SocialMediaTab = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator  tabBar={props => (
-      <MyTabBar {...props} ScreenOptions={{tabBarHideOnKeyboard: true}} />
-    )}
-    options={{headerShown: false}}>
+    <Tab.Navigator
+      tabBar={props => (
+        <MyTabBar {...props} ScreenOptions={{tabBarHideOnKeyboard: true}} />
+      )}
+      options={{headerShown: false}}>
       <Tab.Screen
         options={{headerShown: false}}
-        name="Home"
-        component={HomeStack}
+        name="Discover"
+        component={DiscoverStack}
       />
       <Tab.Screen
         options={{headerShown: false}}
-        name="Chat"
-        component={ChatStack}
+        name="Library"
+        component={LibraryStack}
       />
       <Tab.Screen
         options={{
           headerTitleAlign: 'center',
-          title: 'Favorites',
+          title: 'Store',
           headerStyle: {
             backgroundColor: '#FF6EA1',
           },
@@ -35,13 +38,19 @@ const BookTab = () => {
             textAlign: 'center',
           },
         }}
-        name="Favorites"
-        component={FavoriteStack}
+        name="Store"
+        component={StoreStack}
+      />
+
+      <Tab.Screen
+        options={{headerShown: false}}
+        name="Profile"
+        component={ProfileStack}
       />
     </Tab.Navigator>
   );
 };
 
-export default BookTab;
+export default SocialMediaTab;
 
 const styles = StyleSheet.create({});

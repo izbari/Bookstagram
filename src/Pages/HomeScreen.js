@@ -32,11 +32,11 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 // import BottomSheetBackdrop from '../components/BottomSheet';
+import {useFocusEffect} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 
 function HomeScreen({navigation, route}) {
-  const newPost = route?.params?.newPost;
   const dispatch = useDispatch();
   const authUser = useSelector(store => store.user);
   const friendList = useSelector(state => state.user);
@@ -68,12 +68,11 @@ function HomeScreen({navigation, route}) {
     }
   }, [POST_LIST]);
 
-  //New post listener
-  React.useEffect(() => {
-    if (newPost) {
-      onRefresh();
-    }
-  }, [newPost]);
+  useFocusEffect(
+    React.useCallback(() => {
+      getPosts();
+    }, []),
+  );
 
   const handleModal = async mode => {
     const openHalf = mode === 'comment' ? 1 : 0;
@@ -87,6 +86,7 @@ function HomeScreen({navigation, route}) {
     },
     [setSelectedPost],
   );
+
   //new post önemli
   const onAddCommentPress = comment => {
     dispatch({
