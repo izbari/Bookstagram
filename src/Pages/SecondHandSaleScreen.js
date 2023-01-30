@@ -4,6 +4,7 @@ import {Searchbar} from 'react-native-paper';
 import Icon from '../components/Icons';
 import SecondHandSaleCard from '../components/SecondHandSaleCard.js/secondHandSaleCard';
 import ImagePlaceholder from '../assets/png/imagePlaceholder.jpg';
+import colors from '../constants/colors';
 
 export default function SecondHandSaleScreen() {
   const books = [
@@ -33,14 +34,14 @@ export default function SecondHandSaleScreen() {
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <Searchbar
-          iconColor="#A39ACF"
+          iconColor={colors.lightPurple}
           placeholder="Search"
           placeholderTextColor="gray"
           style={styles.searchBar}
           inputStyle={styles.input}
         />
         <TouchableOpacity style={styles.favorites}>
-          <Icon name="Like" size={25} fill="#A39ACF" />
+          <Icon name="Like" size={25} fill={colors.lightPurple} />
         </TouchableOpacity>
       </View>
       <FlatList

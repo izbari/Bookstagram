@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {TextInput} from 'react-native-element-textinput';
 import {ScrollView, Dimensions} from 'react-native';
 import {Text, Button} from 'react-native-paper';
+import colors from '../../constants/colors';
 import {memo} from 'react';
 const {width} = Dimensions.get('window');
 function FirstStep({onNextStepPress, setFormData, formData}) {
@@ -24,12 +25,12 @@ function FirstStep({onNextStepPress, setFormData, formData}) {
           borderRadius: 10,
           height: 60,
           borderWidth: 2,
-          borderColor: focus ? '#A39ACF' : '#ededed',
+          borderColor: focus ? colors.lightPurple : '#ededed',
           backgroundColor: '#ededed',
         }}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        selectionColor="#A39ACF"
+        selectionColor={colors.lightPurple}
         inputStyle={{
           color: 'grey',
         }}
@@ -48,12 +49,12 @@ function FirstStep({onNextStepPress, setFormData, formData}) {
           borderRadius: 10,
           height: 60,
           borderWidth: 2,
-          borderColor: focus2 ? '#A39ACF' : '#ededed',
+          borderColor: focus2 ? colors.lightPurple : '#ededed',
           backgroundColor: '#ededed',
         }}
         onFocus={() => setFocus2(true)}
         onBlur={() => setFocus2(false)}
-        selectionColor="#A39ACF"
+        selectionColor={colors.lightPurple}
         inputStyle={{
           color: 'grey',
         }}
@@ -73,7 +74,7 @@ function FirstStep({onNextStepPress, setFormData, formData}) {
             borderRadius: 10,
             borderColor: 'white',
             height: 50,
-            backgroundColor: '#8B7FC5',
+            backgroundColor: colors.darkPurple,
           },
           // {backgroundColor: disabled ? '#8B7FC5' : '#A39ACF'},
         ]}
