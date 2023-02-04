@@ -9,7 +9,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-
+import colors from '../constants/colors';
 import {checkEmailExist, userLogin} from '../controllers/authController';
 import Welcome from '../components/Yoga';
 import {TextInput} from 'react-native-element-textinput';
@@ -77,7 +77,7 @@ function Login(props) {
             {!emailChecked && (
               <Text
                 variant="titleLarge"
-                style={{marginBottom: 20, color: '#8B7FC5'}}>
+                style={{marginBottom: 20, color: colors.darkPurple}}>
                 Welcome to Bookstagram
               </Text>
             )}
@@ -97,7 +97,7 @@ function Login(props) {
                     labelStyle={{color: 'white'}}>
                     <Text
                       variant="labelLarge"
-                      style={{color: '#8B7FC5', fontWeight: 'bold'}}>
+                      style={{color: colors.darkPurple, fontWeight: 'bold'}}>
                       Change Email
                     </Text>
                   </TouchableOpacity>
@@ -108,7 +108,7 @@ function Login(props) {
                       <Icon
                         name={secret ? 'eye' : 'eye-off'}
                         size={25}
-                        color={focus ? '#A39ACF' : 'grey'}
+                        color={focus ? colors.lightPurple : 'grey'}
                         onPress={() => {
                           setSecret(prev => !prev);
                         }}
@@ -124,13 +124,13 @@ function Login(props) {
                     borderRadius: 10,
                     height: 60,
                     borderWidth: 2,
-                    borderColor: focus ? '#A39ACF' : '#ededed',
+                    borderColor: focus ? colors.lightPurple : '#ededed',
                     backgroundColor: '#ededed',
                   }}
                   onFocus={() => setFocus(true)}
                   onBlur={() => setFocus(false)}
-                  focusColor="#A39ACF"
-                  selectionColor="#A39ACF"
+                  focusColor={colors.lightPurple}
+                  selectionColor={colors.lightPurple}
                   inputStyle={{
                     color: 'grey',
                   }}
@@ -163,13 +163,13 @@ function Login(props) {
                   borderRadius: 10,
                   height: 60,
                   borderWidth: 2,
-                  borderColor: focus ? '#A39ACF' : '#ededed',
+                  borderColor: focus ? colors.lightPurple : '#ededed',
                   backgroundColor: '#ededed',
                 }}
                 onFocus={() => setFocus(true)}
                 onBlur={() => setFocus(false)}
-                focusColor="#A39ACF"
-                selectionColor="#A39ACF"
+                focusColor={colors.lightPurple}
+                selectionColor={colors.lightPurple}
                 inputStyle={{
                   color: 'grey',
                 }}
@@ -186,7 +186,7 @@ function Login(props) {
               disabled={disabled}
               style={[
                 styles.button,
-                {backgroundColor: disabled ? '#A39ACF' : '#8B7FC5'},
+                {backgroundColor: disabled ? colors.lightPurple : colors.darkPurple},
               ]}
               loading={loading}
               onPress={onLogin}>
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: 'white',
     height: 50,
-    backgroundColor: '#A39ACF',
+    backgroundColor: colors.lightPurple,
   },
   buttonText: {
     alignSelf: 'center',

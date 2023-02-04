@@ -11,6 +11,7 @@ import {Text, Button, Checkbox, Modal, Portal} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {WebView} from 'react-native-webview';
 import terms from '../../utils/terms';
+import colors from '../../constants/colors';
 const {width} = Dimensions.get('window');
 export default function ThirdStep({
   setFormData,
@@ -59,7 +60,7 @@ export default function ThirdStep({
             <Icon
               name={secret ? 'eye' : 'eye-off'}
               size={25}
-              color={focus ? '#A39ACF' : 'grey'}
+              color={focus ? colors.lightPurple : 'grey'}
               onPress={() => {
                 setSecret(prev => !prev);
               }}
@@ -76,11 +77,11 @@ export default function ThirdStep({
           height: 60,
           borderWidth: 2,
           backgroundColor: '#ededed',
-          borderColor: focus ? '#A39ACF' : '#ededed',
+          borderColor: focus ? colors.lightPurple : '#ededed',
         }}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        selectionColor="#A39ACF"
+        selectionColor={colors.lightPurple}
         inputStyle={{
           color: 'grey',
         }}
@@ -97,7 +98,7 @@ export default function ThirdStep({
             <Icon
               name={secretAgain ? 'eye' : 'eye-off'}
               size={25}
-              color={focusForAgain ? '#A39ACF' : 'grey'}
+              color={focusForAgain ? colors.lightPurple : 'grey'}
               onPress={() => {
                 setSecretAgain(prev => !prev);
               }}
@@ -112,12 +113,12 @@ export default function ThirdStep({
           borderRadius: 10,
           height: 60,
           borderWidth: 2,
-          borderColor: focusForAgain ? '#A39ACF' : '#ededed',
+          borderColor: focusForAgain ? colors.lightPurple : '#ededed',
           backgroundColor: '#ededed',
         }}
         onFocus={() => setFocusForAgain(true)}
         onBlur={() => setFocusForAgain(false)}
-        selectionColor="#A39ACF"
+        selectionColor={colors.lightPurple}
         inputStyle={{
           color: 'grey',
         }}
@@ -135,7 +136,7 @@ export default function ThirdStep({
           width,
         }}>
         <Checkbox.Item
-          color={'#8B7FC5'}
+          color={colors.darkPurple}
           labelStyle={{fontSize: 12, fontStyle: 'italic'}}
           style={{fontSize: 12}}
           status={formData.terms ? 'checked' : 'unchecked'}
@@ -156,9 +157,9 @@ export default function ThirdStep({
             borderRadius: 10,
             borderColor: 'white',
             height: 50,
-            backgroundColor: '#8B7FC5',
+            backgroundColor: colors.darkPurple,
           },
-          {backgroundColor: disabled ? '#A39ACF' : '#8B7FC5'},
+          {backgroundColor: disabled ? colors.lightPurple : colors.darkPurple},
         ]}
         loading={loading}
         onPress={onNextStepPress}>
@@ -216,7 +217,7 @@ export default function ThirdStep({
               borderRadius: 0,
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,
-              backgroundColor: '#8B7FC5',
+              backgroundColor: colors.darkPurple,
             }}
             labelStyle={{
               color: '#fff',
