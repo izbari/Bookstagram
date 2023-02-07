@@ -52,6 +52,7 @@ export default function SecondHandSaleScreen() {
             title={item.title}
             price={item.price}
             image={item.image}
+            isMine={false}
           />
         )}
         columnWrapperStyle={{justifyContent: 'space-evenly'}}
