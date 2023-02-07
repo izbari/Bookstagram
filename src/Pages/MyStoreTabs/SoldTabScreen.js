@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function SaledTabScreen() {
+export default function SoldTabScreen() {
   return (
     <View style={styles.container}>
       <Text>SaledTabScreen</Text>

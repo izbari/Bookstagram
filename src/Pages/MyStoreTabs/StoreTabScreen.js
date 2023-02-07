@@ -41,8 +41,7 @@ export default function StoreTabScreen() {
       )}
       columnWrapperStyle={{justifyContent: 'space-evenly'}}
       showsVerticalScrollIndicator={true}
-      style={{marginTop:10}}
-      contentContainerStyle={{paddingBottom:10}}
+      contentContainerStyle={{paddingBottom:10, paddingTop:10}}
     />
     
   </View>

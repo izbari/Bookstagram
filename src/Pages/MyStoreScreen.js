@@ -20,7 +20,8 @@ export default function MyStoreScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 100
+    paddingBottom: 100,
+    backgroundColor:'white'
   },
   background: {
     width: '100%',
