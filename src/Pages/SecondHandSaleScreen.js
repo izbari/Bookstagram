@@ -2,7 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
 import React from 'react';
 import {Searchbar} from 'react-native-paper';
 import Icon from '../components/Icons';
-import SecondHandSaleCard from '../components/SecondHandSaleCard.js/secondHandSaleCard';
+import SecondHandSaleCard from '../components/SecondHandSaleCard/secondHandSaleCard';
 import ImagePlaceholder from '../assets/png/imagePlaceholder.jpg';
 import colors from '../constants/colors';
 
@@ -58,6 +58,7 @@ export default function SecondHandSaleScreen() {
         showsVerticalScrollIndicator={true}
         style={{marginTop:10}}
       />
+      
     </View>
   );
 }

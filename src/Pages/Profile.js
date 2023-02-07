@@ -294,6 +294,12 @@ function Profile(props) {
           {t('common:Account')}
         </Text>
         <View>
+        <TouchableOpacity
+            onPress={() => props.navigation.navigate('MyStoreTab')}
+            style={styles.menuRow}>
+            <Icon name="Card" size={25} fill="#FF6EA1" />
+            <Text style={styles.text}>{t('common:MyStore')}</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => props.navigation.navigate('Store')}
             style={styles.menuRow}>
@@ -320,12 +326,9 @@ function Profile(props) {
           alignSelf: 'center',
           shadowColor: '#CBCBCB',
           borderRadius: 2,
-          marginTop: 35,
+          marginTop: 80,
           elevation: 80,
         }}>
-        <Text style={{color: '#C4C4C4', fontWeight: 'bold', padding: 5}}>
-          {t('common:Settings')}
-        </Text>
         <View>
           <TouchableOpacity style={styles.menuRow}>
             <Icon name="Theme" size={25} fill="black" />

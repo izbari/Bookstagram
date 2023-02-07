@@ -53,7 +53,7 @@
     "react-native-flipper": "^0.131.1",
     "react-native-gesture-handler": "2.2.0",
     "react-native-gifted-chat": "^0.16.3",
-    "react-native-image-crop-picker": "^0.39.0",
+    "react-native-image-crop-picker": "^0.38.1",
     "react-native-image-modal": "^2.0.4",
     "react-native-image-progress": "^1.2.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
