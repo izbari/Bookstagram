@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
 import React from 'react'
 import ImagePlaceholder from '../../assets/png/imagePlaceholder.jpg';
 import SecondHandSaleCard from '../../components/SecondHandSaleCard/secondHandSaleCard';
@@ -26,6 +26,7 @@ export default function FavoritesTabScreen() {
       image: ImagePlaceholder,
     },
   ];
+
   return (
     <View style={styles.container}>
     <FlatList
@@ -43,7 +44,6 @@ export default function FavoritesTabScreen() {
       showsVerticalScrollIndicator={true}
       contentContainerStyle={{paddingBottom:10, paddingTop:10}}
     />
-    
   </View>
   )
 }

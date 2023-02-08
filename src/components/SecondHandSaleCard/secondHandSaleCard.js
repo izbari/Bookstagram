@@ -8,10 +8,15 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from '../Icons';
+const {width} = Dimensions.get('window');
 
-const {width, height} = Dimensions.get('window');
-
-export default function SecondHandSaleCard({image, title, price, isMine}) {
+export default function SecondHandSaleCard({
+  image,
+  title,
+  price,
+  isMine,
+  isSold,
+}) {
   return (
     <>
       <TouchableOpacity style={styles.container}>
@@ -22,6 +27,7 @@ export default function SecondHandSaleCard({image, title, price, isMine}) {
               <Icon name="Like" size={20} fill="#A39ACF" />
             </TouchableOpacity>
           )}
+          {isSold && <Text style={styles.soldText}>SOLD</Text>}
         </View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.price}>{price}</Text>
@@ -77,5 +83,19 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: 20,
     fontSize: 16,
+  },
+  soldText: {
+    position: 'absolute',
+    bottom: 0,
+    width: width / 2 - 36,
+    height: 20,
+    backgroundColor: 'black',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    textAlign: 'center',
+    fontSize: 11,
+    color: 'white',
+    fontWeight: '400',
+    textAlignVertical: 'center',
   },
 });
