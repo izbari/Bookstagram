@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from '../Icons';
+import colors from '../../constants/colors';
 const {width} = Dimensions.get('window');
 
 export default function SecondHandSaleCard({
@@ -24,12 +25,22 @@ export default function SecondHandSaleCard({
           <Image source={image} style={styles.image} resizeMode="cover" />
           {!isMine && (
             <TouchableOpacity style={styles.favoriteContainer}>
-              <Icon name="Like" size={20} fill="#A39ACF" />
+              <Icon name="Like" size={20} fill={colors.lightPurple} />
             </TouchableOpacity>
           )}
+
           {isSold && <Text style={styles.soldText}>SOLD</Text>}
         </View>
-        <Text style={styles.title}>{title}</Text>
+
+        {isMine ? (
+          <View style={styles.titleAndFavoriteContainer}>
+            <Text style={styles.title}>{title}</Text>
+            <Icon name="FilledLike" size={16} fill={colors.lightPurple} />
+            <Text style={styles.favoriteCount}>10</Text>
+          </View>
+        ) : (
+          <Text style={[styles.title, {marginTop:5}]}>{title}</Text>
+        )}
         <Text style={styles.price}>{price}</Text>
       </TouchableOpacity>
     </>
@@ -74,9 +85,9 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'flex-start',
-    marginTop: 5,
     fontSize: 14,
-    width: '100%',
+    width: '78%',
+    paddingRight:5
   },
   price: {
     fontWeight: 'bold',
@@ -98,4 +109,15 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlignVertical: 'center',
   },
+  titleAndFavoriteContainer: {
+    flexDirection: 'row',
+    width: width / 2 - 36,
+    justifyContent:'space-between',
+    textAlign:'center',
+    marginTop:5,
+    alignItems:'center'
+  },
+  favoriteCount: {
+    fontSize:13
+  }
 });
