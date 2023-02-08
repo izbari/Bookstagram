@@ -13,7 +13,7 @@ import AuthStack from './Stacks/authStack';
 import SocialMediaTab from './Tabs/BookTab';
 import BookTab from './Tabs/SocialMediaTab';
 import CreatePost from '../Pages/CreatePost';
-import Animated from 'react-native-reanimated';
+import SecondHandSaleScreen from '../Pages/SecondHandSaleScreen';
 const Stack = createNativeStackNavigator();
 
 const theme = {
@@ -91,6 +91,11 @@ function App() {
               }}
               name="CreatePost"
               component={CreatePost}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="SecondHandSaleScreen"
+              component={SecondHandSaleScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
