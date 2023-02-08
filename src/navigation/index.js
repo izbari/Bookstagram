@@ -14,7 +14,6 @@ import SocialMediaTab from './Tabs/BookTab';
 import BookTab from './Tabs/SocialMediaTab';
 import CreatePost from '../Pages/CreatePost';
 import SecondHandSaleScreen from '../Pages/SecondHandSaleScreen';
-import MyStoreTab from './Tabs/MyStoreTab';
 const Stack = createNativeStackNavigator();
 
 const theme = {
@@ -97,11 +96,6 @@ function App() {
               options={{headerShown: false}}
               name="SecondHandSaleScreen"
               component={SecondHandSaleScreen}
-            />
-            <Stack.Screen
-              options={{headerShown: false}}
-              name="MyStoreTab"
-              component={MyStoreTab}
             />
           </Stack.Navigator>
         </NavigationContainer>

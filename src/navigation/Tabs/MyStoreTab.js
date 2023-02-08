@@ -18,9 +18,8 @@ const MyStoreTab = () => {
           tabBarActiveTintColor: colors.darkPurple,
           tabBarIndicatorStyle: {backgroundColor: colors.darkPurple},
           tabBarPressColor: 'white'
-
         }}>
-        <Tab.Screen name="My Store" component={StoreTabScreen} options={{animation:'none'}}/>
+        <Tab.Screen name="My Store" component={StoreTabScreen} />
         <Tab.Screen name="Favorites" component={FavoritesTabScreen} />
         <Tab.Screen name="Sold" component={SoldTabScreen} />
       </Tab.Navigator>
