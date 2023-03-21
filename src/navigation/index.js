@@ -14,6 +14,7 @@ import SocialMediaTab from './Tabs/BookTab';
 import BookTab from './Tabs/SocialMediaTab';
 import CreatePost from '../Pages/CreatePost';
 import SecondHandSaleScreen from '../Pages/SecondHandSaleScreen';
+import SellScreen from '../Pages/SellScreen';
 const Stack = createNativeStackNavigator();
 
 const theme = {
@@ -31,7 +32,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <ReduxProvier>
         <NavigationContainer>
-          <Stack.Navigator
+          <Stack.Navigator initialRouteName='SellScreen'
             screenOptions={{
               animation: 'slide_from_right',
             }}
@@ -96,6 +97,11 @@ function App() {
               options={{headerShown: false}}
               name="SecondHandSaleScreen"
               component={SecondHandSaleScreen}
+            />
+            <Stack.Screen
+              options={{headerShown: false}}
+              name="SellScreen"
+              component={SellScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
