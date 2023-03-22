@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   TextInput,
+  ScrollView
 } from 'react-native';
 import React, {useState} from 'react';
 import Icon from '../components/Icons';
@@ -16,6 +17,34 @@ export default function SellScreen() {
   const [productHeader, setProductHeader] = useState('');
   const [productAuthor, setProductAuthor] = useState('');
   const [productExplanation, setProductExplanation] = useState('');
+
+  let categories = [
+    'Fantasy',
+    'Adventure',
+    'Diary',
+    'Crime',
+    'Mystery',
+    'Horror',
+    'Thriller',
+    'Paranormal',
+    'Historical fiction',
+    'Science Fiction',
+    'Memoir',
+    'Cooking',
+    'Art',
+    'Poetry',
+    'Development',
+    'Motivational',
+    'Health',
+    'History',
+    'Travel',
+    'Drama',
+    'Families & Relationships',
+    'Humor',
+    'Children',
+    'Business',
+    'Other',
+  ];
 
   const PhotoCard = ({image}) => {
     return (
@@ -46,6 +75,29 @@ export default function SellScreen() {
     );
   };
 
+  const ProductInfoInput = ({
+    header,
+    value,
+    onChangeText,
+    placeholder,
+    numberOfLines,
+    multiline,
+  }) => {
+    return (
+      <View>
+        <Text style={styles.infoHeader}>{header}</Text>
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          style={styles.infoInput}
+          numberOfLines={numberOfLines ? numberOfLines : 2}
+          placeholder={placeholder}
+          placeholderTextColor="#AEAEAE"
+        />
+      </View>
+    );
+  };
+
   const products = [
     {
       image: ImagePlaceholder,
@@ -68,14 +120,14 @@ export default function SellScreen() {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} showsHorizontalScrollIndicator>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}>
           <Icon name="BackArrow" size={25} fill="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Product Info</Text>
       </View>
-
+    <ScrollView>
       <View style={styles.photosContainer}>
         <View style={styles.photosHeader}>
           <View
@@ -105,41 +157,56 @@ export default function SellScreen() {
         </View>
       </View>
 
-      <View style={styles.productHeaderContainer}>
-        <Text style={styles.productHeader}>Book Header</Text>
-        <TextInput
-          value={productHeader}
-          onChangeText={setProductHeader}
-          style={styles.productHeaderInput}
-          numberOfLines={1}
-          placeholder="Write the name of the book you are selling"
-          placeholderTextColor="#AEAEAE"
-        />
-      </View>
+      <ProductInfoInput
+        header="Book Header"
+        value={productHeader}
+        onChangeText={setProductHeader}
+        placeholder="Write the name of the book you are selling"
+      />
 
-      <View style={styles.productAuthorContainer}>
-        <Text style={styles.productAuthor}>Book Author</Text>
-        <TextInput
-          value={productAuthor}
-          onChangeText={setProductAuthor}
-          style={styles.productAuthorInput}
-          numberOfLines={1}
-          placeholder="Write the author of the book you are selling"
-          placeholderTextColor="#AEAEAE"
-        />
-      </View>
+      <ProductInfoInput
+        header="Book Author"
+        value={productAuthor}
+        onChangeText={setProductAuthor}
+        placeholder="Write the author of the book you are selling"
+      />
 
-      <View style={styles.productExplanationContainer}>
-        <Text style={styles.productExplanation}>Product Explanation</Text>
-        <TextInput
-          value={productExplanation}
-          onChangeText={setProductExplanation}
-          numberOfLines={3}
-          style={styles.productExplanationInput}
-          placeholder="Write the explanation of the product you are selling"
-          placeholderTextColor="#AEAEAE"
-        />
-      </View>
+      <ProductInfoInput
+        // TODO :: will be numerical and maybe optional
+        header="Page Count"
+        placeholder="Ex: 120"
+      />
+
+      <ProductInfoInput
+        // TODO :: multiselect categories will be another screen
+        header="Category"
+      />
+
+      <ProductInfoInput
+        // TODO :: condition options will be another screen or it will be checkbox (az kullanılmış, yeni vs.)
+        header="Condition"
+      />
+
+      <ProductInfoInput
+        header="Product Explanation"
+        value={productExplanation}
+        onChangeText={setProductExplanation}
+        placeholder="Write the explanation of the product you are sellinnljbjbblbkjbjhyjvhjyyhglvög"
+        numberOfLines={3}
+      />
+
+      <ProductInfoInput
+        // TODO :: will be numerical
+        header="Price"
+        value={productExplanation}
+        onChangeText={setProductExplanation}
+        placeholder="Write the explanation of the product you are sellinnljbjbblbkjbjhyjvhjyyhglvög"
+        numberOfLines={3}
+      />
+
+       {/* TODO :: there will be a checkbox right side of this text */}
+      <Text>I am open to book swap offers</Text>
+      </ScrollView>
     </View>
   );
 }
@@ -174,7 +241,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     width: '40%',
   },
-  photosContainer: {},
   photosHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -191,33 +257,12 @@ const styles = StyleSheet.create({
   photosInnerContainer: {
     backgroundColor: 'white',
   },
-  productHeaderContainer: {},
-  productHeader: {
+  infoHeader: {
     paddingHorizontal: 15,
     paddingVertical: 10,
-    paddingTop:20
+    paddingTop: 20,
   },
-  productHeaderInput: {
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  productAuthor: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    paddingTop:20
-  },
-  productAuthorInput: {
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-  },
-  productExplanation: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    paddingTop:20
-  },
-  productExplanationInput: {
+  infoInput: {
     backgroundColor: 'white',
     paddingHorizontal: 15,
     paddingVertical: 15,
