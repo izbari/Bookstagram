@@ -4,7 +4,6 @@ import MyStoreTab from '../Tabs/MyStoreTab';
 
 import EditProfile from '../../Pages/EditProfile';
 import ProfileScreen from '../../Pages/Profile';
-import MyStoreTab from '../Tabs/MyStoreTab';
 
 const ProfileStack = () => {
   const Stack = createNativeStackNavigator();
@@ -41,13 +40,13 @@ const ProfileStack = () => {
         name="EditProfile"
         component={EditProfile}
       />
-        <Stack.Screen
-          options={{
-            headerShown: false,
-          }}
-          name="MyStoreTab"
-          component={MyStoreTab}
-        />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="MyStoreTab"
+        component={MyStoreTab}
+      />
     </Stack.Navigator>
   );
 };
