@@ -14,6 +14,7 @@ import FirstStep from '../components/Signup/FirstStep';
 import SecondStep from '../components/Signup/SecondStep';
 import ThirdStep from '../components/Signup/ThirdStep';
 import {createUser} from '../controllers/authController';
+import colors from '../constants/colors';
 //main methods
 const STEP_LENGTH = 3;
 const PROGRESS_LENGTH = STEP_LENGTH + 1;
@@ -137,7 +138,7 @@ function Signup(props) {
               <TouchableOpacity onPress={onNextStepPress}>
                 <Text
                   variant="bodyLarge"
-                  style={{color: '#A39ACF', fontWeight: 'bold'}}>
+                  style={{color: colors.lightPurple, fontWeight: 'bold'}}>
                   {step !== 3 ? 'Next' : 'Sign up'}
                 </Text>
               </TouchableOpacity>
@@ -145,7 +146,7 @@ function Signup(props) {
           </View>
           <ProgressBar
             progress={progressValue}
-            color={'#A39ACF'}
+            color={colors.lightPurple}
             style={{transform: [{scaleX: 0.8}]}}
           />
 

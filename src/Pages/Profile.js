@@ -232,8 +232,14 @@ function Profile(props) {
             {t('common:Account')}
           </Text>
           <View>
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate('BookTab')}
+          <TouchableOpacity
+              onPress={() => props.navigation.navigate('MyStoreTab')}
+            style={styles.menuRow}>
+            <Icon name="Card" size={25} fill="#FF6EA1" />
+            <Text style={styles.text}>{t('common:MyStore')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('BookTab')}
               style={styles.menuRow}>
               <Icon name="Card" size={25} fill="#FF6EA1" />
               <Text style={styles.text}>{t('common:MyCart')}</Text>

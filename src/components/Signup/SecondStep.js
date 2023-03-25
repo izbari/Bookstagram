@@ -3,6 +3,7 @@ import {View, Dimensions, ScrollView} from 'react-native';
 import {RadioButton, Text, Button} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
+import colors from '../../constants/colors';
 const {width} = Dimensions.get('window');
 function SecondStep({onNextStepPress, setFormData, formData}) {
   const [focus, setFocus] = useState(false);
@@ -42,7 +43,7 @@ function SecondStep({onNextStepPress, setFormData, formData}) {
           borderRadius: 10,
           height: 55,
           borderWidth: 2,
-          borderColor: focus ? '#A39ACF' : '#ededed',
+          borderColor: focus ? colors.lightPurple : '#ededed',
           backgroundColor: '#ededed',
         }}
         onPress={onOpen}>
@@ -72,11 +73,11 @@ function SecondStep({onNextStepPress, setFormData, formData}) {
             marginBottom: 40,
           }}>
           <View style={{flexDirection: 'row'}}>
-            <RadioButton value="Male" color={'#8B7FC5'} />
+            <RadioButton value="Male" color={colors.darkPurple} />
             <Text style={{marginTop: 8, fontSize: 15}}>Male</Text>
           </View>
           <View style={{flexDirection: 'row', marginLeft: 70}}>
-            <RadioButton value="Female" color={'#8B7FC5'} />
+            <RadioButton value="Female" color={colors.darkPurple} />
             <Text style={{marginTop: 8, fontSize: 15}}>Female</Text>
           </View>
         </View>
@@ -93,7 +94,7 @@ function SecondStep({onNextStepPress, setFormData, formData}) {
             borderRadius: 10,
             borderColor: 'white',
             height: 50,
-            backgroundColor: '#8B7FC5',
+            backgroundColor: colors.darkPurple,
           },
           // {backgroundColor: disabled ? '#8B7FC5' : '#A39ACF'},
         ]}

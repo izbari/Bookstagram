@@ -28,7 +28,7 @@ const SocialMediaTab = () => {
       <Tab.Screen
         options={{
           headerTitleAlign: 'center',
-          title: 'Store',
+          headerTitle: 'Cart',
           headerStyle: {
             backgroundColor: '#FF6EA1',
           },

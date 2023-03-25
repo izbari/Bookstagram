@@ -1,8 +1,11 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MyStoreTab from '../Tabs/MyStoreTab';
 
 import EditProfile from '../../Pages/EditProfile';
 import ProfileScreen from '../../Pages/Profile';
+import MyStoreTab from '../Tabs/MyStoreTab';
+
 const ProfileStack = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -38,6 +41,13 @@ const ProfileStack = () => {
         name="EditProfile"
         component={EditProfile}
       />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="MyStoreTab"
+          component={MyStoreTab}
+        />
     </Stack.Navigator>
   );
 };
