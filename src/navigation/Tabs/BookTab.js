@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyTabBar from '../../components/TabBar/tabBar';
-import ProfileStack from '../Stacks/profileStack';
+import FavoriteStack from '../Stacks/favoriteStack';
 import StoreStack from '../Stacks/storeStack';
 import LibraryStack from '../Stacks/libraryStack';
 import DiscoverStack from '../Stacks/discoverStack';
@@ -41,11 +41,21 @@ const SocialMediaTab = () => {
         name="Store"
         component={StoreStack}
       />
-
       <Tab.Screen
-        options={{headerShown: false}}
-        name="Profile"
-        component={ProfileStack}
+        options={{
+          headerTitleAlign: 'center',
+          title: 'Favorites',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
+        }}
+        name="Favorites"
+        component={FavoriteStack}
       />
     </Tab.Navigator>
   );

@@ -8,10 +8,10 @@ import BookCard from '../components/BookCard';
 
 function Favorites(props) {
   const list = useSelector(s => s.favList)
-    .slice()
+    ?.slice()
     .reverse();
 
-  if (!list.length) {
+  if (!list?.length) {
     return (
       <View
         style={{
@@ -31,7 +31,14 @@ function Favorites(props) {
     <SafeAreaView style={styles.mainContainer}>
       <FlatList
         data={list}
-        renderItem={({item}) => <BookCard currentScreen = 'Favorite' list={list} navigate={props.navigation.navigate} item={item} />}
+        renderItem={({item}) => (
+          <BookCard
+            currentScreen="Favorite"
+            list={list}
+            navigate={props.navigation.navigate}
+            item={item}
+          />
+        )}
         keyExtractor={item => item.id}
       />
     </SafeAreaView>

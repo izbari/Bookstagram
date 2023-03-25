@@ -4,7 +4,7 @@ import {Rating} from 'react-native-rating-element';
 import bookController from '../../controllers/bookController';
 import FastImage from 'react-native-fast-image';
 import Icon from '../../components/Icons';
-import { useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 const BookCard = ({item, currentScreen, navigate, list}) => {
   const dispatch = useDispatch();
   const [source, setSource] = React.useState(
@@ -60,7 +60,7 @@ const BookCard = ({item, currentScreen, navigate, list}) => {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                list.includes(item)
+                list?.includes(item)
                   ? dispatch({
                       type: 'REMOVE_FAVORITE',
                       payload: {rmFavBook: item},
@@ -69,7 +69,7 @@ const BookCard = ({item, currentScreen, navigate, list}) => {
               }}
               style={{}}>
               <Icon
-                name={list.includes(item) ? 'FilledLike' : 'Like'}
+                name={list?.includes(item) ? 'FilledLike' : 'Like'}
                 size={30}
                 fill="#FF6EA1"
               />
@@ -319,8 +319,9 @@ const BookCard = ({item, currentScreen, navigate, list}) => {
     </View>
   );
 };
-export default React.memo(BookCard, (prevProps, nextProps) => {
-  
-  return prevProps?.list.includes(prevProps.item) ===
-  nextProps?.list.includes(nextProps.item);;
+export default React.memo(BookCard, (prevProps = null, nextProps) => {
+  return (
+    prevProps?.list?.includes(prevProps?.item) ===
+    nextProps?.list?.includes(nextProps?.item)
+  );
 });

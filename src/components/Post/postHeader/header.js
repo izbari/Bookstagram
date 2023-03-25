@@ -9,16 +9,11 @@ import tw from 'twrnc';
 const Header = ({item, navigation}) => {
   const toProfile = React.useCallback(
     userId => {
-      console.log(item.userId, auth().currentUser.uid);
-
       if (auth().currentUser.uid === userId) {
-        navigation.navigate('SocialMediaTab', {
-          screen: 'Profile',
-        });
+        navigation.navigate('Profile');
       } else {
         navigation.navigate('OtherProfile', {
-          param: {selectedUserId: userId},
-          screen: 'OtherProfile',
+          selectedUserId: userId,
         });
       }
     },

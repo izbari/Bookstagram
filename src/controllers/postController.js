@@ -2,7 +2,48 @@ import React from 'react';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-exports.likeHandler = selectedPost => {
+export const getPosts = async () => {
+  try {
+    const list = [];
+    return await firestore()
+      .collection('posts')
+      .orderBy('postTime', 'desc')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const {
+            likes,
+            comments,
+            post,
+            postImg,
+            postTime,
+            userId,
+            userName,
+            userImageUrl,
+          } = doc.data();
+          list.push({
+            id: doc.id,
+            userId,
+            userName,
+            userImageUrl,
+            postTime,
+            post,
+            postImg,
+            liked: false,
+            likes,
+            comments,
+          });
+        });
+        return list;
+      });
+  } catch (error) {
+    setLoading(false);
+    setError(true);
+    console.log('ERROR:', error.msg);
+  }
+};
+
+export const likeHandler = selectedPost => {
   const uid = auth()?.currentUser.uid;
   //unlike
   if (selectedPost.likes.includes(uid)) {
@@ -12,8 +53,8 @@ exports.likeHandler = selectedPost => {
   else likePost(selectedPost.id, selectedPost.likes, uid);
 };
 
-const unlikePost = (postId, prevLikes, uid) => {
- 
+export const unlikePost = (postId, prevLikes, uid) => {
+  firestore.
   firestore()
     .collection('posts')
     .doc(postId)
@@ -26,8 +67,7 @@ const unlikePost = (postId, prevLikes, uid) => {
     });
 };
 
-const likePost = (postId, prevLikes, uid) => {
-  
+export const likePost = (postId, prevLikes, uid) => {
   firestore()
     .collection('posts')
     .doc(postId)

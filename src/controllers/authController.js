@@ -23,7 +23,7 @@ export const createUser = async (user, props) => {
         console.warn('auth.currentuser', auth().currentUser);
         if (auth().currentUser) {
           const userId = auth().currentUser.uid;
-          console.log('userId', userId);
+          console.warn('userId', userId);
           authUser.user
             .updateProfile({
               displayName: user.name + ' ' + user.lastName,
@@ -53,7 +53,7 @@ export const createUser = async (user, props) => {
       .catch(function (error) {
         console.log(error.message);
         error.code == 'auth/email-already-in-use'
-          ? Toast('This email already used by another account!')
+          ? console.warn('This email already used by another account!')
           : null;
         return false;
       });
@@ -102,15 +102,19 @@ const checkAuthConditions = ({
           return true;
         } else {
           Toast('Please Accept terms and policies...');
+          console.warn('Please Accept terms and policies...');
         }
       } else {
         Toast('Please select your gender!');
+        console.warn('Please Accept terms and policies...');
       }
     } else {
       Toast('Please enter your password correctly');
+      console.warn('Please Accept terms and policies...');
     }
   } else {
     Toast('Please fill your information');
+    console.warn('Please Accept terms and policies...');
   }
   return false;
 };
