@@ -16,7 +16,7 @@ export default function ThirdStep({
   setFormData,
   formData,
   loading,
-  onNextStepPress
+  onNextStepPress,
 }) {
   const [visible, setVisible] = useState(false);
   const [focus, setFocus] = useState(false);
@@ -181,11 +181,11 @@ export default function ThirdStep({
           onDismiss={() => setVisible(false)}
           contentContainerStyle={{
             backgroundColor: 'white',
-            flex: 1,
             margin: 15,
             borderRadius: 10,
+            justifyContent: 'space-between',
           }}>
-          <View style={{flex: 1, padding: 20}}>
+          <View style={{height: '90%', paddingHorizontal: 20, paddingTop: 10}}>
             <TouchableOpacity
               hitSlop={{top: 10, bottom: 10, right: 10, left: 10}}
               style={{position: 'absolute', right: 15, top: 15, zIndex: 99}}

@@ -1,31 +1,31 @@
-// import {useState, useEffect, useRef} from 'react';
-// import {Keyboard, Animated} from 'react-native';
+import {useState, useEffect} from 'react';
+import {Keyboard} from 'react-native';
 
-// export const useKeyboardVisible = () => {
-//   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+export const useKeyboardVisible = () => {
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
-//   useEffect(() => {
-//     const keyboardDidShowListener = Keyboard.addListener(
-//       'keyboardDidShow',
-//       () => {
-//         setKeyboardVisible(true);
-//       },
-//     );
-//     const keyboardDidHideListener = Keyboard.addListener(
-//       'keyboardDidHide',
-//       () => {
-//         setKeyboardVisible(false);
-//       },
-//     );
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
 
-//     return () => {
-//       keyboardDidHideListener.remove();
-//       keyboardDidShowListener.remove();
-//     };
-//   }, []);
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
-//   return isKeyboardVisible;
-// };
+  return isKeyboardVisible;
+};
 // export const useKeyboardHeight = () => {
 //   const keyboardHeight = useRef(new Animated.Value(0)).current;
 
@@ -64,15 +64,12 @@
 //   return keyboardHeight;
 // };
 
-import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardEvent } from 'react-native';
-
 export const useKeyboardHeight = () => {
-
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
-    function onKeyboardDidShow(e) { // Remove type here if not using TypeScript
+    function onKeyboardDidShow(e) {
+      // Remove type here if not using TypeScript
       setKeyboardHeight(e.endCoordinates.height);
     }
 
@@ -80,8 +77,14 @@ export const useKeyboardHeight = () => {
       setKeyboardHeight(0);
     }
 
-    const showSubscription = Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+    const showSubscription = Keyboard.addListener(
+      'keyboardDidShow',
+      onKeyboardDidShow,
+    );
+    const hideSubscription = Keyboard.addListener(
+      'keyboardDidHide',
+      onKeyboardDidHide,
+    );
     return () => {
       showSubscription.remove();
       hideSubscription.remove();

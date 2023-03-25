@@ -4,14 +4,15 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyTabBar from '../../components/TabBar/tabBar';
 import HomeStack from '../Stacks/homeStack';
 import ChatStack from '../Stacks/chatStack';
-import FavoriteStack from '../Stacks/favoriteStack';
+import ProfileStack from '../Stacks/profileStack';
 const BookTab = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator  tabBar={props => (
-      <MyTabBar {...props} ScreenOptions={{tabBarHideOnKeyboard: true}} />
-    )}
-    options={{headerShown: false}}>
+    <Tab.Navigator
+      tabBar={props => (
+        <MyTabBar {...props} ScreenOptions={{tabBarHideOnKeyboard: true}} />
+      )}
+      options={{headerShown: false}}>
       <Tab.Screen
         options={{headerShown: false}}
         name="Home"
@@ -23,20 +24,9 @@ const BookTab = () => {
         component={ChatStack}
       />
       <Tab.Screen
-        options={{
-          headerTitleAlign: 'center',
-          title: 'Favorites',
-          headerStyle: {
-            backgroundColor: '#FF6EA1',
-          },
-          headerTintColor: 'white',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            textAlign: 'center',
-          },
-        }}
-        name="Favorites"
-        component={FavoriteStack}
+        options={{headerShown: false}}
+        name="Profile"
+        component={ProfileStack}
       />
     </Tab.Navigator>
   );

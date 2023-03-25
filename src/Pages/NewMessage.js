@@ -47,7 +47,7 @@ const NewMessage = ({navigation, route}) => {
       .ref('/users/')
       .once('value')
       .then(snapshot => {
-        let data = parseFirebaseData(snapshot.val(), auth().currentUser.uid);
+        let data = parseFirebaseData(snapshot?.val(), auth()?.currentUser?.uid);
         data = data.filter(user => {
           return (
             user.id != auth().currentUser.uid &&
@@ -78,7 +78,7 @@ const NewMessage = ({navigation, route}) => {
 
         navigation.navigate('ChatSingleScreen', {
           name: item.name + ' ' + item.lastName,
-          imageUrl : item.imageUrl,
+          imageUrl: item.imageUrl,
           chatId: chatId,
           uid: item.id,
         });
@@ -186,9 +186,10 @@ const NewMessage = ({navigation, route}) => {
             </Text>
           ) : null}
 
-          {MyChats.sort((a, b) => a.name.localeCompare(b.name)).map(item => {
-            return <UserItem key={item.id} item={item} />;
-          })}
+          {MyChats.length > 0 &&
+            MyChats.sort((a, b) => a.name.localeCompare(b.name)).map(item => {
+              return <UserItem key={item.id} item={item} />;
+            })}
         </View>
 
         <Text
@@ -204,7 +205,7 @@ const NewMessage = ({navigation, route}) => {
           <ActivityIndicator size="large" color="#FF6EA1" />
         ) : (
           users
-            .sort((a, b) => a.name.localeCompare(b.name))
+            ?.sort((a, b) => a?.name?.localeCompare(b?.name))
             .map(item => {
               return <UserItem key={item.id} item={item} />;
             })

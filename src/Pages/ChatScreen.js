@@ -53,44 +53,44 @@ export default function Chat({navigation, route}) {
     let otherUids = [];
     let otherUserData = [];
 
-    // auth().onAuthStateChanged(user => {
-    firestore()
-      .collection('Chats')
-      .where('users', 'array-contains', user?.uid)
-      .onSnapshot(snapshot => {
-        snapshot.docs.forEach(chat => {
-          otherUids.push(chat.data().users.find(uid => uid !== user?.uid));
-        });
-        database()
-          .ref('users/')
-          .once('value', snapshot => {
-            snapshot.forEach(item => {
-              if (otherUids.includes(item._snapshot.key)) {
-                const {id, name, lastName, imageUrl} = item._snapshot.value;
+    auth().onAuthStateChanged(user => {
+      firestore()
+        .collection('Chats')
+        .where('users', 'array-contains', user?.uid)
+        .onSnapshot(snapshot => {
+          snapshot.docs.forEach(chat => {
+            otherUids.push(chat.data().users.find(uid => uid !== user?.uid));
+          });
+          database()
+            .ref('users/')
+            .once('value', snapshot => {
+              snapshot.forEach(item => {
+                if (otherUids.includes(item._snapshot.key)) {
+                  const {id, name, lastName, imageUrl} = item._snapshot.value;
 
-                otherUserData.push({
-                  id: id,
-                  name: name,
-                  lastName: lastName,
-                  imageUrl: imageUrl,
-                });
+                  otherUserData.push({
+                    id: id,
+                    name: name,
+                    lastName: lastName,
+                    imageUrl: imageUrl,
+                  });
+                }
+              });
+
+              let result = {};
+              for (let item of otherUserData) {
+                let newObject = Object.assign({}, item);
+                result[newObject.id] = newObject;
+                delete newObject.id;
               }
+
+              setOtherUserData(otherUserData);
+              setLoading(false);
             });
 
-            let result = {};
-            for (let item of otherUserData) {
-              let newObject = Object.assign({}, item);
-              result[newObject.id] = newObject;
-              delete newObject.id;
-            }
-
-            setOtherUserData(otherUserData);
-            setLoading(false);
-          });
-
-        setChats(snapshot.docs);
-      });
-    // });
+          setChats(snapshot.docs);
+        });
+    });
   };
 
   const ChatObject = ({item}) => {

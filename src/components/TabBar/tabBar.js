@@ -4,9 +4,13 @@ import {useSelector} from 'react-redux';
 import Icon from '../../components/Icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useTranslation} from 'react-i18next';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 function MyTabBar({state, descriptors, navigation}) {
-  const messageBadge = useSelector(store => store.messageBadge);
+  // const messageBadge = useSelector(store => store.messageBadge);
+  const messageBadge = 0;
+  const insets = useSafeAreaInsets();
+
   const {i18n, t} = useTranslation();
   function iconGenerator(label) {
     switch (label) {
@@ -28,7 +32,6 @@ function MyTabBar({state, descriptors, navigation}) {
         'ChangeStack;';
     }
   }
-  console.log(state);
 
   const changeStackPress = () => {
     const location = state.routeNames.includes('Discover')
@@ -37,7 +40,12 @@ function MyTabBar({state, descriptors, navigation}) {
     navigation.navigate(location);
   };
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View
+      style={{
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        paddingBottom: insets.bottom,
+      }}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
         const label =
@@ -81,7 +89,9 @@ function MyTabBar({state, descriptors, navigation}) {
               onLongPress={onLongPress}
               style={[
                 styles.bottomButton,
-                {borderBottomColor: isFocused ? '#FF6EA1' : 'transparent'},
+                {
+                  borderBottomColor: isFocused ? '#FF6EA1' : 'transparent',
+                },
               ]}>
               {route.name == 'Chat' ? (
                 <View style={styles.withBadgeWrapper}>

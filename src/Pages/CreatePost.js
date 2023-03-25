@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import {
   StyleSheet,
   Image,
@@ -48,7 +48,7 @@ const CreatePost = ({navigation}) => {
     name,
     lastName,
     imageUrl: userImageUrl,
-  } = useSelector(store => store.user);
+  } = useSelector(store => store.user.user);
 
   const bottomSheetRef = useRef(null);
   const [text, setText] = useState('');
@@ -97,7 +97,7 @@ const CreatePost = ({navigation}) => {
     };
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setMaxHeightValue(
       Math.max(
         inputHeight,

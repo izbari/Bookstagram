@@ -255,7 +255,7 @@ function DiscoverScreen(props) {
 
           }}>
           <ScrollView   horizontal={true}>
-          {list.map((item, index) => {
+          {list?.map((item, index) => {
                return <SelectedTopics key={index} item={item}/>
             })}
           </ScrollView>

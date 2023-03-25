@@ -17,7 +17,7 @@ import ImageModal from 'react-native-image-modal';
 import {Menu, Divider} from 'react-native-paper';
 
 export default function ChatSingleScreen({navigation, route}) {
-  const authUser = useSelector(store => store.user);
+  const authUser = useSelector(store => store.user.user);
   const [messages, setMessages] = useState([]);
   const {name, imageUrl, uid, chatId} = route.params;
   const [currentChatId, setCurrentChatId] = useState(chatId);
@@ -106,7 +106,7 @@ export default function ChatSingleScreen({navigation, route}) {
       ),
     });
   }, [navigation]);
-
+  console.warn('name', route.params);
   React.useEffect(() => {
     const data = firestore()
       .doc('Chats/' + currentChatId)
@@ -123,7 +123,8 @@ export default function ChatSingleScreen({navigation, route}) {
 
   const onSend = useCallback(
     (m = []) => {
-    // her message payloadına sent: true, received: true bu eklecek ona gore goruldu ayarlanacak thick style verilcek...
+      console.log('message', m);
+      // her message payloadına sent: true, received: true bu eklecek ona gore goruldu ayarlanacak thick style verilcek...
       if (currentChatId != 'null') {
         firestore()
           .doc('Chats/' + currentChatId)
@@ -239,17 +240,12 @@ export default function ChatSingleScreen({navigation, route}) {
         messages={messages}
         onSend={text => onSend(text)}
         user={{
-          _id: authUser != null ? authUser.id : route.params.authData.id,
+          _id: authUser != null ? authUser.id : route.params.id,
           name:
             authUser != null
               ? authUser.name + ' ' + authUser.lastName
-              : route.params.authData.name +
-                ' ' +
-                route.params.authData.lastName,
-          avatar:
-            authUser != null
-              ? authUser.imageUrl
-              : route.params.authData.imageUrl,
+              : route.params.name + ' ' + route.params.lastName,
+          avatar: authUser != null ? authUser.imageUrl : route.params.imageUrl,
         }}
         showUserAvatar
         useNativeDriver={true}
@@ -264,7 +260,7 @@ export default function ChatSingleScreen({navigation, route}) {
           navigateProfile(user._id);
         }}
         renderTicks={() => (
-          <View style={{justifyContent:'center'}}>
+          <View style={{justifyContent: 'center'}}>
             <Text>✔✔</Text>
           </View>
         )}

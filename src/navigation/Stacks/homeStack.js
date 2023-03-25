@@ -37,7 +37,16 @@ const HomeStack = ({navigation}) => {
       />
       <Stack.Screen
         options={{
-          headerShown: false,
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#FF6EA1',
+          },
+          headerBackVisible: false,
+          headerTintColor: 'white',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+          },
         }}
         name="OtherProfile"
         component={OtherProfile}

@@ -9,11 +9,11 @@ const Body = ({item}) => {
   return (
     <>
       <View>
-        {item.post != null && (
+        {!!item.post && (
           <Text style={tw`ml-2 mb-2 p-2 text-gray-800`}>{item.post}</Text>
         )}
       </View>
-      {item.postImg != null && (
+      {!!item.postImg && (
         <ImageModal
           resizeMode="cover"
           style={tw`h-96 w-${width * 0.9}px mx-3`}

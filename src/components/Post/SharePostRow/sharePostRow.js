@@ -10,6 +10,7 @@ import {useSelector} from 'react-redux';
 import tw from 'twrnc';
 const sharePostRow = ({friend, post}) => {
   const authUser = useSelector(store => store.user);
+  console.log('authUser', authUser)
   const [sent, setSent] = React.useState(false);
   let idPair =
     auth().currentUser.uid < friend.id

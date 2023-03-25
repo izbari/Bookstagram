@@ -2,12 +2,13 @@ import React, {useEffect} from 'react';
 import {View, Text, Dimensions} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
-const {width} = Dimensions.get('window');
 import Loading from '../components/Loading';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from '../controllers/notificationController';
 import {useDispatch} from 'react-redux';
+import {setUser} from '../features/slices/userSlice';
 
+const {width} = Dimensions.get('window');
 function AuthLoading(props) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -90,15 +91,17 @@ function AuthLoading(props) {
   const from = props?.route?.params?.from;
   console.log('from ', from);
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(user => {
+    const subscriber = auth().onAuthStateChanged((user) => {
       console.warn('Auth state changed', from);
       if (!user) {
-        console.log('User not logged in');
+        console.warn('User not logged in');
         props.navigation.replace('Onboarding');
       } else {
+        console.warn('User logged in', user);
+
         dbToken(user).then(() => {
           if (from == 'Login' || from == 'Signup') {
-            console.log('User login');
+            console.warn('User login');
             props.navigation.replace('BookTab');
           } else if (from == undefined) {
             props.navigation.replace('BookTab');
@@ -112,20 +115,21 @@ function AuthLoading(props) {
     database()
       .ref(`/users/${user.uid}`)
       .on('value', snapshot => {
-        
-        console.log('USER KAYDEDILMIS:', snapshot);
-        if (!snapshot?.val()?.notificationTokens) {
-          messaging()
-            .getToken()
-            .then(token => {
-              if (token) {
-                database()
-                  .ref(`/users/${user.uid}/notificationTokens/${token}`)
-                  .set(true);
-              }
-            });
+        // console.log('USER KAYDEDILMIS:', snapshot);
+        if (snapshot?.val()) {
+          if (!snapshot?.val()?.notificationTokens) {
+            messaging()
+              .getToken()
+              .then(token => {
+                if (token) {
+                  database()
+                    .ref(`/users/${user.uid}/notificationTokens/${token}`)
+                    .set(true);
+                }
+              });
+          }
+          dispatch(setUser(snapshot.val()));
         }
-        dispatch({type: 'SET_USER', payload: {user: snapshot.val()}});
       });
   };
   return (

@@ -38,8 +38,8 @@ const {width} = Dimensions.get('window');
 
 function HomeScreen({navigation, route}) {
   const dispatch = useDispatch();
-  const authUser = useSelector(store => store.user);
-  const friendList = useSelector(state => state.user);
+  const authUser = useSelector(store => store.user.user);
+  const friendList = useSelector(state => state.user.user);
   //bottom sheet variables
   const bottomSheetRef = React.useRef(null);
   const snapPoints = React.useMemo(() => ['50%', '100%'], []);
