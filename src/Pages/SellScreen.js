@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useState} from 'react';
 import Icon from '../components/Icons';
@@ -81,30 +82,6 @@ export default function SellScreen() {
     );
   };
 
-  const ProductInfoInput = ({
-    header,
-    value,
-    onChangeText,
-    placeholder,
-    numberOfLines,
-    multiline,
-    style,
-  }) => {
-    return (
-      <View>
-        <Text style={styles.infoHeader}>{header}</Text>
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          style={[styles.infoInput, style]}
-          numberOfLines={numberOfLines ? numberOfLines : 2}
-          placeholder={placeholder}
-          placeholderTextColor="#AEAEAE"
-        />
-      </View>
-    );
-  };
-
   const products = [
     {
       image: ImagePlaceholder,
@@ -127,7 +104,9 @@ export default function SellScreen() {
   ];
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}>
           <Icon name="BackArrow" size={25} fill="black" />
@@ -135,7 +114,7 @@ export default function SellScreen() {
         <Text style={styles.headerText}>Product Info</Text>
       </View>
       <ScrollView>
-        <View style={styles.photosContainer}>
+        <View>
           <View style={styles.photosHeader}>
             <View
               style={{
@@ -144,7 +123,7 @@ export default function SellScreen() {
                 width: '25%',
                 alignItems: 'center',
               }}>
-              <Text>Photos</Text>
+              <Text style={{fontWeight: '600'}}>Photos</Text>
               <Text style={{fontSize: 12}}>{products.length}/10</Text>
             </View>
             <TouchableOpacity style={styles.editButton}>
@@ -164,37 +143,37 @@ export default function SellScreen() {
           </View>
         </View>
 
-        <ProductInfoInput
-          header="Book Header"
+        <Text style={styles.infoHeader}>Book Header</Text>
+        <TextInput
           value={productHeader}
           onChangeText={setProductHeader}
+          style={styles.infoInput}
           placeholder="Write the name of the book you are selling"
+          placeholderTextColor="#AEAEAE"
         />
 
-        <ProductInfoInput
-          header="Book Author"
+        <Text style={styles.infoHeader}>Book Author</Text>
+        <TextInput
           value={productAuthor}
           onChangeText={setProductAuthor}
+          style={styles.infoInput}
           placeholder="Write the author of the book you are selling"
+          placeholderTextColor="#AEAEAE"
         />
 
-        <ProductInfoInput
-          header="Product Explanation"
+        <Text style={styles.infoHeader}>Product Explanation</Text>
+        <TextInput
           value={productExplanation}
           onChangeText={setProductExplanation}
+          style={styles.infoInput}
           placeholder="Explain the product you are selling in detail"
+          placeholderTextColor="#AEAEAE"
           numberOfLines={3}
-          style={{height: 70}}
         />
 
         <TouchableOpacity
-          style={[
-            styles.touchableInput,
-            {
-              marginTop: 20,
-            },
-          ]}>
-          <Text>Category</Text>
+          style={[styles.touchableInput, {marginTop: 20}]}>
+          <Text style={{fontWeight:'600'}}>Category</Text>
           <Ionicon
             name="caret-forward-outline"
             size={25}
@@ -235,7 +214,7 @@ export default function SellScreen() {
         </View>
         <View
           style={[styles.touchableInput, {marginTop: 20, paddingVertical: 20}]}>
-          <Text>Page Count</Text>
+          <Text style={{fontWeight:'600'}}>Page Count</Text>
           <TextInput
             style={{
               width: 50,
@@ -250,7 +229,7 @@ export default function SellScreen() {
         </View>
         <View
           style={[styles.touchableInput, {marginTop: 20, paddingVertical: 20}]}>
-          <Text>Price</Text>
+          <Text style={{fontWeight:'600'}}>Price</Text>
           <TextInput
             style={{
               width: 50,
@@ -278,7 +257,7 @@ export default function SellScreen() {
           <Text style={styles.sellText}>SELL NOW</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -329,6 +308,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   infoHeader: {
+    fontWeight:'600',
     paddingHorizontal: 15,
     paddingVertical: 10,
     paddingTop: 20,
