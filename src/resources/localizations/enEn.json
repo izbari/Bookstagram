@@ -1,0 +1,33 @@
+{
+  "translation": {
+    "landing": {
+      "hello": "Hello",
+      "myCart": "My cart",
+      "purchases": "Purchases",
+      "theme": "Theme",
+      "account": "Account",
+      "notifications": "Notifications",
+      "languages": "Languages",
+      "sign-out": "Sign out",
+      "books": "Books",
+      "followers": "Followers",
+      "following": "Following",
+      "edit-profile": "Edit Profile",
+      "settings": "Settings",
+      "like": "Like",
+      "comment": "Comment",
+      "comments": "Comment",
+      "share": "Share",
+      "comment-placeholder": "What are you thinking ?"
+    },
+    "tab-names": {
+      "home": "Home",
+      "chat": "Chat",
+      "discover": "Discover",
+      "library": "Library",
+      "store": "Store",
+      "favorites": "Favorites",
+      "profile": "Profile"
+    }
+  }
+}

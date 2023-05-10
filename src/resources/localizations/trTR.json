@@ -1,0 +1,33 @@
+{
+  "translation": {
+    "landing": {
+      "hello": "Merhaba",
+      "my-cart": "Sepetim",
+      "purchases": "Siparişlerim",
+      "theme": "Tema",
+      "account": "Hesabım",
+      "notification": "Bildirimler",
+      "languages": "Diller",
+      "sign-out": "Çıkış yap",
+      "books": "Kitaplar",
+      "fallowers": "Takipçiler",
+      "following": "Takip Edilenler",
+      "edit-profile": "Profili düzenle",
+      "settings": "Ayarlar",
+      "like": "Beğen",
+      "comment": "Yorum",
+      "comments": "Yorum",
+      "share": "Paylaş",
+      "comment-placeholder": "Ne düşünüyorsun ?"
+    },
+    "tab-names": {
+      "home": "Ana Ekran",
+      "chat": "Mesaj",
+      "discover": "Keşfet",
+      "library": "Kütüphane",
+      "store": "Sepet",
+      "favorites": "Favorilerim",
+      "profile": "Profil"
+    }
+  }
+}
