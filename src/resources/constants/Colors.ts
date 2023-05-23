@@ -9,6 +9,8 @@ const Colors = {
   lightGray: '#749198',
   gray: '#E5EBEB',
   darkGray: '#D9D9D9',
+  darkPurple: '#8B7FC5',
+  lightPurple: '#A39ACF',
 };
 
-export default Colors;
+export {Colors};
