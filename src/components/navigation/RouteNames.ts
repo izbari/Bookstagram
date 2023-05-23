@@ -1,6 +1,7 @@
 export enum RouteNames {
   //stacks
   main = 'main',
+  auth = 'auth',
   landing = 'landing',
   favorite = 'favorite',
   profile = 'profile',
@@ -11,7 +12,7 @@ export enum RouteNames {
 
   //auth-screens
   login = 'login',
-  registerScreen = 'register-screen',
+  register = 'register',
   forgetPassword = 'forget-password',
 
   //landing-stack-screens

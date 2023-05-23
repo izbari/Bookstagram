@@ -18,12 +18,14 @@ export const PostBody: React.FunctionComponent<IPostBodyProps> = React.memo(
           )}
         </View>
         {Boolean(props.postImg) && (
-          <ImageModal
-            style={tw`h-96 w-${width * 0.9}px mx-3`}
-            source={{
-              uri: props.postImg,
-            }}
-          />
+          <View style={tw`flex-1`}>
+            <ImageModal
+              style={tw`h-96 w-[${width * 0.96}px] mx-auto`}
+              source={{
+                uri: props.postImg,
+              }}
+            />
+          </View>
         )}
       </>
     );

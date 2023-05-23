@@ -2,9 +2,8 @@ import i18n, {Resource} from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import {AppRegistry} from 'react-native';
 import {name as appName} from '../../../app.json';
-import * as Gesture from 'react-native-gesture-handler';
 import {LanguagesTypes} from '../Localization/LanguageTypes';
-import {App} from '../../..';
+import App from '../../../App';
 
 export class Bootstrapper {
   public static create(): Bootstrapper {
@@ -17,9 +16,7 @@ export class Bootstrapper {
   public async bootstrap(): Promise<void> {
     await this.initLocalization();
 
-    AppRegistry.registerComponent(appName, () =>
-      Gesture.gestureHandlerRootHOC(App),
-    );
+    AppRegistry.registerComponent(appName, () => App);
   }
   public useTranslation(
     translation: Resource,

@@ -48,7 +48,7 @@ export const PostHeader: React.FunctionComponent<IPostHeaderProps> = React.memo(
           <View style={tw`justify-center ml-3`}>
             <Text>{props.userName}</Text>
             <Text style={tw`text-gray-500 text-[12px]`}>
-              {moment(props.postTime.toDate()).fromNow()}
+              {moment(props.postTime?.toDate?.()).fromNow()}
             </Text>
           </View>
         </TouchableOpacity>
