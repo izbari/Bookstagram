@@ -28,10 +28,13 @@ import {BottomsheetCommentAction} from '../../components/Landing/BottomSheetComm
 import {Comment} from '../../components/Landing/Comment';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {IUser} from '../../infrastructure/Redux/Slices/UserSlice';
+import auth from '@react-native-firebase/auth';
 interface ILandingPageProps {
   readonly navigation: INavigationType;
 }
-export const LandingPage: React.FunctionComponent<ILandingPageProps> = () => {
+export const LandingPage: React.FunctionComponent<
+  ILandingPageProps
+> = props => {
   const {refetch, isLoading, data} = useGetPostsQuery();
   const authUser = useAppSelector(store => store.user.user);
   const [friendsData, setFriendsData] = React.useState<IUser[]>([]);
@@ -58,6 +61,7 @@ export const LandingPage: React.FunctionComponent<ILandingPageProps> = () => {
     },
     [setSelectedPost],
   );
+
   const handleSheetChanges = React.useCallback((props: any) => {
     console.log('handleSheetChanges', props);
   }, []);
