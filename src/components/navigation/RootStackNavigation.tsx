@@ -28,10 +28,10 @@ export const RootStackNavigation: React.FunctionComponent = () => {
             component={MainStackNavigation}
           />
         ) : (
-          <RootStack.Group>
+          <>
             <RootStack.Screen name={RouteNames.login} component={Login} />
             <RootStack.Screen name={RouteNames.register} component={Register} />
-          </RootStack.Group>
+          </>
         )}
       </RootStack.Navigator>
     </NavigationContainer>
