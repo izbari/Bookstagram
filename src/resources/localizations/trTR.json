@@ -28,6 +28,24 @@
       "store": "Sepet",
       "favorites": "Favorilerim",
       "profile": "Profil"
+    },
+    "profile": {
+      "account":"Hesabım",
+      "settings": "Ayarlar",
+      "edit-profile": "Profili düzenle",
+      "my-store": "Mağazam",
+      "cart": "Sepetim",
+      "purchases": "Siparişlerim",
+      "account-settings": "Hesap Ayarları",
+      "notifications": "Bildirimler",
+      "languages": "Dil",
+      "sign-out": "Çıkış yap",
+      "theme": "Tema",
+      "books": "Kitap",
+      "followers": "Takipçi",
+      "following": "Takip",
+      "english": "İngilizce",
+      "turkish": "Türkçe"
     }
   }
 }

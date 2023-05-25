@@ -28,6 +28,25 @@
       "store": "Store",
       "favorites": "Favorites",
       "profile": "Profile"
+    },
+    "profile": {
+      "account": "Account",
+      "settings": "Settings",
+      "edit-profile": "Edit Profile",
+      "my-store": "My Store",
+      "cart": "Cart",
+      "purchases": "Purchases",
+      "account-settings": "Account Settings",
+      "notifications": "Notifications",
+      "languages": "Languages",
+      "sign-out": "Sign out",
+      "theme": "Theme",
+      "books": "Books",
+      "followers": "Followers",
+      "following": "Following",
+      "english": "English",
+      "turkish": "Turkish"
+
     }
   }
 }

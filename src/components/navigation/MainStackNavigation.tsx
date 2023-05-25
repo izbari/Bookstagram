@@ -8,7 +8,8 @@ import {useAuth} from '../../infrastructure/Utils/useAuth';
 import {ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {INavigationType} from './Types';
-import {Landing} from '../../use-cases/Landing/Landing';
+import { LandingStackNavigation as LandingStack } from './stacks/LandingStackNavigation';
+import { ProfileStackNavigation as ProfileStack } from './stacks/ProfileStackNavigation';
 const MainStack = createBottomTabNavigator<NavigationParamsList>();
 // const Icon: React.FunctionComponent<{
 //   routeName: string;
@@ -44,10 +45,24 @@ export const MainStackNavigation: React.FunctionComponent = () => {
       //   },
       // }}
 
-      initialRouteName={RouteNames.landing}>
+      initialRouteName={RouteNames.profile}>
       <MainStack.Screen
         name={RouteNames.landing}
-        component={Landing}
+        component={LandingStack}
+        options={{
+          headerShown: false,
+        }}  
+        // options={{
+        //   tabBarIcon: ({focused}) =>
+        //     Icon({routeName: RouteNames.landing, focused}),
+        // }}
+      />
+      <MainStack.Screen
+        name={RouteNames.profile}
+        component={ProfileStack}
+        options={{
+          headerShown: false,
+        }}
         // options={{
         //   tabBarIcon: ({focused}) =>
         //     Icon({routeName: RouteNames.landing, focused}),
