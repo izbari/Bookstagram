@@ -46,7 +46,13 @@
       "following": "Following",
       "english": "English",
       "turkish": "Turkish"
-
+    },
+    "my-store": {
+      "store": "Store",
+      "favorites": "Favorites",
+      "sold": "Sold",
+      "sold-text": "Sold",
+      "sell": "Sell Now",
     }
   }
 }

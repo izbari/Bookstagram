@@ -264,7 +264,7 @@ export const Profile: React.FunctionComponent<IProfileProps> = props => {
           </View>
         </View>
       </ScrollView>
-      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
+      <BottomSheet ref={bottomSheetRef} index={0} snapPoints={snapPoints}>
         <BottomSheetView style={tw`h-full justify-evenly `}>
           <TouchableOpacity
             onPress={() => {

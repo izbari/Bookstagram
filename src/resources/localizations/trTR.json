@@ -46,6 +46,13 @@
       "following": "Takip",
       "english": "İngilizce",
       "turkish": "Türkçe"
+    },
+    "my-store": {
+      "store": "Mağazam",
+      "favorites": "Favorilerim",
+      "sold": "Satılanlar",
+      "sold-text": "Satıldı",
+      "sell": "Hemen Sat"
     }
   }
 }

@@ -9,7 +9,7 @@ const ProfileStack = createNativeStackNavigator<NavigationParamsList>();
 export const ProfileStackNavigation: React.FunctionComponent = () => {
   return (
     <ProfileStack.Navigator
-      initialRouteName={RouteNames.profile}
+      initialRouteName={RouteNames.store}
       screenOptions={{headerShown: false}}>
       <ProfileStack.Screen name={RouteNames.profile} component={Profile} />
       <ProfileStack.Screen name={RouteNames.store} component={MyStore} />

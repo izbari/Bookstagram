@@ -2,42 +2,60 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   Dimensions,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../resources/constants/Colors';
 import tw from 'twrnc';
+import {useTranslation} from 'react-i18next';
 const {width} = Dimensions.get('window');
 
-export const SecondHandSaleCard = ({image, title, price, isMine, isSold}) => {
+interface ISeconHandSaleCardProps {
+  readonly image: string;
+  readonly title: string;
+  readonly price: string;
+  readonly isMine?: boolean;
+  readonly isSold?: boolean;
+  readonly onFavoritePress?: () => void;
+  readonly isFavorite?: boolean;
+}
+
+export const SecondHandSaleCard: React.FunctionComponent<
+  ISeconHandSaleCardProps
+> = props => {
+  const {t} = useTranslation();
   return (
     <>
       <TouchableOpacity style={styles.container}>
-          <ImageBackground source={image} style={styles.image} resizeMode="cover" imageStyle={tw`rounded-md`}>
-          {!isMine && (
-            <TouchableOpacity style={styles.favoriteContainer}>
-              <Icon name="heart-outline" size={20} color={Colors.lightPurple} />
+        <ImageBackground
+          source={{uri: props.image}}
+          style={styles.image}
+          resizeMode="cover"
+          imageStyle={tw`rounded-md`}>
+          {!props.isMine && (
+            <TouchableOpacity onPress={props.onFavoritePress} style={styles.favoriteContainer}>
+              <Icon name={props.isFavorite ? "heart" : "heart-outline"} size={20} color={Colors.lightPurple} />
             </TouchableOpacity>
           )}
 
-          {isSold && <Text style={styles.soldText}>SOLD</Text>}
-          </ImageBackground>
-        
+          {props.isSold && (
+            <Text style={styles.soldText}>{t('my-store.sold-text')}</Text>
+          )}
+        </ImageBackground>
 
-        {isMine ? (
+        {props.isMine ? (
           <View style={styles.titleAndFavoriteContainer}>
-            <Text style={styles.title}>{title}</Text>
-            <Icon name="FilledLike" size={16} fill={Colors.lightPurple} />
+            <Text style={styles.title}>{props.title}</Text>
+            <Icon name="heart" size={16} color={Colors.lightPurple} />
             <Text style={styles.favoriteCount}>10</Text>
           </View>
         ) : (
-          <Text style={[styles.title, {marginTop: 5}]}>{title}</Text>
+          <Text style={[styles.title, {marginTop: 5}]}>{props.title}</Text>
         )}
-        <Text style={styles.price}>{price}</Text>
+        <Text style={styles.price}>{props.price}</Text>
       </TouchableOpacity>
     </>
   );
@@ -49,10 +67,10 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     borderWidth: 1,
     padding: 10,
-    margin: 10,
+    marginHorizontal: 10,
     borderRadius: 10,
     marginTop: 10,
-    flex:1
+    flex: 1,
   },
   image: {
     height: 190,
