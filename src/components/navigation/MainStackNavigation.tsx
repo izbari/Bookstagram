@@ -3,12 +3,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationParamsList} from './NavigationParamsList';
 import {RouteNames} from './RouteNames';
 
-import {LandingStackNavigation} from './stacks/LandingStackNavigation';
-import {ChatStackNavigation} from './stacks/ChatStackNavigation';
-
-ChatStackNavigation;
-const Blank = () => <></>;
-
+import {useTranslation} from 'react-i18next';
+import {useAuth} from '../../infrastructure/Utils/useAuth';
+import {ActivityIndicator} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {INavigationType} from './Types';
+import { LandingStackNavigation as LandingStack } from './stacks/LandingStackNavigation';
+import { ProfileStackNavigation as ProfileStack } from './stacks/ProfileStackNavigation';
 const MainStack = createBottomTabNavigator<NavigationParamsList>();
 // const Icon: React.FunctionComponent<{
 //   routeName: string;
@@ -44,10 +45,24 @@ export const MainStackNavigation: React.FunctionComponent = () => {
       //   },
       // }}
 
-      initialRouteName={RouteNames.landing}>
+      initialRouteName={RouteNames.profile}>
       <MainStack.Screen
         name={RouteNames.landing}
-        component={LandingStackNavigation}
+        component={LandingStack}
+        options={{
+          headerShown: false,
+        }}  
+        // options={{
+        //   tabBarIcon: ({focused}) =>
+        //     Icon({routeName: RouteNames.landing, focused}),
+        // }}
+      />
+      <MainStack.Screen
+        name={RouteNames.profile}
+        component={ProfileStack}
+        options={{
+          headerShown: false,
+        }StackNavigation}
         // options={{
         //   tabBarIcon: ({focused}) =>
         //     Icon({routeName: RouteNames.landing, focused}),

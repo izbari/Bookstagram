@@ -25,7 +25,7 @@ export const RootStackNavigation: React.FunctionComponent = () => {
       <RootStack.Navigator
         initialRouteName={RouteNames.main}
         screenOptions={{headerShown: false}}>
-        {isLoggedIn ? (
+        {!isLoggedIn ? (
           <RootStack.Screen
             name={RouteNames.main}
             component={MainStackNavigation}
