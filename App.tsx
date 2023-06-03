@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Provider} from 'react-redux';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {RootStackNavigation} from './src/components/navigation/RootStackNavigation';
 import {store} from './src/infrastructure/Redux/Store';
@@ -11,9 +11,7 @@ const App: React.FunctionComponent = () => {
     <GestureHandlerRootView style={style.container}>
       <Provider store={store}>
         <BottomSheetModalProvider>
-          <SafeAreaView style={style.container}>
-            <RootStackNavigation />
-          </SafeAreaView>
+          <RootStackNavigation />
         </BottomSheetModalProvider>
       </Provider>
     </GestureHandlerRootView>

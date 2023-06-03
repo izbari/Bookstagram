@@ -3,17 +3,14 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import isEqual from 'react-fast-compare';
-import auth from '@react-native-firebase/auth';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {useNavigation} from '@react-navigation/native';
-import {INavigationType} from '../navigation/Types';
 import tw from 'twrnc';
 
 interface IPostHeaderProps {
-  readonly userId: string;
-  readonly userImageUrl: string;
-  readonly userName: string;
-  readonly postTime: FirebaseFirestoreTypes.Timestamp;
+  readonly userId: string | undefined;
+  readonly userImageUrl: string | undefined;
+  readonly userName: string | undefined;
+  readonly postTime: FirebaseFirestoreTypes.Timestamp | undefined;
 }
 export const PostHeader: React.FunctionComponent<IPostHeaderProps> = React.memo(
   props => {
@@ -33,7 +30,7 @@ export const PostHeader: React.FunctionComponent<IPostHeaderProps> = React.memo(
     //   [navigation],
     // );
     return (
-      <View style={tw`flex-row justify-between items-center`}>
+      <View style={tw`flex-1 flex-row justify-between items-center`}>
         <TouchableOpacity
           // onPress={() => toProfile(props.userId)}
           style={tw`flex-row items-center p-4`}>

@@ -1,10 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {authApi} from '../../Service/AuthService';
+export type IFallowing = {
+  readonly userId: string;
+  readonly img: string;
+  readonly name: string;
+};
 export type IUser = {
   id: string;
   name: string;
   lastName: string;
   fallowers: string[];
-  fallowing: string[];
+  fallowing: IFallowing[];
   email: string;
   birth: string;
   books: string[];
@@ -21,13 +27,15 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
+  extraReducers: builder => {
+    builder.addMatcher(
+      authApi.endpoints.getUserDataById.matchFulfilled,
+      (state, {payload}) => {
+        state.user = payload;
+      },
+    );
   },
+  reducers: {},
 });
-
-export const {setUser} = userSlice.actions;
 
 export default userSlice.reducer;

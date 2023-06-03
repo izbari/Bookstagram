@@ -93,7 +93,7 @@ export const ThirdStep: React.FunctionComponent<IThirdStepProps> = ({
             <Icon
               name={secretAgain ? 'eye' : 'eye-off'}
               size={25}
-              color={focusForAgain ? Colors.lightPurple : 'grey'}
+              color={passAgainFocus ? Colors.lightPurple : 'grey'}
               onPress={() => {
                 setSecretAgain(prev => !prev);
               }}

@@ -16,7 +16,10 @@ export interface NavigationParamsList extends ParamListBase {
 
   //landing-stack-screens
   [RouteNames.landing]: undefined;
-
+  [RouteNames.singlePost]: {
+    focus?: boolean | undefined;
+    id: string | undefined;
+  };
   //favorites-stack-screens
   [RouteNames.favorites]: undefined;
 
