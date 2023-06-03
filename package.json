@@ -36,6 +36,8 @@
     "react-native-emoji-selector": "^0.2.0",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.9.0",
+    "react-native-gifted-chat": "^2.1.0",
+    "react-native-image-crop-picker": "^0.40.0",
     "react-native-image-modal": "^2.0.4",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.6.2",

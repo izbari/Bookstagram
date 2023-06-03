@@ -1,7 +1,10 @@
 import {createSelector, createEntityAdapter} from '@reduxjs/toolkit';
 import {IPost, postApi} from '../../Service/PostService';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import {RootState} from '../Store';
+import {IComment} from '../../../components/Landing/CommentContent';
 interface ICommentPayload {
   userId: string;
   comment: string;
@@ -18,8 +21,9 @@ const postsAdapter = createEntityAdapter<IPost>({
 const initialState = postsAdapter.getInitialState();
 
 export const postSlice = postApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: builder => ({
-    getPosts: builder.query({
+    getPosts: builder.query<IPost[], undefined>({
       queryFn: async () => {
         try {
           const posts: IPost[] = [];
@@ -33,10 +37,9 @@ export const postSlice = postApi.injectEndpoints({
           return {error};
         }
       },
-
-      transformResponse: (responseData: IPost[]) => {
-        console.warn(responseData);
-        return postsAdapter.setAll(initialState, responseData);
+      //@ts-ignore
+      transformResponse: (response: IPost[]) => {
+        return postsAdapter.setAll(initialState, response);
       },
       providesTags: (result: any) => {
         return [
@@ -45,49 +48,19 @@ export const postSlice = postApi.injectEndpoints({
         ];
       },
     }),
-    // getPostsByUserId: builder.query({
-    //   query: id => `/posts/?userId=${id}`,
-    //   transformResponse: (responseData: any, _, arg) => {
-    //     console.log('res', responseData);
-    //     return postsAdapter.setAll(initialState, responseData);
-    //   },
-    //   providesTags: (result: any) => {
-    //     console.log('provies tag kısmı', result);
-    //     return [...result.ids.map((id: string) => ({type: 'Post', id}))];
-    //   },
-    // }),
-    // addNewPost: builder.mutation({
-    //   query: initialPost => ({
-    //     url: '/posts',
-    //     method: 'POST',
-    //     body: {
-    //       ...initialPost,
-    //       userId: Number(initialPost.userId),
-    //     },
-    //   }),
-    //   invalidatesTags: (result, error, arg) => [{type: 'Post'}],
-    // }),
-    // updatePost: builder.mutation({
-    //   query: initialPost => ({
-    //     url: `/posts/${initialPost.id}`,
-    //     method: 'PUT',
-    //     body: {
-    //       ...initialPost,
-    //       date: new Date().toISOString(),
-    //     },
-    //   }),
-    //   invalidatesTags: (result, error, arg) => [{type: 'Post', id: arg.id}],
-    // }),
-    // deletePost: builder.mutation({
-    //   query: ({id}) => ({
-    //     url: `/posts/${id}`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: (result, error, arg) => {
-    //     console.warn('result', result);
-    //     return [{type: 'Post', id: arg.id}];
-    //   },
-    // }),
+    getPostById: builder.query<IPost, string>({
+      queryFn: async id => {
+        try {
+          const postRef = firestore().collection('posts').doc(id);
+          const response = await postRef.get();
+          const post = {...(response.data() as IPost), id: response.id};
+          return {data: post};
+        } catch (error) {
+          return {error};
+        }
+      },
+      providesTags: (result: any, error, id) => [{type: 'Post', id}],
+    }),
     handleLike: builder.mutation({
       queryFn: async ({id, userId}) => {
         try {
@@ -115,7 +88,7 @@ export const postSlice = postApi.injectEndpoints({
 
       async onQueryStarted({id, userId}, {dispatch, queryFulfilled}) {
         const patchResult = dispatch(
-          postSlice.util.updateQueryData('getPosts', undefined, draft => {
+          postApi.util.updateQueryData('getPosts', undefined, draft => {
             const post = draft?.find(_post => _post.id === id);
             const likes = post?.likes ?? [];
             // if user liked the post, remove user id from likes array
@@ -140,48 +113,105 @@ export const postSlice = postApi.injectEndpoints({
       },
     }),
     handleAddComment: builder.mutation<
-      ICommentPayload & {id: string; postTime: string},
-      ICommentPayload
+      IPost,
+      {id: string; userId: string; comment: string; img: string}
     >({
-      queryFn: async ({postId, userId, name, lastName, img, comment}) => {
+      queryFn: async ({id, userId, comment, img}) => {
         try {
-          const postRef = firestore().collection('posts').doc(postId);
-
+          const postRef = firestore().collection('posts').doc(id);
           const response = await postRef.get();
-
           const post = response.data() as IPost;
-
-          const comments = post.comments;
-          const commentPayload = {
-            userId,
+          const comments = post.comments ?? [];
+          comments.push({
             comment,
+            id: userId,
+            userId,
             img,
-            postTime: firestore.Timestamp.fromDate(new Date()),
-            id: new Date().getTime().toString(),
-            name: name + ' ' + lastName,
-          };
-          comments.push(commentPayload);
-          await postRef.update({
-            comments: comments,
+            name: post.userName,
+            postTime: new Date(),
           });
-          return {data: commentPayload};
+          await postRef.update({comments});
+          return {data: {...post, comments}};
         } catch (error) {
           return {error};
         }
+      },
+      async onQueryStarted(
+        {id, userId, comment, img},
+        {dispatch, queryFulfilled},
+      ) {
+        const patchResult = dispatch(
+          postApi.util.updateQueryData('getPosts', undefined, draft => {
+            const post = draft?.find(_post => _post.id === id);
+            const comments = post?.comments ?? [];
+            comments.push({
+              comment,
+              id: userId,
+              userId,
+              img,
+              name: post?.userName,
+              postTime: new Date(),
+            });
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          console.warn('undo');
+          patchResult.undo();
+        }
+      },
+      invalidatesTags: (result, error, arg) => {
+        return [{type: 'Post', id: arg.id}];
+      },
+    }),
+    getCommentsByPostId: builder.query<IComment, string>({
+      queryFn: async id => {
+        try {
+          const postRef = firestore().collection('posts').doc(id);
+          const response = await postRef.get();
+          const post = response.data() as IPost;
+          return {data: post.comments};
+        } catch (error) {
+          return {error};
+        }
+      },
+      providesTags: (result: any, error, id) => [{type: 'Post', id}],
+    }),
+    getPostsByUserId: builder.query<IPost[], string>({
+      queryFn: async id => {
+        try {
+          const posts: IPost[] = [];
+          const postRef = firestore()
+            .collection('posts')
+            .where('userId', '==', id);
+          const response = await postRef.orderBy('postTime', 'desc').get();
+          response?.forEach((doc: FirebaseFirestoreTypes.DocumentSnapshot) => {
+            posts.push({...(doc.data() as IPost), id: doc.id});
+          });
+          return {data: posts};
+        } catch (error) {
+          return {error};
+        }
+      },
+
+      providesTags: (result: any) => {
+        return [
+          {type: 'Post', id: 'LIST'},
+          ...result.map?.((post: any) => ({type: 'Post', id: post.id})),
+        ];
       },
     }),
   }),
 });
 
 export const {
+  useGetCommentsByPostIdQuery,
+  useGetPostByIdQuery,
+  useGetPostsByUserIdQuery,
   useGetPostsQuery,
   useHandleLikeMutation,
   useHandleAddCommentMutation,
-  //   useGetPostsByUserIdQuery,
-  //   useAddNewPostMutation,
-  //   useUpdatePostMutation,
-  //   useDeletePostMutation,
-  //   useAddReactionMutation,
 } = postSlice;
 
 // returns the query result object

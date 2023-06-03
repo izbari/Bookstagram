@@ -15,11 +15,17 @@ export enum RouteNames {
   register = 'register',
   forgetPassword = 'forget-password',
 
+  //chat-stack-screens
+  singleChat = 'single-chat',
+  createChat = 'create-chat',
   //landing-stack-screens
   landingMain = 'landing-main',
+  singlePost = 'single-post',
   categories = 'categories',
   productSearch = 'product-search',
   productOverview = 'product-overview',
+  createPost = 'create-post',
+  createPostTab = 'create-post-tab',
 
   //cart-stack-screens
   cartMain = 'cart-main',

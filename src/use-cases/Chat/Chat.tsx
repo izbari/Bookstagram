@@ -1,0 +1,222 @@
+import React, {useState, useEffect, useLayoutEffect} from 'react';
+import {
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  FlatList,
+  RefreshControl,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+import auth from '@react-native-firebase/auth';
+const {width} = Dimensions.get('window');
+import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
+import moment from 'moment';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useAppSelector} from '../../infrastructure/Redux/Hooks';
+import {IWithNavigation} from '../../components/navigation/Types';
+import {RouteNames} from '../../components/navigation/RouteNames';
+type IChatProps = IWithNavigation<RouteNames.chat>;
+export const Chat: React.FunctionComponent<IChatProps> = ({
+  navigation,
+  route,
+}) => {
+  const authUser = useAppSelector(store => store.user);
+  const [chats, setChats] = useState([]);
+  const [user, setUser] = useState(authUser);
+  const [loading, setLoading] = useState(false);
+  const [otherUserData, setOtherUserData] = useState([]);
+
+  //Update auth user from redux store
+  useEffect(() => {
+    setUser(authUser);
+  }, [authUser]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(RouteNames.createChat, {
+              myChats: otherUserData,
+            });
+          }}>
+          <Ionicons name="create-outline" size={25} color="black" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, loading]);
+
+  useEffect(() => {
+    fetchChats();
+  }, [navigation, user, route?.params?.check]);
+
+  const fetchChats = () => {
+    if (!authUser) return;
+    setLoading(true);
+    let otherUids = [];
+    let otherUserData = [];
+
+    auth().onAuthStateChanged(user => {
+      firestore()
+        .collection('Chats')
+        .where('users', 'array-contains', user?.uid)
+        .onSnapshot(snapshot => {
+          snapshot.docs.forEach(chat => {
+            otherUids.push(chat.data().users.find(uid => uid !== user?.uid));
+          });
+          database()
+            .ref('users/')
+            .once('value', snapshot => {
+              snapshot.forEach(item => {
+                if (otherUids.includes(item._snapshot.key)) {
+                  const {id, name, lastName, imageUrl} = item._snapshot.value;
+
+                  otherUserData.push({
+                    id: id,
+                    name: name,
+                    lastName: lastName,
+                    imageUrl: imageUrl,
+                  });
+                }
+              });
+
+              let result = {};
+              for (let item of otherUserData) {
+                let newObject = Object.assign({}, item);
+                result[newObject.id] = newObject;
+                delete newObject.id;
+              }
+
+              setOtherUserData(otherUserData);
+              setLoading(false);
+            });
+
+          setChats(snapshot.docs);
+        });
+    });
+  };
+
+  const ChatObject = ({item}) => {
+    const willSendUid = item?._data.users?.find(
+      user => user !== auth()?.currentUser?.uid,
+    );
+    const willSendChatId = item?._ref._documentPath._parts[1];
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ChatSingleScreen', {
+            name:
+              otherUserData.find(user => user.id === willSendUid)?.name +
+              ' ' +
+              otherUserData.find(user => user.id === willSendUid)?.lastName,
+            imageUrl: otherUserData.find(user => user.id === willSendUid)
+              ?.imageUrl,
+
+            uid: willSendUid,
+            chatId: willSendChatId,
+          })
+        }
+        style={{
+          flexDirection: 'row',
+          width: width * 0.95,
+          margin: 10,
+          marginBottom: 3,
+          alignSelf: 'center',
+
+          backgroundColor: 'white',
+          borderRadius: 10,
+          shadowColor: '#CBCBCB',
+          elevation: 25,
+        }}>
+        <Image
+          style={{
+            height: 50,
+            width: 50,
+            resizeMode: 'contain',
+            borderRadius: 50,
+            overflow: 'hidden',
+            elavation: 15,
+            margin: 7,
+          }}
+          source={{
+            uri: otherUserData.find(user => user.id === willSendUid)?.imageUrl,
+          }}
+        />
+        <View style={{justifyContent: 'center', marginLeft: 10, padding: 5}}>
+          <Text style={{fontWeight: 'bold'}}>
+            {otherUserData.length === 0
+              ? ' yok'
+              : otherUserData.find(user => user.id === willSendUid)?.name}
+          </Text>
+          <View
+            style={{flexDirection: 'row', width: width - (width * 0.05 + 90)}}>
+            <Text
+              numberOfLines={1}
+              style={{
+                fontStyle: 'italic',
+                fontSize: 12,
+                color: 'grey',
+                marginTop: 5,
+              }}>
+              {item?._data.messages.length === 0
+                ? 'No Messages Yet'
+                : item?.data().messages[0].text}
+            </Text>
+          </View>
+          <View style={{alignItems: 'flex-end'}}>
+            <Text style={{color: 'darkgrey', fontSize: 12}}>
+              {item?.data().messages.length != 0
+                ? moment(item?.data().messages[0].createdAt).fromNow()
+                : 'daha gelmedi'}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          data={chats}
+          renderItem={ChatObject}
+          keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl
+              title="Pull to refresh"
+              tintColor="#FF6EA1"
+              titleColor="grey"
+              colors={['#FF6EA1']}
+              refreshing={loading}
+              onRefresh={() => fetchChats()}
+            />
+          }
+          ListEmptyComponent={
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                margin: 15,
+                marginTop: 100,
+              }}>
+              <Text style={{fontStyle: 'italic', fontSize: 16}}>
+                You have no messages.
+              </Text>
+              <Text style={{fontStyle: 'italic', fontSize: 14}}>
+                To create click top right icon
+              </Text>
+            </View>
+          }
+        />
+      )}
+    </SafeAreaView>
+  );
+};

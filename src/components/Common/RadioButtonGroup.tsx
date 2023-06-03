@@ -12,10 +12,10 @@ const RadioButtonGroup: React.FunctionComponent<
 > = props => {
   return (
     <View style={tw`flex-row justify-around`}>
-      {props.options.map(item => {
+      {props.options.map((item, index) => {
         return (
           <TouchableOpacity
-            key={item.value}
+            key={index}
             onPress={() => props.onChange(item.value)}
             style={tw`flex-row items-center`}>
             <View
