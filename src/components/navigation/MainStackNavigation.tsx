@@ -3,13 +3,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationParamsList} from './NavigationParamsList';
 import {RouteNames} from './RouteNames';
 
-import {useTranslation} from 'react-i18next';
-import {useAuth} from '../../infrastructure/Utils/useAuth';
-import {ActivityIndicator} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {INavigationType} from './Types';
-import { LandingStackNavigation as LandingStack } from './stacks/LandingStackNavigation';
-import { ProfileStackNavigation as ProfileStack } from './stacks/ProfileStackNavigation';
+import {LandingStackNavigation as LandingStack} from './stacks/LandingStackNavigation';
+import {ProfileStackNavigation as ProfileStack} from './stacks/ProfileStackNavigation';
+import {ChatStackNavigation} from './stacks/ChatStackNavigation';
 const MainStack = createBottomTabNavigator<NavigationParamsList>();
 // const Icon: React.FunctionComponent<{
 //   routeName: string;
@@ -32,6 +28,7 @@ const MainStack = createBottomTabNavigator<NavigationParamsList>();
 
 //   return <SvgFromXml xml={icon} />;
 // };
+const Blank = () => <></>;
 export const MainStackNavigation: React.FunctionComponent = () => {
   return (
     <MainStack.Navigator
@@ -51,7 +48,7 @@ export const MainStackNavigation: React.FunctionComponent = () => {
         component={LandingStack}
         options={{
           headerShown: false,
-        }}  
+        }}
         // options={{
         //   tabBarIcon: ({focused}) =>
         //     Icon({routeName: RouteNames.landing, focused}),
@@ -62,7 +59,7 @@ export const MainStackNavigation: React.FunctionComponent = () => {
         component={ProfileStack}
         options={{
           headerShown: false,
-        }StackNavigation}
+        }}
         // options={{
         //   tabBarIcon: ({focused}) =>
         //     Icon({routeName: RouteNames.landing, focused}),
