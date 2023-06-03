@@ -53,6 +53,24 @@
       "sold": "Satılanlar",
       "sold-text": "Satıldı",
       "sell": "Hemen Sat"
+    },
+    "product-info": {
+      "product-info": "Ürün Bilgisi",
+      "photos": "Fotoğraflar",
+      "edit": "Düzenle",
+      "book-header": "Kitap Adı",
+      "book-author": "Yazar Adı",
+      "product-explanation": "Ürün Açıklaması",
+      "category": "Kategori",
+      "condition": "Durum",
+      "worn": "Yıpranmış",
+      "less-used": "Az Kullanılmış",
+      "new": "Yeni",
+      "page-count": "Sayfa Sayısı",
+      "price": "Fiyat",
+      "book-swap-text": "Kitap takasına açığım",
+      "sell-now": "Hemen Sat",
+      "add-photo": "Fotoğraf Ekle",
     }
   }
 }

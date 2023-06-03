@@ -120,7 +120,7 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
 
   return (
     <View style={tw`flex-1 bg-white`}>
-      <TouchableOpacity style={tw`absolute left-2 top-2 z-1`}>
+      <TouchableOpacity style={tw`absolute left-2 top-2 z-1`} onPress={()=> props.navigation.navigate(RouteNames.profile) }>
         <Icon name="chevron-back-outline" size={30} color="white" />
       </TouchableOpacity>
       <View style={tw` bg-[${Colors.lightPurple}] h-30 p-8`} />

@@ -52,7 +52,25 @@
       "favorites": "Favorites",
       "sold": "Sold",
       "sold-text": "Sold",
-      "sell": "Sell Now",
+      "sell": "Sell Now"
+    },
+    "product-info": {
+      "product-info": "Product Info",
+      "photos": "Photos",
+      "edit": "Edit",
+      "book-header": "Book Header",
+      "book-author": "Book Author",
+      "product-explanation": "Product Explanation",
+      "category": "Category",
+      "condition": "Condition",
+      "worn": "Worn",
+      "less-used": "Less Used",
+      "new": "New",
+      "page-count": "Page Count",
+      "price": "Price",
+      "book-swap-text": "I am open to book swap offers",
+      "sell-now": "Sell Now",
+      "add-photo": "Add Photo",
     }
   }
 }

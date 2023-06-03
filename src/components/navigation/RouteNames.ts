@@ -46,4 +46,5 @@ export enum RouteNames {
   changePassword = 'change-password',
   changeEmail = 'change-email',
   contactForm = 'contact-form',
+  sellNow = 'sell-now',
 }

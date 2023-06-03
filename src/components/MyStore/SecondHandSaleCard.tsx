@@ -47,7 +47,7 @@ export const SecondHandSaleCard: React.FunctionComponent<
         </ImageBackground>
 
         {props.isMine ? (
-          <View style={styles.titleAndFavoriteContainer}>
+          <View style={tw`flex-row mt-1`}>
             <Text style={styles.title}>{props.title}</Text>
             <Icon name="heart" size={16} color={Colors.lightPurple} />
             <Text style={styles.favoriteCount}>10</Text>
