@@ -53,4 +53,5 @@ export enum RouteNames {
   changeEmail = 'change-email',
   contactForm = 'contact-form',
   sellNow = 'sell-now',
+  selectCategory = 'select-category',
 }

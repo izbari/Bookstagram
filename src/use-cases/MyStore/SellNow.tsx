@@ -8,12 +8,15 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  Platform,
+  Switch,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Colors} from '../../resources/constants/Colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTranslation} from 'react-i18next';
-import tw from 'twrnc'
+import tw from 'twrnc';
+import ImagePicker from 'react-native-image-crop-picker';
 // import {RadioButton, Switch} from 'react-native-paper';
 import {RouteNames} from '../../components/navigation/RouteNames';
 import {IWithNavigation} from '../../components/navigation/Types';
@@ -28,34 +31,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
   const [pageCount, setPageCount] = useState();
   const [price, setPrice] = useState();
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
-
-  // let categories = [
-  //   'Fantasy',
-  //   'Adventure',
-  //   'Diary',
-  //   'Crime',
-  //   'Mystery',
-  //   'Horror',
-  //   'Thriller',
-  //   'Paranormal',
-  //   'Historical fiction',
-  //   'Science Fiction',
-  //   'Memoir',
-  //   'Cooking',
-  //   'Art',
-  //   'Poetry',
-  //   'Development',
-  //   'Motivational',
-  //   'Health',
-  //   'History',
-  //   'Travel',
-  //   'Drama',
-  //   'Families & Relationships',
-  //   'Humor',
-  //   'Children',
-  //   'Business',
-  //   'Other',
-  // ];
+  const [productImages, setProductImages] = React.useState([]);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const PhotoCard = ({image}) => {
     return (
@@ -69,51 +47,35 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
     );
   };
 
+  const takePhotoByCamera = () => {
+    ImagePicker.openCamera({
+      width: 1080,
+      height: 1920,
+      cropping: true,
+    })
+      .then(image => {
+        console.log(image);
+        const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+        setProductImages([...productImages, imageUri]);
+        console.log('productImages', productImages);
+      })
+      .catch(err => {
+        console.log(err.msg);
+      });
+  };
+
   const PhotoCardFooter = () => {
     return (
       <TouchableOpacity
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          backgroundColor: 'gray',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+        onPress={takePhotoByCamera}
+        style={tw`w-25 h-25 bg-gray-400 rounded-lg items-center justify-center`}>
         <Icon name="add" size={50} color="white" />
-        <Text style={{color: 'white', fontSize: 10}}>{t('product-info.add-photo')}</Text>
+        <Text style={{color: 'white', fontSize: 10}}>
+          {t('product-info.add-photo')}
+        </Text>
       </TouchableOpacity>
     );
   };
-
-  const products = [];
-  
-  // const products = [
-  //   {
-  //     image:
-  //       'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  //   },
-  //   {
-  //     image:
-  //       'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  //   },
-  //   {
-  //     image:
-  //       'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  //   },
-  //   {
-  //     image:
-  //       'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  //   },
-  //   {
-  //     image:
-  //       'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  //   },
-  //   {
-  //     image:
-  //       'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  //   },
-  // ];
 
   return (
     <KeyboardAvoidingView
@@ -128,10 +90,11 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
       <ScrollView>
         <View>
           <View style={styles.photosHeader}>
-            <View
-                style={tw	`flex-row items-center justify-between w-1/3.5`}>
-              <Text style={{fontWeight: '600'}}>{t('product-info.photos')}</Text>
-              <Text style={{fontSize: 12}}>{products.length}/10</Text>
+            <View style={tw`flex-row items-center justify-between w-1/3.5`}>
+              <Text style={{fontWeight: '600'}}>
+                {t('product-info.photos')}
+              </Text>
+              <Text style={{fontSize: 12}}>{productImages.length}/10</Text>
             </View>
             <TouchableOpacity style={styles.editButton}>
               <Text style={styles.editText}>{t('product-info.edit')}</Text>
@@ -140,8 +103,8 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           <View style={styles.photosInnerContainer}>
             <FlatList
               horizontal
-              data={products}
-              renderItem={({item}) => <PhotoCard image={item.image} />}
+              data={productImages}
+              renderItem={({item}) => <PhotoCard image={item} />}
               showsHorizontalScrollIndicator={true}
               contentContainerStyle={{alignItems: 'center', padding: 10}}
               ListFooterComponent={<PhotoCardFooter />}
@@ -168,7 +131,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           placeholderTextColor="#AEAEAE"
         />
 
-        <Text style={styles.infoHeader}>{t('product-info.product-explanation')}</Text>
+        <Text style={styles.infoHeader}>
+          {t('product-info.product-explanation')}
+        </Text>
         <TextInput
           value={productExplanation}
           onChangeText={setProductExplanation}
@@ -178,7 +143,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           numberOfLines={3}
         />
 
-        <TouchableOpacity style={[styles.touchableInput, {marginTop: 20}]}>
+        <TouchableOpacity
+          style={[styles.touchableInput, {marginTop: 20}]}
+          onPress={() => props.navigation.navigate(RouteNames.selectCategory)}>
           <Text style={{fontWeight: '600'}}>{t('product-info.category')}</Text>
           <Icon
             name="caret-forward-outline"
@@ -220,7 +187,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
         </View>
         <View
           style={[styles.touchableInput, {marginTop: 20, paddingVertical: 20}]}>
-          <Text style={{fontWeight: '600'}}>{t('product-info.page-count')}</Text>
+          <Text style={{fontWeight: '600'}}>
+            {t('product-info.page-count')}
+          </Text>
           <TextInput
             style={{
               width: 50,
@@ -252,6 +221,13 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
         <View
           style={[styles.touchableInput, {marginTop: 20, paddingVertical: 20}]}>
           <Text>{t('product-info.book-swap-text')}</Text>
+          <Switch
+            trackColor={{false: 'lightgray', true: Colors.lightPurple}}
+            thumbColor={isEnabled ? Colors.darkPurple : 'gray'}
+            ios_backgroundColor={Colors.darkPurple}
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
           {/* <Switch
             value={isSwitchOn}
             onValueChange={() => setIsSwitchOn(!isSwitchOn)}
@@ -260,7 +236,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
         </View>
 
         <TouchableOpacity style={styles.sellButton}>
-          <Text style={styles.sellText}>{t('product-info.sell-now').toUpperCase()}</Text>
+          <Text style={styles.sellText}>
+            {t('product-info.sell-now').toUpperCase()}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
