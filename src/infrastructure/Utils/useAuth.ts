@@ -15,11 +15,11 @@ export const useAuth = (): IReturnType => {
   React.useEffect(() => {
     try {
       const subscriber = auth().onAuthStateChanged(authUser => {
+        console.warn(authUser.uid);
         if (authUser) {
           getUserData(authUser.uid)
             .unwrap()
-            .then((res: IUser) => {
-              console.log('useAuth', res);
+            .then(() => {
               setIsLoggedIn(true);
             });
         } else {
