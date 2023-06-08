@@ -10,19 +10,22 @@ import {ChatItemSkeleton} from './ChatItemSkeleton';
 import tw from 'twrnc';
 interface IChatItemProps {
   targetUserId: string;
-  lastMessage: string;
-  lastMessageDate: string;
+  messages: any[];
   chatId: string;
 }
 const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
   const navigation = useNavigation<INavigationType>();
+  const lastMessage = props.messages[0].text;
+  const lastMessageDate = props.messages[0].createdAt;
   const {data: chatUser, isLoading} = useGetChatUserByIdQuery(
     props.targetUserId,
     {
       skip: !props.targetUserId,
     },
   );
+
   const handleItemPress = () => {
+    console.warn(props.messages);
     navigation.navigate(RouteNames.singleChat, {
       name: chatUser.name + ' ' + chatUser.lastName,
       avatar: chatUser.imageUrl,
@@ -32,13 +35,13 @@ const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
   };
 
   return (
-    <View style={tw`flex-1`}>
+    <View style={tw``}>
       {isLoading ? (
         <ChatItemSkeleton />
       ) : (
         <TouchableOpacity
           onPress={handleItemPress}
-          style={tw`flex-1 flex-row items-center bg-white rounded-lg p-2 m-2`}>
+          style={tw` flex-row items-center bg-white rounded-lg p-2 m-2`}>
           <Image
             resizeMode="contain"
             style={tw`h-12 w-12 rounded-full`}
@@ -54,12 +57,12 @@ const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
               <Text
                 numberOfLines={1}
                 style={tw`text-gray-500 pt-0.5 pb-1 text-xs italic`}>
-                {props.lastMessage}
+                {lastMessage}
               </Text>
             </View>
             <View style={tw`items-end flex-1 self-end`}>
               <Text style={tw`text-xs text-gray-400 italic`}>
-                {moment(props.lastMessageDate).fromNow()}
+                {moment(lastMessageDate).fromNow()}
               </Text>
             </View>
           </View>

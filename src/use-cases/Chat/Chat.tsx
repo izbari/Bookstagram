@@ -31,6 +31,8 @@ export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
     isLoading,
   } = useGetMyChatsQuery(authUser?.id, {
     skip: !authUser,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
   });
 
   React.useLayoutEffect(() => {
@@ -74,10 +76,10 @@ export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
           data={chats}
           renderItem={({item}) => (
             <ChatItem
+              key={item.id}
               targetUserId={item.targetUserId}
-              chatId={item.chatId}
-              lastMessage={item.messages[0].text}
-              lastMessageDate={item.messages[0].createdAt}
+              chatId={item.id}
+              messages={item.messages}
             />
           )}
           keyExtractor={item => item.id}
