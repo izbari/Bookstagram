@@ -71,6 +71,12 @@
       "book-swap-text": "I am open to book swap offers",
       "sell-now": "Sell Now",
       "add-photo": "Add Photo",
+      "book-header-placeholder": "Write the name of the book you are selling",
+      "book-author-placeholder": "Write the author of the book you are selling",
+      "product-explanation-placeholder": "Write a short explanation about the book you are selling",
+      "pages": "pages",
+      "ask-question": "Ask a question",
+      "swap-offer": "Ask for swap"
     }
   }
 }

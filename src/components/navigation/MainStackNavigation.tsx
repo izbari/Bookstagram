@@ -55,7 +55,7 @@ export const MainStackNavigation: React.FunctionComponent = () => {
         // }}
       />
       <MainStack.Screen
-        name={RouteNames.profile}
+        name={RouteNames.profileStack}
         component={ProfileStack}
         options={{
           headerShown: false,

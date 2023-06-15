@@ -17,6 +17,7 @@ export const ProfileStackNavigation: React.FunctionComponent = () => {
       <ProfileStack.Screen name={RouteNames.store} component={MyStore} />
       <ProfileStack.Screen name={RouteNames.sellNow} component={SellNow} />
       <ProfileStack.Screen name={RouteNames.selectCategory} component={SelectCategory} />
+
     </ProfileStack.Navigator>
   );
 };

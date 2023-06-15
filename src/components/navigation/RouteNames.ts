@@ -1,5 +1,6 @@
 export enum RouteNames {
   //stacks
+  profileStack = 'profile-stack',
   main = 'main',
   auth = 'auth',
   landing = 'landing',
@@ -54,4 +55,5 @@ export enum RouteNames {
   contactForm = 'contact-form',
   sellNow = 'sell-now',
   selectCategory = 'select-category',
+  productInfo = 'product-info',
 }

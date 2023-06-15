@@ -11,6 +11,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../resources/constants/Colors';
 import tw from 'twrnc';
 import {useTranslation} from 'react-i18next';
+import { RouteNames } from '../navigation/RouteNames';
+import { INavigationType, IWithNavigation } from '../navigation/Types';
+import { useNavigation } from '@react-navigation/native';
 const {width} = Dimensions.get('window');
 
 interface ISeconHandSaleCardProps {
@@ -27,9 +30,10 @@ export const SecondHandSaleCard: React.FunctionComponent<
   ISeconHandSaleCardProps
 > = props => {
   const {t} = useTranslation();
+  const navigation = useNavigation<INavigationType>();
   return (
     <>
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={() => navigation.navigate(RouteNames.productInfo)}>
         <ImageBackground
           source={{uri: props.image}}
           style={styles.image}

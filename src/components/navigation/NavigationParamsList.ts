@@ -20,6 +20,12 @@ export interface NavigationParamsList extends ParamListBase {
     focus?: boolean | undefined;
     id: string | undefined;
   };
+  [RouteNames.productInfo]: {
+    productId: string;
+  }
+  [RouteNames.sellNow]: {
+    categories: string[];
+  }
   //favorites-stack-screens
   [RouteNames.favorites]: undefined;
 

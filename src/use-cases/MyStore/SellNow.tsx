@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Switch,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Colors} from '../../resources/constants/Colors';
@@ -20,6 +21,11 @@ import ImagePicker from 'react-native-image-crop-picker';
 // import {RadioButton, Switch} from 'react-native-paper';
 import {RouteNames} from '../../components/navigation/RouteNames';
 import {IWithNavigation} from '../../components/navigation/Types';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import {guidGenerator} from '../../infrastructure/Utils/guidGenerator';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 type ISellNowProps = IWithNavigation<RouteNames.sellNow>;
 
 export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
@@ -28,11 +34,13 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
   const [productAuthor, setProductAuthor] = useState('');
   const [productExplanation, setProductExplanation] = useState('');
   const [checked, setChecked] = React.useState('');
-  const [pageCount, setPageCount] = useState();
-  const [price, setPrice] = useState();
-  const [isSwitchOn, setIsSwitchOn] = React.useState(false);
+  const [pageCount, setPageCount] = useState('');
+  const [price, setPrice] = useState('');
   const [productImages, setProductImages] = React.useState([]);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
+  const [condition, setCondition] = useState('');
+  const categories = props.route.params?.categories ?? [];
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const PhotoCard = ({image}) => {
@@ -40,14 +48,25 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
       <>
         <Image
           source={{uri: image}}
-          style={{width: 100, height: 100, borderRadius: 10, marginRight: 10}}
+          // style={{width: 100, height: 100, borderRadius: 10, marginRight: 10}}
+          style={tw`rounded-lg w-25 h-25 mr-2`}
           resizeMode="cover"
         />
+        {isEditable && (
+          <TouchableOpacity
+            style={tw`absolute top-[-1.5] right-1 z-2 bg-gray-400 rounded-full`}
+            onPress={() => {
+              setProductImages(productImages.filter(img => img !== image));
+            }}>
+            <Icon name="close-outline" size={18} color="white" />
+          </TouchableOpacity>
+        )}
       </>
     );
   };
 
   const takePhotoByCamera = () => {
+    setIsEditable(false);
     ImagePicker.openCamera({
       width: 1080,
       height: 1920,
@@ -77,17 +96,65 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
     );
   };
 
+  const uploadPhotos = async () => {
+    try {
+      const uploadPromises = productImages.map(async image => {
+        const reference = storage().ref(`product-images/${guidGenerator()}`);
+        await reference.putFile(image);
+        return reference.getDownloadURL();
+      });
+      const photoUrls = await Promise.all(uploadPromises);
+      // photoUrls.length > 0 &&s
+       handleSaveProduct(photoUrls);
+    } catch (error) {
+      Alert.alert('Error', error as string);
+    }
+  };
+
+  const handleSaveProduct = async (photoUrls: string[]): Promise<void> => {
+    const product = {
+      productImages: photoUrls,
+      productHeader,
+      productAuthor,
+      productExplanation,
+      pageCount,
+      price,
+      condition,
+      categories,
+      isTradable: isEnabled,
+      createdAt: new Date(),
+    };
+    console.warn('product', product);
+    firestore()
+      .collection('products')
+      .add(product)
+      .then(docRef => {
+        console.log('Document written with ID: ', docRef.id);
+        props.navigation.navigate(RouteNames.productInfo, {
+          productId: docRef.id,
+        });
+      })
+      .catch(error => {
+        console.log('Error adding document: ', error);
+      });
+  };
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Icon name="chevron-back" size={25} color="black" />
+    <View style={tw`flex-1`}>
+      <View style={tw`bg-white shadow-lg h-[10%] items-center justify-center `}>
+        <TouchableOpacity
+          style={tw`absolute top-0 left-0 h-full justify-center pl-1`}
+          onPress={() => {
+            setProductImages([]);
+            setIsEditable(false);
+            props.navigation.navigate(RouteNames.store);
+          }}>
+          <Icon name="chevron-back" size={30} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>{t('product-info.product-info')}</Text>
+        <Text style={tw`font-semibold text-base text-black`}>
+          {t('product-info.product-info')}
+        </Text>
       </View>
-      <ScrollView>
+      <KeyboardAwareScrollView contentContainerStyle={tw`mb-12`}>
         <View>
           <View style={styles.photosHeader}>
             <View style={tw`flex-row items-center justify-between w-1/3.5`}>
@@ -96,7 +163,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
               </Text>
               <Text style={{fontSize: 12}}>{productImages.length}/10</Text>
             </View>
-            <TouchableOpacity style={styles.editButton}>
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => setIsEditable(!isEditable)}>
               <Text style={styles.editText}>{t('product-info.edit')}</Text>
             </TouchableOpacity>
           </View>
@@ -107,7 +176,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
               renderItem={({item}) => <PhotoCard image={item} />}
               showsHorizontalScrollIndicator={true}
               contentContainerStyle={{alignItems: 'center', padding: 10}}
-              ListFooterComponent={<PhotoCardFooter />}
+              ListFooterComponent={productImages.length < 10 && <PhotoCardFooter />}
               ListFooterComponentStyle={{marginRight: 10}}
             />
           </View>
@@ -118,7 +187,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           value={productHeader}
           onChangeText={setProductHeader}
           style={styles.infoInput}
-          placeholder="Write the name of the book you are selling"
+          placeholder={t('product-info.book-header-placeholder')}
           placeholderTextColor="#AEAEAE"
         />
 
@@ -127,7 +196,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           value={productAuthor}
           onChangeText={setProductAuthor}
           style={styles.infoInput}
-          placeholder="Write the author of the book you are selling"
+          placeholder={t('product-info.book-author-placeholder')}
           placeholderTextColor="#AEAEAE"
         />
 
@@ -138,7 +207,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           value={productExplanation}
           onChangeText={setProductExplanation}
           style={styles.infoInput}
-          placeholder="Explain the product you are selling in detail"
+          placeholder={t('product-info.product-explanation-placeholder')}
           placeholderTextColor="#AEAEAE"
           numberOfLines={3}
         />
@@ -147,6 +216,11 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           style={[styles.touchableInput, {marginTop: 20}]}
           onPress={() => props.navigation.navigate(RouteNames.selectCategory)}>
           <Text style={{fontWeight: '600'}}>{t('product-info.category')}</Text>
+          {props.categories &&
+            props.categories.map(category => (
+              <Text style={{color: 'gray'}}>{category}</Text>
+            ))}
+
           <Icon
             name="caret-forward-outline"
             size={25}
@@ -155,33 +229,51 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
         <Text style={styles.infoHeader}>{t('product-info.condition')}</Text>
         <View style={styles.conditionContainer}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            {/* <RadioButton.Android
-              value="worn"
-              status={checked === 'worn' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('worn')}
-              color={Colors.darkPurple}
-              uncheckedColor={Colors.darkPurple}
-            /> */}
+            <TouchableOpacity
+              style={tw`mr-2`}
+              onPress={() => setCondition('worn')}>
+              <Icon
+                name={
+                  condition === 'worn'
+                    ? 'radio-button-on-outline'
+                    : 'radio-button-off-outline'
+                }
+                size={25}
+                color={Colors.darkPurple}
+              />
+            </TouchableOpacity>
             <Text>{t('product-info.worn')}</Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            {/* <RadioButton.Android
-              value="lessUsed"
-              status={checked === 'lessUsed' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('lessUsed')}
-              color={Colors.darkPurple}
-              uncheckedColor={Colors.darkPurple}
-            /> */}
+            <TouchableOpacity
+              style={tw`mr-2`}
+              onPress={() => setCondition('less-used')}>
+              <Icon
+                name={
+                  condition === 'less-used'
+                    ? 'radio-button-on-outline'
+                    : 'radio-button-off-outline'
+                }
+                size={25}
+                color={Colors.darkPurple}
+              />
+            </TouchableOpacity>
             <Text>{t('product-info.less-used')}</Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            {/* <RadioButton.Android
-              value="new"
-              status={checked === 'new' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('new')}
-              color={Colors.darkPurple}
-              uncheckedColor={Colors.darkPurple}
-            /> */}
+            <TouchableOpacity
+              style={tw`mr-2`}
+              onPress={() => setCondition('new')}>
+              <Icon
+                name={
+                  condition === 'new'
+                    ? 'radio-button-on-outline'
+                    : 'radio-button-off-outline'
+                }
+                size={25}
+                color={Colors.darkPurple}
+              />
+            </TouchableOpacity>
             <Text>{t('product-info.new')}</Text>
           </View>
         </View>
@@ -228,20 +320,15 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
             onValueChange={toggleSwitch}
             value={isEnabled}
           />
-          {/* <Switch
-            value={isSwitchOn}
-            onValueChange={() => setIsSwitchOn(!isSwitchOn)}
-            color={Colors.darkPurple}
-          /> */}
         </View>
 
-        <TouchableOpacity style={styles.sellButton}>
+        <TouchableOpacity style={styles.sellButton} onPress={uploadPhotos}>
           <Text style={styles.sellText}>
             {t('product-info.sell-now').toUpperCase()}
           </Text>
         </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
@@ -249,33 +336,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    height: '10%',
-    backgroundColor: 'white',
-    justifyContent: 'flex-end',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.4,
-    shadowRadius: 4.65,
-    elevation: 6,
-    alignItems: 'center',
-    padding: 15,
-  },
-  backButton: {
-    position: 'absolute',
-    left: 0,
-    padding: 10,
-  },
-  headerText: {
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: 16,
-    width: '40%',
-    color: 'black',
-  },
+
   photosHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -302,6 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    flexWrap: 'wrap',
   },
   touchableInput: {
     backgroundColor: 'white',

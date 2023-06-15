@@ -71,6 +71,12 @@
       "book-swap-text": "Kitap takasına açığım",
       "sell-now": "Hemen Sat",
       "add-photo": "Fotoğraf Ekle",
+      "book-header-placeholder": "Satmak istediğiniz kitabın adını yazınız",
+      "book-author-placeholder": "Satmak istediğiniz kitabın yazarını yazınız",
+      "product-explanation-placeholder": "Satmak istediğiniz kitabı kısaca açıklayınız",
+      "pages": "sayfa",
+      "ask-question": "Soru sor",
+      "swap-offer": "Takas teklifi yap"
     }
   }
 }

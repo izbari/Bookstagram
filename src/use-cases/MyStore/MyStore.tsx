@@ -136,7 +136,7 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
             style={tw` bg-white border-[${Colors.darkPurple}] border-2 px-2 h-10 justify-evenly items-center rounded-md shadow-md flex-row`}
             onPress={() => props.navigation.navigate(RouteNames.sellNow)}>
             <Icon name="add" size={25} color={Colors.darkPurple} />
-            <Text style={tw`text-[${Colors.darkPurple}] text-s`}>
+            <Text style={tw`text-[${Colors.darkPurple}]`}>
               {t('my-store.sell')}
             </Text>
           </TouchableOpacity>
