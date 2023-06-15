@@ -5,30 +5,49 @@ import {
   ActivityIndicator,
   Text,
   Image,
+  SafeAreaView,
 } from 'react-native';
-import {GiftedChat, Bubble} from 'react-native-gifted-chat';
+import {GiftedChat, Bubble, IMessage} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ImageModal from 'react-native-image-modal';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {IWithNavigation} from '../../components/navigation/Types';
+import {RouteNames} from '../../components/navigation/RouteNames';
+import {
+  useGetMyChatsQuery,
+  useHandleAddMessageMutation,
+} from '../../infrastructure/Service/ChatService';
 type ISingleChatProps = IWithNavigation<RouteNames.singleChat>;
 export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
   navigation,
   route,
 }) => {
   const authUser = useAppSelector(store => store.user.user);
-  const [messages, setMessages] = useState([]);
-  const {name, imageUrl, uid, chatId} = route.params;
-  const [currentChatId, setCurrentChatId] = useState(chatId);
+  // const [messages, setMessages] = useState([]);
+  const [currentChatId, setCurrentChatId] = useState(route.params?.chatId);
+  const {data: messages = []} = useGetMyChatsQuery(authUser?.id, {
+    selectFromResult: ({data}: any[]) => {
+      const chat = data?.find(
+        chat =>
+          chat.id === currentChatId ||
+          chat.targetUserId === route.params.targetUserId,
+      );
 
+      return {
+        data: chat,
+      };
+    },
+  });
+  console.warn('data', messages?.messages?.length);
+  const [handleAddMessage] = useHandleAddMessageMutation();
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title:
-        route.params.name?.length > 15
-          ? route.params.name.slice(0, 15) + '...'
-          : route.params.name,
+        route.params?.name?.length > 15
+          ? route.params?.name?.slice(0, 15) + '...'
+          : route.params?.name,
 
       headerStyle: {
         backgroundColor: '#FF6EA1',
@@ -50,14 +69,14 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
           <TouchableOpacity
             style={{justifyContent: 'center'}}
             onPress={() => {
-              navigation.navigate('ChatScreen', {check: true});
+              navigation.navigate(RouteNames.chat, {check: true});
             }}>
             <Ionicons name="arrow-back-outline" size={25} color="white" />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => {
-              navigateProfile(route.params.uid);
+              navigateProfile(route.params?.targetUserId);
             }}>
             <Image
               style={{
@@ -70,7 +89,7 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
                 margin: 7,
                 marginRight: 15,
               }}
-              source={{uri: route.params.imageUrl}}
+              source={{uri: route.params?.avatar}}
             />
           </TouchableOpacity>
         </View>
@@ -94,9 +113,9 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
             onPress={() => {
               navigation.navigate('VideoCallScreen', {
                 chatId: currentChatId,
-                name: name,
-                imageUrl: imageUrl,
-                uid: uid,
+                name: route.params?.name,
+                imageUrl: route.params?.avatar,
+                uid: route.params?.targetUserId,
               });
             }}>
             <Ionicons name="videocam-outline" size={20} color="white" />
@@ -106,49 +125,60 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
         </View>
       ),
     });
-  }, [navigation]);
-  console.warn('name', route.params);
-  React.useEffect(() => {
-    const data = firestore()
-      .doc('Chats/' + currentChatId)
-      .onSnapshot(doc => {
-        setMessages(
-          doc?.data()?.messages.map(message => ({
-            ...message,
-            createdAt: message.createdAt.toDate(),
-          })),
-        );
-      });
-    return data;
-  }, [chatId, currentChatId]);
+  }, [
+    currentChatId,
+    navigateProfile,
+    navigation,
+    route.params?.avatar,
+    route.params?.name,
+    route.params?.targetUserId,
+  ]);
 
   const onSend = useCallback(
-    (m = []) => {
-      console.log('message', m);
+    (m: IMessage[]) => {
+      console.warn('currentChatId', currentChatId);
+      const handledChatId =
+        messages.targetUserId === route.params.targetUserId
+          ? messages.id
+          : currentChatId;
+
+      handleAddMessage({
+        chatId: handledChatId,
+        message: m[0],
+        targetUserId: route.params.targetUserId,
+        senderId: auth().currentUser.uid,
+      })
+        .unwrap()
+        .then(data => {
+          console.warn('message added', data);
+          setCurrentChatId(data.id);
+        })
+        .catch(err => {
+          console.warn(err);
+        });
+
+      return;
+
       // her message payloadına sent: true, received: true bu eklecek ona gore goruldu ayarlanacak thick style verilcek...
-      if (currentChatId != 'null') {
+      if (currentChatId) {
         firestore()
           .doc('Chats/' + currentChatId)
           .set({messages: GiftedChat.append(messages, m)}, {merge: true});
       } else {
         // new chat created
-        let idPair =
-          auth().currentUser.uid < uid
-            ? auth().currentUser.uid + '-' + uid
-            : uid + '-' + auth().currentUser.uid;
 
         firestore()
           .collection('Chats')
           .add({
             messages: m,
-            users: [auth().currentUser.uid, uid, idPair],
+            users: [auth().currentUser.uid, route.params.targetUserId, idPair],
           })
           .then(doc => {
             setCurrentChatId(doc._documentPath._parts[1]);
           });
       }
     },
-    [chatId, currentChatId, messages],
+    [currentChatId, handleAddMessage, messages, route.params.targetUserId],
   );
   const RightMenu = () => {
     const [visible, setVisible] = React.useState(false);
@@ -157,6 +187,7 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
     return (
       <View
         style={{
+          flex: 1,
           flexDirection: 'row',
           justifyContent: 'center',
         }}>
@@ -236,20 +267,21 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
   };
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1}}>
       <GiftedChat
-        messages={messages}
-        onSend={text => onSend(text)}
+        messages={
+          messages?.messages?.map?.(message => ({
+            ...message,
+            createdAt: message?.createdAt?.toDate?.(),
+          })) ?? []
+        }
+        onSend={onSend}
         user={{
-          _id: authUser != null ? authUser.id : route.params.id,
-          name:
-            authUser != null
-              ? authUser.name + ' ' + authUser.lastName
-              : route.params.name + ' ' + route.params.lastName,
-          avatar: authUser != null ? authUser.imageUrl : route.params.imageUrl,
+          _id: authUser?.id as string,
+          name: authUser?.name + ' ' + authUser?.lastName,
+          avatar: authUser?.imageUrl,
         }}
         showUserAvatar
-        useNativeDriver={true}
         renderMessageImage={renderMessageImage}
         renderBubble={renderBubble}
         renderLoading={() => (
@@ -266,6 +298,6 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };

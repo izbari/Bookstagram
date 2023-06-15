@@ -1,7 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import React from 'react';
 import {useLazyGetUserDataByIdQuery} from '../Service/AuthService';
-import {IUser} from '../Redux/Slices/UserSlice';
 
 interface IReturnType {
   isLoggedIn: boolean;
@@ -18,8 +17,7 @@ export const useAuth = (): IReturnType => {
         if (authUser) {
           getUserData(authUser.uid)
             .unwrap()
-            .then((res: IUser) => {
-              console.log('useAuth', res);
+            .then(() => {
               setIsLoggedIn(true);
             });
         } else {

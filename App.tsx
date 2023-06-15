@@ -5,14 +5,17 @@ import {StyleSheet} from 'react-native';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {RootStackNavigation} from './src/components/navigation/RootStackNavigation';
 import {store} from './src/infrastructure/Redux/Store';
+import {MenuProvider} from 'react-native-popup-menu';
 
 const App: React.FunctionComponent = () => {
   return (
     <GestureHandlerRootView style={style.container}>
       <Provider store={store}>
-        <BottomSheetModalProvider>
-          <RootStackNavigation />
-        </BottomSheetModalProvider>
+        <MenuProvider>
+          <BottomSheetModalProvider>
+            <RootStackNavigation />
+          </BottomSheetModalProvider>
+        </MenuProvider>
       </Provider>
     </GestureHandlerRootView>
   );

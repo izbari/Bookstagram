@@ -3,18 +3,18 @@ import {postApi} from '../Service/PostService';
 import {setupListeners} from '@reduxjs/toolkit/dist/query';
 import {userSlice} from './Slices/UserSlice';
 import {authApi} from '../Service/AuthService';
-import { productApi } from '../Service/ProductService';
+import {chatApi} from '../Service/ChatService';
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
-    [productApi.reducerPath]: productApi.reducer,
+    [chatApi.reducerPath]: chatApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat([postApi.middleware, authApi.middleware, productApi.middleware]),
+    }).concat([postApi.middleware, authApi.middleware, chatApi.middleware]),
   devTools: true,
 });
 setupListeners(store.dispatch);

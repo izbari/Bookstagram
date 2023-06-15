@@ -1,193 +1,87 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+import React from 'react';
 import {
   View,
   SafeAreaView,
   Text,
   TouchableOpacity,
-  Dimensions,
   FlatList,
   RefreshControl,
-  Image,
   ActivityIndicator,
 } from 'react-native';
-import auth from '@react-native-firebase/auth';
-const {width} = Dimensions.get('window');
-import firestore from '@react-native-firebase/firestore';
-import database from '@react-native-firebase/database';
-import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import tw from 'twrnc';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {IWithNavigation} from '../../components/navigation/Types';
 import {RouteNames} from '../../components/navigation/RouteNames';
+import {useGetMyChatsQuery} from '../../infrastructure/Service/ChatService';
+import ChatItem from '../../components/Chat/ChatItem';
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 type IChatProps = IWithNavigation<RouteNames.chat>;
-export const Chat: React.FunctionComponent<IChatProps> = ({
-  navigation,
-  route,
-}) => {
-  const authUser = useAppSelector(store => store.user);
-  const [chats, setChats] = useState([]);
-  const [user, setUser] = useState(authUser);
-  const [loading, setLoading] = useState(false);
-  const [otherUserData, setOtherUserData] = useState([]);
+export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
+  const authUser = useAppSelector(store => store.user.user);
+  const {
+    data: chats,
+    refetch: refetchChats,
+    isLoading,
+  } = useGetMyChatsQuery(authUser?.id, {
+    skip: !authUser,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
-  //Update auth user from redux store
-  useEffect(() => {
-    setUser(authUser);
-  }, [authUser]);
-
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate(RouteNames.createChat, {
-              myChats: otherUserData,
-            });
-          }}>
-          <Ionicons name="create-outline" size={25} color="black" />
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(RouteNames.createChat);
+            }}>
+            <Ionicons name="create-outline" size={25} color="black" />
+          </TouchableOpacity>
+          <Menu>
+            <MenuTrigger>
+              <Ionicons name="ellipsis-vertical" color={'gray'} size={25} />
+            </MenuTrigger>
+            <MenuOptions>
+              <MenuOption onSelect={() => alert(`Save`)} text="Save" />
+              <MenuOption onSelect={() => alert('Delete')}>
+                <Text style={{color: 'red'}}>Delete</Text>
+              </MenuOption>
+              <MenuOption
+                onSelect={() => alert(`Not called`)}
+                text="Disabled"
+                style={tw``}
+              />
+            </MenuOptions>
+          </Menu>
+        </>
       ),
     });
-  }, [navigation, loading]);
-
-  useEffect(() => {
-    fetchChats();
-  }, [navigation, user, route?.params?.check]);
-
-  const fetchChats = () => {
-    if (!authUser) return;
-    setLoading(true);
-    let otherUids = [];
-    let otherUserData = [];
-
-    auth().onAuthStateChanged(user => {
-      firestore()
-        .collection('Chats')
-        .where('users', 'array-contains', user?.uid)
-        .onSnapshot(snapshot => {
-          snapshot.docs.forEach(chat => {
-            otherUids.push(chat.data().users.find(uid => uid !== user?.uid));
-          });
-          database()
-            .ref('users/')
-            .once('value', snapshot => {
-              snapshot.forEach(item => {
-                if (otherUids.includes(item._snapshot.key)) {
-                  const {id, name, lastName, imageUrl} = item._snapshot.value;
-
-                  otherUserData.push({
-                    id: id,
-                    name: name,
-                    lastName: lastName,
-                    imageUrl: imageUrl,
-                  });
-                }
-              });
-
-              let result = {};
-              for (let item of otherUserData) {
-                let newObject = Object.assign({}, item);
-                result[newObject.id] = newObject;
-                delete newObject.id;
-              }
-
-              setOtherUserData(otherUserData);
-              setLoading(false);
-            });
-
-          setChats(snapshot.docs);
-        });
-    });
-  };
-
-  const ChatObject = ({item}) => {
-    const willSendUid = item?._data.users?.find(
-      user => user !== auth()?.currentUser?.uid,
-    );
-    const willSendChatId = item?._ref._documentPath._parts[1];
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('ChatSingleScreen', {
-            name:
-              otherUserData.find(user => user.id === willSendUid)?.name +
-              ' ' +
-              otherUserData.find(user => user.id === willSendUid)?.lastName,
-            imageUrl: otherUserData.find(user => user.id === willSendUid)
-              ?.imageUrl,
-
-            uid: willSendUid,
-            chatId: willSendChatId,
-          })
-        }
-        style={{
-          flexDirection: 'row',
-          width: width * 0.95,
-          margin: 10,
-          marginBottom: 3,
-          alignSelf: 'center',
-
-          backgroundColor: 'white',
-          borderRadius: 10,
-          shadowColor: '#CBCBCB',
-          elevation: 25,
-        }}>
-        <Image
-          style={{
-            height: 50,
-            width: 50,
-            resizeMode: 'contain',
-            borderRadius: 50,
-            overflow: 'hidden',
-            elavation: 15,
-            margin: 7,
-          }}
-          source={{
-            uri: otherUserData.find(user => user.id === willSendUid)?.imageUrl,
-          }}
-        />
-        <View style={{justifyContent: 'center', marginLeft: 10, padding: 5}}>
-          <Text style={{fontWeight: 'bold'}}>
-            {otherUserData.length === 0
-              ? ' yok'
-              : otherUserData.find(user => user.id === willSendUid)?.name}
-          </Text>
-          <View
-            style={{flexDirection: 'row', width: width - (width * 0.05 + 90)}}>
-            <Text
-              numberOfLines={1}
-              style={{
-                fontStyle: 'italic',
-                fontSize: 12,
-                color: 'grey',
-                marginTop: 5,
-              }}>
-              {item?._data.messages.length === 0
-                ? 'No Messages Yet'
-                : item?.data().messages[0].text}
-            </Text>
-          </View>
-          <View style={{alignItems: 'flex-end'}}>
-            <Text style={{color: 'darkgrey', fontSize: 12}}>
-              {item?.data().messages.length != 0
-                ? moment(item?.data().messages[0].createdAt).fromNow()
-                : 'daha gelmedi'}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  }, [navigation]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      {loading ? (
+    <SafeAreaView style={tw`flex-1`}>
+      {isLoading ? (
         <ActivityIndicator />
       ) : (
         <FlatList
           data={chats}
-          renderItem={ChatObject}
+          renderItem={({item}) => (
+            <ChatItem
+              key={item.id}
+              targetUserId={item.targetUserId}
+              chatId={item.id}
+              messages={item.messages}
+            />
+          )}
           keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
@@ -195,8 +89,8 @@ export const Chat: React.FunctionComponent<IChatProps> = ({
               tintColor="#FF6EA1"
               titleColor="grey"
               colors={['#FF6EA1']}
-              refreshing={loading}
-              onRefresh={() => fetchChats()}
+              refreshing={isLoading}
+              onRefresh={refetchChats}
             />
           }
           ListEmptyComponent={

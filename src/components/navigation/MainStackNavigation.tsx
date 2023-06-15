@@ -42,7 +42,7 @@ export const MainStackNavigation: React.FunctionComponent = () => {
       //   },
       // }}
 
-      initialRouteName={RouteNames.profile}>
+      initialRouteName={RouteNames.chat}>
       <MainStack.Screen
         name={RouteNames.landing}
         component={LandingStack}

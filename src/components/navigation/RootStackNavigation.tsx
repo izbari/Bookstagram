@@ -16,7 +16,6 @@ const RootStack = createNativeStackNavigator<NavigationParamsList>();
 
 export const RootStackNavigation: React.FunctionComponent = () => {
   const {isLoading, isLoggedIn} = useAuth();
-  console.log('rootstack:', isLoggedIn);
 
   if (isLoading) {
     return <ActivityIndicator />;
