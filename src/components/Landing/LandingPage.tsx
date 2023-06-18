@@ -1,9 +1,4 @@
-import {
-  SafeAreaView,
-  ActivityIndicator,
-  RefreshControl,
-  FlatList,
-} from 'react-native';
+import {ActivityIndicator, RefreshControl, FlatList} from 'react-native';
 import React from 'react';
 import tw from 'twrnc';
 import {PostSkeleton} from '../../components/Landing/PostSkeleton';
@@ -15,7 +10,6 @@ import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {Colors} from '../../resources/constants/Colors';
 import {MemoizedShareContent} from './ShareContent';
 import {View} from 'react-native';
-import {guidGenerator} from '../../infrastructure/Utils/guidGenerator';
 interface ILandingPageProps {
   readonly navigation: INavigationType;
 }
@@ -26,10 +20,12 @@ export const LandingPage: React.FunctionComponent<
   const authUser = useAppSelector(store => store.user.user);
   const [postLimit, setPostLimit] = React.useState(5);
   const posts = data?.slice(0, postLimit);
+  const [selectedPostId, setSelectedPostId] = React.useState('');
   //bottom sheet variables
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const snapPoints = React.useMemo(() => ['50%', '100%'], []);
-  const handleBottomSheetMode = () => {
+  const handleBottomSheetMode = (postId: string | undefined) => {
+    postId && setSelectedPostId(postId);
     const bottomSheetIndex = authUser?.fallowing
       ? authUser?.fallowing?.length > 5
         ? 1
@@ -37,7 +33,7 @@ export const LandingPage: React.FunctionComponent<
       : 0;
     bottomSheetRef.current?.snapToIndex(bottomSheetIndex);
   };
-
+  const fallowings = (authUser?.fallowing ?? [])?.slice(-1);
   if (isLoading) {
     return <PostSkeleton />;
   }
@@ -82,8 +78,8 @@ export const LandingPage: React.FunctionComponent<
         )}
         enablePanDownToClose={true}>
         <MemoizedShareContent
-          shareData={authUser?.fallowing}
-          selectedPost={undefined}
+          fallowingIds={fallowings}
+          postId={selectedPostId}
         />
       </BottomSheet>
     </View>

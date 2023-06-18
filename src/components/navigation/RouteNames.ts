@@ -9,12 +9,13 @@ export enum RouteNames {
   chat = 'chat',
   discover = 'discover',
   store = 'store',
-
+  drawer = 'drawer',
+  search = 'search',
   //auth-screens
   login = 'login',
   register = 'register',
   forgetPassword = 'forget-password',
-
+  searchMain = 'search-main',
   //chat-stack-screens
   singleChat = 'single-chat',
   createChat = 'create-chat',

@@ -6,6 +6,10 @@ import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {RootStackNavigation} from './src/components/navigation/RootStackNavigation';
 import {store} from './src/infrastructure/Redux/Store';
 import {MenuProvider} from 'react-native-popup-menu';
+import {CustomStatusBar} from './src/components/Common/StatusBar';
+import {Colors} from './src/resources/constants/Colors';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import 'react-native-gesture-handler';
 
 const App: React.FunctionComponent = () => {
   return (
@@ -13,7 +17,13 @@ const App: React.FunctionComponent = () => {
       <Provider store={store}>
         <MenuProvider>
           <BottomSheetModalProvider>
-            <RootStackNavigation />
+            <SafeAreaProvider>
+              <CustomStatusBar
+                backgroundColor={Colors.lightPurple}
+                barStyle="light-content"
+              />
+              <RootStackNavigation />
+            </SafeAreaProvider>
           </BottomSheetModalProvider>
         </MenuProvider>
       </Provider>

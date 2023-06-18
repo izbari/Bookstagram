@@ -5,7 +5,8 @@ import moment from 'moment';
 import isEqual from 'react-fast-compare';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import tw from 'twrnc';
-
+import {ThreeDotMenu} from '../Common/Menu';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 interface IPostHeaderProps {
   readonly userId: string | undefined;
   readonly userImageUrl: string | undefined;
@@ -49,7 +50,25 @@ export const PostHeader: React.FunctionComponent<IPostHeaderProps> = React.memo(
             </Text>
           </View>
         </TouchableOpacity>
-        {/* <ThreeDotMenu itemId={item.id} whosePost={item.userId} /> */}
+        <ThreeDotMenu
+          icon={
+            <Ionicons
+              name="ellipsis-vertical"
+              size={24}
+              color="black"
+              style={tw`m-2`}
+            />
+          }
+          options={[
+            {
+              style: tw``,
+              text: 'Delete',
+              handleSelect: () => {},
+              customStyles: {},
+            },
+            {text: 'Edit', style: tw``, handleSelect: () => {}},
+          ]}
+        />
       </View>
     );
   },

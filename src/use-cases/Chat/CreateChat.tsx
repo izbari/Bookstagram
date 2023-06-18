@@ -35,7 +35,7 @@ export const CreateChat: React.FunctionComponent<ICreateChatProps> = props => {
     setUsers(newData);
     setMyChats(newData2);
   };
-
+  const [_, ...fallowers] = authUser?.fallowers ?? [];
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* <SearchBar
@@ -71,8 +71,9 @@ export const CreateChat: React.FunctionComponent<ICreateChatProps> = props => {
         {loading ? (
           <ActivityIndicator size="large" color="#FF6EA1" />
         ) : (
-          (authUser?.fallowers ?? []).map((item: any) => {
-            return <CreateChatItem key={item} id={item} />;
+          //@ts-ignore
+          fallowers?.map((id: string) => {
+            return <CreateChatItem key={id} id={id} />;
           })
         )}
       </ScrollView>

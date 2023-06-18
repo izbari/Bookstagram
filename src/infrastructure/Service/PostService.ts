@@ -2,6 +2,8 @@ import {createApi, fakeBaseQuery} from '@reduxjs/toolkit/query/react';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
+import {IUser} from '../Redux/Slices/UserSlice';
 type IComment = {
   comment: string;
   id: string;
@@ -203,9 +205,24 @@ export const postApi = createApi({
         ];
       },
     }),
+    getMultipleUsers: builder.query<IUser[], string[]>({
+      queryFn: async ids => {
+        try {
+          const promises = ids.map(async id => {
+            return database().ref(`users/${id}`).once('value');
+          });
+          let users: any = await Promise.all(promises);
+          users = users.map((user: any) => user.val());
+          return {data: users as IUser[]};
+        } catch (error) {
+          return {error};
+        }
+      },
+    }),
   }),
 });
 export const {
+  useGetMultipleUsersQuery,
   useGetPostsQuery,
   useGetCommentsByPostIdQuery,
   useGetPostByIdQuery,

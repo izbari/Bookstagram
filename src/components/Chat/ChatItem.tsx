@@ -10,13 +10,12 @@ import {ChatItemSkeleton} from './ChatItemSkeleton';
 import tw from 'twrnc';
 interface IChatItemProps {
   targetUserId: string;
-  messages: any[];
   chatId: string;
+  lastMessage: string;
+  lastMessageDate: string;
 }
 const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
   const navigation = useNavigation<INavigationType>();
-  const lastMessage = props.messages[0].text;
-  const lastMessageDate = props.messages[0].createdAt;
   const {data: chatUser, isLoading} = useGetChatUserByIdQuery(
     props.targetUserId,
     {
@@ -25,7 +24,6 @@ const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
   );
 
   const handleItemPress = () => {
-    console.warn(props.messages);
     navigation.navigate(RouteNames.singleChat, {
       name: chatUser.name + ' ' + chatUser.lastName,
       avatar: chatUser.imageUrl,
@@ -57,12 +55,12 @@ const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
               <Text
                 numberOfLines={1}
                 style={tw`text-gray-500 pt-0.5 pb-1 text-xs italic`}>
-                {lastMessage}
+                {props.lastMessage}
               </Text>
             </View>
             <View style={tw`items-end flex-1 self-end`}>
               <Text style={tw`text-xs text-gray-400 italic`}>
-                {moment(lastMessageDate).fromNow()}
+                {moment(props.lastMessageDate?.toDate?.()).fromNow()}
               </Text>
             </View>
           </View>

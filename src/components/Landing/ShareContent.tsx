@@ -2,30 +2,36 @@ import React from 'react';
 import isEqual from 'react-fast-compare';
 import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import {MemoizedSharePostRow} from './SharePostRow';
-import {IFallowing} from '../../infrastructure/Redux/Slices/UserSlice';
-import {guidGenerator} from '../../infrastructure/Utils/guidGenerator';
-import {IPost} from '../../infrastructure/Service/PostService';
+import {
+  IPost,
+  useGetMultipleUsersQuery,
+} from '../../infrastructure/Service/PostService';
 
 interface IShareContentProps {
-  readonly shareData: IFallowing[] | undefined;
-  selectedPost: IPost | undefined;
+  readonly fallowingIds: string[] | undefined;
+  readonly postId: string | undefined;
   readonly limit?: number;
 }
 const ShareContent: React.FunctionComponent<IShareContentProps> = props => {
   const data = props.limit
-    ? props?.shareData?.slice(0, props.limit)
-    : props.shareData;
+    ? props?.fallowingIds?.slice(0, props.limit)
+    : props?.fallowingIds;
+  const {data: fallowingUserData} = useGetMultipleUsersQuery(
+    props.fallowingIds ?? [],
+    {skip: !props.fallowingIds?.length},
+  );
   return (
     <BottomSheetFlatList
-      data={data}
-      keyExtractor={item => guidGenerator()}
-      renderItem={({item, index}) => (
+      data={fallowingUserData}
+      keyExtractor={item => item?.id as string}
+      renderItem={({item: user}) => (
         <MemoizedSharePostRow
-          key={index}
-          img={item.img}
-          name={item.name}
-          userId={item.userId}
-          post={props.selectedPost}
+          key={user?.id}
+          img={user?.imageUrl}
+          name={user?.name + ' ' + user?.lastName}
+          userId={user?.id}
+          postId={props.postId}
+          username={user?.username}
         />
       )}
       //   refreshing={false}

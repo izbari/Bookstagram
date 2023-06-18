@@ -2,72 +2,53 @@ import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationParamsList} from './NavigationParamsList';
 import {RouteNames} from './RouteNames';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {LandingStackNavigation as LandingStack} from './stacks/LandingStackNavigation';
 import {ProfileStackNavigation as ProfileStack} from './stacks/ProfileStackNavigation';
-import {ChatStackNavigation} from './stacks/ChatStackNavigation';
+import {Colors} from '../../resources/constants/Colors';
+import {SearchStackNavigation} from './stacks/SearchStackNavigation';
 const MainStack = createBottomTabNavigator<NavigationParamsList>();
-// const Icon: React.FunctionComponent<{
-//   routeName: string;
-//   focused: boolean;
-// }> = ({routeName, focused}) => {
-//   let icon = null;
-//   switch (routeName) {
-//     case RouteNames.landing:
-//       icon = focused ? HomeFilled : HomeOutline;
-//       break;
-//     case RouteNames.favorites:
-//       icon = focused ? FavoriteFilled : FavoriteOutline;
-//       break;
-//     case RouteNames.profile:
-//       icon = focused ? ProfileFilled : ProfileOutline;
-//       break;
-//     default:
-//       break;
-//   }
-
-//   return <SvgFromXml xml={icon} />;
-// };
 const Blank = () => <></>;
 export const MainStackNavigation: React.FunctionComponent = () => {
   return (
     <MainStack.Navigator
-      // screenOptions={{
-      //   headerShown: false,
-      //   tabBarActiveTintColor: Colors.secondaryColor,
-      //   tabBarInactiveTintColor: Colors.primaryColor,
-      //   tabBarShowLabel: false,
-      //   tabBarStyle: {
-      //     backgroundColor: Colors.primaryColor,
-      //   },
-      // }}
-
-      initialRouteName={RouteNames.chat}>
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+      }}
+      initialRouteName={RouteNames.landing}>
       <MainStack.Screen
         name={RouteNames.landing}
         component={LandingStack}
         options={{
           headerShown: false,
         }}
-        // options={{
-        //   tabBarIcon: ({focused}) =>
-        //     Icon({routeName: RouteNames.landing, focused}),
-        // }}
-      />
-      <MainStack.Screen
-        name={RouteNames.profile}
-        component={ProfileStack}
         options={{
           headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Ionicons
+              name="home"
+              size={25}
+              color={focused ? Colors.lightPurple : Colors.primaryColor}
+            />
+          ),
         }}
-        // options={{
-        //   tabBarIcon: ({focused}) =>
-        //     Icon({routeName: RouteNames.landing, focused}),
-        // }}
       />
+
       <MainStack.Screen
         name={RouteNames.createPostTab}
         component={Blank}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Ionicons
+              name="add-circle-outline"
+              size={25}
+              color={Colors.lightPurple}
+            />
+          ),
+        }}
         listeners={({navigation}) => ({
           focus: () => {
             navigation.navigate(RouteNames.createPost);
@@ -75,13 +56,18 @@ export const MainStackNavigation: React.FunctionComponent = () => {
         })}
       />
       <MainStack.Screen
-        name={RouteNames.chat}
-        options={{headerShown: false}}
-        component={ChatStackNavigation}
-        // options={{
-        //   tabBarIcon: ({focused}) =>
-        //     Icon({routeName: RouteNames.landing, focused}),
-        // }}
+        name={RouteNames.search}
+        component={SearchStackNavigation}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Ionicons
+              name="search-outline"
+              size={25}
+              color={Colors.lightPurple}
+            />
+          ),
+        }}
       />
     </MainStack.Navigator>
   );

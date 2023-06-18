@@ -20,6 +20,12 @@ export interface NavigationParamsList extends ParamListBase {
     focus?: boolean | undefined;
     id: string | undefined;
   };
+  [RouteNames.singleChat]: {
+    targetUserId: string;
+    chatId: string;
+    name: string;
+    avatar: string;
+  };
   //favorites-stack-screens
   [RouteNames.favorites]: undefined;
 

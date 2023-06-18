@@ -6,12 +6,16 @@ import {useNavigation} from '@react-navigation/native';
 import {RouteNames} from '../navigation/RouteNames';
 import {ChatItemSkeleton} from './ChatItemSkeleton';
 import {useGetChatUserByIdQuery} from '../../infrastructure/Service/ChatService';
+import {useAppSelector} from '../../infrastructure/Redux/Hooks';
+import firestore from '@react-native-firebase/firestore';
 const {width} = Dimensions.get('window');
 type ICreateChatItemProps = {
   id: string;
 };
 const CreateChatItem: React.FunctionComponent<ICreateChatItemProps> = props => {
   const navigation = useNavigation<INavigationType>();
+  const authUser = useAppSelector(state => state.user.user);
+  const [chatId, setChatId] = React.useState('');
   const {
     data: user,
     isLoading,
@@ -19,7 +23,24 @@ const CreateChatItem: React.FunctionComponent<ICreateChatItemProps> = props => {
   } = useGetChatUserByIdQuery(props.id, {
     skip: !props.id,
   });
-  console.warn(user);
+  React.useEffect(() => {
+    const targetUserId = user?.id;
+    const authUserId = authUser?.id;
+    const idPair =
+      authUserId < targetUserId
+        ? authUserId + '-' + targetUserId
+        : targetUserId + '-' + authUserId;
+    if (!isError && user?.id) {
+      firestore()
+        .collection('chats')
+        .where('users', 'array-contains', idPair)
+        .onSnapshot(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            setChatId(doc.id);
+          });
+        });
+    }
+  }, [authUser?.id, isError, user?.id]);
   if (isError) {
     return <Text>Something went wrong</Text>;
   }
@@ -32,7 +53,7 @@ const CreateChatItem: React.FunctionComponent<ICreateChatItemProps> = props => {
           name: user?.name + ' ' + user?.lastName,
           avatar: user?.imageUrl,
           targetUserId: props?.id,
-          chatId: undefined,
+          chatId: chatId ?? undefined,
         });
       }}
       style={{

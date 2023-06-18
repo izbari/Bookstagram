@@ -1,53 +1,110 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useCallback} from 'react';
 import {
   TouchableOpacity,
   View,
-  ActivityIndicator,
   Text,
   Image,
   SafeAreaView,
+  Pressable,
 } from 'react-native';
-import {GiftedChat, Bubble, IMessage} from 'react-native-gifted-chat';
+import {
+  GiftedChat,
+  Bubble,
+  IMessage,
+  BubbleProps,
+} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ImageModal from 'react-native-image-modal';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {IWithNavigation} from '../../components/navigation/Types';
 import {RouteNames} from '../../components/navigation/RouteNames';
+import tw from 'twrnc';
+import {Colors} from '../../resources/constants/Colors';
+import {useImageAspectRatio} from '../../infrastructure/Utils/useImageAspectRatio';
 import {
-  useGetMyChatsQuery,
-  useHandleAddMessageMutation,
-} from '../../infrastructure/Service/ChatService';
+  Menu,
+  MenuTrigger,
+  MenuOptions,
+  MenuOption,
+} from 'react-native-popup-menu';
+import moment from 'moment';
+import FastImage from 'react-native-fast-image';
 type ISingleChatProps = IWithNavigation<RouteNames.singleChat>;
 export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
   navigation,
   route,
 }) => {
   const authUser = useAppSelector(store => store.user.user);
-  // const [messages, setMessages] = useState([]);
-  const [currentChatId, setCurrentChatId] = useState(route.params?.chatId);
-  const {data: messages = []} = useGetMyChatsQuery(authUser?.id, {
-    selectFromResult: ({data}: any[]) => {
-      const chat = data?.find(
-        chat =>
-          chat.id === currentChatId ||
-          chat.targetUserId === route.params.targetUserId,
-      );
+  const {
+    avatar: targetUserAvatar,
+    chatId,
+    name: targetUserName,
+    targetUserId,
+  } = route.params;
+  const imageAspectRatio = useImageAspectRatio(targetUserAvatar);
+  const authUserId = authUser?.id as string;
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const idPair =
+    authUserId < targetUserId
+      ? authUserId + '-' + targetUserId
+      : targetUserId + '-' + authUserId;
+  const [currentChatId, setCurrentChatId] = useState(chatId);
 
-      return {
-        data: chat,
-      };
-    },
-  });
-  console.warn('data', messages?.messages?.length);
-  const [handleAddMessage] = useHandleAddMessageMutation();
+  React.useEffect(() => {
+    if (currentChatId) {
+      const data = firestore()
+        .doc('chats/' + currentChatId)
+        .onSnapshot(doc => {
+          setMessages(
+            doc?.data()?.messages.map((message: IMessage) => ({
+              ...message,
+              //@ts-ignore
+              pending: false,
+              sent: false,
+              createdAt: message.createdAt?.toDate(),
+            })),
+          );
+        });
+      return data;
+    }
+  }, [authUserId, currentChatId]);
+
+  React.useEffect(() => {
+    if (currentChatId && messages.length > 0) {
+      let isRequired = false;
+      messages.forEach(message => {
+        if (authUserId !== message.user._id && !message.received) {
+          isRequired = true;
+        }
+      });
+      if (isRequired) {
+        console.log('calisti');
+
+        firestore()
+          .doc('chats/' + currentChatId)
+          .set(
+            {
+              messages: messages.map(message => ({
+                ...message,
+                received: authUserId !== message.user._id,
+              })),
+            },
+            {merge: true},
+          );
+      } else {
+        console.log('calismadi');
+      }
+    }
+  }, [authUserId, currentChatId, idPair, messages, targetUserId]);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title:
-        route.params?.name?.length > 15
-          ? route.params?.name?.slice(0, 15) + '...'
-          : route.params?.name,
+        targetUserName.length > 15
+          ? targetUserName?.slice(0, 15) + '...'
+          : targetUserName,
 
       headerStyle: {
         backgroundColor: '#FF6EA1',
@@ -59,171 +116,133 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
         fontSize: 18,
       },
       headerShown: true,
-      headerLeft: () => (
-        <View
-          style={{
-            flexDirection: 'row',
-            alignSelf: 'center',
-            justifyContent: 'center',
-          }}>
+      // eslint-disable-next-line react/no-unstable-nested-components
+
+      // eslint-disable-next-line react/no-unstable-nested-components
+      header: () => (
+        <View style={tw`bg-[${Colors.lightPurple}] flex-row justify-evenly`}>
           <TouchableOpacity
-            style={{justifyContent: 'center'}}
+            style={tw`flex-row items-center justify-center px-2 py-2`}
             onPress={() => {
               navigation.navigate(RouteNames.chat, {check: true});
             }}>
             <Ionicons name="arrow-back-outline" size={25} color="white" />
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              navigateProfile(route.params?.targetUserId);
-            }}>
             <Image
-              style={{
-                height: 35,
-                width: 35,
-                resizeMode: 'contain',
-                borderRadius: 50,
-                overflow: 'hidden',
-                elavation: 15,
-                margin: 7,
-                marginRight: 15,
-              }}
-              source={{uri: route.params?.avatar}}
+              style={tw`w-8 h-8 ml-2 rounded-full`}
+              source={{uri: targetUserAvatar}}
             />
           </TouchableOpacity>
-        </View>
-      ),
-      headerRight: () => (
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: 100,
-          }}>
-          <TouchableOpacity
-            style={{justifyContent: 'center'}}
-            onPress={() => {
-              navigation.navigate('ChatScreen', {check: true});
-            }}>
-            <Ionicons name="call-outline" size={18} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{justifyContent: 'center'}}
-            onPress={() => {
-              navigation.navigate('VideoCallScreen', {
-                chatId: currentChatId,
-                name: route.params?.name,
-                imageUrl: route.params?.avatar,
-                uid: route.params?.targetUserId,
-              });
-            }}>
-            <Ionicons name="videocam-outline" size={20} color="white" />
-          </TouchableOpacity>
 
-          <RightMenu />
+          <TouchableOpacity
+            onPress={() => {
+              navigateProfile(targetUserId);
+            }}
+            style={tw`flex-1 items-center justify-center pr-4 `}>
+            <Text
+              style={tw`text-white font-bold text-lg`}
+              numberOfLines={1}
+              ellipsizeMode="tail">
+              {targetUserName}
+            </Text>
+          </TouchableOpacity>
+          <View style={tw`flex-row items-center justify-center gap-3 px-2 `}>
+            <TouchableOpacity
+              style={tw`justify-center`}
+              onPress={() => {
+                navigation.navigate('ChatScreen', {check: true});
+              }}>
+              <Ionicons name="call-outline" size={18} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={tw`justify-center`}
+              onPress={() => {
+                navigation.navigate('VideoCallScreen', {
+                  chatId: currentChatId,
+                  name: targetUserName,
+                  imageUrl: targetUserAvatar,
+                  uid: targetUserId,
+                });
+              }}>
+              <Ionicons name="videocam-outline" size={20} color="white" />
+            </TouchableOpacity>
+
+            <RightMenu />
+          </View>
         </View>
       ),
+      // eslint-disable-next-line react/no-unstable-nested-components
     });
   }, [
     currentChatId,
     navigateProfile,
     navigation,
-    route.params?.avatar,
-    route.params?.name,
-    route.params?.targetUserId,
+    targetUserName,
+    targetUserAvatar,
+    targetUserId,
+    imageAspectRatio,
   ]);
-
   const onSend = useCallback(
     (m: IMessage[]) => {
-      console.warn('currentChatId', currentChatId);
-      const handledChatId =
-        messages.targetUserId === route.params.targetUserId
-          ? messages.id
-          : currentChatId;
-
-      handleAddMessage({
-        chatId: handledChatId,
-        message: m[0],
-        targetUserId: route.params.targetUserId,
-        senderId: auth().currentUser.uid,
-      })
-        .unwrap()
-        .then(data => {
-          console.warn('message added', data);
-          setCurrentChatId(data.id);
-        })
-        .catch(err => {
-          console.warn(err);
-        });
-
-      return;
-
-      // her message payloadına sent: true, received: true bu eklecek ona gore goruldu ayarlanacak thick style verilcek...
+      const messageUsers = [authUserId, targetUserId, idPair];
+      const updatedMessages = GiftedChat.append(messages, [
+        {
+          ...m[0],
+          sent: false,
+          received: false,
+          pending: true,
+        },
+      ]);
+      setMessages(updatedMessages);
       if (currentChatId) {
         firestore()
-          .doc('Chats/' + currentChatId)
-          .set({messages: GiftedChat.append(messages, m)}, {merge: true});
+          .doc('chats/' + currentChatId)
+          .set(
+            {
+              messages: GiftedChat.append(messages, [
+                {
+                  ...updatedMessages[0],
+                  pending: false,
+                  sent: true,
+                },
+              ]),
+            },
+            {merge: true},
+          );
       } else {
         // new chat created
 
         firestore()
-          .collection('Chats')
+          .collection('chats')
           .add({
             messages: m,
-            users: [auth().currentUser.uid, route.params.targetUserId, idPair],
+            users: messageUsers,
           })
           .then(doc => {
-            setCurrentChatId(doc._documentPath._parts[1]);
+            setCurrentChatId(doc.id);
           });
       }
     },
-    [currentChatId, handleAddMessage, messages, route.params.targetUserId],
+    [authUserId, currentChatId, idPair, messages, targetUserId],
   );
-  const RightMenu = () => {
-    const [visible, setVisible] = React.useState(false);
-    const openMenu = () => setVisible(true);
-    const closeMenu = () => setVisible(false);
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
-        {/* <Menu
-          style={{width: '50%'}}
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <TouchableOpacity
-              style={{width: 20, height: 20}}
-              title="dot"
-              onPress={openMenu}>
-              <Ionicons
-                name="ellipsis-vertical-outline"
-                size={20}
-                color="white"
-              />
-            </TouchableOpacity>
-          }>
-          <Menu.Item
-            icon="delete"
-            onPress={() => {}}
-            title="Clear Chat"
-            titleStyle={{fontSize: 14}}
-          />
-          <Divider />
-          <Menu.Item
-            icon="cog"
-            onPress={() => {}}
-            title="Settings"
-            titleStyle={{fontSize: 14}}
-          />
-        </Menu> */}
-      </View>
-    );
-  };
+  const RightMenu = () => (
+    <Menu>
+      <MenuTrigger>
+        <Ionicons name="ellipsis-vertical" color={'white'} size={20} />
+      </MenuTrigger>
+      <MenuOptions customStyles={tw`rounded-xl bg-red-400`}>
+        <MenuOption onSelect={() => alert(`Save`)} text="Save" />
+        <MenuOption onSelect={() => alert('Delete')}>
+          <Text style={{color: 'red'}}>Delete</Text>
+        </MenuOption>
+        <MenuOption
+          onSelect={() => alert('Not called')}
+          text="Disabled"
+          style={tw``}
+        />
+      </MenuOptions>
+    </Menu>
+  );
 
   const renderMessageImage = props => {
     return (
@@ -233,13 +252,11 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
           padding: 2,
         }}>
         <ImageModal
-          resizeMode="contain"
           style={{
             width: 200,
             height: 200,
             padding: 6,
             borderRadius: 15,
-            resizeMode: 'cover',
           }}
           source={{uri: props.currentMessage.image}}
         />
@@ -252,30 +269,93 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
       : navigation.navigate('OtherProfile', {selectedUserId: userid});
   };
 
-  const renderBubble = props => {
+  const renderBubble = (props: BubbleProps<IMessage>) => {
     return (
       <Bubble
         {...props}
+        renderCustomView={props => {
+          return (
+            props.currentMessage.isSharedContent && (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate(RouteNames.singlePost, {
+                    id: props.currentMessage.postId,
+                  })
+                }
+                style={{
+                  borderRadius: 15,
+                  padding: 5,
+                }}>
+                <View style={tw`flex-row items-center gap-2 `}>
+                  <FastImage
+                    source={{
+                      uri: props.currentMessage?.postAuthorAvatar as string,
+                    }}
+                    style={tw`w-8 h-8 rounded-full`}
+                  />
+                  <Text style={tw`text-white`}>
+                    {props.currentMessage?.postAuthorName}
+                  </Text>
+                </View>
+                <Text style={tw`py-2`}>{props.currentMessage.postText}</Text>
+                <ImageModal
+                  style={{
+                    width: 200,
+                    height: 200,
+                    padding: 6,
+                    borderRadius: 5,
+                  }}
+                  source={{uri: props.currentMessage.postImage}}
+                />
+              </Pressable>
+            )
+          );
+        }}
+        renderTicks={thickProps => {
+          return (
+            authUserId === thickProps?.user?._id && (
+              <View style={tw`flex-row items-center mx-2`}>
+                <Text
+                  style={tw`text-[10px] text-white family-sans mr-1`}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {moment(thickProps?.createdAt).format('LT')}
+                </Text>
+
+                {thickProps?.pending ? (
+                  <Ionicons
+                    name="time-outline"
+                    size={15}
+                    color="white"
+                    style={tw`ml-1`}
+                  />
+                ) : thickProps?.received ? (
+                  <Ionicons name="checkmark-done" size={15} color="white" />
+                ) : (
+                  <Ionicons name="checkmark-outline" size={15} color="white" />
+                )}
+              </View>
+            )
+          );
+        }}
         wrapperStyle={{
           left: {
             backgroundColor: '#fff',
           },
-          right: {backgroundColor: '#ff6ea1'},
+          right: {backgroundColor: Colors.lightPurple, padding: 5},
         }}
       />
     );
   };
-
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={tw`flex-1`}>
       <GiftedChat
-        messages={
-          messages?.messages?.map?.(message => ({
-            ...message,
-            createdAt: message?.createdAt?.toDate?.(),
-          })) ?? []
-        }
+        messages={messages}
         onSend={onSend}
+        renderTime={() => null}
+        isTyping
+        isLoadingEarlier
+        infiniteScroll
         user={{
           _id: authUser?.id as string,
           name: authUser?.name + ' ' + authUser?.lastName,
@@ -284,19 +364,14 @@ export const SingleChat: React.FunctionComponent<ISingleChatProps> = ({
         showUserAvatar
         renderMessageImage={renderMessageImage}
         renderBubble={renderBubble}
-        renderLoading={() => (
-          <View style={{flex: 1, justifyContent: 'center'}}>
-            <ActivityIndicator size="large" color="#ff6ea1" />
-          </View>
-        )}
+        // renderLoading={() => (
+        //   <View style={tw`flex-1 justify-center`}>
+        //     <ActivityIndicator size="large" color="#ff6ea1" />
+        //   </View>
+        // )}
         onPressAvatar={user => {
           navigateProfile(user._id);
         }}
-        renderTicks={() => (
-          <View style={{justifyContent: 'center'}}>
-            <Text>✔✔</Text>
-          </View>
-        )}
       />
     </SafeAreaView>
   );

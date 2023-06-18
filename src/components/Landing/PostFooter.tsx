@@ -17,7 +17,7 @@ import {INavigationType} from '../navigation/Types';
 import {RouteNames} from '../navigation/RouteNames';
 interface IPostFooterProps {
   readonly item: IPost | undefined;
-  readonly setBottomSheetVisible: (visible: boolean) => void;
+  readonly setBottomSheetVisible: (postId: string | undefined) => void;
   readonly onCommentPress: () => void;
 }
 export const PostFooter: React.FunctionComponent<IPostFooterProps> = React.memo(
@@ -35,8 +35,8 @@ export const PostFooter: React.FunctionComponent<IPostFooterProps> = React.memo(
     const [handleLike] = useHandleLikeMutation();
 
     const onSharePress = React.useCallback(() => {
-      props.setBottomSheetVisible(true);
-    }, []);
+      props.setBottomSheetVisible(props?.item?.id);
+    }, [props]);
 
     const handleLikePress = React.useCallback(async () => {
       await handleLike({id: props.item?.id, userId: authId}).unwrap();

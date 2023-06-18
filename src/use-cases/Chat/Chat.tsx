@@ -14,7 +14,10 @@ import tw from 'twrnc';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {IWithNavigation} from '../../components/navigation/Types';
 import {RouteNames} from '../../components/navigation/RouteNames';
-import {useGetMyChatsQuery} from '../../infrastructure/Service/ChatService';
+import {
+  useGetMyChatsQuery,
+  useLazyGetMyChatsQuery,
+} from '../../infrastructure/Service/ChatService';
 import ChatItem from '../../components/Chat/ChatItem';
 import {
   Menu,
@@ -22,53 +25,22 @@ import {
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import {useIsFocused} from '@react-navigation/native';
+import {Header} from '../../components/Chat/Header';
 type IChatProps = IWithNavigation<RouteNames.chat>;
 export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
   const authUser = useAppSelector(store => store.user.user);
-  const {
-    data: chats,
-    refetch: refetchChats,
-    isLoading,
-  } = useGetMyChatsQuery(authUser?.id, {
-    skip: !authUser,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-  });
+  const isFocused = useIsFocused();
+  const [fetchChats, {data: chats, isLoading}] = useLazyGetMyChatsQuery();
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: true,
-      headerRight: () => (
-        <>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate(RouteNames.createChat);
-            }}>
-            <Ionicons name="create-outline" size={25} color="black" />
-          </TouchableOpacity>
-          <Menu>
-            <MenuTrigger>
-              <Ionicons name="ellipsis-vertical" color={'gray'} size={25} />
-            </MenuTrigger>
-            <MenuOptions>
-              <MenuOption onSelect={() => alert(`Save`)} text="Save" />
-              <MenuOption onSelect={() => alert('Delete')}>
-                <Text style={{color: 'red'}}>Delete</Text>
-              </MenuOption>
-              <MenuOption
-                onSelect={() => alert(`Not called`)}
-                text="Disabled"
-                style={tw``}
-              />
-            </MenuOptions>
-          </Menu>
-        </>
-      ),
-    });
-  }, [navigation]);
-
+  React.useEffect(() => {
+    if (isFocused) {
+      fetchChats(authUser?.id);
+    }
+  }, [authUser?.id, fetchChats, isFocused]);
   return (
     <SafeAreaView style={tw`flex-1`}>
+      <Header />
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -79,7 +51,8 @@ export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
               key={item.id}
               targetUserId={item.targetUserId}
               chatId={item.id}
-              messages={item.messages}
+              lastMessage={item.messages[0].text}
+              lastMessageDate={item.messages[0].createdAt}
             />
           )}
           keyExtractor={item => item.id}
@@ -90,7 +63,7 @@ export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
               titleColor="grey"
               colors={['#FF6EA1']}
               refreshing={isLoading}
-              onRefresh={refetchChats}
+              onRefresh={() => fetchChats(authUser?.id)}
             />
           }
           ListEmptyComponent={

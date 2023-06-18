@@ -7,7 +7,7 @@ import {IPost} from '../../infrastructure/Service/PostService';
 import tw from 'twrnc';
 interface IPostProps {
   readonly item: IPost | undefined;
-  readonly setBottomSheetVisible: (visible: boolean) => void;
+  readonly setBottomSheetVisible: (postId: string | undefined) => void;
   readonly onCommentPress?: () => void;
 }
 export const Post: React.FunctionComponent<IPostProps> = props => {

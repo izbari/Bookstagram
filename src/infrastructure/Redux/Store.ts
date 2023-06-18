@@ -14,7 +14,10 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat([postApi.middleware, authApi.middleware, chatApi.middleware]),
+    })
+      .concat(postApi.middleware)
+      .concat(authApi.middleware)
+      .concat(chatApi.middleware),
   devTools: true,
 });
 setupListeners(store.dispatch);

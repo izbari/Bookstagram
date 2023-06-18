@@ -7,25 +7,41 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Login} from '../../use-cases/Auth/Login';
 import {Register} from '../../use-cases/Auth/Register';
 import {useAuth} from '../../infrastructure/Utils/useAuth';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import {CreatePost} from '../../use-cases/CreatePost/CreatePost';
 import {SinglePost} from '../../use-cases/Landing/SinglePost';
-
+import auth from '@react-native-firebase/auth';
+import {SingleChat} from '../../use-cases/Chat/SingleChat';
+import {CreateChat} from '../../use-cases/Chat/CreateChat';
+import {
+  DrawerNavigator,
+  DrawerStackNavigation,
+} from './stacks/DrawerNavigation';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  createDrawerNavigator,
+} from '@react-navigation/drawer';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ChatStackNavigation} from './stacks/ChatStackNavigation';
+import {LandingStackNavigation} from './stacks/LandingStackNavigation';
 const RootStack = createNativeStackNavigator<NavigationParamsList>();
+const Drawer = createDrawerNavigator();
 
 export const RootStackNavigation: React.FunctionComponent = () => {
-  const {isLoading, isLoggedIn} = useAuth();
+  const {isLoading} = useAuth();
+  const user = auth().currentUser;
 
   if (isLoading) {
     return <ActivityIndicator />;
   }
   return (
     <NavigationContainer>
-      <RootStack.Navigator
-        initialRouteName={RouteNames.main}
+      <Drawer.Navigator
+        initialRouteName={RouteNames.landing}
         screenOptions={{headerShown: false}}>
-        {isLoggedIn ? (
-          <RootStack.Screen
+        {user ? (
+          <Drawer.Screen
             name={RouteNames.main}
             component={MainStackNavigation}
           />
@@ -43,8 +59,14 @@ export const RootStackNavigation: React.FunctionComponent = () => {
             presentation: 'fullScreenModal',
           }}
         />
+        <RootStack.Screen
+          name={RouteNames.chat}
+          component={ChatStackNavigation}
+        />
         <RootStack.Screen name={RouteNames.singlePost} component={SinglePost} />
-      </RootStack.Navigator>
+        <RootStack.Screen name={RouteNames.singleChat} component={SingleChat} />
+        <RootStack.Screen name={RouteNames.createChat} component={CreateChat} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };

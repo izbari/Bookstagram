@@ -10,11 +10,12 @@ export type IUser = {
   name: string;
   lastName: string;
   fallowers: string[];
-  fallowing: IFallowing[];
+  fallowing: string[];
   email: string;
   birth: string;
   books: string[];
   gender: string;
+  username: string;
   imageUrl: string;
 } | null;
 interface UserState {
