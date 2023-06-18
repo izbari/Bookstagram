@@ -11,6 +11,7 @@ import {ActivityIndicator} from 'react-native';
 import {CreatePost} from '../../use-cases/CreatePost/CreatePost';
 import {SinglePost} from '../../use-cases/Landing/SinglePost';
 import { ProductInfo } from '../../use-cases/MyStore/ProductInfo';
+import { Store } from '../../use-cases/MyStore/Store';
 
 const RootStack = createNativeStackNavigator<NavigationParamsList>();
 
@@ -23,7 +24,7 @@ export const RootStackNavigation: React.FunctionComponent = () => {
   return (
     <NavigationContainer>
       <RootStack.Navigator
-        initialRouteName={RouteNames.main}
+        initialRouteName={RouteNames.store}
         screenOptions={{headerShown: false}}>
         {isLoggedIn ? (
           <RootStack.Screen
@@ -46,6 +47,7 @@ export const RootStackNavigation: React.FunctionComponent = () => {
         />
         <RootStack.Screen name={RouteNames.singlePost} component={SinglePost} />
         <RootStack.Screen name={RouteNames.productInfo} component={ProductInfo} />
+        <RootStack.Screen name={RouteNames.store} component={Store} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

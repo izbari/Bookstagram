@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 import {Colors} from '../../resources/constants/Colors';
 type ISelectCategoryProps = IWithNavigation<RouteNames.selectCategory>;
 
-const categoryList = {
+export const categoryList = {
   Fantasy: false,
   Adventure: false,
   Diary: false,

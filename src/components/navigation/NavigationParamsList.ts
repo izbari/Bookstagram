@@ -11,6 +11,7 @@ export interface NavigationParamsList extends ParamListBase {
   [RouteNames.chat]: undefined;
   [RouteNames.library]: undefined;
   [RouteNames.store]: undefined;
+  [RouteNames.myStore]: undefined;
 
   //screens-independent
 

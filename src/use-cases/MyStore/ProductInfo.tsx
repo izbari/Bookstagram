@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import PagerView from 'react-native-pager-view';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -22,7 +22,7 @@ export const ProductInfo: React.FunctionComponent<
 > = props => {
   const {t} = useTranslation();
   const productId = props.route.params.productId;
-  console.log('productId', productId);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const {data, isLoading} = useGetProductByIdQuery(productId, {
     skip: !productId,
   });
@@ -39,29 +39,35 @@ export const ProductInfo: React.FunctionComponent<
     productAuthor: string;
     id: string;
     createdAt: Date;
+    userId: string;
   } = JSON.parse(JSON.stringify(data ?? {}, null, 2));
-  console.warn('swap', productData.isTradable);
 
+  console.warn('userId', productData.id);
   if (isLoading) return <ActivityIndicator />;
   return (
     <View style={tw`flex-1 bg-white`}>
-      <PagerView style={tw`h-60`} initialPage={0}>
+      <View style={tw`absolute z-2 flex-row justify-between w-full top-0`}>
+        <TouchableOpacity style={tw`p-1`}>
+          <Icon name="chevron-back" size={30} color="white" />
+        </TouchableOpacity>
+        <View style={tw`flex-row mr-3`}>
+          <TouchableOpacity style={tw`p-1 mr-2`}>
+            <Icon name="share-outline" size={30} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity style={tw`p-1`}>
+            <Icon name="heart-circle-outline" size={30} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <PagerView
+        style={tw`h-60 mb-2`}
+        initialPage={0}
+        onPageScroll={e => {
+          setCurrentIndex(e.nativeEvent.position);
+        }}>
         {productData.productImages.map((image, index) => {
           return (
             <>
-              <View style={tw`absolute z-2 flex-row justify-between w-full`}>
-                <TouchableOpacity style={tw`p-1`}>
-                  <Icon name="chevron-back" size={30} color="white" />
-                </TouchableOpacity>
-                <View style={tw`flex-row mr-3`}>
-                  <TouchableOpacity style={tw`p-1 mr-2`}>
-                    <Icon name="share-outline" size={30} color="white" />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={tw`p-1`}>
-                    <Icon name="heart-circle-outline" size={30} color="white" />
-                  </TouchableOpacity>
-                </View>
-              </View>
               <Image
                 key={index}
                 source={{uri: image}}
@@ -72,7 +78,23 @@ export const ProductInfo: React.FunctionComponent<
           );
         })}
       </PagerView>
-      <View style={tw`p-3`}>
+      <View style={tw`z-6 h-6 w-full`}>
+        {productData.productImages.length > 1 && (
+          <View style={tw`flex-row justify-center items-center`}>
+            {productData.productImages.map((_, index) => {
+              return (
+                <View
+                  key={index}
+                  style={tw`h-2 w-2 rounded-full m-1 ${
+                    index === currentIndex ? 'bg-gray-500' : 'bg-gray-200'
+                  }`}></View>
+              );
+            })}
+          </View>
+        )}
+      </View>
+
+      <View style={tw`p-3 pt-1`}>
         <View style={tw`flex-row items-center mb-2`}>
           <Icon name="time" size={20} color="lightgray" style={tw`pr-1`} />
           <Text style={tw`text-gray-400`}>

@@ -22,14 +22,17 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {RouteNames} from '../../components/navigation/RouteNames';
 import {IWithNavigation} from '../../components/navigation/Types';
 import firestore from '@react-native-firebase/firestore';
+import database, { FirebaseDatabaseTypes} from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import {guidGenerator} from '../../infrastructure/Utils/guidGenerator';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useAppSelector } from '../../infrastructure/Redux/Hooks';
 
 type ISellNowProps = IWithNavigation<RouteNames.sellNow>;
 
 export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
   const {t} = useTranslation();
+  const user = useAppSelector(store => store.user.user);
   const [productHeader, setProductHeader] = useState('');
   const [productAuthor, setProductAuthor] = useState('');
   const [productExplanation, setProductExplanation] = useState('');
@@ -123,6 +126,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
       categories,
       isTradable: isEnabled,
       createdAt: new Date(),
+      userId: user?.id,
     };
     console.warn('product', product);
     firestore()
@@ -133,6 +137,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
         props.navigation.navigate(RouteNames.productInfo, {
           productId: docRef.id,
         });
+        database().ref('users/' + user?.id + '/products').push(docRef.id);
       })
       .catch(error => {
         console.log('Error adding document: ', error);
@@ -146,7 +151,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           onPress={() => {
             setProductImages([]);
             setIsEditable(false);
-            props.navigation.navigate(RouteNames.store);
+            props.navigation.navigate(RouteNames.myStore);
           }}>
           <Icon name="chevron-back" size={30} color="black" />
         </TouchableOpacity>
@@ -209,7 +214,8 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           style={styles.infoInput}
           placeholder={t('product-info.product-explanation-placeholder')}
           placeholderTextColor="#AEAEAE"
-          numberOfLines={3}
+          numberOfLines={5}
+          multiline={true}
         />
 
         <TouchableOpacity

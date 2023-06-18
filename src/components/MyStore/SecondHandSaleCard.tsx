@@ -24,6 +24,7 @@ interface ISeconHandSaleCardProps {
   readonly isSold?: boolean;
   readonly onFavoritePress?: () => void;
   readonly isFavorite?: boolean;
+  readonly onPress?: () => void;
 }
 
 export const SecondHandSaleCard: React.FunctionComponent<
@@ -33,7 +34,7 @@ export const SecondHandSaleCard: React.FunctionComponent<
   const navigation = useNavigation<INavigationType>();
   return (
     <>
-      <TouchableOpacity style={styles.container} onPress={() => navigation.navigate(RouteNames.productInfo)}>
+      <TouchableOpacity style={styles.container} onPress={props.onPress}>
         <ImageBackground
           source={{uri: props.image}}
           style={styles.image}
@@ -59,7 +60,7 @@ export const SecondHandSaleCard: React.FunctionComponent<
         ) : (
           <Text style={[styles.title, {marginTop: 5}]}>{props.title}</Text>
         )}
-        <Text style={styles.price}>{props.price}</Text>
+        <Text style={styles.price}>{props.price} TL</Text>
       </TouchableOpacity>
     </>
   );

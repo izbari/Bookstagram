@@ -9,6 +9,7 @@ export enum RouteNames {
   library = 'library',
   chat = 'chat',
   discover = 'discover',
+  myStore = 'my-store',
   store = 'store',
 
   //auth-screens

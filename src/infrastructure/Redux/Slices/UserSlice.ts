@@ -27,6 +27,11 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
+  reducers: {
+    setUserData: (state, {payload}) => {
+      state.user = payload;
+    },
+  },
   extraReducers: builder => {
     builder.addMatcher(
       authApi.endpoints.getUserDataById.matchFulfilled,
@@ -35,7 +40,6 @@ export const userSlice = createSlice({
       },
     );
   },
-  reducers: {},
 });
-
+export const {setUserData} = userSlice.actions;
 export default userSlice.reducer;
