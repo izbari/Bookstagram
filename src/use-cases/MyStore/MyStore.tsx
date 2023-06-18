@@ -15,7 +15,9 @@ import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import {SecondHandSaleCard} from '../../components/MyStore/SecondHandSaleCard';
 import {RouteNames} from '../../components/navigation/RouteNames';
 import {IWithNavigation} from '../../components/navigation/Types';
-type IMyStoreProps = IWithNavigation<RouteNames.store>;
+import {useGetProductsByUserIdQuery} from '../../infrastructure/Service/ProductService';
+import {useAppSelector} from '../../infrastructure/Redux/Hooks';
+type IMyStoreProps = IWithNavigation<RouteNames.myStore>;
 
 const books = [
   {
@@ -46,6 +48,11 @@ const books = [
 
 export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
   const {t} = useTranslation();
+  const user = useAppSelector(store => store.user.user);
+  const {data : userProducts, isLoading} = useGetProductsByUserIdQuery(user?.id, {
+    skip: !user?.id,
+  });
+  console.warn('userProducts', userProducts);
   const [favorite, setFavorite] = React.useState(false);
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
@@ -58,12 +65,13 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
   const StoreTabScreen = () => (
     <FlashList
       numColumns={2}
-      data={books}
+      data={userProducts}
       renderItem={({item}) => (
         <SecondHandSaleCard
-          title={item.title}
-          price={item.price}
-          image={item.image}
+          title={item?.productHeader}
+          price={item?.price}
+          image={item?.productImages[0]}
+          onPress={() => props.navigation.navigate(RouteNames.productInfo, {productId: item?.id})}
           isMine={true}
         />
       )}
@@ -120,7 +128,9 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
 
   return (
     <View style={tw`flex-1 bg-white`}>
-      <TouchableOpacity style={tw`absolute left-2 top-2 z-1`} onPress={()=> props.navigation.navigate(RouteNames.profile) }>
+      <TouchableOpacity
+        style={tw`absolute left-2 top-2 z-1`}
+        onPress={() => props.navigation.navigate(RouteNames.profile)}>
         <Icon name="chevron-back-outline" size={30} color="white" />
       </TouchableOpacity>
       <View style={tw` bg-[${Colors.lightPurple}] h-30 p-8`} />
@@ -136,7 +146,7 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
             style={tw` bg-white border-[${Colors.darkPurple}] border-2 px-2 h-10 justify-evenly items-center rounded-md shadow-md flex-row`}
             onPress={() => props.navigation.navigate(RouteNames.sellNow)}>
             <Icon name="add" size={25} color={Colors.darkPurple} />
-            <Text style={tw`text-[${Colors.darkPurple}] text-s`}>
+            <Text style={tw`text-[${Colors.darkPurple}]`}>
               {t('my-store.sell')}
             </Text>
           </TouchableOpacity>

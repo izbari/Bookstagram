@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 import {Colors} from '../../resources/constants/Colors';
 type ISelectCategoryProps = IWithNavigation<RouteNames.selectCategory>;
 
-const categoryList = {
+export const categoryList = {
   Fantasy: false,
   Adventure: false,
   Diary: false,
@@ -44,7 +44,7 @@ export const SelectCategory: React.FunctionComponent<
   const [selectedCategories, setSelectedCategories] =
     React.useState(categoryList);
 
-  const onPressHandle = (category: keyof typeof categoryList ) => {
+  const onPressHandle = (category: keyof typeof categoryList) => {
     setSelectedCategories(prevState => ({
       ...prevState,
       [category]: !prevState[category],
@@ -53,9 +53,21 @@ export const SelectCategory: React.FunctionComponent<
 
   return (
     <View style={tw`flex-1`}>
-      <View style={tw`h-15 bg-white shadow-2xl justify-center`}>
-        <TouchableOpacity style={tw`absolute top-4 left-2`}>
-          <Icon name="chevron-back" size={25} color="black" />
+      <View
+        style={tw`h-15 bg-white justify-center shadow-2xl z-1 items-center`}>
+        <TouchableOpacity
+          style={tw`absolute top-5 right-7 z-2`}
+          onPress={() =>
+            props.navigation.navigate(RouteNames.sellNow, {
+              categories: Object.keys(selectedCategories).filter(
+                item => selectedCategories[item as keyof typeof categoryList],
+              ),
+            })
+          }>
+          <Text
+            style={tw`text-[${Colors.darkPurple}] text-center font-semibold`}>
+            Done
+          </Text>
         </TouchableOpacity>
         <Text style={tw` text-black text-center text-lg font-semibold`}>
           {t('product-info.category')}
@@ -64,7 +76,7 @@ export const SelectCategory: React.FunctionComponent<
       <FlashList
         data={Object.keys(categoryList)}
         estimatedItemSize={24}
-        renderItem={({item }) => (
+        renderItem={({item}) => (
           <TouchableOpacity
             onPress={() => onPressHandle(item)}
             style={tw`h-15 mb-0.5 bg-white justify-center`}>

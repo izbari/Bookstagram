@@ -19,24 +19,6 @@ export const MainStackNavigation: React.FunctionComponent = () => {
       }}
       initialRouteName={RouteNames.landing}>
       <MainStack.Screen
-        name={RouteNames.landing}
-        component={LandingStack}
-        options={{
-          headerShown: false,
-        }}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <Ionicons
-              name="home"
-              size={25}
-              color={focused ? Colors.lightPurple : Colors.primaryColor}
-            />
-          ),
-        }}
-      />
-
-      <MainStack.Screen
         name={RouteNames.createPostTab}
         component={Blank}
         options={{

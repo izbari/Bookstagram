@@ -11,6 +11,7 @@ export interface NavigationParamsList extends ParamListBase {
   [RouteNames.chat]: undefined;
   [RouteNames.library]: undefined;
   [RouteNames.store]: undefined;
+  [RouteNames.myStore]: undefined;
 
   //screens-independent
 
@@ -20,6 +21,12 @@ export interface NavigationParamsList extends ParamListBase {
     focus?: boolean | undefined;
     id: string | undefined;
   };
+  [RouteNames.productInfo]: {
+    productId: string;
+  }
+  [RouteNames.sellNow]: {
+    categories: string[];
+  }
   [RouteNames.singleChat]: {
     targetUserId: string;
     chatId: string;

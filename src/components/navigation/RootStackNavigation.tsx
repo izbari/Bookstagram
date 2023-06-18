@@ -10,6 +10,8 @@ import {useAuth} from '../../infrastructure/Utils/useAuth';
 import {ActivityIndicator, Text, View} from 'react-native';
 import {CreatePost} from '../../use-cases/CreatePost/CreatePost';
 import {SinglePost} from '../../use-cases/Landing/SinglePost';
+import { ProductInfo } from '../../use-cases/MyStore/ProductInfo';
+import { Store } from '../../use-cases/MyStore/Store';
 import auth from '@react-native-firebase/auth';
 import {SingleChat} from '../../use-cases/Chat/SingleChat';
 import {CreateChat} from '../../use-cases/Chat/CreateChat';
@@ -64,6 +66,8 @@ export const RootStackNavigation: React.FunctionComponent = () => {
           component={ChatStackNavigation}
         />
         <RootStack.Screen name={RouteNames.singlePost} component={SinglePost} />
+        <RootStack.Screen name={RouteNames.productInfo} component={ProductInfo} />
+        <RootStack.Screen name={RouteNames.store} component={Store} />
         <RootStack.Screen name={RouteNames.singleChat} component={SingleChat} />
         <RootStack.Screen name={RouteNames.createChat} component={CreateChat} />
       </Drawer.Navigator>

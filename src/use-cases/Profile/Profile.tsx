@@ -207,7 +207,7 @@ export const Profile: React.FunctionComponent<IProfileProps> = props => {
           </Text>
           <View>
             <TouchableOpacity
-              onPress={() => props.navigation.navigate(RouteNames.store)}
+              onPress={() => props.navigation.navigate(RouteNames.myStore)}
               style={styles.menuRow}>
               <MaterialIcon
                 name="store-mall-directory"

@@ -14,9 +14,10 @@ export const ProfileStackNavigation: React.FunctionComponent = () => {
       initialRouteName={RouteNames.sellNow}
       screenOptions={{headerShown: false}}>
       <ProfileStack.Screen name={RouteNames.profile} component={Profile} />
-      <ProfileStack.Screen name={RouteNames.store} component={MyStore} />
+      <ProfileStack.Screen name={RouteNames.myStore} component={MyStore} />
       <ProfileStack.Screen name={RouteNames.sellNow} component={SellNow} />
       <ProfileStack.Screen name={RouteNames.selectCategory} component={SelectCategory} />
+
     </ProfileStack.Navigator>
   );
 };

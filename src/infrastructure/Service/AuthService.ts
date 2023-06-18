@@ -21,6 +21,7 @@ export interface IPost {
   userName: string;
   id: string;
   liked: boolean;
+  products: string[];
 }
 export const authApi = createApi({
   reducerPath: 'auth',
