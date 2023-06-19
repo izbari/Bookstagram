@@ -20,9 +20,11 @@ export type IUser = {
 } | null;
 interface UserState {
   user: IUser;
+  isInBookTab: boolean;
 }
 const initialState: UserState = {
   user: null,
+  isInBookTab: false,
 };
 
 export const userSlice = createSlice({
@@ -31,6 +33,9 @@ export const userSlice = createSlice({
   reducers: {
     setUserData: (state, {payload}) => {
       state.user = payload;
+    },
+    setCurrentTab: (state, {payload}) => {
+      state.isInBookTab = payload;
     },
   },
   extraReducers: builder => {
@@ -42,5 +47,5 @@ export const userSlice = createSlice({
     );
   },
 });
-export const {setUserData} = userSlice.actions;
+export const {setUserData, setCurrentTab} = userSlice.actions;
 export default userSlice.reducer;

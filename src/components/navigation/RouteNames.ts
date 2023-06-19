@@ -13,6 +13,9 @@ export enum RouteNames {
   store = 'store',
   drawer = 'drawer',
   search = 'search',
+  discoverBook = 'discover-book',
+  book = 'book',
+  bookDetail = 'book-detail',
   //auth-screens
   login = 'login',
   register = 'register',

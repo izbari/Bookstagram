@@ -28,7 +28,7 @@ import {
 import {useIsFocused} from '@react-navigation/native';
 import {Header} from '../../components/Chat/Header';
 type IChatProps = IWithNavigation<RouteNames.chat>;
-export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
+export const Chat: React.FunctionComponent<IChatProps> = props => {
   const authUser = useAppSelector(store => store.user.user);
   const isFocused = useIsFocused();
   const [fetchChats, {data: chats, isLoading}] = useLazyGetMyChatsQuery();
@@ -40,7 +40,7 @@ export const Chat: React.FunctionComponent<IChatProps> = ({navigation}) => {
   }, [authUser?.id, fetchChats, isFocused]);
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <Header />
+      <Header navigation={props.navigation} />
       {isLoading ? (
         <ActivityIndicator />
       ) : (

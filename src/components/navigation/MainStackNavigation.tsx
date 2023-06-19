@@ -5,7 +5,6 @@ import {RouteNames} from './RouteNames';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {LandingStackNavigation as LandingStack} from './stacks/LandingStackNavigation';
-import {ProfileStackNavigation as ProfileStack} from './stacks/ProfileStackNavigation';
 import {Colors} from '../../resources/constants/Colors';
 import {SearchStackNavigation} from './stacks/SearchStackNavigation';
 const MainStack = createBottomTabNavigator<NavigationParamsList>();
@@ -18,6 +17,23 @@ export const MainStackNavigation: React.FunctionComponent = () => {
         tabBarShowLabel: false,
       }}
       initialRouteName={RouteNames.landing}>
+      <MainStack.Screen
+        name={RouteNames.landing}
+        component={LandingStack}
+        options={{
+          headerShown: false,
+        }}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Ionicons
+              name="home"
+              size={25}
+              color={focused ? Colors.lightPurple : Colors.primaryColor}
+            />
+          ),
+        }}
+      />
       <MainStack.Screen
         name={RouteNames.createPostTab}
         component={Blank}
