@@ -23,10 +23,13 @@ export interface NavigationParamsList extends ParamListBase {
   };
   [RouteNames.productInfo]: {
     productId: string;
-  }
+  };
   [RouteNames.sellNow]: {
     categories: string[];
-  }
+  };
+  [RouteNames.bookDetail]: {
+    id: string;
+  };
   [RouteNames.singleChat]: {
     targetUserId: string;
     chatId: string;
