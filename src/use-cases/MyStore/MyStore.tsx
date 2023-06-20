@@ -52,7 +52,6 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
   const {data : userProducts, isLoading} = useGetProductsByUserIdQuery(user?.id, {
     skip: !user?.id,
   });
-  console.warn('userProducts', userProducts);
   const [favorite, setFavorite] = React.useState(false);
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
@@ -130,7 +129,7 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
     <View style={tw`flex-1 bg-white`}>
       <TouchableOpacity
         style={tw`absolute left-2 top-2 z-1`}
-        onPress={() => props.navigation.navigate(RouteNames.profile)}>
+        onPress={() => props.navigation.navigate(RouteNames.profileMain)}>
         <Icon name="chevron-back-outline" size={30} color="white" />
       </TouchableOpacity>
       <View style={tw` bg-[${Colors.lightPurple}] h-30 p-8`} />

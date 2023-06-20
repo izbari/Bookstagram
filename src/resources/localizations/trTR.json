@@ -77,6 +77,23 @@
       "pages": "sayfa",
       "ask-question": "Soru sor",
       "swap-offer": "Takas teklifi yap"
+    },
+    "drawer": {
+      "home": "Ana Ekran",
+      "chat": "Mesaj",
+      "discover": "Keşfet",
+      "library": "Kütüphane",
+      "store": "Sepet",
+      "favorites": "Favorilerim",
+      "profile": "Profil",
+      "sign-out": "Çıkış yap",
+      "settings": "Ayarlar",
+      "edit-profile": "Profili düzenle",
+      "my-store": "Mağazam",
+      "cart": "Sepetim",
+      "purchases": "Siparişlerim",
+      "view-profile": "Profili görüntüle"
+    
     }
   }
 }

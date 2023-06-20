@@ -7,7 +7,7 @@ export interface NavigationParamsList extends ParamListBase {
   [RouteNames.landing]: undefined;
   [RouteNames.discover]: undefined;
   [RouteNames.favorites]: undefined;
-  [RouteNames.profile]: undefined;
+  [RouteNames.profileMain]: undefined;
   [RouteNames.chat]: undefined;
   [RouteNames.library]: undefined;
   [RouteNames.store]: undefined;
@@ -54,7 +54,8 @@ export interface NavigationParamsList extends ParamListBase {
   [RouteNames.favorites]: undefined;
 
   //profile-stack-screen
-  [RouteNames.profile]: undefined;
+  [RouteNames.profileStack]: undefined;
+  [RouteNames.profileSettings]: undefined;
 
   [RouteNames.addresses]: {
     shipping?: boolean;

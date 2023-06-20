@@ -28,6 +28,7 @@ import {CustomDrawerContent} from './CustomDrawerContent';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {BookBottomTab, BookStackNavigation} from './BookBottomTab';
 import {BookDetail} from '../../use-cases/BookDetail/BookDetail';
+import { ProfileStackNavigation } from './stacks/StoreStackNavigation';
 const RootStack = createNativeStackNavigator<NavigationParamsList>();
 const Drawer = createDrawerNavigator();
 
@@ -43,7 +44,7 @@ export const RootStackNavigation: React.FunctionComponent = () => {
     <NavigationContainer>
       <Drawer.Navigator
         drawerContent={props => <CustomDrawerContent {...props} />}
-        initialRouteName={RouteNames.landing}
+        // initialRouteName={RouteNames.landing}
         screenOptions={{headerShown: false}}>
         {user ? (
           isInBookTab ? (
