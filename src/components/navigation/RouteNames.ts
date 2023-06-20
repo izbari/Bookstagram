@@ -1,6 +1,5 @@
 export enum RouteNames {
   //stacks
-  profileStack = 'profile-stack',
   main = 'main',
   auth = 'auth',
   landing = 'landing',
@@ -54,11 +53,18 @@ export enum RouteNames {
   orderDetails = 'order-details',
   addresses = 'addresses',
   adressEditAdd = 'address-edit-add',
-  profileEdit = 'profile-edit',
-  changePassword = 'change-password',
-  changeEmail = 'change-email',
+
   contactForm = 'contact-form',
   sellNow = 'sell-now',
   selectCategory = 'select-category',
   productInfo = 'product-info',
+
+  //profile-stack-screens
+  profileStack = 'profile-stack',
+  profileMain = 'profile-main',
+  profileEdit = 'profile-edit',
+  changePassword = 'change-password',
+  changeEmail = 'change-email',
+  profileSettings = 'profile-settings',
+  
 }

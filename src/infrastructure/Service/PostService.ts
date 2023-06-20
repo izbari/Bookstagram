@@ -183,12 +183,12 @@ export const postApi = createApi({
     }),
     getPostsByUserId: builder.query<IPost[], string>({
       queryFn: async id => {
+        console.warn('id', id);
         try {
           const posts: IPost[] = [];
-          const postRef = firestore()
-            .collection('posts')
-            .where('userId', '==', id);
-          const response = await postRef.orderBy('postTime', 'desc').get();
+          const postRef = firestore().collection('posts');
+          const response = await postRef.where('userId', '==', id).get();
+          console.warn('response', response);
           response?.forEach((doc: FirebaseFirestoreTypes.DocumentSnapshot) => {
             posts.push({...(doc.data() as IPost), id: doc.id});
           });
@@ -196,13 +196,6 @@ export const postApi = createApi({
         } catch (error) {
           return {error};
         }
-      },
-
-      providesTags: (result: any) => {
-        return [
-          {type: 'Post', id: 'LIST'},
-          ...result.map?.((post: any) => ({type: 'Post', id: post.id})),
-        ];
       },
     }),
     getMultipleUsers: builder.query<IUser[], string[]>({

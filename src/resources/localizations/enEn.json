@@ -77,6 +77,19 @@
       "pages": "pages",
       "ask-question": "Ask a question",
       "swap-offer": "Ask for swap"
+    },
+    "drawer": {
+      "home": "Home",
+      "chat": "Chat",
+      "discover": "Discover",
+      "library": "Library",
+      "store": "Store",
+      "favorites": "Favorites",
+      "profile": "Profile",
+      "settings": "Settings",
+      "sign-out": "Sign out",
+      "view-profile": "View Profile"
+  
     }
   }
 }
