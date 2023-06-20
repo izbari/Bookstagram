@@ -26,7 +26,8 @@ import {ChatStackNavigation} from './stacks/ChatStackNavigation';
 import {LandingStackNavigation} from './stacks/LandingStackNavigation';
 import {CustomDrawerContent} from './CustomDrawerContent';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
-import {BookStackNavigation} from './stacks/BookStackNavigation';
+import {BookBottomTab, BookStackNavigation} from './BookBottomTab';
+import {BookDetail} from '../../use-cases/BookDetail/BookDetail';
 const RootStack = createNativeStackNavigator<NavigationParamsList>();
 const Drawer = createDrawerNavigator();
 
@@ -46,10 +47,7 @@ export const RootStackNavigation: React.FunctionComponent = () => {
         screenOptions={{headerShown: false}}>
         {user ? (
           isInBookTab ? (
-            <Drawer.Screen
-              name={RouteNames.book}
-              component={BookStackNavigation}
-            />
+            <Drawer.Screen name={RouteNames.book} component={BookBottomTab} />
           ) : (
             <Drawer.Screen
               name={RouteNames.main}
@@ -83,6 +81,7 @@ export const RootStackNavigation: React.FunctionComponent = () => {
         <RootStack.Screen name={RouteNames.store} component={Store} />
         <RootStack.Screen name={RouteNames.singleChat} component={SingleChat} />
         <RootStack.Screen name={RouteNames.createChat} component={CreateChat} />
+        <RootStack.Screen name={RouteNames.bookDetail} component={BookDetail} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

@@ -1,9 +1,6 @@
-export const checkThumbnail = item => {
-  if (
-    typeof item.volumeInfo.imageLinks !== 'undefined' &&
-    item.volumeInfo.imageLinks.thumbnail != null
-  ) {
-    return {uri: item.volumeInfo.imageLinks.thumbnail};
+export const checkThumbnail = imageLinks => {
+  if (typeof imageLinks !== 'undefined' && imageLinks.thumbnail != null) {
+    return {uri: imageLinks.thumbnail};
   } else {
     return require('../../resources/assets/images/imagePlaceholder.jpg');
   }
@@ -52,37 +49,13 @@ export const checkPrice = item => {
     return 'Price undefined';
   }
 };
-export const genres = {
-  12: 'Adventure',
-  14: 'Fantasy',
-  16: 'Animation',
-  18: 'Drama',
-  27: 'Horror',
-  28: 'Action',
-  35: 'Comedy',
-  36: 'History',
-  37: 'Western',
-  53: 'Thriller',
-  80: 'Crime',
-  99: 'Documentary',
-  878: 'Science Fiction',
-  9648: 'Mystery',
-  10402: 'Music',
-  10749: 'Romance',
-  10751: 'Family',
-  10752: 'War',
-  10770: 'TV Movie',
-};
 
-const API_URL = `https://www.googleapis.com/books/v1/volumes?q=java&printType=books&maxResults=40&langRestrict=en&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
-export const getImagePath = (path: string) =>
-  `https://image.tmdb.org/t/p/w440_and_h660_face${path}`;
-export const getBackdropPath = (path: string) =>
-  `https://image.tmdb.org/t/p/w370_and_h556_multi_faces${path}`;
+const API_URL = `https://www.googleapis.com/books/v1/volumes?q=python&printType=books&maxResults=40&langRestrict=en&orderBy=relevance&key=AIzaSyByxO96LIpEUfdloW3nXPGQbJfarekB7t0`;
 
-export const getMovies = async () => {
+export const getBooks = async () => {
   const {items} = await fetch(API_URL).then(x => x.json());
-  const movies = items.map(({id, volumeInfo}) => ({
+  const books = items.map(({id, volumeInfo}) => ({
+    ...volumeInfo,
     key: id,
     title: volumeInfo.title,
     desc: volumeInfo.description,
@@ -90,5 +63,5 @@ export const getMovies = async () => {
     author: volumeInfo.authors,
   }));
 
-  return movies;
+  return books;
 };
