@@ -130,7 +130,7 @@ export const CreatePost: React.FunctionComponent<ICreatePostProps> = ({
           results
         </Text>
 
-        <View style={tw`py-4`}>
+        <View style={tw`py-4 gap-4`}>
           <CustomRadioButton
             id={0}
             title="Anyone"

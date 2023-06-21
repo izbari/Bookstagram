@@ -183,12 +183,10 @@ export const postApi = createApi({
     }),
     getPostsByUserId: builder.query<IPost[], string>({
       queryFn: async id => {
-        console.warn('id', id);
         try {
           const posts: IPost[] = [];
           const postRef = firestore().collection('posts');
           const response = await postRef.where('userId', '==', id).get();
-          console.warn('response', response);
           response?.forEach((doc: FirebaseFirestoreTypes.DocumentSnapshot) => {
             posts.push({...(doc.data() as IPost), id: doc.id});
           });

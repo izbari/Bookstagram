@@ -15,6 +15,7 @@ import {useHandleLikeMutation} from '../../infrastructure/Redux/Slices/PostSlice
 import {useNavigation} from '@react-navigation/native';
 import {INavigationType} from '../navigation/Types';
 import {RouteNames} from '../navigation/RouteNames';
+import {Colors} from '../../resources/constants/Colors';
 interface IPostFooterProps {
   readonly item: IPost | undefined;
   readonly setBottomSheetVisible: (postId: string | undefined) => void;
@@ -66,7 +67,11 @@ export const PostFooter: React.FunctionComponent<IPostFooterProps> = React.memo(
               style={tw`flex-row flex-1 items-center justify-between h-10 px-6`}>
               {hasLike ? (
                 <View style={tw`flex-row`}>
-                  <Ionicons name="heart-outline" size={20} color={'#FF6EA1'} />
+                  <Ionicons
+                    name="heart-outline"
+                    size={20}
+                    color={Colors.lightPurple}
+                  />
                   <Text style={tw`text-gray-500`}>
                     {props.item?.likes?.length === 0
                       ? ''
@@ -94,9 +99,13 @@ export const PostFooter: React.FunctionComponent<IPostFooterProps> = React.memo(
           <CustomButton onPress={handleLikePress} style={tw`flex-1`}>
             <View style={tw`flex-row flex-1 justify-center h-10 items-center`}>
               {props.item?.likes?.includes?.(authId) ? (
-                <Ionicons name="heart" size={25} color={'#FF6EA1'} />
+                <Ionicons name="heart" size={25} color={Colors.lightPurple} />
               ) : (
-                <Ionicons name="heart-outline" size={25} color={'#FF6EA1'} />
+                <Ionicons
+                  name="heart-outline"
+                  size={25}
+                  color={Colors.lightPurple}
+                />
               )}
               <Text style={tw`text-gray-500 ml-2 font-medium`}>
                 {t('landing.like')}
@@ -106,7 +115,7 @@ export const PostFooter: React.FunctionComponent<IPostFooterProps> = React.memo(
 
           <CustomButton onPress={handleCommentPress} style={tw`flex-1`}>
             <View style={tw`flex-row flex-1 justify-center h-10 items-center`}>
-              <Octicons name="comment" size={23} color={'#FF6EA1'} />
+              <Octicons name="comment" size={23} color={Colors.lightPurple} />
               <Text style={tw`text-gray-500 ml-2 font-medium`}>
                 {t('landing.comment')}
               </Text>
@@ -114,7 +123,11 @@ export const PostFooter: React.FunctionComponent<IPostFooterProps> = React.memo(
           </CustomButton>
           <CustomButton onPress={onSharePress} style={tw`flex-1`}>
             <View style={tw`flex-row flex-1 justify-center h-10 items-center`}>
-              <Ionicons name="share-social-outline" size={25} color="#FF6EA1" />
+              <Ionicons
+                name="share-social-outline"
+                size={25}
+                color={Colors.lightPurple}
+              />
               <Text style={tw`text-gray-500 ml-2 font-medium`}>
                 {t('landing.share')}
               </Text>

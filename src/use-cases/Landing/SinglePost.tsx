@@ -4,6 +4,9 @@ import {
   Platform,
   ScrollView,
   SafeAreaView,
+  View,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import React from 'react';
 import Animated, {
@@ -25,6 +28,9 @@ import {MemoizedShareContent} from '../../components/Landing/ShareContent';
 import {Comment} from '../../components/Landing/Comment';
 import {PostCommentInput} from '../../components/Landing/PostCommentInput';
 import {guidGenerator} from '../../infrastructure/Utils/guidGenerator';
+import {Colors} from '../../resources/constants/Colors';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import CommonHeader from '../../components/Common/CommonHeader';
 type SinglePostProps = IWithNavigation<RouteNames.singlePost>;
 export const SinglePost: React.FunctionComponent<SinglePostProps> = props => {
   const textInputRef = React.useRef();
@@ -79,11 +85,12 @@ export const SinglePost: React.FunctionComponent<SinglePostProps> = props => {
   };
 
   return (
-    <SafeAreaView style={[tw`flex-1 bg-white `]}>
+    <SafeAreaView style={[tw`flex-1 bg-white`]}>
+      <CommonHeader title={'Bookstagram'} />
       <ScrollView
         //@ts-ignore
         ref={scrollViewRef}
-        contentContainerStyle={tw`grow`}>
+        contentContainerStyle={tw`grow pb-24`}>
         <Post
           item={post}
           setBottomSheetVisible={handleBottomSheetMode}

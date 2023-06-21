@@ -44,7 +44,6 @@ export const PostCommentInput: React.FunctionComponent<
     setComment(curComment => curComment + emoji);
   };
   const hasCommentLenght = comment.length > 0;
-  const bottomInset = Platform.OS === 'ios' ? 0 : isKeyboardActive ? -12 : 0;
   return (
     <View
       style={tw`bg-white items-center justify-center  p-4  border-t border-gray-200  `}>

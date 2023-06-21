@@ -118,7 +118,7 @@ export const postSlice = postApi.injectEndpoints({
     >({
       queryFn: async ({id, userId, comment, img}) => {
         try {
-          const postRef = tion('posts').doc(id);
+          const postRef = firestore().collection('posts').doc(id);
           const response = await postRef.get();
           const post = response.data() as IPost;
           const comments = post.comments ?? [];

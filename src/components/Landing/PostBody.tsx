@@ -14,7 +14,9 @@ export const PostBody: React.FunctionComponent<IPostBodyProps> = React.memo(
       <View style={tw`flex-1`}>
         <View>
           {Boolean(props.post) && (
-            <Text style={tw`ml-2 mb-2 p-2 text-gray-800`}>{props.post}</Text>
+            <Text style={tw`ml-2 mb-2 p-2 text-gray-800`}>
+              {props.post?.trim()}
+            </Text>
           )}
         </View>
         {Boolean(props.postImg) && (
