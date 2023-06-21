@@ -2,12 +2,12 @@ import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {NavigationParamsList} from '../NavigationParamsList';
-import {RouteNames} from '../RouteNames';
-import {DiscoverBook} from '../../../use-cases/DiscoverBook/DiscoverBook';
+import {NavigationParamsList} from './NavigationParamsList';
+import {RouteNames} from './RouteNames';
+import {DiscoverBookStackNavigation} from './stacks/DiscoverBookStackNavigation.tsx';
 
 const BookStack = createBottomTabNavigator<NavigationParamsList>();
-export const BookStackNavigation: React.FunctionComponent = () => {
+export const BookBottomTab: React.FunctionComponent = () => {
   return (
     <BookStack.Navigator
       screenOptions={{
@@ -16,8 +16,8 @@ export const BookStackNavigation: React.FunctionComponent = () => {
       }}
       initialRouteName={RouteNames.discoverBook}>
       <BookStack.Screen
-        name={RouteNames.landing}
-        component={DiscoverBook}
+        name={RouteNames.discoverBook}
+        component={DiscoverBookStackNavigation}
         options={{
           headerShown: false,
         }}

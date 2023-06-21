@@ -15,6 +15,7 @@ export enum RouteNames {
   discoverBook = 'discover-book',
   book = 'book',
   bookDetail = 'book-detail',
+  addCategory = 'add-category',
   //auth-screens
   login = 'login',
   register = 'register',

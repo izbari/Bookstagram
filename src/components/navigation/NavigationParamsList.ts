@@ -28,7 +28,21 @@ export interface NavigationParamsList extends ParamListBase {
     categories: string[];
   };
   [RouteNames.bookDetail]: {
-    id: string;
+    item: {
+      infoLink: string;
+      averageRating: any;
+      categories: any;
+      authors: any;
+      ratingsCount: string;
+      description: any;
+      publisher: ReactNode;
+      accessInfo: any;
+      key: string;
+      title: string;
+      desc: string;
+      imageURL: string;
+      author: string[];
+    };
   };
   [RouteNames.singleChat]: {
     targetUserId: string;
