@@ -67,7 +67,30 @@ export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           {!isInBookTab ? 'Go to Books' : 'Go to Social Media'}
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={tw` bg-[${Colors.lightPurple}] rounded-md p-2 mx-4 flex-row items-center mt-3`}
+        onPress={() => {
+          props.navigation.closeDrawer();
+          dispatch(setCurrentTab(!isInBookTab));
+          props.navigation.navigate(
+            isInBookTab ? RouteNames.landing : RouteNames.store,
+          );
+        }}>
+        <Ionicons
+          name={isInBookTab ? 'storefront-outline' : 'storefront-outline'}
+          color="white"
+          size={30}
+          style={tw`mx-4`}
+        />
+        <Text
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          style={tw`text-center text-white font-bold`}>
+          {!isInBookTab ? 'Go to Store' : 'Go to Social Media'}
+        </Text>
+      </TouchableOpacity>
       <View style={tw`bg-gray-200 h-px w-full m-4`}></View>
+
 
       {/* <DrawerItemList {...props} /> */}
       <DrawerItem

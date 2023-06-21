@@ -4,21 +4,27 @@ import {
   Platform,
   ScrollView,
   SafeAreaView,
+  View,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import React from 'react';
 import Animated, {
   useAnimatedStyle,
   useAnimatedKeyboard,
 } from 'react-native-reanimated';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {IWithNavigation} from '../../components/navigation/Types';
 import {RouteNames} from '../../components/navigation/RouteNames';
 import {Post} from '../../components/Landing/Post';
+import {Colors} from '../../resources/constants/Colors';
 import {
   IPost,
   useGetPostsQuery,
   useHandleAddCommentMutation,
 } from '../../infrastructure/Service/PostService';
 import tw from 'twrnc';
+import FastImage from 'react-native-fast-image';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {MemoizedShareContent} from '../../components/Landing/ShareContent';
@@ -80,6 +86,27 @@ export const SinglePost: React.FunctionComponent<SinglePostProps> = props => {
 
   return (
     <SafeAreaView style={[tw`flex-1 bg-white `]}>
+      <View
+        style={{
+          flexDirection: 'row',
+          paddingVertical: 8,
+          paddingHorizontal: 16,
+          backgroundColor: Colors.lightPurple,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity onPress={() => props.navigation?.goBack()}>
+          <Ionicons name="chevron-back" size={30} color="white" />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: 'white',
+          }}>
+          Share
+        </Text>
+      </View>
       <ScrollView
         //@ts-ignore
         ref={scrollViewRef}

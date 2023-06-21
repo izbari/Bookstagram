@@ -66,5 +66,8 @@ export enum RouteNames {
   changePassword = 'change-password',
   changeEmail = 'change-email',
   profileSettings = 'profile-settings',
+
+  //store-stack-screens
+  storeStack = 'store-stack',
   
 }
