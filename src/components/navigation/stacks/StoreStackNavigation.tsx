@@ -2,22 +2,22 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import * as React from 'react';
 import {NavigationParamsList} from '../NavigationParamsList';
 import {RouteNames} from '../RouteNames';
-import {Profile} from '../../../use-cases/Profile/Profile';
 import {MyStore} from '../../../use-cases/MyStore/MyStore';
 import {SellNow} from '../../../use-cases/MyStore/SellNow';
 import {SelectCategory} from '../../../use-cases/MyStore/SelectCategory';
+import { Store } from '../../../use-cases/MyStore/Store';
 
-const ProfileStack = createNativeStackNavigator<NavigationParamsList>();
-export const ProfileStackNavigation: React.FunctionComponent = () => {
+const StoreStack = createNativeStackNavigator<NavigationParamsList>();
+export const StoreStackNavigation: React.FunctionComponent = () => {
   return (
-    <ProfileStack.Navigator
+    <StoreStack.Navigator
       initialRouteName={RouteNames.sellNow}
       screenOptions={{headerShown: false}}>
-      <ProfileStack.Screen name={RouteNames.profile} component={Profile} />
-      <ProfileStack.Screen name={RouteNames.myStore} component={MyStore} />
-      <ProfileStack.Screen name={RouteNames.sellNow} component={SellNow} />
-      <ProfileStack.Screen name={RouteNames.selectCategory} component={SelectCategory} />
+      <StoreStack.Screen name={RouteNames.myStore} component={MyStore} />
+      <StoreStack.Screen name={RouteNames.sellNow} component={SellNow} />
+      <StoreStack.Screen name={RouteNames.selectCategory} component={SelectCategory} />
+      <StoreStack.Screen name={RouteNames.store} component={Store} />
 
-    </ProfileStack.Navigator>
+    </StoreStack.Navigator>
   );
 };

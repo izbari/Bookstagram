@@ -89,7 +89,9 @@ export const Profile: React.FunctionComponent<IProfileMainProps> = props => {
       <FlatList
         data={posts}
         renderItem={({item}) => (
-          <TouchableOpacity style={tw`flex-row border border-gray-200`}>
+          <TouchableOpacity style={tw`flex-row border border-gray-200`}
+          onPress={() => props.navigation.navigate(RouteNames.singlePost, {id: item?.id})}
+          >
             <Image
                 resizeMode="cover"
                 style={tw`w-30 h-30`}
