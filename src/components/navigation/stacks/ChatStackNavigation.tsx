@@ -9,7 +9,7 @@ export const ChatStackNavigation: React.FunctionComponent = () => {
   return (
     <ChatStack.Navigator
       initialRouteName={RouteNames.chat}
-      screenOptions={{headerShown: false}}>
+      screenOptions={{headerShown: false, animation: 'slide_from_left'}}>
       <ChatStack.Screen name={RouteNames.chat} component={Chat} />
     </ChatStack.Navigator>
   );

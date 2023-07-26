@@ -7,6 +7,7 @@ import {IWithNavigation} from '../../components/navigation/Types';
 import {FlashList} from '@shopify/flash-list';
 import {useTranslation} from 'react-i18next';
 import {Colors} from '../../resources/constants/Colors';
+import CommonHeader from '../../components/Common/CommonHeader';
 type ISelectCategoryProps = IWithNavigation<RouteNames.selectCategory>;
 
 export const categoryList = {
@@ -53,26 +54,24 @@ export const SelectCategory: React.FunctionComponent<
 
   return (
     <View style={tw`flex-1`}>
-      <View
-        style={tw`h-15 bg-white justify-center shadow-2xl z-1 items-center`}>
-        <TouchableOpacity
-          style={tw`absolute top-5 right-7 z-2`}
-          onPress={() =>
-            props.navigation.navigate(RouteNames.sellNow, {
-              categories: Object.keys(selectedCategories).filter(
-                item => selectedCategories[item as keyof typeof categoryList],
-              ),
-            })
-          }>
-          <Text
-            style={tw`text-[${Colors.darkPurple}] text-center font-semibold`}>
-            Done
-          </Text>
-        </TouchableOpacity>
-        <Text style={tw` text-black text-center text-lg font-semibold`}>
-          {t('product-info.category')}
-        </Text>
-      </View>
+      <CommonHeader
+        title={t('product-info.category')}
+        right={
+          <TouchableOpacity
+            style={tw`absolute right-4`}
+            onPress={() =>
+              props.navigation.navigate(RouteNames.sellNow, {
+                categories: Object.keys(selectedCategories).filter(
+                  item => selectedCategories[item as keyof typeof categoryList],
+                ),
+              })
+            }>
+            <Text style={tw`text-white text-lg text-center font-bold`}>
+              Done
+            </Text>
+          </TouchableOpacity>
+        }
+      />
       <FlashList
         data={Object.keys(categoryList)}
         estimatedItemSize={24}

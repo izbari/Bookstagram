@@ -13,10 +13,10 @@ export const Header: React.FunctionComponent<IHeader> = props => {
   return (
     <View
       style={[
-        tw` bg-[${Colors.lightPurple}] justify-between flex-row items-center px-4 `,
-        {height: getStatusBarHeight() * 2.2},
+        tw` h-14 bg-[${Colors.lightPurple}] justify-between flex-row items-center px-4 `,
+        ,
       ]}>
-      <View style={tw`items-center justify-center absolute w-full`}>
+      <View style={tw`items-center justify-center absolute w-full bg-red-400`}>
         <Text style={tw`text-white font-bold`}>Messages</Text>
       </View>
       <TouchableOpacity

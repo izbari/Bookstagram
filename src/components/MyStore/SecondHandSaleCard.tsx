@@ -11,9 +11,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../resources/constants/Colors';
 import tw from 'twrnc';
 import {useTranslation} from 'react-i18next';
-import { RouteNames } from '../navigation/RouteNames';
-import { INavigationType, IWithNavigation } from '../navigation/Types';
-import { useNavigation } from '@react-navigation/native';
+import {INavigationType} from '../navigation/Types';
+import {useNavigation} from '@react-navigation/native';
+import isEqual from 'react-fast-compare';
 const {width} = Dimensions.get('window');
 
 interface ISeconHandSaleCardProps {
@@ -27,44 +27,49 @@ interface ISeconHandSaleCardProps {
   readonly onPress?: () => void;
 }
 
-export const SecondHandSaleCard: React.FunctionComponent<
-  ISeconHandSaleCardProps
-> = props => {
-  const {t} = useTranslation();
-  const navigation = useNavigation<INavigationType>();
-  return (
-    <>
-      <TouchableOpacity style={styles.container} onPress={props.onPress}>
-        <ImageBackground
-          source={{uri: props.image}}
-          style={styles.image}
-          resizeMode="cover"
-          imageStyle={tw`rounded-md`}>
-          {!props.isMine && (
-            <TouchableOpacity onPress={props.onFavoritePress} style={styles.favoriteContainer}>
-              <Icon name={props.isFavorite ? "heart" : "heart-outline"} size={20} color={Colors.lightPurple} />
-            </TouchableOpacity>
-          )}
+export const SecondHandSaleCard: React.FunctionComponent<ISeconHandSaleCardProps> =
+  React.memo(props => {
+    const {t} = useTranslation();
+    const navigation = useNavigation<INavigationType>();
+    return (
+      <View style={{flex: 1}}>
+        <TouchableOpacity style={styles.container} onPress={props.onPress}>
+          <ImageBackground
+            source={{uri: props.image}}
+            style={styles.image}
+            resizeMode="cover"
+            imageStyle={tw`rounded-md`}>
+            {!props.isMine && (
+              <TouchableOpacity
+                onPress={() => props.onFavoritePress(props.id)}
+                style={styles.favoriteContainer}>
+                <Icon
+                  name={props.isFavorite ? 'heart' : 'heart-outline'}
+                  size={20}
+                  color={Colors.lightPurple}
+                />
+              </TouchableOpacity>
+            )}
 
-          {props.isSold && (
-            <Text style={styles.soldText}>{t('my-store.sold-text')}</Text>
-          )}
-        </ImageBackground>
+            {props.isSold && (
+              <Text style={styles.soldText}>{t('my-store.sold-text')}</Text>
+            )}
+          </ImageBackground>
 
-        {props.isMine ? (
-          <View style={tw`flex-row mt-1`}>
-            <Text style={styles.title}>{props.title}</Text>
-            <Icon name="heart" size={16} color={Colors.lightPurple} />
-            <Text style={styles.favoriteCount}>10</Text>
-          </View>
-        ) : (
-          <Text style={[styles.title, {marginTop: 5}]}>{props.title}</Text>
-        )}
-        <Text style={styles.price}>{props.price} TL</Text>
-      </TouchableOpacity>
-    </>
-  );
-};
+          {props.isMine ? (
+            <View style={tw`flex-row mt-1`}>
+              <Text style={styles.title}>{props.title}</Text>
+              <Icon name="heart" size={16} color={Colors.lightPurple} />
+              <Text style={styles.favoriteCount}>10</Text>
+            </View>
+          ) : (
+            <Text style={[styles.title, {marginTop: 5}]}>{props.title}</Text>
+          )}
+          <Text style={styles.price}>{props.price} TL</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }, isEqual);
 
 const styles = StyleSheet.create({
   container: {
@@ -72,10 +77,9 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     borderWidth: 1,
     padding: 10,
-    marginHorizontal: 10,
-    borderRadius: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
     marginTop: 10,
-    flex: 1,
   },
   image: {
     height: 190,
@@ -116,15 +120,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: 20,
+    paddingVertical: 5,
     backgroundColor: 'black',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
     textAlign: 'center',
     fontSize: 11,
     color: 'white',
     fontWeight: '400',
-    textAlignVertical: 'center',
   },
   titleAndFavoriteContainer: {
     flexDirection: 'row',

@@ -10,36 +10,50 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Image,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch, useSelector} from 'react-redux';
+import Image from 'react-native-fast-image';
 import {WebView} from 'react-native-webview';
 import {Header} from '../../components/BookDetail/Header';
 import {Colors} from '../../resources/constants/Colors';
-
+import {useAppSelector} from '../../infrastructure/Redux/Hooks';
+import database from '@react-native-firebase/database';
 const {width} = Dimensions.get('window');
+export const RenderStar = props => {
+  let bookStar = props.averageRating;
+  const star = [];
+  for (let i = 0; i < 5; i++) {
+    if (bookStar === undefined || bookStar === null) {
+      bookStar = 0;
+    }
+    star.push(
+      <Ionicons
+        key={i}
+        name={
+          bookStar === 0 ? 'star-outline' : bookStar >= 1 ? 'star' : 'star-half'
+        }
+        size={20}
+        color={bookStar > 0 ? '#FDCF3E' : '#E5E5E5'}
+      />,
+    );
+    bookStar = bookStar !== 0 ? bookStar - 1 : 0;
+  }
+  return star;
+};
 type IBookDetail = IWithNavigation<RouteNames.bookDetail>;
 export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
-  const book = props.route.params.item;
-  const dispatch = useDispatch();
-  const list = useSelector(store => store.favList);
+  const book = props.route.params?.item
+    ? {...props.route.params?.item, ...props.route.params?.item.volumeInfo}
+    : props.route.params?.item;
+  const user = useAppSelector(store => store.user.user);
   console.warn(JSON.stringify(book, null, 2));
 
   const [read, setRead] = React.useState(false);
-  const favHandler = item => {
-    if (list.includes(item)) {
-      dispatch({type: 'REMOVE_FAVORITE', payload: {rmFavBook: item}});
-    } else {
-      dispatch({type: 'ADD_FAVORITE', payload: {favCard: item}});
-    }
-  };
-  const cartHandler = item => {
-    dispatch({type: 'ADD_CART', payload: {cartCard: item}});
-  };
-  const onShare = async () => {
+
+  const handleShare = async () => {
     try {
       const result = await Share.share({
         message: book.infoLink,
@@ -54,45 +68,36 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
         // dismissed
       }
     } catch (error) {
-      alert(error.message);
+      Alert.alert('Something went wrong...');
     }
   };
-  const RenderStart = () => {
-    let bookStar = book.averageRating;
-    const star = [];
-    for (let i = 0; i < 5; i++) {
-      console.warn(i, '', bookStar);
-      if (bookStar === undefined || bookStar === null) {
-        bookStar = 0;
-      }
-      star.push(
-        <Ionicons
-          key={i}
-          name={
-            bookStar === 0
-              ? 'star-outline'
-              : bookStar >= 1
-              ? 'star'
-              : 'star-half'
-          }
-          size={20}
-          color={bookStar > 0 ? '#FDCF3E' : '#E5E5E5'}
-        />,
-      );
-      bookStar = bookStar !== 0 ? bookStar - 1 : 0;
-    }
-    return star;
-  };
+
   const [readMore, setReadMore] = React.useState(false);
+  const handleLike = () => {
+    let favoriteBooks = user?.favoriteBooks ?? [];
+    if (favoriteBooks?.includes(book.id)) {
+      favoriteBooks = favoriteBooks.filter(item => item !== book.id);
+    } else {
+      favoriteBooks = [...favoriteBooks, book.id];
+    }
+    database().ref(`users/${user?.id}`).update({favoriteBooks});
+  };
+  console.warn(JSON.stringify(book, null, 2));
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Header title={book.title} />
+      <Header
+        title={book.title}
+        handleLike={handleLike}
+        isLiked={user?.favoriteBooks?.includes(book?.id)}
+        onShare={handleShare}
+        setRead={setRead}
+      />
       {!read ? (
         <ScrollView>
           <View
             style={{
               flex: 1,
-
               padding: 5,
             }}>
             <View
@@ -101,29 +106,31 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
                 flex: 1,
               }}>
               <Image
-                source={{uri: book.imageURL.replace('http', 'https')}}
+                source={{
+                  uri: book?.imageLinks.thumbnail?.replace?.('http', 'https'),
+                }}
+                resizeMode="contain"
                 style={{
                   alignSelf: 'center',
                   height: 300,
                   width: width,
-                  resizeMode: 'contain',
                   margin: 10,
                   borderRadius: 3,
                 }}
               />
               <Text style={tw`text-gray-500 text-center `}>
-                {book.categories?.join(', ')}
+                {book?.categories?.join(', ')}
               </Text>
 
               <View style={tw`px-4 items-center`}>
                 <Text style={tw`text-black text-center text-lg font-semibold`}>
-                  {book.title}
+                  {book?.title}
                 </Text>
                 <Text style={tw`text-gray-600`}>
                   {book?.authors?.join(', ')}
                 </Text>
                 <View style={tw`flex-row items-center self-center`}>
-                  <RenderStart />
+                  <RenderStar book={book.averageRating} />
                   <Text style={tw`ml-0.5  mt-0.75 text-gray-400 `}>
                     ({book?.ratingsCount ?? 0})
                   </Text>
@@ -147,7 +154,7 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
                       justifyContent: 'center',
                       marginRight: 10,
                     }}
-                    onPress={() => cartHandler(book)}>
+                    onPress={handleLike}>
                     <View>
                       <Text
                         style={{
@@ -156,7 +163,9 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
                           textAlign: 'center',
                           fontWeight: 'bold',
                         }}>
-                        Add to cart
+                        {!user?.favoriteBooks?.includes(book?.id)
+                          ? 'Add to Favorite'
+                          : 'Remove from Favorite'}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -197,7 +206,7 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
                 <Text
                   numberOfLines={readMore ? undefined : 5}
                   style={tw`italic `}>
-                  {book.description.trim()}
+                  {book?.description?.trim?.()}
                 </Text>
                 <Text
                   onPress={() => setReadMore(curr => !curr)}
@@ -217,7 +226,7 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
                     <Text style={tw`bg-purple-100 mr-6 py-4 px-4 min-w-25`}>
                       Publisher
                     </Text>
-                    <Text style={tw``}>{book.publisher}</Text>
+                    <Text style={tw``}>{book?.publisher}</Text>
                   </View>
                   <View style={tw`h-0.5 bg-gray-300  mx-4`} />
 
@@ -225,7 +234,7 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
                     <Text style={tw`bg-purple-100 mr-6 py-4 px-4 min-w-25	`}>
                       Language
                     </Text>
-                    <Text style={tw``}>{book.language}</Text>
+                    <Text style={tw``}>{book?.language}</Text>
                   </View>
                   <View style={tw`h-0.5 bg-gray-300  mx-4`} />
 
@@ -233,7 +242,7 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
                     <Text style={tw`bg-purple-100 mr-6 py-4 px-4  min-w-25`}>
                       {'Page Count'.replace(' ', '\n')}
                     </Text>
-                    <Text style={tw``}>{book.pageCount}</Text>
+                    <Text style={tw``}>{book?.pageCount}</Text>
                   </View>
                   <View style={tw`h-0.5 bg-gray-300 mx-4`} />
                 </View>
@@ -242,7 +251,9 @@ export const BookDetail: React.FunctionComponent<IBookDetail> = props => {
           </View>
         </ScrollView>
       ) : (
-        <WebView source={{uri: book.accessInfo.webReaderLink}} />
+        book?.saleInfo?.isEbook && (
+          <WebView source={{uri: book?.accessInfo?.webReaderLink}} />
+        )
       )}
     </SafeAreaView>
   );

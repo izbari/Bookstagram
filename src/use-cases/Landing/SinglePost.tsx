@@ -1,38 +1,24 @@
-import {
-  Dimensions,
-  FlatList,
-  Platform,
-  ScrollView,
-  SafeAreaView,
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import {FlatList, ScrollView, SafeAreaView} from 'react-native';
 import React from 'react';
 import Animated, {
   useAnimatedStyle,
   useAnimatedKeyboard,
 } from 'react-native-reanimated';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {IWithNavigation} from '../../components/navigation/Types';
 import {RouteNames} from '../../components/navigation/RouteNames';
 import {Post} from '../../components/Landing/Post';
-import {Colors} from '../../resources/constants/Colors';
 import {
   IPost,
   useGetPostsQuery,
   useHandleAddCommentMutation,
 } from '../../infrastructure/Service/PostService';
 import tw from 'twrnc';
-import FastImage from 'react-native-fast-image';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {MemoizedShareContent} from '../../components/Landing/ShareContent';
 import {Comment} from '../../components/Landing/Comment';
 import {PostCommentInput} from '../../components/Landing/PostCommentInput';
 import {guidGenerator} from '../../infrastructure/Utils/guidGenerator';
-import {Colors} from '../../resources/constants/Colors';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommonHeader from '../../components/Common/CommonHeader';
 type SinglePostProps = IWithNavigation<RouteNames.singlePost>;
 export const SinglePost: React.FunctionComponent<SinglePostProps> = props => {

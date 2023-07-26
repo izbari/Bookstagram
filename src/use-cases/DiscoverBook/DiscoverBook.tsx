@@ -9,6 +9,7 @@ import {
   Text,
   Animated,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Image from 'react-native-fast-image';
 import tw from 'twrnc';
@@ -31,19 +32,21 @@ export const DiscoverBook: React.FunctionComponent<IDiscoverBook> = props => {
   const user = useAppSelector(state => state.user.user);
   const [books, setBooks] = React.useState([]);
   const [trending, setTrending] = React.useState([]);
-
+  const [isLoading, setIsLoading] = React.useState(false);
   const scrollX = React.useRef(new Animated.Value(0)).current;
   React.useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const books = await getBooks();
-      const trend = await getBooks();
+      const trend = books;
       // Add empty items to create fake space
       // [empty_item, ...movies, empty_item]
       setTrending(trend);
       setBooks([{key: 'empty-left'}, ...books, {key: 'empty-right'}]);
+      setIsLoading(false);
     };
 
-    if (books.length === 0) {
+    if (books?.length === 0) {
       fetchData(books);
     }
   }, [books]);
@@ -149,12 +152,24 @@ export const DiscoverBook: React.FunctionComponent<IDiscoverBook> = props => {
             Our Top Picks
           </Text>
         </View>
-        <CustomFlatlist />
+        {isLoading ? (
+          <View style={tw`flex-1 items-center justify-center`}>
+            <ActivityIndicator size="small" color={'white'} />
+          </View>
+        ) : (
+          <CustomFlatlist />
+        )}
       </View>
 
       <ScrollView nestedScrollEnabled style={{flex: 0.5}}>
         {/* Categories */}
-        <Categories />
+        {isLoading ? (
+          <View style={tw`flex-1 items-center justify-center`}>
+            <ActivityIndicator size="small" color={Colors.lightPurple} />
+          </View>
+        ) : (
+          <Categories />
+        )}
         {/* Trending Books Section */}
         <TrendBookItems trending={trending as any[]} />
       </ScrollView>

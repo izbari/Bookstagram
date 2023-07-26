@@ -18,12 +18,13 @@ export const useAuth = (): IReturnType => {
   React.useEffect(() => {
     try {
       const subscriber = auth().onAuthStateChanged(authUser => {
+        console.warn(authUser);
         if (authUser) {
           database()
             .ref('users/' + authUser.uid)
             .on('value', snapshot => {
               const user = {
-                ...snapshot.val(),
+                ...snapshot?.val(),
                 products: Object.values(snapshot.val().products ?? {}),
               };
               if (user) {
@@ -33,17 +34,14 @@ export const useAuth = (): IReturnType => {
                 setIsLoggedIn(false);
               }
             });
-          // getUserData(authUser.uid)
-          //   .unwrap()
-          //   .then(() => {
-          //     setIsLoggedIn(true);
-          //   });
+        } else {
+          setIsLoggedIn(false);
         }
       });
       return subscriber; // unsubscribe on unmount
     } catch (error) {
       console.warn('useAuth:', error);
     }
-  }, [getUserData]);
+  }, [dispatch, getUserData]);
   return {isLoading, isLoggedIn};
 };

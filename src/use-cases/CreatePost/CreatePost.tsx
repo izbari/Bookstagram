@@ -37,6 +37,7 @@ import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {IWithNavigation} from '../../components/navigation/Types';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useKeyboardVisible} from '../../infrastructure/Utils/useKeyboardVisible';
+import {Colors} from '../../resources/constants/Colors';
 const {width} = Dimensions.get('window');
 const VISIBILITIES = {
   0: 'Anyone',
@@ -111,9 +112,11 @@ export const CreatePost: React.FunctionComponent<ICreatePostProps> = ({
         </View>
         <View
           style={tw`w-6 h-6 rounded-full self-center border-2 justify-center items-center ${
-            selected ? 'border-[#FF6EA1]' : 'border-gray-600'
+            selected ? `border-[${Colors.lightPurple}]` : 'border-gray-600'
           }`}>
-          {selected && <View style={tw`w-4 h-4 rounded-full bg-[#FF6EA1]`} />}
+          {selected && (
+            <View style={tw`w-4 h-4 rounded-full bg-[${Colors.lightPurple}]`} />
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -175,7 +178,6 @@ export const CreatePost: React.FunctionComponent<ICreatePostProps> = ({
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          buttonColor="white"
           textColor="lightgray"
           contentStyle={tw`justify-start`}
           style={tw`rounded-0`}
@@ -271,7 +273,6 @@ export const CreatePost: React.FunctionComponent<ICreatePostProps> = ({
       cropping: true,
     })
       .then(image => {
-        console.log(image);
         const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
         setImage(imageUri);
         console.log('image pathi', image.path);

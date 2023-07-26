@@ -39,7 +39,7 @@ const SharePostRow: React.FunctionComponent<ISharePostRowProps> = props => {
           _id: guidGenerator(),
           // postText: post.post ? post.post : '',
           createdAt: new Date(),
-          postImage: post.postImg ? post.postImg : undefined,
+          postImage: post?.postImg ? post?.postImg : null,
           user: {
             _id: authUser.id,
             name: authUser.name + ' ' + authUser.lastName,

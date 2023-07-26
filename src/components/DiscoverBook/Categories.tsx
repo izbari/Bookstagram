@@ -15,7 +15,7 @@ const Categories: React.FunctionComponent<ICategories> = props => {
       .ref(`users/${user?.id}/categories`)
       .on('value', snapshot => {
         const data = snapshot.val();
-        getCategoryPhotos(data).then(_data => {
+        getCategoryPhotos(data ?? []).then(_data => {
           setUserCategories(_data);
         });
       });

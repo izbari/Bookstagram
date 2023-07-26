@@ -1,4 +1,9 @@
-import {ActivityIndicator, RefreshControl, FlatList} from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import React from 'react';
 import tw from 'twrnc';
 import {PostSkeleton} from '../../components/Landing/PostSkeleton';
@@ -10,9 +15,11 @@ import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {Colors} from '../../resources/constants/Colors';
 import {MemoizedShareContent} from './ShareContent';
 import {View} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 interface ILandingPageProps {
   readonly navigation: INavigationType;
 }
+const {height} = Dimensions.get('window');
 export const LandingPage: React.FunctionComponent<
   ILandingPageProps
 > = props => {
@@ -24,6 +31,7 @@ export const LandingPage: React.FunctionComponent<
   //bottom sheet variables
   const bottomSheetRef = React.useRef<BottomSheet>(null);
   const snapPoints = React.useMemo(() => ['50%', '100%'], []);
+  console.warn(authUser?.fallowing.length);
   const handleBottomSheetMode = (postId: string | undefined) => {
     postId && setSelectedPostId(postId);
     const bottomSheetIndex = authUser?.fallowing
@@ -33,7 +41,14 @@ export const LandingPage: React.FunctionComponent<
       : 0;
     bottomSheetRef.current?.snapToIndex(bottomSheetIndex);
   };
-  const fallowings = (authUser?.fallowing ?? [])?.slice(-1);
+  const fallowings = authUser?.fallowing ?? [];
+  const isFocused = useIsFocused();
+  console.log(authUser?.fallowing);
+  React.useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [authUser?.id, isFocused, refetch]);
   if (isLoading) {
     return <PostSkeleton />;
   }
@@ -72,6 +87,7 @@ export const LandingPage: React.FunctionComponent<
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
+        containerHeight={height}
         // eslint-disable-next-line react/no-unstable-nested-components
         backdropComponent={backdropProps => (
           <BottomSheetBackdrop {...backdropProps} disappearsOnIndex={-1} />

@@ -104,4 +104,9 @@ export const productApi = createApi({
     }),
   }),
 });
-export const {useGetProductByIdQuery, useGetProductsByUserIdQuery, useGetAllProductsQuery, useGetProductsByCategoryQuery} = productApi;
+export const {
+  useGetProductByIdQuery,
+  useGetProductsByUserIdQuery,
+  useGetAllProductsQuery,
+  useGetProductsByCategoryQuery,
+} = productApi;

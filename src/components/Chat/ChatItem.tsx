@@ -13,6 +13,8 @@ interface IChatItemProps {
   chatId: string;
   lastMessage: string;
   lastMessageDate: string;
+  isSharedContent: boolean;
+  isLastMessageFromMe: boolean;
 }
 const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
   const navigation = useNavigation<INavigationType>();
@@ -31,7 +33,6 @@ const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
       chatId: props.chatId,
     });
   };
-
   return (
     <View style={tw``}>
       {isLoading ? (
@@ -55,7 +56,11 @@ const ChatItem: React.FunctionComponent<IChatItemProps> = props => {
               <Text
                 numberOfLines={1}
                 style={tw`text-gray-500 pt-0.5 pb-1 text-xs italic`}>
-                {props.lastMessage}
+                {props.isSharedContent && !props.isLastMessageFromMe
+                  ? `${chatUser.name + ' ' + chatUser.lastName} shared a post`
+                  : props.isSharedContent
+                  ? 'You shared a post'
+                  : props.lastMessage}
               </Text>
             </View>
             <View style={tw`items-end flex-1 self-end`}>

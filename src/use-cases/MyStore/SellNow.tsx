@@ -22,11 +22,12 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {RouteNames} from '../../components/navigation/RouteNames';
 import {IWithNavigation} from '../../components/navigation/Types';
 import firestore from '@react-native-firebase/firestore';
-import database, { FirebaseDatabaseTypes} from '@react-native-firebase/database';
+import database, {FirebaseDatabaseTypes} from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import {guidGenerator} from '../../infrastructure/Utils/guidGenerator';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import { useAppSelector } from '../../infrastructure/Redux/Hooks';
+import {useAppSelector} from '../../infrastructure/Redux/Hooks';
+import CommonHeader from '../../components/Common/CommonHeader';
 
 type ISellNowProps = IWithNavigation<RouteNames.sellNow>;
 
@@ -77,7 +78,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
     })
       .then(image => {
         console.log(image);
-        const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
+        const imageUri = Platform.OS !== 'ios' ? image.sourceURL : image.path;
         setProductImages([...productImages, imageUri]);
         console.log('productImages', productImages);
       })
@@ -108,9 +109,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
       });
       const photoUrls = await Promise.all(uploadPromises);
       // photoUrls.length > 0 &&s
-       handleSaveProduct(photoUrls);
+      handleSaveProduct(photoUrls);
     } catch (error) {
-      Alert.alert('Error', error as string);
+      Alert.alert(('Error' + error) as string);
     }
   };
 
@@ -137,7 +138,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
         props.navigation.navigate(RouteNames.productInfo, {
           productId: docRef.id,
         });
-        database().ref('users/' + user?.id + '/products').push(docRef.id);
+        database()
+          .ref('users/' + user?.id + '/products')
+          .push(docRef.id);
       })
       .catch(error => {
         console.log('Error adding document: ', error);
@@ -145,7 +148,7 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
   };
   return (
     <View style={tw`flex-1`}>
-      <View style={tw`bg-white shadow-lg h-[10%] items-center justify-center `}>
+      {/* <View style={tw`bg-white shadow-lg h-[10%] items-center justify-center `}>
         <TouchableOpacity
           style={tw`absolute top-0 left-0 h-full justify-center pl-1`}
           onPress={() => {
@@ -158,7 +161,8 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
         <Text style={tw`font-semibold text-base text-black`}>
           {t('product-info.product-info')}
         </Text>
-      </View>
+      </View> */}
+      <CommonHeader title={t('product-info.product-info')} />
       <KeyboardAwareScrollView contentContainerStyle={tw`mb-12`}>
         <View>
           <View style={styles.photosHeader}>
@@ -181,7 +185,9 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
               renderItem={({item}) => <PhotoCard image={item} />}
               showsHorizontalScrollIndicator={true}
               contentContainerStyle={{alignItems: 'center', padding: 10}}
-              ListFooterComponent={productImages.length < 10 && <PhotoCardFooter />}
+              ListFooterComponent={
+                productImages.length < 10 && <PhotoCardFooter />
+              }
               ListFooterComponentStyle={{marginRight: 10}}
             />
           </View>
@@ -321,8 +327,8 @@ export const SellNow: React.FunctionComponent<ISellNowProps> = props => {
           <Text>{t('product-info.book-swap-text')}</Text>
           <Switch
             trackColor={{false: 'lightgray', true: Colors.lightPurple}}
-            thumbColor={isEnabled ? Colors.darkPurple : 'gray'}
-            ios_backgroundColor={Colors.darkPurple}
+            thumbColor={isEnabled ? 'white' : '#ededed'}
+            ios_backgroundColor={'white'}
             onValueChange={toggleSwitch}
             value={isEnabled}
           />

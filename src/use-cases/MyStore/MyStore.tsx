@@ -1,96 +1,43 @@
-import {
-  Text,
-  View,
-  Image,
-  useWindowDimensions,
-  TouchableOpacity,
-} from 'react-native';
+/* eslint-disable react/no-unstable-nested-components */
+import {Text, View, Image, TouchableOpacity} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
-import React from 'react';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../resources/constants/Colors';
 import tw from 'twrnc';
 import {useTranslation} from 'react-i18next';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import {SecondHandSaleCard} from '../../components/MyStore/SecondHandSaleCard';
 import {RouteNames} from '../../components/navigation/RouteNames';
-import {IWithNavigation} from '../../components/navigation/Types';
+import {
+  INavigationType,
+  IWithNavigation,
+} from '../../components/navigation/Types';
 import {useGetProductsByUserIdQuery} from '../../infrastructure/Service/ProductService';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
+import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
+import {useNavigation} from '@react-navigation/native';
+import CommonHeader from '../../components/Common/CommonHeader';
 type IMyStoreProps = IWithNavigation<RouteNames.myStore>;
-
-const books = [
-  {
-    title: 'Java',
-    price: '10 TL',
-    image:
-      'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  },
-  {
-    title: 'Jotform',
-    price: '20 TL',
-    image:
-      'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  },
-  {
-    title: 'Harry Potter',
-    price: '30 TL',
-    image:
-      'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  },
-  {
-    title: 'Fahrenheit 451',
-    price: '40 TL',
-    image:
-      'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=',
-  },
-];
-
-export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
-  const {t} = useTranslation();
-  const user = useAppSelector(store => store.user.user);
-  const {data : userProducts, isLoading} = useGetProductsByUserIdQuery(user?.id, {
-    skip: !user?.id,
-  });
-  const [favorite, setFavorite] = React.useState(false);
-  const layout = useWindowDimensions();
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: 'first', title: t('my-store.store')},
-    {key: 'second', title: t('my-store.favorites')},
-    {key: 'third', title: t('my-store.sold')},
-  ]);
-
-  const StoreTabScreen = () => (
+const FavoritesTabScreen = React.memo(props => {
+  const navigation = useNavigation<INavigationType>();
+  return (
     <FlashList
       numColumns={2}
-      data={userProducts}
+      data={props.favoriteProducts}
       renderItem={({item}) => (
         <SecondHandSaleCard
-          title={item?.productHeader}
-          price={item?.price}
-          image={item?.productImages[0]}
-          onPress={() => props.navigation.navigate(RouteNames.productInfo, {productId: item?.id})}
-          isMine={true}
-        />
-      )}
-      estimatedItemSize={20}
-      showsVerticalScrollIndicator={true}
-      contentContainerStyle={tw`pb-2 pt-2`}
-    />
-  );
-
-  const FavoritesTabScreen = () => (
-    <FlashList
-      numColumns={2}
-      data={books}
-      renderItem={({item}) => (
-        <SecondHandSaleCard
-          onFavoritePress={() => setFavorite(!favorite)}
-          isFavorite={favorite}
-          title={item.title}
+          onPress={() =>
+            navigation.navigate(RouteNames.productInfo, {
+              productId: item.id,
+            })
+          }
+          onFavoritePress={props.handleFavPress}
+          isFavorite={true}
+          id={item.id}
+          title={item.productHeader}
           price={item.price}
-          image={item.image}
+          image={item.productImages[0]}
           isMine={false}
         />
       )}
@@ -99,16 +46,25 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
       contentContainerStyle={tw`pb-2 pt-2`}
     />
   );
+});
 
-  const SoldTabScreen = () => (
+const SoldTabScreen = props => {
+  const navigation = useNavigation<INavigationType>();
+
+  return (
     <FlashList
       numColumns={2}
-      data={books}
+      data={props.books}
       renderItem={({item}) => (
         <SecondHandSaleCard
-          title={item.title}
+          onPress={() =>
+            navigation.navigate(RouteNames.productInfo, {
+              productId: item.id,
+            })
+          }
+          title={item.productHeader}
           price={item.price}
-          image={item.image}
+          image={item.productImages[0]}
           isMine={true}
           isSold={true}
         />
@@ -118,55 +74,210 @@ export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
       contentContainerStyle={tw`pb-2 pt-2`}
     />
   );
-
-  const renderScene = SceneMap({
-    first: StoreTabScreen,
-    second: FavoritesTabScreen,
-    third: SoldTabScreen,
-  });
+};
+const StoreTabScreen = props => {
+  const navigation = useNavigation<INavigationType>();
 
   return (
+    <FlashList
+      numColumns={2}
+      data={props.userProducts}
+      renderItem={({item}) => (
+        <SecondHandSaleCard
+          title={item?.productHeader}
+          price={item?.price}
+          image={item?.productImages?.[0]}
+          onPress={() =>
+            navigation.navigate(RouteNames.productInfo, {
+              productId: item?.id,
+            })
+          }
+          isMine={true}
+        />
+      )}
+      estimatedItemSize={20}
+      showsVerticalScrollIndicator={true}
+      contentContainerStyle={tw`pb-2 pt-2`}
+    />
+  );
+};
+
+export const MyStore: React.FunctionComponent<IMyStoreProps> = props => {
+  const {t} = useTranslation();
+  const authUser = useAppSelector(store => store.user.user);
+  const userId = props.route?.params?.id ?? authUser?.id;
+  const isAuthUser = authUser?.id === userId;
+  const {data: userProducts, isLoading} = useGetProductsByUserIdQuery(userId, {
+    skip: !userId,
+  });
+  const [user, setUser] = useState(isAuthUser ? authUser : {});
+  const [favoriteProducts, setFavoriteProducts] = React.useState([]);
+  console.warn(userId);
+  const getUserData = React.useCallback(
+    async (userId: string) => {
+      if (isAuthUser) {
+        return setUser(authUser);
+      }
+      await database()
+        .ref(`users/${userId}`)
+        .once('value', snapshot => {
+          setUser(snapshot.val());
+        });
+    },
+    [authUser, isAuthUser],
+  );
+  const handleFavoritePress = React.useCallback(
+    async id => {
+      let favoriteProducts = user?.favoriteProducts ?? [];
+      if (favoriteProducts.includes(id)) {
+        favoriteProducts = favoriteProducts.filter(
+          productId => productId !== id,
+        );
+      } else {
+        favoriteProducts = [...favoriteProducts, id];
+      }
+      await database().ref(`users/${userId}`).update({
+        favoriteProducts,
+      });
+    },
+    [user?.favoriteProducts, userId],
+  );
+  React.useEffect(() => {
+    // get favorite products by product id parallel from database
+    const getFavoriteProducts = async () => {
+      await getUserData(userId);
+      console.warn(
+        'user?.favoriteProducts ?? []',
+        user?.favoriteProducts ?? [],
+      );
+      const _favoriteProducts = await Promise.all(
+        (user?.favoriteProducts ?? [])?.map(async productId => {
+          const product = await firestore()
+            .collection('products')
+            .doc(productId)
+            .get();
+          return {...product.data(), id: product.id};
+        }),
+      );
+      if (favoriteProducts.length !== _favoriteProducts.length) {
+        setFavoriteProducts(_favoriteProducts);
+      }
+    };
+    getFavoriteProducts();
+  }, [favoriteProducts.length, getUserData, user?.favoriteProducts, userId]);
+
+  const [selectedScreen, setSelectedScreen] = useState(1);
+  return (
     <View style={tw`flex-1 bg-white`}>
-      <TouchableOpacity
-        style={tw`absolute left-2 top-2 z-1`}
-        onPress={() => props.navigation.navigate(RouteNames.profileMain)}>
-        <Icon name="chevron-back-outline" size={30} color="white" />
-      </TouchableOpacity>
-      <View style={tw` bg-[${Colors.lightPurple}] h-30 p-8`} />
+      <CommonHeader title={t('profile.my-store')} backDisabled={true} />
+      <View style={tw` h-10 p-8`} />
       <View style={tw`p-4 mt-[-70]`}>
         <Image
-          source={{uri: 'https://picsum.photos/200'}}
+          source={{uri: user?.imageUrl}}
           style={tw` w-25 h-25 rounded-full border-2 border-white`}
           resizeMode="cover"
         />
         <View style={tw`flex-row items-center justify-between`}>
-          <Text style={tw`text-lg w-30 font-semibold`}>meliketekin</Text>
-          <TouchableOpacity
-            style={tw` bg-white border-[${Colors.darkPurple}] border-2 px-2 h-10 justify-evenly items-center rounded-md shadow-md flex-row`}
-            onPress={() => props.navigation.navigate(RouteNames.sellNow)}>
-            <Icon name="add" size={25} color={Colors.darkPurple} />
-            <Text style={tw`text-[${Colors.darkPurple}]`}>
-              {t('my-store.sell')}
-            </Text>
-          </TouchableOpacity>
+          <Text style={tw`text-lg w-30 font-semibold`}>
+            {user?.name + ' ' + user?.lastName}
+          </Text>
+          {user.id === authUser?.id && (
+            <TouchableOpacity
+              style={tw` bg-white border-[${Colors.darkPurple}] border-2 px-2 h-10 justify-evenly items-center rounded-md shadow-md flex-row`}
+              onPress={() => props.navigation.navigate(RouteNames.sellNow)}>
+              <Icon name="add" size={25} color={Colors.darkPurple} />
+              <Text style={tw`text-[${Colors.darkPurple}] font-semibold`}>
+                {t('my-store.sell')}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-      <TabView
-        navigationState={{index, routes}}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{width: layout.width}}
-        style={tw`bg-white flex-1`}
-        renderTabBar={props => (
-          <TabBar
-            {...props}
-            style={tw`bg-white`}
-            indicatorStyle={tw`bg-[${Colors.darkPurple}]`}
-            labelStyle={tw`text-[${Colors.darkPurple}] font-semibold text-sm normal-case`}
-            android_ripple={tw`text-transparent`}
-          />
-        )}
-      />
+      <View style={tw`flex-row px-2 `}>
+        <TouchableOpacity
+          style={[
+            selectedScreen === 1 && {
+              paddingBottom: 5,
+              borderBottomWidth: 2,
+              borderBottomColor: Colors.darkPurple,
+            },
+            {
+              flex: 1,
+              alignItems: 'center',
+            },
+          ]}
+          onPress={() => {
+            setSelectedScreen(1);
+          }}>
+          <Text
+            style={[
+              selectedScreen === 1 && tw`text-[${Colors.darkPurple}] font-bold`,
+              {fontWeight: '500'},
+            ]}>
+            My Store
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedScreen(2);
+          }}
+          style={[
+            selectedScreen === 2 && {
+              paddingBottom: 5,
+              borderBottomWidth: 2,
+              borderBottomColor: Colors.darkPurple,
+            },
+            {
+              flex: 1,
+              alignItems: 'center',
+            },
+          ]}>
+          <Text
+            style={[
+              selectedScreen === 2 && tw`text-[${Colors.darkPurple}] font-bold`,
+              ,
+              {fontWeight: '500'},
+            ]}>
+            Favorites
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            selectedScreen === 3 && {
+              paddingBottom: 5,
+              borderBottomWidth: 2,
+              borderBottomColor: Colors.darkPurple,
+            },
+            {
+              flex: 1,
+              alignItems: 'center',
+            },
+          ]}
+          onPress={() => {
+            setSelectedScreen(3);
+          }}>
+          <Text
+            style={[
+              selectedScreen === 3 && tw`text-[${Colors.darkPurple}] font-bold`,
+              ,
+              {fontWeight: '500'},
+            ]}>
+            Sold
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {selectedScreen === 1 ? (
+        <StoreTabScreen userProducts={userProducts} />
+      ) : selectedScreen === 2 ? (
+        <FavoritesTabScreen
+          favoriteProducts={favoriteProducts}
+          handleFavPress={handleFavoritePress}
+        />
+      ) : (
+        <SoldTabScreen
+          books={userProducts?.filter(product => product?.isSold)}
+        />
+      )}
     </View>
   );
 };

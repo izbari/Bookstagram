@@ -70,5 +70,8 @@ export enum RouteNames {
 
   //store-stack-screens
   storeStack = 'store-stack',
-  
+  myStoreStack = 'my-store-stack',
+  searchBook = 'search-book',
+  searchBookStack = 'search-book-stack',
+  chatStack = 'chat-stack',
 }

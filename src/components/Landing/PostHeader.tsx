@@ -7,6 +7,10 @@ import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import tw from 'twrnc';
 import {ThreeDotMenu} from '../Common/Menu';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
+import {INavigationType} from '../navigation/Types';
+import auth from '@react-native-firebase/auth';
+import {RouteNames} from '../navigation/RouteNames';
 interface IPostHeaderProps {
   readonly userId: string | undefined;
   readonly userImageUrl: string | undefined;
@@ -15,25 +19,20 @@ interface IPostHeaderProps {
 }
 export const PostHeader: React.FunctionComponent<IPostHeaderProps> = React.memo(
   props => {
-    // const navigation = useNavigation<INavigationType>();
-    // const toProfile = React.useCallback(
-    //   (userId: string) => {
-    //     if (typeof auth().currentUser === 'object') {
-    //       if (auth().currentUser?.uid === userId) {
-    //         navigation.navigate('Profile');
-    //       } else {
-    //         navigation.navigate('OtherProfile', {
-    //           selectedUserId: userId,
-    //         });
-    //       }
-    //     }
-    //   },
-    //   [navigation],
-    // );
+    const navigation = useNavigation<INavigationType>();
+    const toProfile = React.useCallback(
+      (userId: string) => {
+        navigation.navigate(RouteNames.profileStack, {
+          screen: RouteNames.profileMain,
+          params: {id: userId},
+        });
+      },
+      [navigation],
+    );
     return (
       <View style={tw`flex-1 flex-row justify-between items-center`}>
         <TouchableOpacity
-          // onPress={() => toProfile(props.userId)}
+          onPress={() => toProfile(props.userId)}
           style={tw`flex-row items-center p-4`}>
           <FastImage
             style={tw`h-11 w-11 rounded-full overflow-hidden`}

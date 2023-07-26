@@ -10,12 +10,12 @@ export const ProfileStackNavigation: React.FunctionComponent = () => {
   return (
     <ProfileStack.Navigator
       initialRouteName={RouteNames.profileMain}
-      screenOptions={{headerShown: false}}>
+      screenOptions={{headerShown: false, animation: 'slide_from_left'}}>
       <ProfileStack.Screen name={RouteNames.profileMain} component={Profile} />
-      <ProfileStack.Screen name={RouteNames.profileSettings} component={ProfileSettings} />
-
-
-
+      <ProfileStack.Screen
+        name={RouteNames.profileSettings}
+        component={ProfileSettings}
+      />
     </ProfileStack.Navigator>
   );
 };

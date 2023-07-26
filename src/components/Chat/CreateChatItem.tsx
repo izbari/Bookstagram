@@ -56,18 +56,20 @@ const CreateChatItem: React.FunctionComponent<ICreateChatItemProps> = props => {
           chatId: chatId ?? undefined,
         });
       }}
-      style={{
-        flexDirection: 'row',
-        width: width * 0.95,
-        margin: 10,
-        marginBottom: 3,
-        alignSelf: 'center',
+      style={[
+        {
+          flexDirection: 'row',
+          width: width * 0.95,
+          margin: 10,
+          marginBottom: 3,
+          alignSelf: 'center',
 
-        backgroundColor: 'white',
-        borderRadius: 10,
-        shadowColor: '#CBCBCB',
-        elevation: 25,
-      }}>
+          backgroundColor: 'white',
+          borderRadius: 10,
+          shadowColor: '#CBCBCB',
+          elevation: 25,
+        },
+      ]}>
       <Image
         style={{
           height: 50,
@@ -94,7 +96,7 @@ const CreateChatItem: React.FunctionComponent<ICreateChatItemProps> = props => {
               color: 'grey',
               marginTop: 5,
             }}>
-            {"User's cool bio..."}
+            {user?.username ?? "User's cool bio..."}
           </Text>
         </View>
       </View>

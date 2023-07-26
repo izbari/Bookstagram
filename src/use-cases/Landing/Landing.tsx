@@ -41,10 +41,7 @@ export const Landing: React.FunctionComponent<ILandingProps> = props => {
           <FastImage source={{uri: authUser?.imageUrl}} style={styles.avatar} />
         </TouchableOpacity>
         <Text style={styles.title}>Bookstagram</Text>
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate(RouteNames.chat)}>
-          <Ionicons name="chatbox-ellipses-outline" size={25} color="white" />
-        </TouchableOpacity>
+        <View style={{flex: 1 / 8}} />
       </View>
       <LandingPage navigation={props.navigation} />
     </View>

@@ -3,14 +3,13 @@ import * as React from 'react';
 import {NavigationParamsList} from '../NavigationParamsList';
 import {RouteNames} from '../RouteNames';
 import {Landing} from '../../../use-cases/Landing/Landing';
-import {SinglePost} from '../../../use-cases/Landing/SinglePost';
 
 const LandingStack = createNativeStackNavigator<NavigationParamsList>();
 export const LandingStackNavigation: React.FunctionComponent = () => {
   return (
     <LandingStack.Navigator
       initialRouteName={RouteNames.landingMain}
-      screenOptions={{headerShown: false}}>
+      screenOptions={{headerShown: false, animation: 'slide_from_left'}}>
       <LandingStack.Screen name={RouteNames.landingMain} component={Landing} />
     </LandingStack.Navigator>
   );

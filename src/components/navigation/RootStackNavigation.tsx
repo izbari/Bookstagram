@@ -7,7 +7,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Login} from '../../use-cases/Auth/Login';
 import {Register} from '../../use-cases/Auth/Register';
 import {useAuth} from '../../infrastructure/Utils/useAuth';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import {CreatePost} from '../../use-cases/CreatePost/CreatePost';
 import {SinglePost} from '../../use-cases/Landing/SinglePost';
 import {ProductInfo} from '../../use-cases/MyStore/ProductInfo';
@@ -16,26 +16,20 @@ import auth from '@react-native-firebase/auth';
 import {SingleChat} from '../../use-cases/Chat/SingleChat';
 import {CreateChat} from '../../use-cases/Chat/CreateChat';
 
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  createDrawerNavigator,
-} from '@react-navigation/drawer';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {ChatStackNavigation} from './stacks/ChatStackNavigation';
-import {LandingStackNavigation} from './stacks/LandingStackNavigation';
 import {CustomDrawerContent} from './CustomDrawerContent';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
-import {BookStackNavigation} from './stacks/BookStackNavigation';
-import { ProfileStackNavigation } from './stacks/StoreStackNavigation';
+import {StoreStackNavigation} from './stacks/StoreStackNavigation';
+import {BookBottomTab} from './BookBottomTab';
+import {ProfileStackNavigation} from './stacks/ProfileStackNavigation';
 const RootStack = createNativeStackNavigator<NavigationParamsList>();
 const Drawer = createDrawerNavigator();
 
 export const RootStackNavigation: React.FunctionComponent = () => {
-  const {isLoading} = useAuth();
-  const user = auth().currentUser;
+  const {isLoading, isLoggedIn} = useAuth();
+  console.warn('isLoggedIn', isLoggedIn);
   const isInBookTab = useAppSelector(state => state.user.isInBookTab);
-
   if (isLoading) {
     return <ActivityIndicator />;
   }
@@ -45,7 +39,7 @@ export const RootStackNavigation: React.FunctionComponent = () => {
         drawerContent={props => <CustomDrawerContent {...props} />}
         initialRouteName={RouteNames.landing}
         screenOptions={{headerShown: false}}>
-        {user ? (
+        {isLoggedIn ? (
           isInBookTab ? (
             <Drawer.Screen name={RouteNames.book} component={BookBottomTab} />
           ) : (
@@ -81,8 +75,14 @@ export const RootStackNavigation: React.FunctionComponent = () => {
         <RootStack.Screen name={RouteNames.store} component={Store} />
         <RootStack.Screen name={RouteNames.singleChat} component={SingleChat} />
         <RootStack.Screen name={RouteNames.createChat} component={CreateChat} />
-        <RootStack.Screen name={RouteNames.profileStack} component={ProfileStackNavigation} />
-
+        <RootStack.Screen
+          name={RouteNames.storeStack}
+          component={StoreStackNavigation}
+        />
+        <RootStack.Screen
+          name={RouteNames.profileStack}
+          component={ProfileStackNavigation}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );

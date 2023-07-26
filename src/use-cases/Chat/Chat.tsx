@@ -14,19 +14,11 @@ import tw from 'twrnc';
 import {useAppSelector} from '../../infrastructure/Redux/Hooks';
 import {IWithNavigation} from '../../components/navigation/Types';
 import {RouteNames} from '../../components/navigation/RouteNames';
-import {
-  useGetMyChatsQuery,
-  useLazyGetMyChatsQuery,
-} from '../../infrastructure/Service/ChatService';
+import {useLazyGetMyChatsQuery} from '../../infrastructure/Service/ChatService';
 import ChatItem from '../../components/Chat/ChatItem';
-import {
-  Menu,
-  MenuOption,
-  MenuOptions,
-  MenuTrigger,
-} from 'react-native-popup-menu';
+
 import {useIsFocused} from '@react-navigation/native';
-import {Header} from '../../components/Chat/Header';
+import CommonHeader from '../../components/Common/CommonHeader';
 type IChatProps = IWithNavigation<RouteNames.chat>;
 export const Chat: React.FunctionComponent<IChatProps> = props => {
   const authUser = useAppSelector(store => store.user.user);
@@ -40,7 +32,16 @@ export const Chat: React.FunctionComponent<IChatProps> = props => {
   }, [authUser?.id, fetchChats, isFocused]);
   return (
     <SafeAreaView style={tw`flex-1`}>
-      <Header navigation={props.navigation} />
+      <CommonHeader
+        right={
+          <TouchableOpacity
+            style={tw`absolute right-3 top-1 p-2`}
+            onPress={() => props.navigation.navigate(RouteNames.createChat)}>
+            <Ionicons name="create-outline" size={23} color="white" />
+          </TouchableOpacity>
+        }
+        title={'Messages'}
+      />
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -52,7 +53,9 @@ export const Chat: React.FunctionComponent<IChatProps> = props => {
               targetUserId={item.targetUserId}
               chatId={item.id}
               lastMessage={item.messages[0].text}
+              isSharedContent={!!item.messages[0].isSharedContent}
               lastMessageDate={item.messages[0].createdAt}
+              isLastMessageFromMe={item.messages[0].user._id === authUser?.id}
             />
           )}
           keyExtractor={item => item.id}

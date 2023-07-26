@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {LandingStackNavigation as LandingStack} from './stacks/LandingStackNavigation';
 import {Colors} from '../../resources/constants/Colors';
 import {SearchStackNavigation} from './stacks/SearchStackNavigation';
+import {ChatStackNavigation} from './stacks/ChatStackNavigation';
 const MainStack = createBottomTabNavigator<NavigationParamsList>();
 const Blank = () => <></>;
 export const MainStackNavigation: React.FunctionComponent = () => {
@@ -54,13 +55,13 @@ export const MainStackNavigation: React.FunctionComponent = () => {
         })}
       />
       <MainStack.Screen
-        name={RouteNames.search}
-        component={SearchStackNavigation}
+        name={RouteNames.chatStack}
+        component={ChatStackNavigation}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <Ionicons
-              name="search-outline"
+              name={focused ? 'ios-chatbubbles' : 'ios-chatbubbles-outline'}
               size={25}
               color={Colors.lightPurple}
             />

@@ -38,7 +38,8 @@ export const checkTitle = item => {
 export const checkPrice = item => {
   if (
     typeof item.saleInfo.listPrice !== 'undefined' &&
-    item.saleInfo.listPrice != null
+    item.saleInfo.listPrice != null &&
+    item.saleInfo.listPrice.amount !== 0
   ) {
     return (
       item.saleInfo.listPrice.amount +
@@ -46,7 +47,7 @@ export const checkPrice = item => {
       item.saleInfo.listPrice.currencyCode
     );
   } else {
-    return 'Price undefined';
+    return '';
   }
 };
 
@@ -54,9 +55,10 @@ const API_URL = `https://www.googleapis.com/books/v1/volumes?q=python&printType=
 
 export const getBooks = async () => {
   const {items} = await fetch(API_URL).then(x => x.json());
-  const books = items.map(({id, volumeInfo}) => ({
+  const books = items.map(({id, volumeInfo, ...rest}) => ({
     ...volumeInfo,
-    key: id,
+    ...rest,
+    id: id,
     title: volumeInfo.title,
     desc: volumeInfo.description,
     imageURL: volumeInfo.imageLinks.thumbnail,

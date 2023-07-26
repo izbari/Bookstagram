@@ -4,17 +4,24 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import tw from 'twrnc';
 import {useNavigation} from '@react-navigation/native';
 import {INavigationType} from '../navigation/Types';
-type IHeader = {title: string};
+type IHeader = {
+  title: string;
+  handleLike: () => void;
+  isLiked: boolean;
+  onShare: () => void;
+  setRead: (read: boolean) => void;
+};
 export const Header: React.FunctionComponent<IHeader> = props => {
   const navigation = useNavigation<INavigationType>();
-  const handleFavorite = () => {};
 
-  const handleShare = () => {};
   return (
     <View style={tw` flex-row gap-2 h-10 justify-end items-center px-4`}>
       <TouchableOpacity
         style={tw`flex-0.25`}
-        onPress={navigation.canGoBack() && navigation.goBack}>
+        onPress={() => {
+          navigation.canGoBack() && navigation.goBack();
+          props.setRead(false);
+        }}>
         <Ionicons
           name={'chevron-back-outline'}
           // name={list.includes(book) ? 'heart' : 'heart-outline'}
@@ -31,15 +38,15 @@ export const Header: React.FunctionComponent<IHeader> = props => {
         </Text>
       </View>
       <View style={tw`flex-0.25 flex-row justify-end gap-x-2`}>
-        <TouchableOpacity onPress={handleFavorite} style={tw``}>
+        <TouchableOpacity onPress={props.handleLike} style={tw``}>
           <Ionicons
-            name={'heart-outline'}
+            name={props.isLiked ? 'heart' : 'heart-outline'}
             // name={list.includes(book) ? 'heart' : 'heart-outline'}
             size={25}
             color="#fff"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleShare} style={tw``}>
+        <TouchableOpacity onPress={props.onShare} style={tw``}>
           <Ionicons name="share-outline" size={25} color="#fff" />
         </TouchableOpacity>
       </View>

@@ -50,7 +50,7 @@ export const getCategoryPhotos = async (
     }
     return images;
   } catch (err) {
-    Alert.alert('Something went wrong...');
+    Alert.alert('Something went wrong...2');
   }
 };
 export const AddCategory: React.FunctionComponent<IAddCategory> = props => {
@@ -115,7 +115,7 @@ export const AddCategory: React.FunctionComponent<IAddCategory> = props => {
           <AddCategoryItem
             item={item}
             index={index}
-            isUserCategory={userCategories?.includes(item.category)}
+            isUserCategory={userCategories?.includes?.(item?.category)}
             selectedCategories={userCategories}
             setSelectedCategories={setUserCategories}
           />

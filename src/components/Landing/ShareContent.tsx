@@ -22,6 +22,7 @@ const ShareContent: React.FunctionComponent<IShareContentProps> = props => {
   );
   return (
     <BottomSheetFlatList
+      contentContainerStyle={{grow: 1}}
       data={fallowingUserData}
       keyExtractor={item => item?.id as string}
       renderItem={({item: user}) => (
