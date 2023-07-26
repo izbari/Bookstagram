@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+<<<<<<< HEAD
         googlePlayServicesVersion = "+" // default: "+"
         firebaseMessagingVersion = "21.1.0" // default: ""
         buildToolsVersion = "30.0.2"
@@ -9,12 +10,22 @@ buildscript {
         compileSdkVersion = 31
         targetSdkVersion = 31
         ndkVersion = "20.1.5948944"
+=======
+        buildToolsVersion = "33.0.0"
+        minSdkVersion = 21
+        compileSdkVersion = 33
+        targetSdkVersion = 33
+
+        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
+        ndkVersion = "23.1.7779620"
+>>>>>>> refactor/migration-new-architecture
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
+<<<<<<< HEAD
         classpath 'com.google.gms:google-services:4.3.5'
         classpath('com.android.tools.build:gradle:7.1.1')
         // NOTE: Do not place your application dependencies here; they belong
@@ -41,5 +52,10 @@ allprojects {
         maven { url 'https://maven.google.com' }
 
         maven { url 'https://www.jitpack.io' }
+=======
+        classpath("com.android.tools.build:gradle:7.3.1")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath ('com.google.gms:google-services:4.3.15')
+>>>>>>> refactor/migration-new-architecture
     }
 }

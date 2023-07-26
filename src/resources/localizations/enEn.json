@@ -1,0 +1,95 @@
+{
+  "translation": {
+    "landing": {
+      "hello": "Hello",
+      "myCart": "My cart",
+      "purchases": "Purchases",
+      "theme": "Theme",
+      "account": "Account",
+      "notifications": "Notifications",
+      "languages": "Languages",
+      "sign-out": "Sign out",
+      "books": "Books",
+      "followers": "Followers",
+      "following": "Following",
+      "edit-profile": "Edit Profile",
+      "settings": "Settings",
+      "like": "Like",
+      "comment": "Comment",
+      "comments": "Comment",
+      "share": "Share",
+      "comment-placeholder": "What are you thinking ?"
+    },
+    "tab-names": {
+      "home": "Home",
+      "chat": "Chat",
+      "discover": "Discover",
+      "library": "Library",
+      "store": "Store",
+      "favorites": "Favorites",
+      "profile": "Profile"
+    },
+    "profile": {
+      "account": "Account",
+      "settings": "Settings",
+      "edit-profile": "Edit Profile",
+      "my-store": "My Store",
+      "cart": "Cart",
+      "purchases": "Purchases",
+      "account-settings": "Account Settings",
+      "notifications": "Notifications",
+      "languages": "Languages",
+      "sign-out": "Sign out",
+      "theme": "Theme",
+      "books": "Books",
+      "followers": "Followers",
+      "following": "Following",
+      "english": "English",
+      "turkish": "Turkish"
+    },
+    "my-store": {
+      "store": "Store",
+      "favorites": "Favorites",
+      "sold": "Sold",
+      "sold-text": "Sold",
+      "sell": "Sell Now"
+    },
+    "product-info": {
+      "product-info": "Product Info",
+      "photos": "Photos",
+      "edit": "Edit",
+      "book-header": "Book Header",
+      "book-author": "Book Author",
+      "product-explanation": "Product Explanation",
+      "category": "Category",
+      "condition": "Condition",
+      "worn": "Worn",
+      "less-used": "Less Used",
+      "new": "New",
+      "page-count": "Page Count",
+      "price": "Price",
+      "book-swap-text": "I am open to book swap offers",
+      "sell-now": "Sell Now",
+      "add-photo": "Add Photo",
+      "book-header-placeholder": "Write the name of the book you are selling",
+      "book-author-placeholder": "Write the author of the book you are selling",
+      "product-explanation-placeholder": "Write a short explanation about the book you are selling",
+      "pages": "pages",
+      "ask-question": "Ask a question",
+      "swap-offer": "Ask for swap"
+    },
+    "drawer": {
+      "home": "Home",
+      "chat": "Chat",
+      "discover": "Discover",
+      "library": "Library",
+      "store": "Store",
+      "favorites": "Favorites",
+      "profile": "Profile",
+      "settings": "Settings",
+      "sign-out": "Sign out",
+      "view-profile": "View Profile"
+  
+    }
+  }
+}

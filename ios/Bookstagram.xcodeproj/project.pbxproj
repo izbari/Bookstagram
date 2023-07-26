@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* BookstagramTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BookstagramTests.m */; };
+<<<<<<< HEAD
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		182FE1F2297B5AA70086C412 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 182FE1F1297B5AA70086C412 /* GoogleService-Info.plist */; };
@@ -30,6 +31,31 @@
 		18ED1D14297752CC005EBB0C /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18ED1D13297752CC005EBB0C /* BootSplash.storyboard */; };
 		191C775331D2D045C62E6510 /* libPods-Bookstagram-BookstagramTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E359B39400AE04C945101A1 /* libPods-Bookstagram-BookstagramTests.a */; };
 		EBB517CFBEB0B63349D7856C /* libPods-Bookstagram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A3CA05F5990BA88DAA838B /* libPods-Bookstagram.a */; };
+=======
+		0A26A0006624D9E5212FBB3E /* Pods_Bookstagram_BookstagramTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E8392877FB1FAD187E55C0D /* Pods_Bookstagram_BookstagramTests.framework */; };
+		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1823584F2A0C8D390006871E /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5212A0AAC1E0059F5E9 /* AntDesign.ttf */; };
+		182358502A0C8D390006871E /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5272A0AAC1E0059F5E9 /* Entypo.ttf */; };
+		182358512A0C8D390006871E /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5282A0AAC1E0059F5E9 /* EvilIcons.ttf */; };
+		182358522A0C8D390006871E /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C51C2A0AAC1E0059F5E9 /* Feather.ttf */; };
+		182358532A0C8D390006871E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C51B2A0AAC1E0059F5E9 /* FontAwesome.ttf */; };
+		182358542A0C8D390006871E /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5202A0AAC1E0059F5E9 /* FontAwesome5_Brands.ttf */; };
+		182358552A0C8D390006871E /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5222A0AAC1E0059F5E9 /* FontAwesome5_Regular.ttf */; };
+		182358562A0C8D390006871E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C51E2A0AAC1E0059F5E9 /* FontAwesome5_Solid.ttf */; };
+		182358572A0C8D390006871E /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5252A0AAC1E0059F5E9 /* Fontisto.ttf */; };
+		182358582A0C8D390006871E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C51D2A0AAC1E0059F5E9 /* Foundation.ttf */; };
+		182358592A0C8D390006871E /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C52A2A0AAC1F0059F5E9 /* Ionicons.ttf */; };
+		1823585A2A0C8D390006871E /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5242A0AAC1E0059F5E9 /* MaterialCommunityIcons.ttf */; };
+		1823585B2A0C8D390006871E /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C51F2A0AAC1E0059F5E9 /* MaterialIcons.ttf */; };
+		1823585C2A0C8D390006871E /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5292A0AAC1E0059F5E9 /* Octicons.ttf */; };
+		1823585D2A0C8D390006871E /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5232A0AAC1E0059F5E9 /* SimpleLineIcons.ttf */; };
+		1823585E2A0C8D390006871E /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C5262A0AAC1E0059F5E9 /* Zocial.ttf */; };
+		18A5C52C2A0AB0F90059F5E9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18A5C52B2A0AB0F90059F5E9 /* GoogleService-Info.plist */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		BC37ABAB17AAD189B64D65F5 /* Pods_Bookstagram.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA3314F5D0AC6213B89D52B6 /* Pods_Bookstagram.framework */; };
+>>>>>>> refactor/migration-new-architecture
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +72,7 @@
 		00E356EE1AD99517003FC87E /* BookstagramTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookstagramTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BookstagramTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookstagramTests.m; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		031DFFE83D59C5037360FE34 /* Pods-Bookstagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookstagram.release.xcconfig"; path = "Target Support Files/Pods-Bookstagram/Pods-Bookstagram.release.xcconfig"; sourceTree = "<group>"; };
 		0E359B39400AE04C945101A1 /* libPods-Bookstagram-BookstagramTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Bookstagram-BookstagramTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* Bookstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,6 +104,39 @@
 		5BF91D4880BFADF911CED981 /* Pods-Bookstagram-BookstagramTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookstagram-BookstagramTests.release.xcconfig"; path = "Target Support Files/Pods-Bookstagram-BookstagramTests/Pods-Bookstagram-BookstagramTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F2941E980EF8E65FCFDF8ED0 /* Pods-Bookstagram.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookstagram.debug.xcconfig"; path = "Target Support Files/Pods-Bookstagram/Pods-Bookstagram.debug.xcconfig"; sourceTree = "<group>"; };
+=======
+		05F2E1A7ECA835D3E739EF74 /* Pods-Bookstagram-BookstagramTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookstagram-BookstagramTests.release.xcconfig"; path = "Target Support Files/Pods-Bookstagram-BookstagramTests/Pods-Bookstagram-BookstagramTests.release.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Bookstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bookstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Bookstagram/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Bookstagram/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Bookstagram/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Bookstagram/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Bookstagram/main.m; sourceTree = "<group>"; };
+		18A5C51B2A0AAC1E0059F5E9 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		18A5C51C2A0AAC1E0059F5E9 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		18A5C51D2A0AAC1E0059F5E9 /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		18A5C51E2A0AAC1E0059F5E9 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		18A5C51F2A0AAC1E0059F5E9 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		18A5C5202A0AAC1E0059F5E9 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		18A5C5212A0AAC1E0059F5E9 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		18A5C5222A0AAC1E0059F5E9 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		18A5C5232A0AAC1E0059F5E9 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		18A5C5242A0AAC1E0059F5E9 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		18A5C5252A0AAC1E0059F5E9 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		18A5C5262A0AAC1E0059F5E9 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		18A5C5272A0AAC1E0059F5E9 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		18A5C5282A0AAC1E0059F5E9 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		18A5C5292A0AAC1E0059F5E9 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		18A5C52A2A0AAC1F0059F5E9 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		18A5C52B2A0AB0F90059F5E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7E86C4C5C864AD52673DE97D /* Pods-Bookstagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookstagram.release.xcconfig"; path = "Target Support Files/Pods-Bookstagram/Pods-Bookstagram.release.xcconfig"; sourceTree = "<group>"; };
+		7F0BA3BF628835D9F72D4CA1 /* Pods-Bookstagram-BookstagramTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookstagram-BookstagramTests.debug.xcconfig"; path = "Target Support Files/Pods-Bookstagram-BookstagramTests/Pods-Bookstagram-BookstagramTests.debug.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Bookstagram/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8E8392877FB1FAD187E55C0D /* Pods_Bookstagram_BookstagramTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bookstagram_BookstagramTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		965C3D9F0DE3C23530E6A61B /* Pods-Bookstagram.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bookstagram.debug.xcconfig"; path = "Target Support Files/Pods-Bookstagram/Pods-Bookstagram.debug.xcconfig"; sourceTree = "<group>"; };
+		AA3314F5D0AC6213B89D52B6 /* Pods_Bookstagram.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bookstagram.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+>>>>>>> refactor/migration-new-architecture
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +144,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
 				191C775331D2D045C62E6510 /* libPods-Bookstagram-BookstagramTests.a in Frameworks */,
+=======
+				0A26A0006624D9E5212FBB3E /* Pods_Bookstagram_BookstagramTests.framework in Frameworks */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +156,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
 				EBB517CFBEB0B63349D7856C /* libPods-Bookstagram.a in Frameworks */,
+=======
+				BC37ABAB17AAD189B64D65F5 /* Pods_Bookstagram.framework in Frameworks */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +187,7 @@
 		13B07FAE1A68108700A75B9A /* Bookstagram */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				182FE1F1297B5AA70086C412 /* GoogleService-Info.plist */,
 				18932FD52978680D00335A47 /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -126,11 +195,20 @@
 				18ED1D13297752CC005EBB0C /* BootSplash.storyboard */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+=======
+				18A5C51A2A0AAB6B0059F5E9 /* Fonts */,
+				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				13B07FB61A68108700A75B9A /* Info.plist */,
+				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+>>>>>>> refactor/migration-new-architecture
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = Bookstagram;
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD
 		18932FD52978680D00335A47 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +228,27 @@
 				18932FD2297867D400335A47 /* Octicons.ttf */,
 				18932FD0297867D400335A47 /* SimpleLineIcons.ttf */,
 				18932FC9297867D300335A47 /* Zocial.ttf */,
+=======
+		18A5C51A2A0AAB6B0059F5E9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				18A5C5212A0AAC1E0059F5E9 /* AntDesign.ttf */,
+				18A5C5272A0AAC1E0059F5E9 /* Entypo.ttf */,
+				18A5C5282A0AAC1E0059F5E9 /* EvilIcons.ttf */,
+				18A5C51C2A0AAC1E0059F5E9 /* Feather.ttf */,
+				18A5C51B2A0AAC1E0059F5E9 /* FontAwesome.ttf */,
+				18A5C5202A0AAC1E0059F5E9 /* FontAwesome5_Brands.ttf */,
+				18A5C5222A0AAC1E0059F5E9 /* FontAwesome5_Regular.ttf */,
+				18A5C51E2A0AAC1E0059F5E9 /* FontAwesome5_Solid.ttf */,
+				18A5C5252A0AAC1E0059F5E9 /* Fontisto.ttf */,
+				18A5C51D2A0AAC1E0059F5E9 /* Foundation.ttf */,
+				18A5C52A2A0AAC1F0059F5E9 /* Ionicons.ttf */,
+				18A5C5242A0AAC1E0059F5E9 /* MaterialCommunityIcons.ttf */,
+				18A5C51F2A0AAC1E0059F5E9 /* MaterialIcons.ttf */,
+				18A5C5292A0AAC1E0059F5E9 /* Octicons.ttf */,
+				18A5C5232A0AAC1E0059F5E9 /* SimpleLineIcons.ttf */,
+				18A5C5262A0AAC1E0059F5E9 /* Zocial.ttf */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -158,8 +257,13 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+<<<<<<< HEAD
 				27A3CA05F5990BA88DAA838B /* libPods-Bookstagram.a */,
 				0E359B39400AE04C945101A1 /* libPods-Bookstagram-BookstagramTests.a */,
+=======
+				AA3314F5D0AC6213B89D52B6 /* Pods_Bookstagram.framework */,
+				8E8392877FB1FAD187E55C0D /* Pods_Bookstagram_BookstagramTests.framework */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -174,12 +278,20 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
+=======
+				18A5C52B2A0AB0F90059F5E9 /* GoogleService-Info.plist */,
+>>>>>>> refactor/migration-new-architecture
 				13B07FAE1A68108700A75B9A /* Bookstagram */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BookstagramTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+<<<<<<< HEAD
 				8DC49AAEDE05C52CACE9E3A3 /* Pods */,
+=======
+				BBD78D7AC51CEA395F1C20DB /* Pods */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -195,6 +307,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD
 		8DC49AAEDE05C52CACE9E3A3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,6 +315,15 @@
 				031DFFE83D59C5037360FE34 /* Pods-Bookstagram.release.xcconfig */,
 				5467EE71A16F4B6748887E53 /* Pods-Bookstagram-BookstagramTests.debug.xcconfig */,
 				5BF91D4880BFADF911CED981 /* Pods-Bookstagram-BookstagramTests.release.xcconfig */,
+=======
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				965C3D9F0DE3C23530E6A61B /* Pods-Bookstagram.debug.xcconfig */,
+				7E86C4C5C864AD52673DE97D /* Pods-Bookstagram.release.xcconfig */,
+				7F0BA3BF628835D9F72D4CA1 /* Pods-Bookstagram-BookstagramTests.debug.xcconfig */,
+				05F2E1A7ECA835D3E739EF74 /* Pods-Bookstagram-BookstagramTests.release.xcconfig */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -213,12 +335,21 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BookstagramTests" */;
 			buildPhases = (
+<<<<<<< HEAD
 				E21F3F0FCF12C9004F8E21BA /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				F4287C04C308F541EA540450 /* [CP] Embed Pods Frameworks */,
 				07CA966A73C96EB6A6CF624F /* [CP] Copy Pods Resources */,
+=======
+				EA49A6F6CAF140B3932A8E80 /* [CP] Check Pods Manifest.lock */,
+				00E356EA1AD99517003FC87E /* Sources */,
+				00E356EB1AD99517003FC87E /* Frameworks */,
+				00E356EC1AD99517003FC87E /* Resources */,
+				F3DA17CBD46F88E4D43BB461 /* [CP] Embed Pods Frameworks */,
+				E6A80385A98A438D06D16AF0 /* [CP] Copy Pods Resources */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			buildRules = (
 			);
@@ -234,15 +365,25 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Bookstagram" */;
 			buildPhases = (
+<<<<<<< HEAD
 				8504B1BA64187729169C16CE /* [CP] Check Pods Manifest.lock */,
+=======
+				BCE3600E5FAC44F5689E2832 /* [CP] Check Pods Manifest.lock */,
+>>>>>>> refactor/migration-new-architecture
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+<<<<<<< HEAD
 				75B61B796CB806CABFF82124 /* [CP] Embed Pods Frameworks */,
 				D3904998CEA0D54CAD91EBA7 /* [CP] Copy Pods Resources */,
 				190EE69246E09B3FB3FFC4AA /* [CP-User] [RNFB] Core Configuration */,
+=======
+				D0569D91DBAF17D429652F65 /* [CP] Embed Pods Frameworks */,
+				20287B57B5DB2D64EC268733 /* [CP] Copy Pods Resources */,
+				8480F9243B87AF230C0F868D /* [CP-User] [RNFB] Core Configuration */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			buildRules = (
 			);
@@ -259,7 +400,11 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+<<<<<<< HEAD
 				LastUpgradeCheck = 1420;
+=======
+				LastUpgradeCheck = 1210;
+>>>>>>> refactor/migration-new-architecture
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
@@ -301,6 +446,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
 				18932FD62978683C00335A47 /* AntDesign.ttf in Resources */,
 				18932FD72978683C00335A47 /* Entypo.ttf in Resources */,
 				18932FD82978683C00335A47 /* EvilIcons.ttf in Resources */,
@@ -319,6 +465,27 @@
 				18932FE42978683C00335A47 /* SimpleLineIcons.ttf in Resources */,
 				18932FE52978683C00335A47 /* Zocial.ttf in Resources */,
 				18ED1D14297752CC005EBB0C /* BootSplash.storyboard in Resources */,
+=======
+				1823584F2A0C8D390006871E /* AntDesign.ttf in Resources */,
+				182358502A0C8D390006871E /* Entypo.ttf in Resources */,
+				182358512A0C8D390006871E /* EvilIcons.ttf in Resources */,
+				182358522A0C8D390006871E /* Feather.ttf in Resources */,
+				182358532A0C8D390006871E /* FontAwesome.ttf in Resources */,
+				182358542A0C8D390006871E /* FontAwesome5_Brands.ttf in Resources */,
+				182358552A0C8D390006871E /* FontAwesome5_Regular.ttf in Resources */,
+				182358562A0C8D390006871E /* FontAwesome5_Solid.ttf in Resources */,
+				182358572A0C8D390006871E /* Fontisto.ttf in Resources */,
+				182358582A0C8D390006871E /* Foundation.ttf in Resources */,
+				182358592A0C8D390006871E /* Ionicons.ttf in Resources */,
+				1823585A2A0C8D390006871E /* MaterialCommunityIcons.ttf in Resources */,
+				1823585B2A0C8D390006871E /* MaterialIcons.ttf in Resources */,
+				1823585C2A0C8D390006871E /* Octicons.ttf in Resources */,
+				1823585D2A0C8D390006871E /* SimpleLineIcons.ttf in Resources */,
+				1823585E2A0C8D390006871E /* Zocial.ttf in Resources */,
+				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				18A5C52C2A0AB0F90059F5E9 /* GoogleService-Info.plist in Resources */,
+>>>>>>> refactor/migration-new-architecture
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,20 +498,32 @@
 			files = (
 			);
 			inputPaths = (
+<<<<<<< HEAD
+=======
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+>>>>>>> refactor/migration-new-architecture
 			);
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
+<<<<<<< HEAD
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		07CA966A73C96EB6A6CF624F /* [CP] Copy Pods Resources */ = {
+=======
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		20287B57B5DB2D64EC268733 /* [CP] Copy Pods Resources */ = {
+>>>>>>> refactor/migration-new-architecture
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+<<<<<<< HEAD
 				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram-BookstagramTests/Pods-Bookstagram-BookstagramTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -357,6 +536,20 @@
 			showEnvVarsInLog = 0;
 		};
 		190EE69246E09B3FB3FFC4AA /* [CP-User] [RNFB] Core Configuration */ = {
+=======
+				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram/Pods-Bookstagram-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram/Pods-Bookstagram-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bookstagram/Pods-Bookstagram-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8480F9243B87AF230C0F868D /* [CP-User] [RNFB] Core Configuration */ = {
+>>>>>>> refactor/migration-new-architecture
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -367,6 +560,7 @@
 			name = "[CP-User] [RNFB] Core Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
+<<<<<<< HEAD
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    _JSON_OUTPUT_BASE64=$(python -c 'import json,sys,base64;print(base64.b64encode(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"').read())['${_JSON_ROOT}'])))' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
 		};
 		75B61B796CB806CABFF82124 /* [CP] Embed Pods Frameworks */ = {
@@ -387,6 +581,11 @@
 			showEnvVarsInLog = 0;
 		};
 		8504B1BA64187729169C16CE /* [CP] Check Pods Manifest.lock */ = {
+=======
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
+		};
+		BCE3600E5FAC44F5689E2832 /* [CP] Check Pods Manifest.lock */ = {
+>>>>>>> refactor/migration-new-architecture
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -408,12 +607,17 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+<<<<<<< HEAD
 		D3904998CEA0D54CAD91EBA7 /* [CP] Copy Pods Resources */ = {
+=======
+		D0569D91DBAF17D429652F65 /* [CP] Embed Pods Frameworks */ = {
+>>>>>>> refactor/migration-new-architecture
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+<<<<<<< HEAD
 				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram/Pods-Bookstagram-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -426,6 +630,37 @@
 			showEnvVarsInLog = 0;
 		};
 		E21F3F0FCF12C9004F8E21BA /* [CP] Check Pods Manifest.lock */ = {
+=======
+				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram/Pods-Bookstagram-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram/Pods-Bookstagram-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bookstagram/Pods-Bookstagram-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6A80385A98A438D06D16AF0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram-BookstagramTests/Pods-Bookstagram-BookstagramTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Bookstagram-BookstagramTests/Pods-Bookstagram-BookstagramTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bookstagram-BookstagramTests/Pods-Bookstagram-BookstagramTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA49A6F6CAF140B3932A8E80 /* [CP] Check Pods Manifest.lock */ = {
+>>>>>>> refactor/migration-new-architecture
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -447,7 +682,11 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+<<<<<<< HEAD
 		F4287C04C308F541EA540450 /* [CP] Embed Pods Frameworks */ = {
+=======
+		F3DA17CBD46F88E4D43BB461 /* [CP] Embed Pods Frameworks */ = {
+>>>>>>> refactor/migration-new-architecture
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -498,7 +737,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+=======
+				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+>>>>>>> refactor/migration-new-architecture
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -516,16 +759,25 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = 5467EE71A16F4B6748887E53 /* Pods-Bookstagram-BookstagramTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+=======
+			baseConfigurationReference = 7F0BA3BF628835D9F72D4CA1 /* Pods-Bookstagram-BookstagramTests.debug.xcconfig */;
+			buildSettings = {
+>>>>>>> refactor/migration-new-architecture
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = BookstagramTests/Info.plist;
+<<<<<<< HEAD
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+=======
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+>>>>>>> refactor/migration-new-architecture
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,6 +796,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = 5BF91D4880BFADF911CED981 /* Pods-Bookstagram-BookstagramTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -551,6 +804,14 @@
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BookstagramTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+=======
+			baseConfigurationReference = 05F2E1A7ECA835D3E739EF74 /* Pods-Bookstagram-BookstagramTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = BookstagramTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+>>>>>>> refactor/migration-new-architecture
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -569,25 +830,46 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = F2941E980EF8E65FCFDF8ED0 /* Pods-Bookstagram.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+=======
+			baseConfigurationReference = 965C3D9F0DE3C23530E6A61B /* Pods-Bookstagram.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NH8WPVGLV9;
+>>>>>>> refactor/migration-new-architecture
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Bookstagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< HEAD
+=======
+				MARKETING_VERSION = 1.0;
+>>>>>>> refactor/migration-new-architecture
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Bookstagram;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example121.--PRODUCT-NAME-rfc1034identifier-";
+				PRODUCT_NAME = Bookstagram;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+>>>>>>> refactor/migration-new-architecture
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -596,24 +878,45 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = 031DFFE83D59C5037360FE34 /* Pods-Bookstagram.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+=======
+			baseConfigurationReference = 7E86C4C5C864AD52673DE97D /* Pods-Bookstagram.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NH8WPVGLV9;
+>>>>>>> refactor/migration-new-architecture
 				INFOPLIST_FILE = Bookstagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< HEAD
+=======
+				MARKETING_VERSION = 1.0;
+>>>>>>> refactor/migration-new-architecture
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Bookstagram;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example121.--PRODUCT-NAME-rfc1034identifier-";
+				PRODUCT_NAME = Bookstagram;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+>>>>>>> refactor/migration-new-architecture
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -624,7 +927,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+<<<<<<< HEAD
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+=======
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+>>>>>>> refactor/migration-new-architecture
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -652,7 +959,11 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+<<<<<<< HEAD
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+=======
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+>>>>>>> refactor/migration-new-architecture
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -668,18 +979,36 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+<<<<<<< HEAD
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+=======
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+>>>>>>> refactor/migration-new-architecture
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
+<<<<<<< HEAD
 					"$(SDKROOT)/usr/lib/swift",
+=======
+					"\"$(SDKROOT)/usr/lib/swift\"",
+>>>>>>> refactor/migration-new-architecture
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+<<<<<<< HEAD
+=======
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+>>>>>>> refactor/migration-new-architecture
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -689,7 +1018,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+<<<<<<< HEAD
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+=======
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+>>>>>>> refactor/migration-new-architecture
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -717,7 +1050,11 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+<<<<<<< HEAD
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+=======
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+>>>>>>> refactor/migration-new-architecture
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -726,17 +1063,35 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+<<<<<<< HEAD
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+=======
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+>>>>>>> refactor/migration-new-architecture
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
 				);
 				LIBRARY_SEARCH_PATHS = (
+<<<<<<< HEAD
 					"$(SDKROOT)/usr/lib/swift",
+=======
+					"\"$(SDKROOT)/usr/lib/swift\"",
+>>>>>>> refactor/migration-new-architecture
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+<<<<<<< HEAD
+=======
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+>>>>>>> refactor/migration-new-architecture
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

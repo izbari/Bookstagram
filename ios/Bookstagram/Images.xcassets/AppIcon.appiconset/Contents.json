@@ -1,55 +1,82 @@
 {
   "images" : [
     {
+<<<<<<< HEAD
       "filename" : "40.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
+<<<<<<< HEAD
       "filename" : "60.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
+<<<<<<< HEAD
       "filename" : "58.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
+<<<<<<< HEAD
       "filename" : "87.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
+<<<<<<< HEAD
       "filename" : "80.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
+<<<<<<< HEAD
       "filename" : "120 1.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
+<<<<<<< HEAD
       "filename" : "120.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
+<<<<<<< HEAD
       "filename" : "180.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
+<<<<<<< HEAD
       "filename" : "1024.png",
+=======
+>>>>>>> refactor/migration-new-architecture
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

@@ -1,6 +1,10 @@
 {
   "project_info": {
     "project_number": "464963021979",
+<<<<<<< HEAD
+=======
+    "firebase_url": "https://bookstagram-325020-default-rtdb.firebaseio.com",
+>>>>>>> refactor/migration-new-architecture
     "project_id": "bookstagram-325020",
     "storage_bucket": "bookstagram-325020.appspot.com"
   },
@@ -29,6 +33,16 @@
             {
               "client_id": "464963021979-mo6v5dvesodml81isgmroq07qftqlvib.apps.googleusercontent.com",
               "client_type": 3
+<<<<<<< HEAD
+=======
+            },
+            {
+              "client_id": "464963021979-2icbu8kj8bk76a7rm35ff19d9l5r1oj2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.Bookstagram"
+              }
+>>>>>>> refactor/migration-new-architecture
             }
           ]
         }
